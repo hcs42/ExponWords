@@ -8,6 +8,7 @@ Example word list file:
     cat -- macska
     like -- szeret
         I like you a lot.
+        I really don't like this restaurant.
     go -- megy
         I would like to go to the cinema.
 
@@ -20,6 +21,7 @@ Example invocation (y, n and q are typed by the user):
     8/1 <0>: Word in English: like --
     szeret
         I like you a lot.
+        I really don't like this restaurant.
     Did you know this word? [y/n/q]y
 
 
