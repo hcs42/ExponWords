@@ -11,7 +11,7 @@ Example word list file:
     go -- megy
         I would like to go to the cinema.
 
-Example invocation:
+Example invocation (y, n and q are typed by the user):
 
     $ python exponwords.py -f my_words.txt
     4 word pairs read.
