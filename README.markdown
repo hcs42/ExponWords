@@ -35,3 +35,5 @@ Example invocation (y, n and q are typed by the user):
 Example invocation with getch() used instead of readline() and with colors:
 
     $ python exponwords.py -gcf my_words.txt
+
+This features might not work on all system.
