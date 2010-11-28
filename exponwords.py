@@ -152,7 +152,7 @@ def words_to_file(wordlist, dict_file_name):
     file.close()
 
 
-def ask_word(word, direction, wordlist, use_getch=False):
+def ask_word(word, direction, wordlist, use_getch=False, use_color=False):
     """Asks a word from the user via the console.
 
     Arguments:
@@ -175,15 +175,23 @@ def ask_word(word, direction, wordlist, use_getch=False):
 
     if ch == 'q':
         return 'quit'
-    print solution_word
+
+    if use_color:
+        CSI="\x1B["
+        print CSI+"1;34m" + solution_word + CSI + "0m"
+    else:
+        print solution_word
+
     sys.stdout.write(word.explanation)
 
     while True:
-        print 'Did you know this word? [y/n/q]'
+        sys.stdout.write('Did you know this word? [y/n/q]')
         if use_getch:
             ch = getch()
         else:
             ch = sys.stdin.readline().strip()
+        sys.stdout.write('\n\n')
+
         if ch == 'q':
             return 'quit'
         elif ch == 'y':
@@ -196,7 +204,7 @@ def next_date(strength, date):
     return date + datetime.timedelta(2 ** strength)
 
 
-def practice_words(wordlist, use_getch=False):
+def practice_words(wordlist, use_getch=False, use_color=False):
     """Practice the words that need to be asked.
 
     Argument:
@@ -223,8 +231,9 @@ def practice_words(wordlist, use_getch=False):
 
         sys.stdout.write('%s/%s <%s>: ' % (len(words_to_do), i, strength))
 
-        answer = ask_word(word, direction, wordlist, use_getch)
+        answer = ask_word(word, direction, wordlist, use_getch, use_color)
         if answer == 'quit':
+            print
             break
         elif answer is True:
             word.strengths[direction] += 1
@@ -261,8 +270,10 @@ def practice_words(wordlist, use_getch=False):
 def ask_words(options):
     fname = options.dict_file_name
     wordlist = words_from_file(fname)
+    if wordlist is None:
+        sys.exit(1)
     sys.stdout.write("%d word pairs read.\n" % len(wordlist.list))
-    practice_words(wordlist, use_getch=options.getch)
+    practice_words(wordlist, use_getch=options.getch, use_color=options.color)
     words_to_file(wordlist, fname)
     if options.backup:
         words_to_file(wordlist, fname + '_' + str(datetime.date.today()))
@@ -280,16 +291,18 @@ def parse_args():
     parser = optparse.OptionParser()
 
     parser.add_option('-f', '--dict-file-name', dest='dict_file_name',
-                      help='The name of the dictionary file. The default is: '
-                      '/a/docs/hcs/esperanto/w.txt Commands: ask-words, '
-                      'show-future',
-                      action='store', default=None)
+                      help='The name of the dictionary file. The default is '
+                      'words.txt.',
+                      action='store', default='words.txt')
 #    parser.add_option('-d', '--future-days', dest='future_days',
 #                      help='Set the future days. 10 by default. Commands: '
 #                      'show-future',
 #                      type='int', action='store', default=10)
     parser.add_option('-g', '--getch', dest='getch',
                       help='Use getch() instead of readline()',
+                      action='store_true')
+    parser.add_option('-c', '--color', dest='color',
+                      help='Use terminal colors',
                       action='store_true')
     parser.add_option('-b', '--backup', dest='backup',
                       help='Create backup files',
