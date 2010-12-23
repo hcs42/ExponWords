@@ -17,3 +17,9 @@
     font-size: 30;
     color: blue;
 }
+
+#transferred-exc
+{
+    font-style: bold;
+    color: red;
+}

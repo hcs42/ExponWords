@@ -69,8 +69,13 @@ function yesno_button(answer) {
         data: {'answer': JSON.stringify(answer)},
         type: 'post',
         success: function(result) {
-            transferred++;
-            $('#transferred').text(transferred);
+            if (result == 'ok') {
+                transferred++;
+                $('#transferred').text(transferred);
+            } else {
+                // Appending an '!'
+                $('#transferred-exc').text($('#transferred-exc').text() + '!');
+            }
         }
     });
 }
