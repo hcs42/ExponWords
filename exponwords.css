@@ -1,0 +1,19 @@
+.button
+{
+    background-color: #fff;
+    border: 1px dotted #080;
+    padding: 1px 5px 1px 5px;
+    cursor: pointer;
+    color: #006;
+}
+
+#question
+{
+    font-size: 30;
+}
+
+#answer
+{
+    font-size: 30;
+    color: blue;
+}

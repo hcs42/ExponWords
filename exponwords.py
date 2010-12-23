@@ -6,6 +6,9 @@ import re
 import random
 import datetime
 import optparse
+import json
+import web as webpy
+import exponwords_ss
 
 ##### getch #####
 
@@ -48,14 +51,49 @@ class _GetchWindows:
 getch = _Getch()
 
 
+##### Utilities #####
+
+def file_to_string(file_name, return_none=False):
+    """Reads a file's content into a string.
+
+    Arguments:
+    - file_name (str) -- Path to the file.
+    - return_none (bool) -- Specifies what to do if the file does not exist.
+      If `return_none` is ``True``, ``None`` will be returned. Otherwise an
+      `IOError` exception will be raised.
+
+    **Returns:** str | ``None``
+    """
+
+    if return_none and not os.path.exists(file_name):
+        return None
+    with open(file_name, 'r') as f:
+        s = f.read()
+    return s
+
+
 ##### Word, WordList #####
 
 
 class Word(object):
 
+    """Represents a word pair.
+
+    Data attributes:
+    - langs ([str]) -- langs[0] is the form of the word in the first language;
+      langs[1] is the form of the word in the second language.
+    - strengths ([int]) -- strengths[i] is the strengths of the word in
+      language i (i is either 0 or 1).
+    - dates ([date]) -- dates[0] is the date when the user should be ask to
+      translate largs[0] to langs[1]. dates[1] is the date for the opposite
+      direction.
+    - explanation (str) -- The explanation and/or examples that belong to this
+      word pair.
+    """
+
     def __repr__(self):
         return ('<%s -- %s, Expl: %s>' %
-                (repr(self.lang1), repr(self.lang2), repr(self.explanation)))
+                (repr(self.langs[0]), repr(self.langs[1]), repr(self.explanation)))
 
 
 class WordList(object):
@@ -206,6 +244,31 @@ def next_date(strength, date):
     return date + datetime.timedelta(2 ** strength)
 
 
+def calc_words_to_do(wordlist):
+    today = datetime.date.today()
+    words_to_do = []
+    for word in wordlist.list:
+        for direction in [0, 1]:
+            if word.dates[direction] <= today:
+                words_to_do.append((word, direction))
+    random.shuffle(words_to_do)
+    return words_to_do
+
+
+def update_word(word, direction, answer):
+    assert(isinstance(answer, bool))
+    today = datetime.date.today()
+    strength = word.strengths[direction]
+    if answer:
+        # The user knew the answer
+        word.strengths[direction] += 1
+        word.dates[direction] = next_date(strength, today)
+    else:
+        # The user did not know the answer
+        word.strengths[direction] = 0
+        word.dates[direction] = today
+
+
 def practice_words(wordlist, use_getch=False, use_color=False):
     """Practice the words that need to be asked.
 
@@ -214,14 +277,7 @@ def practice_words(wordlist, use_getch=False, use_color=False):
     - use_getch (bool)
     """
 
-    today = datetime.date.today()
-    words_to_do = []
-    for word in wordlist.list:
-        for direction in [0, 1]:
-            if word.dates[direction] <= today:
-                words_to_do.append((word, direction))
-    random.shuffle(words_to_do)
-
+    words_to_do = calc_words_to_do(wordlist)
     print 'Total number of words: %s' % (len(wordlist.list) * 2)
     print 'Words to ask now: %s' % (len(words_to_do))
 
@@ -229,20 +285,14 @@ def practice_words(wordlist, use_getch=False, use_color=False):
     for word, direction in words_to_do:
         i += 1
         strength = word.strengths[direction]
-        date = word.dates[direction]
-
         sys.stdout.write('%s/%s <%s>: ' % (len(words_to_do), i, strength))
 
         answer = ask_word(word, direction, wordlist, use_getch, use_color)
         if answer == 'quit':
             print
             break
-        elif answer is True:
-            word.strengths[direction] += 1
-            word.dates[direction] = next_date(strength, today)
-        elif answer is False:
-            word.strengths[direction] = 0
-            word.dates[direction] = today
+        else:
+            update_word(word, direction, answer)
 
 
 # def inc_wd(wd,date,strength,n):
@@ -284,6 +334,107 @@ def ask_words(options):
 #     words = words_from_file(od['dict-file-name'])
 #     print_future(words,od['future-days'])
 
+
+##### web interface #####
+
+urls = [
+    r'/()', 'Fetch',
+    r'/(exponwords.js|exponwords.html|exponwords.css)', 'Fetch',
+    r'/(json2.js|jquery.js)', 'Fetch',
+    r'/get_todays_wordlist', 'GetTodaysWordList',
+    r'/update_word', 'UpdateWord',
+    ]
+
+
+class Fetch(object):
+    """Serves the files that should be served unchanged."""
+
+    def GET(self, name):
+        """Serves a HTTP GET request.
+
+        Argument:
+        - name (unicode) -- The name of the URL that was requested.
+
+        Returns: str
+        """
+
+        if name == '':
+            name = 'exponwords.html'
+        return file_to_string(name)
+
+class GetTodaysWordList(object):
+    """Serves the word list of the day."""
+
+    def POST(self):
+        """Serves a HTTP GET request.
+
+        Argument:
+        - name (unicode) -- The name of the URL that was requested.
+
+        Returns: str
+        """
+
+        # reading the word list
+        fname = exponwords_ss.options.dict_file_name
+        exponwords_ss.wordlist = words_from_file(fname)
+        exponwords_ss.words_to_do_current = 0
+        if exponwords_ss.wordlist is None:
+            sys.stderr.write('File not found: ' + fname + '\n')
+            sys.exit(1)
+        sys.stdout.write("%d word pairs read.\n" %
+                         len(exponwords_ss.wordlist.list))
+
+        # calculating the words to be asked today
+        exponwords_ss.words_to_do = \
+            calc_words_to_do(exponwords_ss.wordlist)
+
+        result = []
+        for word, direction in exponwords_ss.words_to_do:
+            result.append([word.langs[0], word.langs[1], direction,
+                           word.explanation])
+
+        return json.dumps(result)
+
+#json.loads(value)
+#words_to_file(wordlist, fname)
+
+class UpdateWord(object):
+    """Serves the word list of the day."""
+
+    def POST(self):
+        """Serves a HTTP GET request.
+
+        Argument:
+        - name (unicode) -- The name of the URL that was requested.
+
+        Returns: str
+        """
+
+        # Updating the word in the word list
+        answer = json.loads(webpy.input()['answer'])
+        word, direction = \
+            exponwords_ss.words_to_do[exponwords_ss.words_to_do_current]
+        exponwords_ss.words_to_do_current += 1
+        update_word(word, direction, answer)
+
+        # Writing the word list to the disk
+        fname = exponwords_ss.options.dict_file_name
+        words_to_file(exponwords_ss.wordlist, fname)
+
+        return json.dumps('ok')
+
+
+def start_webserver(options):
+
+    exponwords_ss.options = options
+    port = '8080'
+    sys.argv = (None, port)
+    webapp = webpy.application(urls, globals())
+    webapp.run()
+
+
+##### command line interface #####
+
 def parse_args():
     """Parses the given command line options.
 
@@ -318,9 +469,13 @@ def main(options, args):
         ask_words(options)
     elif args in [['show-future'], ['f']]:
         show_future(options)
+    elif args in [['start-webserver'], ['w']]:
+        start_webserver(options)
     else:
         print "Unknown command: '%s'" % args
 
+
+##### main #####
 
 if __name__ == '__main__':
     main(*parse_args())
