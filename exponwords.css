@@ -1,10 +1,17 @@
 .button
 {
+    font-size: 30;
     background-color: #fff;
-    border: 1px dotted #080;
+    border: 3px solid #080;
     padding: 1px 5px 1px 5px;
     cursor: pointer;
     color: #006;
+}
+
+#buttons
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 #question
