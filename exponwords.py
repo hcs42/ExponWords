@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
+import os
 import re
 import random
 import datetime
@@ -478,4 +479,5 @@ def main(options, args):
 ##### main #####
 
 if __name__ == '__main__':
+    os.chdir(os.path.dirname(sys.argv[0]))
     main(*parse_args())
