@@ -1,0 +1,5 @@
+- number of hits and misses in stats
+- favicon
+- help page
+- show the future
+- "I said I knew that word but I have just realized I did not"

@@ -340,8 +340,8 @@ def ask_words(options):
 
 urls = [
     r'/()', 'Fetch',
-    r'/(exponwords.js|exponwords.html|exponwords.css)', 'Fetch',
-    r'/(json2.js|jquery.js)', 'Fetch',
+    r'/(exponwords\.js|exponwords\.html|exponwords\.css|help\.html)', 'Fetch',
+    r'/(json2\.js|jquery\.js)', 'Fetch',
     r'/get_todays_wordlist', 'GetTodaysWordList',
     r'/update_word', 'UpdateWord',
     ]
