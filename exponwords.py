@@ -428,8 +428,7 @@ class UpdateWord(object):
 def start_webserver(options):
 
     exponwords_ss.options = options
-    port = '8080'
-    sys.argv = (None, port)
+    sys.argv = (None, options.port)
     webapp = webpy.application(urls, globals())
     webapp.run()
 
@@ -448,6 +447,10 @@ def parse_args():
                       help='The name of the dictionary file. The default is '
                       'words.txt.',
                       action='store', default='words.txt')
+    parser.add_option('-p', '--port', dest='port',
+                      help='The port on which the webserver will listen. The '
+                      'default is 8080.',
+                      action='store', default='8080')
 #    parser.add_option('-d', '--future-days', dest='future_days',
 #                      help='Set the future days. 10 by default. Commands: '
 #                      'show-future',
