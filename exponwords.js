@@ -1,6 +1,7 @@
 var todays_wordlist;
 var transferred = 0;
 var answered = 0;
+var answered_incorrectly = 0;
 
 // Details of the current word
 var word;
@@ -61,6 +62,10 @@ function ok_button() {
 
 function yesno_button(answer) {
     answered++;
+    if (!answer) {
+        answered_incorrectly++;
+        $('#answered-incorrectly').text(answered_incorrectly);
+    }
     $('#answered').text(answered);
     ask_word();
     $.ajax({

@@ -25,6 +25,11 @@
     color: blue;
 }
 
+#answered-incorrectly
+{
+    color: red;
+}
+
 #transferred-exc
 {
     font-style: bold;
