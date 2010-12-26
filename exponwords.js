@@ -97,6 +97,11 @@ function yesno_button(answer) {
     });
 }
 
+function translate_node_text(node)
+{
+    node.text(tr(node.text()));
+}
+
 $(document).ready(function() {
 
     // Get the translation
@@ -109,10 +114,10 @@ $(document).ready(function() {
             tr_dict = result;
 
             // Translate the UI
-            $('#yes-button').text(tr('YES'));
-            $('#no-button').text(tr('NO'));
-            $('#ok-button').text(tr('SHOW ANSWER'));
-            $('#help').text(tr('Help'));
+            translate_node_text($('#yes-button'));
+            translate_node_text($('#no-button'));
+            translate_node_text($('#ok-button'));
+            translate_node_text($('#help'));
 
             // Event handlers
             $('#yes-button').click(function() { yesno_button(true); });
