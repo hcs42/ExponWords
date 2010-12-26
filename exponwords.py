@@ -342,7 +342,10 @@ urls = [
     r'/()', 'Fetch',
     r'/(exponwords\.js|exponwords\.html|exponwords\.css|help\.html)', 'Fetch',
     r'/(json2\.js|jquery\.js)', 'Fetch',
+    r'/(translations/[a-zA-Z0-9_-]\.json)', 'Fetch',
+    r'/help', 'GetHelp',
     r'/get_todays_wordlist', 'GetTodaysWordList',
+    r'/get_translation', 'GetTranslation',
     r'/update_word', 'UpdateWord',
     ]
 
@@ -396,8 +399,33 @@ class GetTodaysWordList(object):
 
         return json.dumps(result)
 
-#json.loads(value)
-#words_to_file(wordlist, fname)
+class GetTranslation(object):
+    """Returns the translation of the user interface."""
+
+    def POST(self):
+        """Serves a HTTP POST request.
+
+        Returns: JSON
+        """
+
+        lang = exponwords_ss.options.ui_language
+        fname = os.path.join('translations', lang + '.json')
+        tr_dict = json.loads(file_to_string(fname))
+        return json.dumps(tr_dict)
+
+class GetHelp(object):
+    """Returns the help."""
+
+    def GET(self):
+        """Serves a HTTP GET request.
+
+        Returns: JSON
+        """
+
+        lang = exponwords_ss.options.ui_language
+        fname = os.path.join('help', lang + '.html')
+        return file_to_string(fname)
+
 
 class UpdateWord(object):
     """Serves the word list of the day."""
@@ -464,6 +492,10 @@ def parse_args():
     parser.add_option('-b', '--backup', dest='backup',
                       help='Create backup files',
                       action='store_true')
+    parser.add_option('--lang', dest='ui_language',
+                      help='Language of the user interface',
+                      action='store', choices=['en', 'hu'],
+                      default='en')
     (options, args) = parser.parse_args()
     return (options, args)
 

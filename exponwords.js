@@ -1,3 +1,7 @@
+// Translation of the user interface
+var tr_dict;
+
+// Global state
 var todays_wordlist;
 var transferred = 0;
 var answered = 0;
@@ -9,6 +13,14 @@ var direction;
 var question_word;
 var solution_word;
 var explanation;
+
+function tr(original) {
+    if (original in tr_dict) {
+        return tr_dict[original];
+    } else {
+        return original;
+    }
+}
 
 function get_todays_wordlist() {
     // Get the list of today's word from the server and ask the first one.
@@ -86,8 +98,29 @@ function yesno_button(answer) {
 }
 
 $(document).ready(function() {
-    $('#yes-button').click(function() { yesno_button(true); });
-    $('#no-button').click(function() { yesno_button(false); });
-    $('#ok-button').click(ok_button);
-    get_todays_wordlist();
+
+    // Get the translation
+    $.ajax({
+        url: '/get_translation',
+        dataType: 'json',
+        data: {},
+        type: 'post',
+        success: function(result) {
+            tr_dict = result;
+
+            // Translate the UI
+            $('#yes-button').text(tr('YES'));
+            $('#no-button').text(tr('NO'));
+            $('#ok-button').text(tr('SHOW ANSWER'));
+            $('#help').text(tr('Help'));
+
+            // Event handlers
+            $('#yes-button').click(function() { yesno_button(true); });
+            $('#no-button').click(function() { yesno_button(false); });
+            $('#ok-button').click(ok_button);
+
+            // The first word
+            get_todays_wordlist();
+        }
+    });
 });
