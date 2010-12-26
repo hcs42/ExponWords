@@ -1,3 +1,6 @@
+- authentication using openid
+- adding new words
+- listing stored words
 - number of hits and misses in stats
 - favicon
 - help page
