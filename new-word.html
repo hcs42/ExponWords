@@ -1,0 +1,27 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>ExponWords (New word)</title>
+    <link rel=stylesheet href="exponwords.css" type="text/css">
+  </head>
+  <body>
+    <form id="searchbar-container-form" action="/new-word-post" method="post">
+      <p>
+        <span id="lang1-label">Language 1</span>:
+        <input id="lang1-input" name="lang1" type="text" size="40"/>
+      </p>
+      <p>
+        <span id="lang2-label">Language 2</span>:
+        <input id="lang2-input" name="lang2" type="text" size="40"/>
+      </p>
+      <p>
+        <span id="explanation-label">Explanation</span>:
+        <input id="explanation-input" name="explanation" type="text" size="40"/>
+      </p>
+      <input id="add-new-word-button" type="submit" value="Add new word" />
+    </form>
+  </body>
+  <script type="text/javascript" language="JavaScript" src="/jquery.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/json2.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/exponwords.js"></script>
+</html>

@@ -403,6 +403,7 @@ urls = [
     r'/get_todays_wordlist', 'GetTodaysWordList',
     r'/get_translation', 'GetTranslation',
     r'/update_word', 'UpdateWord',
+    r'/new-word-post', 'AddNewWord',
     ]
 
 
@@ -524,6 +525,42 @@ class UpdateWord(object):
         words_to_file(exponwords_ss.wordlist, fname)
 
         return json.dumps('ok')
+
+
+class AddNewWord(object):
+    """Adds a new word to the word list"""
+
+    def POST(self):
+        """Serves a HTTP POST request.
+
+        Returns: str
+        """
+
+        # Getting the details of the new word
+        lang1 = webpy.input()['lang1']
+        lang2 = webpy.input()['lang2']
+        explanation = webpy.input()['explanation']
+        if explanation != '':
+            explanation = '    ' + explanation + '\n'
+
+        # Creating the new word
+        word = Word()
+        word.langs = [lang1, lang2]
+        word.strengths = [0, 0]
+        word.dates = [datetime.date.today(), datetime.date.today()]
+        word.explanation = explanation
+
+        # Reading the word list from the disk
+        fname = exponwords_ss.options.dict_file_name
+        wordlist = words_from_file(fname)
+
+        # Adding the new word to the word list
+        wordlist.list.append(word)
+
+        # Writing the word list to the disk
+        words_to_file(wordlist, fname)
+
+        return 'Word added.'
 
 
 def start_webserver(options):
