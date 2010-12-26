@@ -10,6 +10,7 @@ import optparse
 import json
 import web as webpy
 import exponwords_ss
+import StringIO
 
 ##### getch #####
 
@@ -71,6 +72,35 @@ def file_to_string(file_name, return_none=False):
     with open(file_name, 'r') as f:
         s = f.read()
     return s
+
+
+def escape_html(text):
+    """Escapes the given text so that it will appear correctly when
+    inserted into HTML.
+
+    **Argument:**
+
+    - `text` (str)
+
+    **Returns:** str
+
+    **Example:** ::
+
+        >>> escape_html('<text>')
+        '&lt;text&gt;'
+    """
+
+    def escape_char(matchobject):
+        """Escapes one character based on a match."""
+        whole = matchobject.group(0)
+        if whole == '<':
+            return '&lt;'
+        elif whole == '>':
+            return '&gt;'
+        elif whole == '&':
+            return '&amp;'
+
+    return re.sub(r'[<>&]', escape_char, text)
 
 
 ##### Word, WordList #####
@@ -169,15 +199,14 @@ def words_from_file(dict_file_name):
     return wordlist
 
 
-def words_to_file(wordlist, dict_file_name):
-    """Writes the word list to a file.
+def write_words(wordlist, file):
+    """Writes the word list to a file object.
 
     Arguments:
     - words (WordList)
-    - dict_file_name (str)
+    - file (file_object())
     """
 
-    file = open(dict_file_name, 'w')
     file.write('CONFIG: lang1=%s\n' % wordlist.langs[0])
     file.write('CONFIG: lang2=%s\n' % wordlist.langs[1])
     for word in wordlist.list:
@@ -190,8 +219,33 @@ def words_to_file(wordlist, dict_file_name):
              str(word.strengths[1]),
              str(word.dates[1]),
              word.explanation))
+
+def words_to_file(wordlist, dict_file_name):
+    """Writes the word list to a file.
+
+    Arguments:
+    - words (WordList)
+    - dict_file_name (str)
+    """
+
+    file = open(dict_file_name, 'w')
+    write_words(wordlist, file)
     file.close()
 
+def words_to_str(wordlist):
+    """Writes the word list to a file.
+
+    Argument:
+    - words (WordList)
+
+    Return: str
+    """
+
+    sio = StringIO.StringIO()
+    write_words(wordlist, sio)
+    result = sio.getvalue()
+    sio.close()
+    return result
 
 def ask_word(word, direction, wordlist, use_getch=False, use_color=False):
     """Asks a word from the user via the console.
@@ -343,6 +397,8 @@ urls = [
     r'/(exponwords\.js|exponwords\.html|exponwords\.css|help\.html)', 'Fetch',
     r'/(json2\.js|jquery\.js)', 'Fetch',
     r'/(translations/[a-zA-Z0-9_-]\.json)', 'Fetch',
+    r'/(new-word.html)', 'Fetch',
+    r'/word-list', 'GetWordList',
     r'/help', 'GetHelp',
     r'/get_todays_wordlist', 'GetTodaysWordList',
     r'/get_translation', 'GetTranslation',
@@ -412,6 +468,23 @@ class GetTranslation(object):
         fname = os.path.join('translations', lang + '.json')
         tr_dict = json.loads(file_to_string(fname))
         return json.dumps(tr_dict)
+
+class GetWordList(object):
+    """Returns the word list."""
+
+    def GET(self):
+        """Serves a HTTP GET request.
+
+        Returns: JSON
+        """
+
+        template = file_to_string('word-list.html')
+
+        fname = exponwords_ss.options.dict_file_name
+        wordlist = words_from_file(fname)
+        body = escape_html(words_to_str(wordlist))
+        return re.sub('%WORDLIST%', body, template)
+
 
 class GetHelp(object):
     """Returns the help."""

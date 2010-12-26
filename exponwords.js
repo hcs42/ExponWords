@@ -118,6 +118,8 @@ $(document).ready(function() {
             translate_node_text($('#no-button'));
             translate_node_text($('#ok-button'));
             translate_node_text($('#help'));
+            translate_node_text($('#word-list'));
+            translate_node_text($('#new-word'));
 
             // Event handlers
             $('#yes-button').click(function() { yesno_button(true); });

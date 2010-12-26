@@ -3,5 +3,7 @@
     "YES": "IGEN",
     "NO": "NEM",
     "SHOW ANSWER": "MUTASD A VÁLASZT",
-    "NO_MORE_FOR_TODAY": "Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz még egyszer azokon a szavakon, amiket nem tudtál.)"
+    "NO_MORE_FOR_TODAY": "Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz még egyszer azokon a szavakon, amiket nem tudtál.)",
+    "Word list": "Szólista",
+    "New word": "Új szó"
 }
