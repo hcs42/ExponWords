@@ -39,7 +39,7 @@ function get_todays_wordlist() {
 
 function ask_word() {
     if (todays_wordlist.length == 0) {
-        $('#main').text('No more words for today. Good job!');
+        $('#main').text(tr('NO_MORE_FOR_TODAY'));
     } else {
         show_ok_button();
         word = todays_wordlist[0];
