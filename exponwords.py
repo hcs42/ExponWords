@@ -624,5 +624,7 @@ def main(options, args):
 ##### main #####
 
 if __name__ == '__main__':
-    os.chdir(os.path.dirname(sys.argv[0]))
+    exponwords_path = os.path.dirname(sys.argv[0])
+    if exponwords_path != '':
+        os.chdir(os.path.dirname(sys.argv[0]))
     main(*parse_args())
