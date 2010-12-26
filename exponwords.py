@@ -451,8 +451,10 @@ class GetTodaysWordList(object):
 
         result = []
         for word, direction in exponwords_ss.words_to_do:
-            result.append([word.langs[0], word.langs[1], direction,
-                           word.explanation])
+            result.append([escape_html(word.langs[0]),
+                           escape_html(word.langs[1]),
+                           direction,
+                           escape_html(word.explanation)])
 
         return json.dumps(result)
 
