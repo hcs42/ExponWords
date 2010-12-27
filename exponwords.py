@@ -11,6 +11,8 @@ import json
 import web
 import exponwords_ss
 import StringIO
+import time
+
 
 ##### getch #####
 
@@ -394,10 +396,11 @@ def ask_words(options):
 
 urls = [
     r'/', 'Index',
-    r'/(exponwords\.js|exponwords\.html|exponwords\.css|help\.html)', 'Fetch',
-    r'/(json2\.js|jquery\.js)', 'Fetch',
-    r'/(translations/[a-zA-Z0-9_-]\.json)', 'Fetch',
-    r'/(new-word.html)', 'FetchAuth',
+    r'/(exponwords\.html|help\.html)', 'Fetch',
+    r'/([a-zA-Z0-9_-]*\.js)', 'Fetch',
+    r'/([a-zA-Z0-9_-]*\.css)', 'Fetch',
+    r'/(translations/[a-zA-Z0-9_-]*\.json)', 'Fetch',
+    r'/(new-word\.html|login\.html)', 'FetchAuth',
     r'/word-list', 'GetWordList',
     r'/help', 'GetHelp',
     r'/get_todays_wordlist', 'GetTodaysWordList',
@@ -415,11 +418,6 @@ class BaseServer(object):
         return exponwords_ss.session
 
     def is_logged_in(self):
-        print 'BaseServer.is_logged_in:'
-        print exponwords_ss.options.password
-        print self.get_session().get('logged_in', False)
-        print (exponwords_ss.options.password == '' or
-                self.get_session().get('logged_in', False))
         return (exponwords_ss.options.password == '' or
                 self.get_session().get('logged_in', False))
 
@@ -429,6 +427,9 @@ class BaseServer(object):
     def log_out(self):
         self.get_session().logged_in = False
 
+    def create_message_page(self, message):
+        template = file_to_string('message.html')
+        return re.sub('%MESSAGE%', message, template)
 
 class Index(BaseServer):
     """Serves the index page."""
@@ -439,11 +440,15 @@ class Index(BaseServer):
         Returns: str
         """
 
-        print 'Index: is_logged_in()'
+        exponwords_ss.lock.acquire()
+
         if self.is_logged_in():
-            return file_to_string('exponwords.html')
+            result = file_to_string('exponwords.html')
         else:
-            return file_to_string('login.html')
+            result = file_to_string('login.html')
+
+        exponwords_ss.lock.release()
+        return result
 
 
 class LoginPost(BaseServer):
@@ -455,13 +460,17 @@ class LoginPost(BaseServer):
         Returns: str
         """
 
+        exponwords_ss.lock.acquire()
         password = web.input()['password'].encode('utf-8')
 
         if password == exponwords_ss.options.password:
             self.log_in()
-            return 'Logged in.'
+            result = self.create_message_page('Logged in.')
         else:
-            return 'Incorrect password.'
+            result = self.create_message_page('Incorrect password.')
+
+        exponwords_ss.lock.release()
+        return result
 
 
 class Fetch(BaseServer):
@@ -476,7 +485,10 @@ class Fetch(BaseServer):
         Returns: str
         """
 
-        return file_to_string(name)
+        exponwords_ss.lock.acquire()
+        result = file_to_string(name)
+        exponwords_ss.lock.release()
+        return result
 
 class FetchAuth(BaseServer):
     """Serves the files that should be served unchanged."""
@@ -490,11 +502,14 @@ class FetchAuth(BaseServer):
         Returns: str
         """
 
+        exponwords_ss.lock.acquire()
         if not self.is_logged_in():
-            return 'Please log in.'
-            # redirect to '/'; maybe with seeother
+            return self.create_message_page('Please log in.')
 
-        return file_to_string(name)
+        result = file_to_string(name)
+
+        exponwords_ss.lock.release()
+        return result
 
 class GetTodaysWordList(BaseServer):
     """Serves the word list of the day."""
@@ -508,9 +523,11 @@ class GetTodaysWordList(BaseServer):
         Returns: str
         """
 
+        exponwords_ss.lock.acquire()
         if not self.is_logged_in():
-            return 'Please log in.'
-            # TODO redirect to '/'
+            result = self.create_message_page('Please log in.')
+            exponwords_ss.lock.release()
+            return result
 
         # reading the word list
         fname = exponwords_ss.options.dict_file_name
@@ -533,7 +550,9 @@ class GetTodaysWordList(BaseServer):
                            direction,
                            word.explanation])
 
-        return json.dumps(result)
+        result = json.dumps(result)
+        exponwords_ss.lock.release()
+        return result
 
 class GetTranslation(BaseServer):
     """Returns the translation of the user interface."""
@@ -544,10 +563,13 @@ class GetTranslation(BaseServer):
         Returns: JSON
         """
 
+        exponwords_ss.lock.acquire()
         lang = exponwords_ss.options.ui_language
         fname = os.path.join('translations', lang + '.json')
         tr_dict = json.loads(file_to_string(fname))
-        return json.dumps(tr_dict)
+        result = json.dumps(tr_dict)
+        exponwords_ss.lock.release()
+        return result
 
 class GetWordList(BaseServer):
     """Returns the word list."""
@@ -558,16 +580,19 @@ class GetWordList(BaseServer):
         Returns: JSON
         """
 
+        exponwords_ss.lock.acquire()
         if not self.is_logged_in():
-            return 'Please log in.'
-            # redirect to '/'
-
-        template = file_to_string('word-list.html')
+            result = self.create_message_page('Please log in.')
+            exponwords_ss.lock.release()
+            return result
 
         fname = exponwords_ss.options.dict_file_name
         wordlist = words_from_file(fname)
         body = escape_html(words_to_str(wordlist))
-        return re.sub('%WORDLIST%', body, template)
+        template = file_to_string('word-list.html')
+        result = re.sub('%WORDLIST%', body, template)
+        exponwords_ss.lock.release()
+        return result
 
 
 class GetHelp(BaseServer):
@@ -579,9 +604,12 @@ class GetHelp(BaseServer):
         Returns: JSON
         """
 
+        exponwords_ss.lock.acquire()
         lang = exponwords_ss.options.ui_language
         fname = os.path.join('help', lang + '.html')
-        return file_to_string(fname)
+        result = file_to_string(fname)
+        exponwords_ss.lock.release()
+        return result
 
 
 class UpdateWord(BaseServer):
@@ -596,9 +624,11 @@ class UpdateWord(BaseServer):
         Returns: str
         """
 
+        exponwords_ss.lock.acquire()
         if not self.is_logged_in():
-            return 'Please log in.'
-            # redirect to '/'
+            result = self.create_message_page('Please log in.')
+            exponwords_ss.lock.release()
+            return result
 
         # Updating the word in the word list
         answer = json.loads(web.input()['answer'])
@@ -611,7 +641,9 @@ class UpdateWord(BaseServer):
         fname = exponwords_ss.options.dict_file_name
         words_to_file(exponwords_ss.wordlist, fname)
 
-        return json.dumps('ok')
+        result = json.dumps('ok')
+        exponwords_ss.lock.release()
+        return result
 
 
 class AddNewWord(BaseServer):
@@ -623,9 +655,11 @@ class AddNewWord(BaseServer):
         Returns: str
         """
 
+        exponwords_ss.lock.acquire()
         if not self.is_logged_in():
-            return 'Please log in.'
-            # redirect to '/'
+            result = self.create_message_page('Please log in.')
+            exponwords_ss.lock.release()
+            return result
 
         # Getting the details of the new word
         lang1 = web.input()['lang1'].encode('utf-8')
@@ -651,7 +685,9 @@ class AddNewWord(BaseServer):
         # Writing the word list to the disk
         words_to_file(wordlist, fname)
 
-        return 'Word added.'
+        result = self.create_message_page('Word added')
+        exponwords_ss.lock.release()
+        return result
 
 
 def start_webserver(options):
