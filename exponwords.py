@@ -539,9 +539,9 @@ class AddNewWord(object):
         """
 
         # Getting the details of the new word
-        lang1 = webpy.input()['lang1']
-        lang2 = webpy.input()['lang2']
-        explanation = webpy.input()['explanation']
+        lang1 = webpy.input()['lang1'].encode('utf-8')
+        lang2 = webpy.input()['lang2'].encode('utf-8')
+        explanation = webpy.input()['explanation'].encode('utf-8')
         if explanation != '':
             explanation = '    ' + explanation + '\n'
 
