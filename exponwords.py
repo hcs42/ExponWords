@@ -8,7 +8,7 @@ import random
 import datetime
 import optparse
 import json
-import web as webpy
+import web
 import exponwords_ss
 import StringIO
 
@@ -393,21 +393,78 @@ def ask_words(options):
 ##### web interface #####
 
 urls = [
-    r'/()', 'Fetch',
+    r'/', 'Index',
     r'/(exponwords\.js|exponwords\.html|exponwords\.css|help\.html)', 'Fetch',
     r'/(json2\.js|jquery\.js)', 'Fetch',
     r'/(translations/[a-zA-Z0-9_-]\.json)', 'Fetch',
-    r'/(new-word.html)', 'Fetch',
+    r'/(new-word.html)', 'FetchAuth',
     r'/word-list', 'GetWordList',
     r'/help', 'GetHelp',
     r'/get_todays_wordlist', 'GetTodaysWordList',
     r'/get_translation', 'GetTranslation',
     r'/update_word', 'UpdateWord',
     r'/new-word-post', 'AddNewWord',
+    r'/login-post', 'LoginPost',
     ]
 
 
-class Fetch(object):
+class BaseServer(object):
+    """Serves the index page."""
+
+    def get_session(self):
+        return exponwords_ss.session
+
+    def is_logged_in(self):
+        print 'BaseServer.is_logged_in:'
+        print exponwords_ss.options.password
+        print self.get_session().get('logged_in', False)
+        print (exponwords_ss.options.password == '' or
+                self.get_session().get('logged_in', False))
+        return (exponwords_ss.options.password == '' or
+                self.get_session().get('logged_in', False))
+
+    def log_in(self):
+        self.get_session().logged_in = True
+
+    def log_out(self):
+        self.get_session().logged_in = False
+
+
+class Index(BaseServer):
+    """Serves the index page."""
+
+    def GET(self):
+        """Serves a HTTP GET request.
+
+        Returns: str
+        """
+
+        print 'Index: is_logged_in()'
+        if self.is_logged_in():
+            return file_to_string('exponwords.html')
+        else:
+            return file_to_string('login.html')
+
+
+class LoginPost(BaseServer):
+    """Logs in the user."""
+
+    def POST(self):
+        """Serves a HTTP POST request.
+
+        Returns: str
+        """
+
+        password = web.input()['password'].encode('utf-8')
+
+        if password == exponwords_ss.options.password:
+            self.log_in()
+            return 'Logged in.'
+        else:
+            return 'Incorrect password.'
+
+
+class Fetch(BaseServer):
     """Serves the files that should be served unchanged."""
 
     def GET(self, name):
@@ -419,11 +476,27 @@ class Fetch(object):
         Returns: str
         """
 
-        if name == '':
-            name = 'exponwords.html'
         return file_to_string(name)
 
-class GetTodaysWordList(object):
+class FetchAuth(BaseServer):
+    """Serves the files that should be served unchanged."""
+
+    def GET(self, name):
+        """Serves a HTTP GET request.
+
+        Argument:
+        - name (unicode) -- The name of the URL that was requested.
+
+        Returns: str
+        """
+
+        if not self.is_logged_in():
+            return 'Please log in.'
+            # redirect to '/'; maybe with seeother
+
+        return file_to_string(name)
+
+class GetTodaysWordList(BaseServer):
     """Serves the word list of the day."""
 
     def POST(self):
@@ -434,6 +507,10 @@ class GetTodaysWordList(object):
 
         Returns: str
         """
+
+        if not self.is_logged_in():
+            return 'Please log in.'
+            # TODO redirect to '/'
 
         # reading the word list
         fname = exponwords_ss.options.dict_file_name
@@ -458,7 +535,7 @@ class GetTodaysWordList(object):
 
         return json.dumps(result)
 
-class GetTranslation(object):
+class GetTranslation(BaseServer):
     """Returns the translation of the user interface."""
 
     def POST(self):
@@ -472,7 +549,7 @@ class GetTranslation(object):
         tr_dict = json.loads(file_to_string(fname))
         return json.dumps(tr_dict)
 
-class GetWordList(object):
+class GetWordList(BaseServer):
     """Returns the word list."""
 
     def GET(self):
@@ -480,6 +557,10 @@ class GetWordList(object):
 
         Returns: JSON
         """
+
+        if not self.is_logged_in():
+            return 'Please log in.'
+            # redirect to '/'
 
         template = file_to_string('word-list.html')
 
@@ -489,7 +570,7 @@ class GetWordList(object):
         return re.sub('%WORDLIST%', body, template)
 
 
-class GetHelp(object):
+class GetHelp(BaseServer):
     """Returns the help."""
 
     def GET(self):
@@ -503,7 +584,7 @@ class GetHelp(object):
         return file_to_string(fname)
 
 
-class UpdateWord(object):
+class UpdateWord(BaseServer):
     """Serves the word list of the day."""
 
     def POST(self):
@@ -515,8 +596,12 @@ class UpdateWord(object):
         Returns: str
         """
 
+        if not self.is_logged_in():
+            return 'Please log in.'
+            # redirect to '/'
+
         # Updating the word in the word list
-        answer = json.loads(webpy.input()['answer'])
+        answer = json.loads(web.input()['answer'])
         word, direction = \
             exponwords_ss.words_to_do[exponwords_ss.words_to_do_current]
         exponwords_ss.words_to_do_current += 1
@@ -529,7 +614,7 @@ class UpdateWord(object):
         return json.dumps('ok')
 
 
-class AddNewWord(object):
+class AddNewWord(BaseServer):
     """Adds a new word to the word list"""
 
     def POST(self):
@@ -538,10 +623,14 @@ class AddNewWord(object):
         Returns: str
         """
 
+        if not self.is_logged_in():
+            return 'Please log in.'
+            # redirect to '/'
+
         # Getting the details of the new word
-        lang1 = webpy.input()['lang1'].encode('utf-8')
-        lang2 = webpy.input()['lang2'].encode('utf-8')
-        explanation = webpy.input()['explanation'].encode('utf-8')
+        lang1 = web.input()['lang1'].encode('utf-8')
+        lang2 = web.input()['lang2'].encode('utf-8')
+        explanation = web.input()['explanation'].encode('utf-8')
         if explanation != '':
             explanation = '    ' + explanation + '\n'
 
@@ -569,8 +658,11 @@ def start_webserver(options):
 
     exponwords_ss.options = options
     sys.argv = (None, options.port)
-    webapp = webpy.application(urls, globals())
-    webapp.run()
+    app = web.application(urls, globals())
+    exponwords_ss.webapp = app
+    store = web.session.DiskStore('sessions')
+    exponwords_ss.session = web.session.Session(app, store)
+    app.run()
 
 
 ##### command line interface #####
@@ -608,6 +700,9 @@ def parse_args():
                       help='Language of the user interface',
                       action='store', choices=['en', 'hu'],
                       default='en')
+    parser.add_option('--password', dest='password',
+                      help='Password for the web interface',
+                      action='store', default='')
     (options, args) = parser.parse_args()
     return (options, args)
 
