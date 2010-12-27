@@ -1,7 +1,10 @@
 - authentication using openid
 - help page
 - edit word list
+
+- edit a word "on the fly"
 - favicon
+- textarea for explanation
 - number of hits and misses in stats
 - show the future
 - "I said I knew that word but I have just realized I did not"
