@@ -392,6 +392,25 @@ def ask_words(options):
 #     print_future(words,od['future-days'])
 
 
+##### translation #####
+
+def get_tr_dict(lang=None):
+    if lang is None:
+        lang = exponwords_ss.options.ui_language
+    tr_dict = exponwords_ss.tr_dicts.get(lang)
+    if tr_dict is None:
+        fname = os.path.join('translations', lang + '.json')
+        tr_dict = json.loads(file_to_string(fname))
+        exponwords_ss.tr_dicts[lang] = tr_dict
+    return tr_dict
+    
+def tr(word, lang=None):
+    if lang is None:
+        lang = exponwords_ss.options.ui_language
+    translated_word = get_tr_dict(lang).get(word, word)
+    return translated_word
+
+
 ##### web interface #####
 
 urls = [
@@ -564,10 +583,7 @@ class GetTranslation(BaseServer):
         """
 
         exponwords_ss.lock.acquire()
-        lang = exponwords_ss.options.ui_language
-        fname = os.path.join('translations', lang + '.json')
-        tr_dict = json.loads(file_to_string(fname))
-        result = json.dumps(tr_dict)
+        result = json.dumps(get_tr_dict())
         exponwords_ss.lock.release()
         return result
 
