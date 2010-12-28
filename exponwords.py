@@ -403,13 +403,32 @@ def get_tr_dict(lang=None):
         tr_dict = json.loads(file_to_string(fname))
         exponwords_ss.tr_dicts[lang] = tr_dict
     return tr_dict
-    
+
 def tr(word, lang=None):
     if lang is None:
         lang = exponwords_ss.options.ui_language
     translated_word = get_tr_dict(lang).get(word, word)
     return translated_word
 
+def translate_html(html_text):
+    """Translates the given HTML text.
+
+    The substrings in `html_text` which has the form ##WORD## will be translated
+    using the `tr` function.
+
+    **Argument:**
+
+    - `html_text` (str)
+
+    **Returns:** str
+    """
+
+    def translate(matchobject):
+        """Translates one word."""
+        word = matchobject.group(1)
+        return tr(word)
+
+    return re.sub(r'%TRANS: ([^%]+)%', translate, html_text)
 
 ##### web interface #####
 
@@ -448,7 +467,8 @@ class BaseServer(object):
 
     def create_message_page(self, message):
         template = file_to_string('message.html')
-        return re.sub('%MESSAGE%', message, template)
+        html_text = re.sub('%MESSAGE%', tr(message), template)
+        return translate_html(html_text)
 
 class Index(BaseServer):
     """Serves the index page."""
@@ -466,6 +486,7 @@ class Index(BaseServer):
         else:
             result = file_to_string('login.html')
 
+        result = translate_html(result)
         exponwords_ss.lock.release()
         return result
 
@@ -505,7 +526,7 @@ class Fetch(BaseServer):
         """
 
         exponwords_ss.lock.acquire()
-        result = file_to_string(name)
+        result = translate_html(file_to_string(name))
         exponwords_ss.lock.release()
         return result
 
@@ -525,7 +546,7 @@ class FetchAuth(BaseServer):
         if not self.is_logged_in():
             return self.create_message_page('Please log in.')
 
-        result = file_to_string(name)
+        result = translate_html(file_to_string(name))
 
         exponwords_ss.lock.release()
         return result

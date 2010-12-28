@@ -86,22 +86,9 @@ function yesno_button(answer) {
     });
 }
 
-function translate_node_text(node)
-{
-    node.text(tr(node.text()));
-}
-
 $(document).ready(function() {
 
     get_translation(function() {
-
-        // Translate the UI
-        translate_node_text($('#yes-button'));
-        translate_node_text($('#no-button'));
-        translate_node_text($('#ok-button'));
-        translate_node_text($('#help'));
-        translate_node_text($('#word-list'));
-        translate_node_text($('#new-word'));
 
         // Event handlers
         $('#yes-button').click(function() { yesno_button(true); });
@@ -110,5 +97,6 @@ $(document).ready(function() {
 
         // The first word
         get_todays_wordlist();
+
     });
 });
