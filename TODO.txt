@@ -1,11 +1,12 @@
-- authentication using openid
+- favicon
 - help page
 - edit word list
+- don't make the explanation 'pre'
+- textarea for explanation
 
 - edit a word "on the fly"
-- favicon
-- textarea for explanation
 - number of hits and misses in stats
+- authentication using openid
 - show the future
 - "I said I knew that word but I have just realized I did not"
 - showing "(n)" when having multiple occurrences of the same word
