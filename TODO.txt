@@ -3,6 +3,7 @@
 - edit word list
 - don't make the explanation 'pre'
 - textarea for explanation
+- "-f" should be relative to the starting path
 
 - edit a word "on the fly"
 - number of hits and misses in stats

@@ -12,6 +12,8 @@ Installation
 2. Download and install web.py into a virtual Python environment and download
    ExponWords:
 
+        $ mkdir exponwords
+        $ cd exponwords
         $ virtualenv python
         New python executable in python/bin/python
         Installing setuptools............done.
