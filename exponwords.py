@@ -438,7 +438,7 @@ urls = [
     r'/([a-zA-Z0-9_-]*\.js)', 'Fetch',
     r'/([a-zA-Z0-9_-]*\.css)', 'Fetch',
     r'/(translations/[a-zA-Z0-9_-]*\.json)', 'Fetch',
-    r'/(new-word\.html|login\.html)', 'FetchAuth',
+    r'/(new-word\.html)', 'FetchAuth',
     r'/word-list', 'GetWordList',
     r'/help', 'GetHelp',
     r'/get_todays_wordlist', 'GetTodaysWordList',
@@ -446,6 +446,7 @@ urls = [
     r'/update_word', 'UpdateWord',
     r'/new-word-post', 'AddNewWord',
     r'/login-post', 'LoginPost',
+    r'/logout', 'Logout',
     ]
 
 
@@ -528,6 +529,22 @@ class LoginPost(BaseServer):
             return self.create_message_page('Logged in.')
         else:
             return self.create_message_page('Incorrect password.')
+
+
+class Logout(BaseServer):
+    """Logs out the user."""
+
+    def get_request(self):
+        """Serves a HTTP GET request.
+
+        Returns: html_str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
+        self.log_out()
+        return self.create_message_page('Logged out.')
 
 
 class Fetch(BaseServer):

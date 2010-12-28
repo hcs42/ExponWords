@@ -14,5 +14,7 @@
     "Please log in.": "Légy szíves jelentkezz be!",
     "Word added": "Szó hozzáadva a listához",
     "Logged in.": "Belépés sikerült.",
-    "Incorrect password.": "Hibás jelszó"
+    "Incorrect password.": "Hibás jelszó",
+    "Log out": "Kijelentkezés",
+    "Logged out.": "A kijelentkezés sikerült."
 }
