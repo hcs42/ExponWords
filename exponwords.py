@@ -645,8 +645,8 @@ class GetWordList(BaseServer):
 
         fname = exponwords_ss.options.dict_file_name
         wordlist = words_from_file(fname)
-        body = escape_html(words_to_str(wordlist))
-        template = file_to_string('word-list.html')
+        body = escape_html(words_to_str(wordlist)).decode('utf-8')
+        template = translate_html(file_to_string('word-list.html'))
         return re.sub('%WORDLIST%', body, template)
 
 
