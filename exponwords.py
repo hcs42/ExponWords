@@ -153,8 +153,9 @@ class Word(object):
 class WordList(object):
 
     def __init__(self):
-        self.list = []
+        self.d = {}
         self.langs = ['', '']
+        self.next_index = 0
 
 
 def words_from_file(dict_file_name):
@@ -168,14 +169,15 @@ def words_from_file(dict_file_name):
 
     file = open(dict_file_name, 'r')
     wordlist = WordList()
+    current_word_index = None
     i = 0
     for line in file:
         line = line.rstrip()
         if (line == '') or (line[0] == ' '):
             # This line is part of an explanation.
-            if len(wordlist.list) > 0:
+            if current_word_index is not None:
                 line = re.sub('^ {1,4}', '', line) # removing prefix spaces
-                wordlist.list[-1].explanation += line + '\n'
+                wordlist.d[current_word_index].explanation += line + '\n'
         elif line.startswith('CONFIG:'):
             # This line is a configuration line.
             regexp = '^CONFIG: (.*?)=(.*)$'
@@ -189,6 +191,8 @@ def words_from_file(dict_file_name):
                 wordlist.langs[0] = value
             elif key == 'lang2':
                 wordlist.langs[1] = value
+            elif key == 'next_index':
+                wordlist.next_index = int(value)
             else:
                 print ('ERROR: Unknown configuration key at line %s: %s' %
                        (i, key))
@@ -196,7 +200,7 @@ def words_from_file(dict_file_name):
         else:
             # This line contains a word pair.
             strength_date_regexp = '<(\d+) +(\d\d\d\d)-(\d\d)-(\d\d)>'
-            regexp = ('^(.*?) -- (.*?)' +
+            regexp = (r'^(\{(\d+)\})? *(.*?) -- (.*?)' +
                       '( ' + strength_date_regexp * 2 + ')?' +
                       '$')
             r = re.search(regexp, line)
@@ -205,20 +209,34 @@ def words_from_file(dict_file_name):
                 return None
 
             word = Word()
-            word.langs = [r.group(1), r.group(2)]
-            if r.group(3) is not None:
-                word.strengths = [int(r.group(4)), int(r.group(8))]
-                word.dates = [datetime.date(int(r.group(5)),
-                                           int(r.group(6)),
-                                           int(r.group(7))),
-                              datetime.date(int(r.group(9)),
-                                           int(r.group(10)),
-                                           int(r.group(11)))]
+
+            if r.group(2) is None:
+                current_word_index = wordlist.next_index
+            else:
+                current_word_index = int(r.group(2))
+            wordlist.next_index = \
+                max(wordlist.next_index, current_word_index + 1)
+
+            word.langs = [r.group(3), r.group(4)]
+            if r.group(5) is not None:
+                word.strengths = [int(r.group(6)), int(r.group(10))]
+                word.dates = [datetime.date(int(r.group(7)),
+                                           int(r.group(8)),
+                                           int(r.group(9))),
+                              datetime.date(int(r.group(11)),
+                                           int(r.group(12)),
+                                           int(r.group(13)))]
             else:
                 word.strengths = [0, 0]
                 word.dates = [datetime.date.today(), datetime.date.today()]
             word.explanation = ''
-            wordlist.list.append(word)
+
+            if current_word_index in wordlist.d:
+                msg = 'ERROR: Word index %s is already taken; line %s: %s'
+                print msg % (current_word_index, i, line)
+                return None
+            wordlist.d[current_word_index] = word
+
         i += 1
     file.close()
     return wordlist
@@ -234,10 +252,12 @@ def write_words(wordlist, file):
 
     file.write('CONFIG: lang1=%s\n' % wordlist.langs[0])
     file.write('CONFIG: lang2=%s\n' % wordlist.langs[1])
-    for word in wordlist.list:
+    file.write('CONFIG: next_index=%s\n' % wordlist.next_index)
+    for word_index, word in sorted(wordlist.d.items()):
         file.write(
-            '%s -- %s <%s %s><%s %s>\n' %
-            (word.langs[0],
+            '{%s} %s -- %s <%s %s><%s %s>\n' %
+            (word_index,
+             word.langs[0],
              word.langs[1],
              str(word.strengths[0]),
              str(word.dates[0]),
@@ -331,7 +351,7 @@ def next_date(strength, date):
 def calc_words_to_do(wordlist):
     today = datetime.date.today()
     words_to_do = []
-    for word_index, word in enumerate(wordlist.list):
+    for word_index, word in wordlist.d.items():
         for direction in [0, 1]:
             if word.dates[direction] <= today:
                 words_to_do.append((word_index, direction))
@@ -362,12 +382,12 @@ def practice_words(wordlist, use_getch=False, use_color=False):
     """
 
     words_to_do = calc_words_to_do(wordlist)
-    print 'Total number of words: %s' % (len(wordlist.list) * 2)
+    print 'Total number of words: %s' % (len(wordlist.d) * 2)
     print 'Words to ask now: %s' % (len(words_to_do))
 
     i = 0
     for word_index, direction in words_to_do:
-        word = wordlist.list[word_index]
+        word = wordlist.d[word_index]
         i += 1
         strength = word.strengths[direction]
         sys.stdout.write('%s/%s <%s>: ' % (len(words_to_do), i, strength))
@@ -409,7 +429,7 @@ def ask_words(options):
     wordlist = words_from_file(fname)
     if wordlist is None:
         sys.exit(1)
-    sys.stdout.write("%d word pairs read.\n" % len(wordlist.list))
+    sys.stdout.write("%d word pairs read.\n" % len(wordlist.d))
     practice_words(wordlist, use_getch=options.getch, use_color=options.color)
     words_to_file(wordlist, fname)
     if options.backup:
@@ -641,7 +661,7 @@ class GetTodaysWordList(BaseServer):
 
         result = []
         for word_index, direction in words_to_do:
-            word = exponwords_ss.wordlist.list[word_index]
+            word = exponwords_ss.wordlist.d[word_index]
             result.append([word.langs[0],
                            word.langs[1],
                            direction,
@@ -714,7 +734,7 @@ class UpdateWord(BaseServer):
         answer = json.loads(web.input()['answer'])
         word_index = json.loads(web.input()['word_index'])
         direction = json.loads(web.input()['direction'])
-        word = exponwords_ss.wordlist.list[word_index]
+        word = exponwords_ss.wordlist.d[word_index]
         update_word(word, direction, answer)
         save_words()
 
@@ -748,7 +768,9 @@ class AddNewWord(BaseServer):
         word.explanation = explanation
 
         # Adding the new word to the word list
-        exponwords_ss.wordlist.list.append(word)
+        word_index = exponwords_ss.wordlist.next_index
+        exponwords_ss.wordlist.next_index += 1
+        exponwords_ss.wordlist.d[word_index] = word
         save_words()
 
         return self.create_message_page('Word added')
