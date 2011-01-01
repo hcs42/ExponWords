@@ -1,14 +1,34 @@
-- favicon
-- help page
-- edit word list
-- don't make the explanation 'pre'
-- textarea for explanation
-- "-f" should be relative to the starting path
+Top priority
+------------
 
 - edit a word "on the fly"
+    - "Edit" link on the main page to /edit-word?word=12
+- print an editable word list
+    - print the word list
+    - "Edit" link next to each word to /edit-word?word=12
+
+Important
+---------
+
+- edit raw word list
+    - should update wlct
+- "-f" should be relative to the starting path
+- English help page
+
+Would be nice
+-------------
+
 - number of hits and misses in stats
 - authentication using openid
+- password should be pwd so that it will be remembered by the browser
 - show the future
 - "I said I knew that word but I have just realized I did not"
 - showing "(n)" when having multiple occurrences of the same word
-- remove word
+- remove word (probably into the /edit-word page)
+
+Wishlist
+--------
+
+- "We will have a word test tomorrow at school" mode:
+    - asking only words added at a certain date
+- importing/exporting CSV files
