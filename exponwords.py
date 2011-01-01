@@ -437,6 +437,7 @@ urls = [
     r'/(exponwords\.html|help\.html)', 'Fetch',
     r'/([a-zA-Z0-9_-]*\.js)', 'Fetch',
     r'/([a-zA-Z0-9_-]*\.css)', 'Fetch',
+    r'/([a-zA-Z0-9_-]*\.ico)', 'Fetch',
     r'/(translations/[a-zA-Z0-9_-]*\.json)', 'Fetch',
     r'/(new-word\.html)', 'FetchAuth',
     r'/word-list', 'GetWordList',
