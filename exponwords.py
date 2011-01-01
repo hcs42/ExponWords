@@ -104,6 +104,27 @@ def escape_html(text):
 
     return re.sub(r'[<>&]', escape_char, text)
 
+def explanation_to_html(explanation):
+    """Escapes the given explanation so that it can be printed as HTML.
+
+    **Argument:**
+
+    - `explanation` (str)
+
+    **Returns:** str
+    """
+
+    def insert_nbps(matchobject):
+        """Returns the same number of "&nbsp;":s as the number of matched
+        characters."""
+        spaces = matchobject.group(1)
+        return '&nbsp;' * (4 + len(spaces))
+
+    regexp = re.compile(r'^( *)', re.MULTILINE)
+    exp2 = re.sub(regexp, insert_nbps, explanation)
+    exp3 = '<br/>'.join(exp2.splitlines())
+    return exp3
+
 
 ##### Word, WordList #####
 
@@ -621,7 +642,7 @@ class GetTodaysWordList(BaseServer):
             result.append([word.langs[0],
                            word.langs[1],
                            direction,
-                           word.explanation])
+                           explanation_to_html(word.explanation)])
 
         return json.dumps(result)
 

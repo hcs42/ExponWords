@@ -57,7 +57,7 @@ function show_yesno_buttons() {
 
 function ok_button() {
     $('#answer').text(solution_word);
-    $('#explanation').text(explanation);
+    $('#explanation').html(explanation);
     show_yesno_buttons();
 }
 
