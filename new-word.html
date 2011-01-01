@@ -6,7 +6,8 @@
     <link rel=stylesheet href="exponwords.css" type="text/css">
   </head>
   <body>
-    <form id="searchbar-container-form" action="/new-word-post" method="post">
+    <p>%MESSAGE%</p>
+    <form id="searchbar-container-form" action="/new-word" method="post">
       <table>
         <tr>
           <td><span id="lang1-label">%TRANS: Word in language 1%</span>:</td>
@@ -23,6 +24,7 @@
         </tr>
       </table>
       <input id="add-new-word-button" type="submit" value="OK" />
+      <p><a id="index-page" href="/">%TRANS: Go to the index page%</p>
     </form>
   </body>
   <script type="text/javascript" language="JavaScript" src="/jquery.js"></script>

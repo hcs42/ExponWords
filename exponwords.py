@@ -487,13 +487,12 @@ urls = [
     r'/([a-zA-Z0-9_-]*\.css)', 'Fetch',
     r'/([a-zA-Z0-9_-]*\.ico)', 'Fetch',
     r'/(translations/[a-zA-Z0-9_-]*\.json)', 'Fetch',
-    r'/(new-word\.html)', 'FetchAuth',
     r'/word-list', 'GetWordList',
     r'/help', 'GetHelp',
     r'/get_todays_wordlist', 'GetTodaysWordList',
     r'/get_translation', 'GetTranslation',
     r'/update_word', 'UpdateWord',
-    r'/new-word-post', 'AddNewWord',
+    r'/new-word', 'AddNewWord',
     r'/login-post', 'LoginPost',
     r'/logout', 'Logout',
     ]
@@ -742,7 +741,23 @@ class UpdateWord(BaseServer):
 
 
 class AddNewWord(BaseServer):
-    """Adds a new word to the word list"""
+    """Serves the /new-word page."""
+
+    def get_request(self):
+        """Serves a HTTP GET request.
+
+        Argument:
+        - name (unicode) -- The name of the URL that was requested.
+
+        Returns: str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
+        template = file_to_string('new-word.html')
+        html_text = re.sub('%MESSAGE%', '', template)
+        return translate_html(html_text)
 
     def post_request(self):
         """Serves a HTTP POST request.
@@ -773,7 +788,10 @@ class AddNewWord(BaseServer):
         exponwords_ss.wordlist.d[word_index] = word
         save_words()
 
-        return self.create_message_page('Word added')
+        template = file_to_string('new-word.html')
+        html_text = re.sub('%MESSAGE%', 'Word added.', template)
+        return translate_html(html_text)
+
 
 
 def start_webserver(options):
