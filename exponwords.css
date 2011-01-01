@@ -8,6 +8,20 @@
     color: #006;
 }
 
+.small-button
+{
+    background-color: #fff;
+    border: 2px solid #080;
+    padding: 0px 5px 0px 5px;
+    cursor: pointer;
+    color: #006;
+}
+
+.small_button_li
+{
+    padding: 3px 0px 3px 0px;
+}
+
 #buttons
 {
     margin-top: 20px;
