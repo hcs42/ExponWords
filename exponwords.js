@@ -6,6 +6,7 @@ var answered_incorrectly = 0;
 
 // Details of the current word
 var word;
+var word_index;
 var direction;
 var question_word;
 var solution_word;
@@ -35,7 +36,8 @@ function ask_word() {
         direction = word[2];
         question_word = word[direction]
         solution_word = word[1 - direction]
-        explanation = word[3];
+        word_index = word[3]
+        explanation = word[4];
         $('#question').text(question_word);
         $('#answer').text('');
         $('#explanation').text('');
@@ -62,6 +64,9 @@ function ok_button() {
 }
 
 function yesno_button(answer) {
+    var old_word_index = word_index;
+    var old_direction = direction;
+    var old_answer = answer;
     answered++;
     if (!answer) {
         answered_incorrectly++;
@@ -72,7 +77,9 @@ function yesno_button(answer) {
     $.ajax({
         url: '/update_word',
         dataType: 'json',
-        data: {'answer': JSON.stringify(answer)},
+        data: {'answer': JSON.stringify(old_answer),
+               'word_index': JSON.stringify(old_word_index),
+               'direction': JSON.stringify(old_direction)},
         type: 'post',
         success: function(result) {
             if (result == 'ok') {

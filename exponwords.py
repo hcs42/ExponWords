@@ -331,10 +331,10 @@ def next_date(strength, date):
 def calc_words_to_do(wordlist):
     today = datetime.date.today()
     words_to_do = []
-    for word in wordlist.list:
+    for word_index, word in enumerate(wordlist.list):
         for direction in [0, 1]:
             if word.dates[direction] <= today:
-                words_to_do.append((word, direction))
+                words_to_do.append((word_index, direction))
     random.shuffle(words_to_do)
     return words_to_do
 
@@ -366,7 +366,8 @@ def practice_words(wordlist, use_getch=False, use_color=False):
     print 'Words to ask now: %s' % (len(words_to_do))
 
     i = 0
-    for word, direction in words_to_do:
+    for word_index, direction in words_to_do:
+        word = wordlist.list[word_index]
         i += 1
         strength = word.strengths[direction]
         sys.stdout.write('%s/%s <%s>: ' % (len(words_to_do), i, strength))
@@ -476,6 +477,18 @@ urls = [
     r'/login-post', 'LoginPost',
     r'/logout', 'Logout',
     ]
+
+
+def load_words():
+    """Loads the word list file from the disk."""
+    fname = exponwords_ss.options.dict_file_name
+    exponwords_ss.wordlist = words_from_file(fname)
+
+
+def save_words():
+    """Saves the word list file to the disk."""
+    fname = exponwords_ss.options.dict_file_name
+    words_to_file(exponwords_ss.wordlist, fname)
 
 
 class BaseServer(object):
@@ -623,25 +636,16 @@ class GetTodaysWordList(BaseServer):
         if not self.is_logged_in():
             return self.create_message_page('Please log in.')
 
-        # reading the word list
-        fname = exponwords_ss.options.dict_file_name
-        exponwords_ss.wordlist = words_from_file(fname)
-        exponwords_ss.words_to_do_current = 0
-        if exponwords_ss.wordlist is None:
-            sys.stderr.write('File not found: ' + fname + '\n')
-            sys.exit(1)
-        sys.stdout.write("%d word pairs read.\n" %
-                         len(exponwords_ss.wordlist.list))
-
         # calculating the words to be asked today
-        exponwords_ss.words_to_do = \
-            calc_words_to_do(exponwords_ss.wordlist)
+        words_to_do = calc_words_to_do(exponwords_ss.wordlist)
 
         result = []
-        for word, direction in exponwords_ss.words_to_do:
+        for word_index, direction in words_to_do:
+            word = exponwords_ss.wordlist.list[word_index]
             result.append([word.langs[0],
                            word.langs[1],
                            direction,
+                           word_index,
                            explanation_to_html(word.explanation)])
 
         return json.dumps(result)
@@ -671,9 +675,8 @@ class GetWordList(BaseServer):
         if not self.is_logged_in():
             return self.create_message_page('Please log in.')
 
-        fname = exponwords_ss.options.dict_file_name
-        wordlist = words_from_file(fname)
-        body = escape_html(words_to_str(wordlist)).decode('utf-8')
+        raw_wordlist = words_to_str(exponwords_ss.wordlist)
+        body = escape_html(raw_wordlist).decode('utf-8')
         template = translate_html(file_to_string('word-list.html'))
         return re.sub('%WORDLIST%', body, template)
 
@@ -709,14 +712,11 @@ class UpdateWord(BaseServer):
 
         # Updating the word in the word list
         answer = json.loads(web.input()['answer'])
-        word, direction = \
-            exponwords_ss.words_to_do[exponwords_ss.words_to_do_current]
-        exponwords_ss.words_to_do_current += 1
+        word_index = json.loads(web.input()['word_index'])
+        direction = json.loads(web.input()['direction'])
+        word = exponwords_ss.wordlist.list[word_index]
         update_word(word, direction, answer)
-
-        # Writing the word list to the disk
-        fname = exponwords_ss.options.dict_file_name
-        words_to_file(exponwords_ss.wordlist, fname)
+        save_words()
 
         return json.dumps('ok')
 
@@ -747,22 +747,20 @@ class AddNewWord(BaseServer):
         word.dates = [datetime.date.today(), datetime.date.today()]
         word.explanation = explanation
 
-        # Reading the word list from the disk
-        fname = exponwords_ss.options.dict_file_name
-        wordlist = words_from_file(fname)
-
         # Adding the new word to the word list
-        wordlist.list.append(word)
-
-        # Writing the word list to the disk
-        words_to_file(wordlist, fname)
+        exponwords_ss.wordlist.list.append(word)
+        save_words()
 
         return self.create_message_page('Word added')
 
 
 def start_webserver(options):
 
+    # Options, word list
     exponwords_ss.options = options
+    load_words()
+
+    # Starting the web server
     sys.argv = (None, options.port)
     app = web.application(urls, globals())
     exponwords_ss.webapp = app
