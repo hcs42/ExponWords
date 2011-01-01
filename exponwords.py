@@ -150,12 +150,13 @@ def words_from_file(dict_file_name):
     i = 0
     for line in file:
         line = line.rstrip()
-        if line == '':
-            pass
-        elif line[0] == ' ':
+        if (line == '') or (line[0] == ' '):
+            # This line is part of an explanation.
             if len(wordlist.list) > 0:
+                line = re.sub('^ {1,4}', '', line) # removing prefix spaces
                 wordlist.list[-1].explanation += line + '\n'
         elif line.startswith('CONFIG:'):
+            # This line is a configuration line.
             regexp = '^CONFIG: (.*?)=(.*)$'
             r = re.search(regexp, line)
             if r is None:
@@ -172,6 +173,7 @@ def words_from_file(dict_file_name):
                        (i, key))
                 return None
         else:
+            # This line contains a word pair.
             strength_date_regexp = '<(\d+) +(\d\d\d\d)-(\d\d)-(\d\d)>'
             regexp = ('^(.*?) -- (.*?)' +
                       '( ' + strength_date_regexp * 2 + ')?' +
@@ -213,14 +215,18 @@ def write_words(wordlist, file):
     file.write('CONFIG: lang2=%s\n' % wordlist.langs[1])
     for word in wordlist.list:
         file.write(
-            '%s -- %s <%s %s><%s %s>\n%s' %
+            '%s -- %s <%s %s><%s %s>\n' %
             (word.langs[0],
              word.langs[1],
              str(word.strengths[0]),
              str(word.dates[0]),
              str(word.strengths[1]),
-             str(word.dates[1]),
-             word.explanation))
+             str(word.dates[1])))
+        for expl_line in word.explanation.splitlines():
+            if expl_line != '':
+                file.write('    ')
+                file.write(expl_line)
+            file.write('\n')
 
 def words_to_file(wordlist, dict_file_name):
     """Writes the word list to a file.
@@ -710,8 +716,8 @@ class AddNewWord(BaseServer):
         lang1 = web.input()['lang1'].encode('utf-8')
         lang2 = web.input()['lang2'].encode('utf-8')
         explanation = web.input()['explanation'].encode('utf-8')
-        if explanation != '':
-            explanation = '    ' + explanation + '\n'
+        if (len(explanation) > 1) and (explanation[-1] != '\n'):
+            explanation += '\n'
 
         # Creating the new word
         word = Word()
