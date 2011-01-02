@@ -1,8 +1,6 @@
 Top priority
 ------------
 
-- edit a word "on the fly"
-    - "Edit" link on the main page to /edit-word?word=12
 - print an editable word list
     - print the word list
     - "Edit" link next to each word to /edit-word?word=12
@@ -11,13 +9,13 @@ Important
 ---------
 
 - edit raw word list
-    - should update wlct
 - "-f" should be relative to the starting path
 - English help page
 
 Would be nice
 -------------
 
+- random should not be totally random: it could be deterministic within a day
 - number of hits and misses in stats
 - authentication using openid
 - password should be pwd so that it will be remembered by the browser
