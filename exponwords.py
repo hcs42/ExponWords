@@ -489,10 +489,12 @@ urls = [
     r'/(translations/[a-zA-Z0-9_-]*\.json)', 'Fetch',
     r'/word-list', 'GetWordList',
     r'/help', 'GetHelp',
+    r'/get_word', 'GetWord',
     r'/get_todays_wordlist', 'GetTodaysWordList',
     r'/get_translation', 'GetTranslation',
     r'/update_word', 'UpdateWord',
     r'/new-word', 'AddNewWord',
+    r'/edit-word', 'EditWord',
     r'/login-post', 'LoginPost',
     r'/logout', 'Logout',
     ]
@@ -640,14 +642,36 @@ class FetchAuth(BaseServer):
         return translate_html(file_to_string(name))
 
 
+class GetWord(BaseServer):
+    """Serves a word."""
+
+    def post_request(self):
+        """Serves a HTTP POST request.
+
+        Returns: json_str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
+        word_index = int(json.loads(web.input()['word_index']))
+        word = exponwords_ss.wordlist.d.get(word_index)
+
+        if word is None:
+            return json.dumps('nosuchword')
+
+        result = [word.langs[0],
+                  word.langs[1],
+                  word.explanation]
+
+        return json.dumps(result)
+
+
 class GetTodaysWordList(BaseServer):
     """Serves the word list of the day."""
 
     def post_request(self):
         """Serves a HTTP POST request.
-
-        Argument:
-        - name (unicode) -- The name of the URL that was requested.
 
         Returns: json_str
         """
@@ -789,6 +813,52 @@ class AddNewWord(BaseServer):
         html_text = re.sub('%MESSAGE%', 'Word added.', template)
         return translate_html(html_text)
 
+
+class EditWord(BaseServer):
+    """Serves the /edit-word page."""
+
+    def get_request(self):
+        """Serves a HTTP GET request.
+
+        Returns: str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
+        word_index_str = web.input()['word_index'].encode('utf-8')
+        template = file_to_string('edit-word.html')
+        html_text = re.sub('%WORD_INDEX%', word_index_str, template)
+        html_text = re.sub('%MESSAGE%', '', html_text)
+        return translate_html(html_text)
+
+    def post_request(self):
+        """Serves a HTTP POST request.
+
+        Returns: html_str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
+        # Getting the new fields of the word
+        word_index = int(web.input()['word_index'].encode('utf-8'))
+        lang1 = web.input()['lang1'].encode('utf-8')
+        lang2 = web.input()['lang2'].encode('utf-8')
+        explanation = web.input()['explanation'].encode('utf-8')
+        if (len(explanation) > 1) and (explanation[-1] != '\n'):
+            explanation += '\n'
+
+        # Modifyig the word
+        word = exponwords_ss.wordlist.d[word_index]
+        word.langs = [lang1, lang2]
+        word.explanation = explanation
+        save_words()
+
+        template = file_to_string('edit-word.html')
+        html_text = re.sub('%WORD_INDEX%', str(word_index), template)
+        html_text = re.sub('%MESSAGE%', 'Word modified.', html_text)
+        return translate_html(html_text)
 
 
 def start_webserver(options):

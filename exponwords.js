@@ -34,13 +34,15 @@ function ask_word() {
         show_ok_button();
         word = todays_wordlist[0];
         direction = word[2];
-        question_word = word[direction]
-        solution_word = word[1 - direction]
-        word_index = word[3]
+        question_word = word[direction];
+        solution_word = word[1 - direction];
+        word_index = word[3];
         explanation = word[4];
         $('#question').text(question_word);
         $('#answer').text('');
         $('#explanation').text('');
+        var edit_link = '/edit-word?word_index=' + word_index;
+        $('#edit-word-button').attr('href', edit_link);
         todays_wordlist.shift();
     }
 }
