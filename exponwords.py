@@ -746,9 +746,6 @@ class AddNewWord(BaseServer):
     def get_request(self):
         """Serves a HTTP GET request.
 
-        Argument:
-        - name (unicode) -- The name of the URL that was requested.
-
         Returns: str
         """
 
