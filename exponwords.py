@@ -578,12 +578,7 @@ class Index(BaseServer):
 class LoginPost(BaseServer):
     """Logs in the user."""
 
-    def post_request(self):
-        """Serves a HTTP POST request.
-
-        Returns: html_str
-        """
-
+    def login_request(self):
         password = web.input()['password'].encode('utf-8')
 
         if password == exponwords_ss.options.password:
@@ -591,6 +586,22 @@ class LoginPost(BaseServer):
             return self.create_message_page('Logged in.')
         else:
             return self.create_message_page('Incorrect password.')
+
+    def get_request(self):
+        """Serves a HTTP GET request.
+
+        Returns: html_str
+        """
+
+        return self.login_request()
+
+    def post_request(self):
+        """Serves a HTTP POST request.
+
+        Returns: html_str
+        """
+
+        return self.login_request()
 
 
 class Logout(BaseServer):
