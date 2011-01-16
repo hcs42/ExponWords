@@ -1,6 +1,11 @@
+// Constants
+RETRIES_COUNT = 24;
+RETRY_DELAY_TIME = 10 * 1000; // 10 seconds
+
 // Global state
 var todays_wordlist;
 var transferred = 0;
+var transfer_in_progress = 0;
 var answered = 0;
 var answered_incorrectly = 0;
 
@@ -22,6 +27,10 @@ function get_todays_wordlist() {
         success: function(result) {
             todays_wordlist = result;
             $('#all').text(todays_wordlist.length);
+            $('#transferred').text('0');
+            $('#transfer-in-progress').text('0');
+            $('#answered').text('0');
+            $('#answered-incorrectly').text('0');
             ask_word();
         }
     });
@@ -65,10 +74,56 @@ function ok_button() {
     show_yesno_buttons();
 }
 
+function update_error(data, result, retries)
+{
+    if (retries == RETRIES_COUNT) {
+        transfer_in_progress++;
+        $('#transfer-in-progress').text(transfer_in_progress);
+    };
+    setTimeout(
+        function() {
+            update_word(data, retries - 1);
+        }, RETRY_DELAY_TIME);
+}
+
+function update_word(data, retries)
+{
+    if (retries != 0) {
+        $.ajax({
+            url: '/update_word',
+            dataType: 'json',
+            data: data,
+            type: 'post',
+            timeout: 2000,
+            success: function(result) {
+                if (result == 'ok') {
+                    transferred++;
+                    $('#transferred').text(transferred);
+                    if (retries != RETRIES_COUNT) {
+                        transfer_in_progress--;
+                        $('#transfer-in-progress').text(transfer_in_progress);
+                    }
+                } else {
+                    update_error(data, result, retries);
+                }
+            },
+            error: function(result) {
+                update_error(data, result, retries);
+            }
+        });
+    } else {
+        transfer_in_progress--;
+        $('#transfer-in-progress').text(transfer_in_progress);
+    }
+}
+
 function yesno_button(answer) {
     var old_word_index = word_index;
     var old_direction = direction;
     var old_answer = answer;
+    var data = {'answer': JSON.stringify(old_answer),
+                'word_index': JSON.stringify(old_word_index),
+                'direction': JSON.stringify(old_direction)};
     answered++;
     if (!answer) {
         answered_incorrectly++;
@@ -76,23 +131,7 @@ function yesno_button(answer) {
     }
     $('#answered').text(answered);
     ask_word();
-    $.ajax({
-        url: '/update_word',
-        dataType: 'json',
-        data: {'answer': JSON.stringify(old_answer),
-               'word_index': JSON.stringify(old_word_index),
-               'direction': JSON.stringify(old_direction)},
-        type: 'post',
-        success: function(result) {
-            if (result == 'ok') {
-                transferred++;
-                $('#transferred').text(transferred);
-            } else {
-                // Appending an '!'
-                $('#transferred-exc').text($('#transferred-exc').text() + '!');
-            }
-        }
-    });
+    update_word(data, RETRIES_COUNT);
 }
 
 $(document).ready(function() {

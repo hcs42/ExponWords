@@ -1,6 +1,7 @@
 Top priority
 ------------
 
+- jump to the main page after login
 - print an editable word list
     - print the word list
     - "Edit" link next to each word to /edit-word?word=12

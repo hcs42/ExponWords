@@ -46,10 +46,9 @@
     color: red;
 }
 
-#transferred-exc
+.transfer-related
 {
-    font-style: bold;
-    color: red;
+    color: green;
 }
 
 #explanation
