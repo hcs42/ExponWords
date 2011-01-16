@@ -583,7 +583,8 @@ class LoginPost(BaseServer):
 
         if password == exponwords_ss.options.password:
             self.log_in()
-            return self.create_message_page('Logged in.')
+            result = file_to_string('exponwords.html')
+            return translate_html(result)
         else:
             return self.create_message_page('Incorrect password.')
 
