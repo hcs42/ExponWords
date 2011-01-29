@@ -490,6 +490,7 @@ urls = [
     r'/([a-zA-Z0-9_-]*\.ico)', 'Fetch',
     r'/(translations/[a-zA-Z0-9_-]*\.json)', 'Fetch',
     r'/word-list', 'GetWordList',
+    r'/raw-word-list', 'GetRawWordList',
     r'/help', 'GetHelp',
     r'/get_word', 'GetWord',
     r'/get_todays_wordlist', 'GetTodaysWordList',
@@ -732,9 +733,45 @@ class GetWordList(BaseServer):
         if not self.is_logged_in():
             return self.create_message_page('Please log in.')
 
+        def e(s):
+            return escape_html(s).decode('utf-8')
+
+        html = []
+        edit_text = tr('Edit')
+        for word_index, word in exponwords_ss.wordlist.d.items():
+            edit_link = '"/edit-word?word_index=' + str(word_index) + '"'
+            html += [
+                '<tr>'
+                '<td>', e(word.langs[0]), '</td>'
+                '<td>', e(word.langs[1]), '</td>'
+                '<td class="explanation">',
+                explanation_to_html(word.explanation).decode('utf8'), '</td>'
+                '<td>', e(str(word.strengths[0])), '</td>'
+                '<td>', e(str(word.strengths[1])), '</td>'
+                '<td>', e(str(word.dates[0])), '</td>'
+                '<td>', e(str(word.dates[1])), '</td>'
+                '<td><a href=', edit_link, '>', edit_text, '</a></td>'
+                '</tr>\n']
+        body = ''.join(html)
+        template = translate_html(file_to_string('word-list.html'))
+        return re.sub('%WORDLIST%', body, template)
+
+
+class GetRawWordList(BaseServer):
+    """Returns the word list."""
+
+    def get_request(self):
+        """Serves a HTTP GET request.
+
+        Returns: json_str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
         raw_wordlist = words_to_str(exponwords_ss.wordlist)
         body = escape_html(raw_wordlist).decode('utf-8')
-        template = translate_html(file_to_string('word-list.html'))
+        template = translate_html(file_to_string('raw-word-list.html'))
         return re.sub('%WORDLIST%', body, template)
 
 

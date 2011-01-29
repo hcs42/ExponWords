@@ -5,6 +5,7 @@
     "ANSWER": "MUTASD A VÁLASZT",
     "NO_MORE_FOR_TODAY": "Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz még egyszer azokon a szavakon, amiket nem tudtál.)",
     "Word list": "Szólista",
+    "Raw word list": "Nyers szólista",
     "New word": "Új szó",
     "Current word": "Aktuális szó",
     "Edit": "Szerkeszt",
@@ -21,5 +22,8 @@
     "Log out": "Kijelentkezés",
     "Logged out.": "A kijelentkezés sikerült.",
     "Main page": "Főoldal",
-    "Login": "Bejelentkezés"
+    "Login": "Bejelentkezés",
+    "Action": "Akció",
+    "Strengths": "Erősség",
+    "Dates": "Dátum"
 }
