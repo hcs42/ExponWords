@@ -121,6 +121,8 @@ def explanation_to_html(explanation):
         return '&nbsp;' * (4 + len(spaces))
 
     regexp = re.compile(r'^( *)', re.MULTILINE)
+    if (len(explanation) > 1) and (explanation[-1] == '\n'):
+        explanation = explanation[:-1]
     exp2 = re.sub(regexp, insert_nbps, explanation)
     exp3 = '<br/>'.join(exp2.splitlines())
     return exp3
