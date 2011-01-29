@@ -121,16 +121,16 @@ function yesno_button(answer) {
     var old_word_index = word_index;
     var old_direction = direction;
     var old_answer = answer;
-    var data = {'answer': JSON.stringify(old_answer),
-                'word_index': JSON.stringify(old_word_index),
-                'direction': JSON.stringify(old_direction)};
+    ask_word();
     answered++;
     if (!answer) {
         answered_incorrectly++;
         $('#answered-incorrectly').text(answered_incorrectly);
     }
     $('#answered').text(answered);
-    ask_word();
+    var data = {'answer': JSON.stringify(old_answer),
+                'word_index': JSON.stringify(old_word_index),
+                'direction': JSON.stringify(old_direction)};
     update_word(data, RETRIES_COUNT);
 }
 
