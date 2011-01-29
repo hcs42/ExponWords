@@ -41,10 +41,11 @@
     valamelyik alkalommal azt mondja, hogy nem tudja a szót, akkor a szó
     erőssége visszaáll a kezdeti szinte, és ismét először 1, aztán 2, majd 4,
     stb. napos időközökkel lesz kérdezve.</p>
-    <p>A program szópárokat tárol, amiknek a következő elemeik vannak:</p>
+    <p>A program szavakat és kifejezéseket tárol. Ezeket az egyszerűség
+    kedvéért csak szavaknak fogjuk hívni. A szavaknak a következő elemeik
+    vannak:</p>
     <ul>
-      <li>Szó az egyik nyelven: a megtanulandó idegen nyelvű szó vagy
-      kifejezés.</li>
+      <li>Szó az egyik nyelven: a megtanulandó idegen nyelvű szó.</li>
       <li>Szó a másik nyelven: a megtanulandó szó anyanyelvi megfelelője vagy
       (akár idegen nyelvű) magyarázata.</li>
       <li>Magyarázat: bármilyen szöveg, amit csak akkor szeretnénk hogy
@@ -55,21 +56,21 @@
       irányú erősségeket (tehát a felhasználónak mennyire jut eszébe a szó a
       második nyelven, ha a program az első nyelven írja ki) és a 2&rarr;1
       irányúakat (ami ennek a fordítottja). Szintén külön tárolja a dátumokat
-      is (mikor kell a szót legközelebb kérdezni). Ezeket a mezőket a "<a
-        href="/word-list">Szólista</a>" menüpontban
-      lehet megnézni, ahol a szavak után csúcsos zárójelben vannak
-      megjelenítve.</li>
+      is (mikor kell a szót legközelebb kérdezni). Ezeket a mezőket a
+      "<a href="/word-list">Szólista</a>" oldalon lehet megnézni.</li>
     </ul>
 
     <h3>Felhasználói felület</h3>
     <p>A főoldalon a következő elemek találhatók:</p>
     <ul>
-      <li>Statisztika (például "5 / 6
+      <li>Statisztika (például "<span class="transfer-related">5 (1)</span> / 6
       (<span id="answered-incorrectly">2</span>) / 10"): ezek a számok mutatják
       az aktuális szótanulási gyakorlat állapotát. A számok jelentése:
       <ol>
         <li>Eddig megválaszolt szavak száma, amiről a válasz visszament a
         szerverre.</li>
+        <li>Azok a szavak, amikről a választ nem sikerült egyből visszaküldeni
+        a szerverre, és a kliens még próbálkozik.</li>
         <li>Eddig megválaszolt szavak száma. (Ha az előző szám és ez elkezd
         nagyon eltérni egymástól, akkor valószínűleg elveszett a kapcsolat a
         szerverrel. Ekkor érdemes megállni és újratölteni az oldalt. Velem még
@@ -81,10 +82,12 @@
       </li>
       <li>Menü
       <ol>
-        <li><a href="/word-list">Szólista</a>: a szótárban lévő szavak listája</li>
+        <li><a href="/word-list">Szólista</a>: a szótárban lévő szavak listája egy táblázatban megjelenítve. A szavakat lehet szerkeszteni is.</li>
+        <li><a href="/raw-word-list">Nyers szólista</a>: a szótárban lévő szavak listája abban a formában, ahogy az a szerveren tárolva van</li>
         <li><a href="/new-word">Új szó</a>: új szó felvitele a szótárba</li>
         <li><a href="/logout">Kijelentkezés</a>: a program legközelebb ismét kérjen jelszót</li>
         <li><a href="/help">Segítség</a>: ez az oldal</li>
+        <li>"Aktuális szó: Szerkeszt": annak a szónak a szerkesztése, amelyiket épp kérdezi a program. A szerkesztés hatása csak akkor fog látszani, ha a felhasználó frissíti a felkérdező oldalt.</li>
       </ol>
       </li>
       <li>Gombok:</li>
@@ -151,7 +154,7 @@
         teendő?</em></p>
       <p>Van jónéhány dolog a <a
         href="https://github.com/hcs42/ExponWords/blob/master/TODO.txt">tennivalóim
-        listáján</a>. Ha valamire szükséged van, szólj, és felteszem a listára
+        listáján</a> (angolul). Ha valamire szükséged van, szólj, és felteszem a listára
       vagy megpróbálom előrébb venni.</p>
       </li>
 
@@ -179,5 +182,5 @@
     <ul>
       <li><a href="https://github.com/hcs42/ExponWords">Az ExponWords honlapja (angol)</a></li>
     </ul>
-
+  </body>
 </html>
