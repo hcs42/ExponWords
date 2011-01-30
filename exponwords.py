@@ -172,7 +172,7 @@ def words_from_file(dict_file_name):
     file = open(dict_file_name, 'r')
     wordlist = WordList()
     current_word_index = None
-    i = 0
+    i = 1
     for line in file:
         line = line.rstrip()
         if (line == '') or (line[0] == ' '):
