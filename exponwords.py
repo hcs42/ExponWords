@@ -1015,7 +1015,7 @@ class EditWord(BaseServer):
 
         template = file_to_string('edit-word.html')
         html_text = re.sub('%WORD_INDEX%', str(word_index), template)
-        html_text = re.sub('%MESSAGE%', 'Word modified.', html_text)
+        html_text = re.sub('%MESSAGE%', tr('Word modified.'), html_text)
         return translate_html(html_text)
 
 
