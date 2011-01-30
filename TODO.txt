@@ -6,12 +6,13 @@ Top priority
 Important
 ---------
 
-- edit raw word list
 - English help page
+- remove word (probably a button into the /edit-word page)
 
 Would be nice
 -------------
 
+- edit raw word list
 - random should not be totally random: it could be deterministic within a day
 - number of hits and misses in stats
 - authentication using openid
@@ -19,7 +20,6 @@ Would be nice
 - show the future
 - "I said I knew that word but I have just realized I did not"
 - showing "(n)" when having multiple occurrences of the same word
-- remove word (probably into the /edit-word page)
 
 Wishlist
 --------
