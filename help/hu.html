@@ -71,10 +71,7 @@
         szerverre.</li>
         <li>Azok a szavak, amikről a választ nem sikerült egyből visszaküldeni
         a szerverre, és a kliens még próbálkozik.</li>
-        <li>Eddig megválaszolt szavak száma. (Ha az előző szám és ez elkezd
-        nagyon eltérni egymástól, akkor valószínűleg elveszett a kapcsolat a
-        szerverrel. Ekkor érdemes megállni és újratölteni az oldalt. Velem még
-        nem fordult elő élesben.)</li>
+        <li>Eddig megválaszolt szavak száma.</li>
         <li>Eddigi olyan szavak száma, amiket a felhasználó nem tudott.</li>
         <li>Összes szavak száma, amiket a gyakorlat során a program kérdezni
         fog.</li>
@@ -84,10 +81,14 @@
       <ol>
         <li><a href="/word-list">Szólista</a>: a szótárban lévő szavak listája egy táblázatban megjelenítve. A szavakat lehet szerkeszteni is.</li>
         <li><a href="/raw-word-list">Nyers szólista</a>: a szótárban lévő szavak listája abban a formában, ahogy az a szerveren tárolva van</li>
-        <li><a href="/new-word">Új szó</a>: új szó felvitele a szótárba</li>
+        <li><a href="/new-word">Új szó</a>: új szó felvitele a szótárba;
+        optimális táblázatkezelő programból kimásolt szavakra</li>
+        <li><a href="/new-words">Új szavak</a>: több új szó felvitele a szótárba</li>
         <li><a href="/logout">Kijelentkezés</a>: a program legközelebb ismét kérjen jelszót</li>
         <li><a href="/help">Segítség</a>: ez az oldal</li>
-        <li>"Aktuális szó: Szerkeszt": annak a szónak a szerkesztése, amelyiket épp kérdezi a program. A szerkesztés hatása csak akkor fog látszani, ha a felhasználó frissíti a felkérdező oldalt.</li>
+        <li>"Aktuális szó: Szerkeszt": annak a szónak a szerkesztése, amelyiket
+        épp kérdezi a program. A szerkesztés hatása csak akkor fog látszani, ha
+        a felhasználó frissíti a felkérdező oldalt.</li>
       </ol>
       </li>
       <li>Gombok:</li>
@@ -103,7 +104,7 @@
       </ol>
       <li class="small_button_li">Szó: a kikérdezett szó feketével jelenik meg.
       A <span class="small-button">MUTASD A VÁLASZT</span> gomb megnyomása után
-      a megoldás kékkel jelenik meg, a magyarázat kisebb betűkkel feketével.
+      a megoldás kékkel jelenik meg, a magyarázat kisebb betűkkel szürkével.
       </li>
     </ul>
 
@@ -178,9 +179,9 @@
 
     </ul>
 
-    <h3>Linkek</h3>
-    <ul>
-      <li><a href="https://github.com/hcs42/ExponWords">Az ExponWords honlapja (angol)</a></li>
-    </ul>
+    <h3>Névjegy</h3>
+    <a href="https://github.com/hcs42/ExponWords">ExponWords</a>
+    %EW_VERSION%<br/>
+    Copyright (C) 2010-2011 Hoch Csaba
   </body>
 </html>

@@ -57,6 +57,8 @@ getch = _Getch()
 
 ##### Utilities #####
 
+version = '0.1'
+
 def file_to_string(file_name, return_none=False):
     """Reads a file's content into a string.
 
@@ -854,7 +856,8 @@ class GetHelp(BaseServer):
 
         lang = exponwords_ss.options.ui_language
         fname = os.path.join('help', lang + '.html')
-        return file_to_string(fname)
+        html = file_to_string(fname)
+        return re.sub('%EW_VERSION%', version, html)
 
 
 class UpdateWord(BaseServer):
