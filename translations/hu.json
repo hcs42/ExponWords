@@ -7,6 +7,7 @@
     "Word list": "Szólista",
     "Raw word list": "Nyers szólista",
     "New word": "Új szó",
+    "New words": "Új szavak",
     "Current word": "Aktuális szó",
     "Edit": "Szerkeszt",
     "Go to the index page": "Vissza a főoldalra",
@@ -16,6 +17,7 @@
     "Password": "Jelszó",
     "Please log in.": "Légy szíves jelentkezz be!",
     "Word added.": "Szó hozzáadva a listához.",
+    "Words added.": "Szavak hozzáadva a listához.",
     "Word modified.": "Szó módosítva.",
     "Logged in.": "Belépés sikerült.",
     "Incorrect password.": "Hibás jelszó",
@@ -25,5 +27,9 @@
     "Login": "Bejelentkezés",
     "Action": "Akció",
     "Strengths": "Erősség",
-    "Dates": "Dátum"
+    "Dates": "Dátum",
+    "WORDS-INPUT-DESCRIPTION": "Minden sorba egy új szót írj, ami a következő mezőkből áll: szó az első nyelven; szó a második nyelven; magyarázat. A \"magyarázat\" mező elhagyható. A mezőket TAB karakterrel válaszd el egymástól. Ha egy táblázatkezelő programban (például LibreOffice-ban, OpenOffice.org-ban vagy Mircosoft Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza, és azt ide bemásolod, akkor az épp ilyen formátumban lesz.",
+    "Not enough fields in the following line": "Nincs elég mező a következő sorban",
+    "Too many fields in the following line": "Túl sok mező van a következő sorban",
+    "line": ""
 }

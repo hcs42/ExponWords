@@ -159,6 +159,35 @@ class WordList(object):
         self.langs = ['', '']
         self.next_index = 0
 
+    def add_word(self, lang1, lang2, explanation):
+        """Adds a word to the word list.
+
+        Arguments:
+        - lang1 (str)
+        - lang2 (str)
+        - explanation (str)
+        """
+
+        # Creating the new word
+        word = Word()
+        word.langs = [lang1, lang2]
+        word.strengths = [0, 0]
+        word.dates = [datetime.date.today(), datetime.date.today()]
+        word.explanation = explanation
+
+        # Adding the new word to the word list
+        self.d[self.get_next_index()] = word
+
+    def get_next_index(self):
+        """Returns the next free index.
+        
+        Returns: int
+        """
+
+        res = self.next_index
+        self.next_index += 1
+        return res
+
 
 def words_from_file(dict_file_name):
     """Reads a word list from a file.
@@ -297,6 +326,44 @@ def words_to_str(wordlist):
     result = sio.getvalue()
     sio.close()
     return result
+
+
+def add_words(wordlist, raw):
+    """Adds the given words to a word list.
+
+    Arguments:
+    - wordlist (WordList)
+    - raw (str)
+
+    Raises: (ErrorMsg, ErrorLineNumber, ErrorLine)
+        ErrorMsg (str)
+        ErrorLineNumber (int)
+        ErrorLine (str)
+    """
+
+    i = 1
+    new_word_list = [] # [(lang1, lang2, explanation)]
+    for line in raw.splitlines():
+        line = line.strip()
+        if (line == ''):
+            continue
+
+        fields = line.split('\t')
+        if len(fields) < 2:
+            return ('Not enough fields in the following line', i, line)
+        elif len(fields) == 2:
+            new_word_list.append((fields[0], fields[1], ''))
+        elif len(fields) == 3:
+            new_word_list.append(fields)
+        else:
+            return ('Too many fields in the following line', i, line)
+
+        i += 1
+
+    for lang1, lang2, explanation in new_word_list:
+        wordlist.add_word(lang1, lang2, explanation)
+    return 'ok'
+
 
 def ask_word(word, direction, wordlist, use_getch=False, use_color=False):
     """Asks a word from the user via the console.
@@ -497,6 +564,7 @@ urls = [
     r'/get_translation', 'GetTranslation',
     r'/update_word', 'UpdateWord',
     r'/new-word', 'AddNewWord',
+    r'/new-words', 'AddNewWords',
     r'/edit-word', 'EditWord',
     r'/login-post', 'LoginPost',
     r'/logout', 'Logout',
@@ -844,25 +912,57 @@ class AddNewWord(BaseServer):
         lang1 = web.input()['lang1'].encode('utf-8')
         lang2 = web.input()['lang2'].encode('utf-8')
         explanation = web.input()['explanation'].encode('utf-8')
-        if (len(explanation) > 1) and (explanation[-1] != '\n'):
-            explanation += '\n'
 
-        # Creating the new word
-        word = Word()
-        word.langs = [lang1, lang2]
-        word.strengths = [0, 0]
-        word.dates = [datetime.date.today(), datetime.date.today()]
-        word.explanation = explanation
-
-        # Adding the new word to the word list
-        word_index = exponwords_ss.wordlist.next_index
-        exponwords_ss.wordlist.next_index += 1
-        exponwords_ss.wordlist.d[word_index] = word
+        # Adding the new word
+        exponwords_ss.wordlist.add_word(lang1, lang2, explanation)
         save_words()
 
         template = file_to_string('new-word.html')
-        html_text = re.sub('%MESSAGE%', 'Word added.', template)
+        html_text = re.sub('%MESSAGE%', tr('Word added.'), template)
         return translate_html(html_text)
+
+
+class AddNewWords(BaseServer):
+    """Serves the /new-words page."""
+
+    def get_request(self):
+        """Serves a HTTP GET request.
+
+        Returns: str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
+        template = file_to_string('new-words.html')
+        html_text = re.sub('%MESSAGE%', '', template)
+        return translate_html(html_text)
+
+    def post_request(self):
+        """Serves a HTTP POST request.
+
+        Returns: html_str
+        """
+
+        if not self.is_logged_in():
+            return self.create_message_page('Please log in.')
+
+        # Getting the details of the new word
+        new_words_raw = web.input()['new-words'].encode('utf-8')
+        result = add_words(exponwords_ss.wordlist, new_words_raw)
+        if result == 'ok':
+            save_words()
+            template = file_to_string('new-words.html')
+            html_text = re.sub('%MESSAGE%', tr('Words added.'), template)
+            return translate_html(html_text)
+        else:
+            err_msg, err_linenumber, err_line = result
+            msg = (tr(err_msg) + ': '+
+                   tr('line') + ' '+ str(err_linenumber) + ': ' +
+                   err_line)
+            template = file_to_string('new-words.html')
+            html_text = re.sub('%MESSAGE%', msg, template)
+            return translate_html(html_text)
 
 
 class EditWord(BaseServer):

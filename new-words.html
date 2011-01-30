@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>ExponWords (%TRANS: New words%)</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel=stylesheet href="exponwords.css" type="text/css">
+  </head>
+  <body>
+    <p>%MESSAGE%</p>
+    <form id="searchbar-container-form" action="/new-words" method="post">
+      <div id="description-label">%TRANS: WORDS-INPUT-DESCRIPTION%</div>
+      <div><textarea name="new-words" rows="20" cols ="80"/></textarea></div>
+      <div><input type="submit" value="OK" /></div>
+    </form>
+    <p><a id="index-page" href="/">%TRANS: Go to the index page%</p>
+  </body>
+  <script type="text/javascript" language="JavaScript" src="/jquery.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/json2.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/exponwordslib.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/new-word.js"></script>
+</html>
