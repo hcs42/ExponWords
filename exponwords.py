@@ -575,13 +575,17 @@ urls = [
 
 def load_words():
     """Loads the word list file from the disk."""
-    fname = exponwords_ss.options.dict_file_name
+    dir = exponwords_ss.original_dir
+    rel_fname = exponwords_ss.options.dict_file_name
+    fname = os.path.join(dir, rel_fname)
     exponwords_ss.wordlist = words_from_file(fname)
 
 
 def save_words():
     """Saves the word list file to the disk."""
-    fname = exponwords_ss.options.dict_file_name
+    dir = exponwords_ss.original_dir
+    rel_fname = exponwords_ss.options.dict_file_name
+    fname = os.path.join(dir, rel_fname)
     words_to_file(exponwords_ss.wordlist, fname)
 
 
@@ -1086,6 +1090,7 @@ def main(options, args):
 ##### main #####
 
 if __name__ == '__main__':
+    exponwords_ss.original_dir = os.getcwd()
     exponwords_path = os.path.dirname(sys.argv[0])
     if exponwords_path != '':
         os.chdir(os.path.dirname(sys.argv[0]))

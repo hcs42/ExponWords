@@ -13,3 +13,4 @@
     - print the word list
     - "Edit" link next to each word to /edit-word?word=12
 - adding words copied from a spreadsheet application
+- "-f" should be relative to the starting path

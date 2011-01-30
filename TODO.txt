@@ -7,7 +7,6 @@ Important
 ---------
 
 - edit raw word list
-- "-f" should be relative to the starting path
 - English help page
 
 Would be nice
