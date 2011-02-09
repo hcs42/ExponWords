@@ -232,7 +232,7 @@ def words_from_file(dict_file_name):
                 return None
         else:
             # This line contains a word pair.
-            strength_date_regexp = '<(\d+) +(\d\d\d\d)-(\d\d)-(\d\d)>'
+            strength_date_regexp = '<(-?\d+) +(\d\d\d\d)-(\d\d)-(\d\d)>'
             regexp = (r'^(\{(\d+)\})? *(.*?) -- (.*?)' +
                       '( ' + strength_date_regexp * 2 + ')?' +
                       '$')
@@ -416,6 +416,8 @@ def ask_word(word, direction, wordlist, use_getch=False, use_color=False):
 
 
 def next_date(strength, date):
+    if strength < 0:
+        strength = 0
     return date + datetime.timedelta(2 ** strength)
 
 
