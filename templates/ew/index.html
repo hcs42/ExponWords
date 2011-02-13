@@ -1,0 +1,16 @@
+{{ msg }}
+
+<ul>
+    <li><a href="">Menu item 1</a></li>
+    <li><a href="">Menu item 2</a></li>
+    {% if wordlists %}
+    <li>Edit dictionary:
+        <ul>
+        {% for wordlist in wordlists %}
+            <li><a href="/wordlist/{{ wordlist.id }}/">{{ wordlist.name }}</a></li>
+        {% endfor %}
+        </ul>
+    </li>
+    {% endif %}
+</ul>
+
