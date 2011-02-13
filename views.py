@@ -4,13 +4,14 @@ from django.contrib.auth import authenticate
 
 def index(request):
     if request.user.is_authenticated():
-        msg = 'Username: ' + request.user.username
+        username = request.user.username
+        wordlists = WordList.objects.all()
     else:
-        msg = 'Not logged in'
+        username = None
+        wordlists = None
 
-    wordlists = WordList.objects.all()
     return render_to_response(
                'ew/index.html',
                {'wordlists': wordlists,
-                'msg': msg})
+                'username': username})
 

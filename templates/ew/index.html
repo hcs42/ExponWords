@@ -1,16 +1,45 @@
-{{ msg }}
+<h1>ExponWords</h1>
+
+{% if username == None %}
+You are not logged in.
+{% else %}
+Welcome, {{ username }}!
+{% endif %}
 
 <ul>
-    <li><a href="">Menu item 1</a></li>
-    <li><a href="">Menu item 2</a></li>
-    {% if wordlists %}
-    <li>Edit dictionary:
-        <ul>
-        {% for wordlist in wordlists %}
-            <li><a href="/wordlist/{{ wordlist.id }}/">{{ wordlist.name }}</a></li>
-        {% endfor %}
-        </ul>
-    </li>
-    {% endif %}
-</ul>
 
+  <!-- Menu items for not logged in users -->
+
+  {% if username == None %}
+  <li><a href="login">Log in</a></li>
+  {% endif %}
+
+  <!-- Menu items for logged in users -->
+
+  {% if username != None %}
+  <li><a href="logout">Log out</a></li>
+  {% endif %}
+
+  <!-- Listing word lists -->
+
+  {% if wordlists %}
+  <li>Dictionaries:
+  <ul>
+    {% for wordlist in wordlists %}
+    <li>
+      {{ wordlist.name }}:
+      <a href="/wordlist/{{ wordlist.id }}/practice/">Practice</a>,
+      <a href="/wordlist/{{ wordlist.id }}/edit/">View/edit</a>,
+      <a href="/wordlist/{{ wordlist.id }}/new-word/">Add new word</a>,
+      <a href="/wordlist/{{ wordlist.id }}/new-words/">Add new words</a>
+    </li>
+    {% endfor %}
+  </ul>
+  </li>
+  {% endif %}
+
+  <!-- Menu items for everyone -->
+
+  <li><a href="">Help</a></li>
+
+</ul>
