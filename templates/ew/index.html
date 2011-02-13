@@ -35,10 +35,10 @@ Welcome, {{ username }}!
     {% for wordlist in wordlists %}
     <li>
       {{ wordlist.name }}:
-      <a href="/wordlist/{{ wordlist.id }}/practice/">Practice</a>,
-      <a href="/wordlist/{{ wordlist.id }}/edit/">View/edit</a>,
-      <a href="/wordlist/{{ wordlist.id }}/new-word/">Add new word</a>,
-      <a href="/wordlist/{{ wordlist.id }}/new-words/">Add new words</a>
+      <a href="/dict/{{ wordlist.id }}/practice/">Practice</a>,
+      <a href="/dict/{{ wordlist.id }}/edit/">View/edit</a>,
+      <a href="/dict/{{ wordlist.id }}/new-word/">Add new word</a>,
+      <a href="/dict/{{ wordlist.id }}/new-words/">Add new words</a>
     </li>
     {% endfor %}
   </ul>

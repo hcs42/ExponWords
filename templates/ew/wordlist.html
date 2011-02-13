@@ -1,0 +1,33 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+ExponWords (Dictionary {{ wordlist.name }})
+{% endblock %}
+
+{% block content %}
+Dictionary: {{ wordlist.name }}
+
+<table border="1">
+  <tr>
+    <td class="tbl_header">Word in language 1</td>
+    <td class="tbl_header">Word in language 2</td>
+    <td class="tbl_header">Explanation</td>
+    <td class="tbl_header" colspan="2">Strengths</td>
+    <td class="tbl_header" colspan="2">Dates</td>
+    <td class="tbl_header">Action</td>
+  </tr>
+  {% for word in words %}
+  <tr>
+    <td>{{ word.lang0 }}</td>
+    <td>{{ word.lang1 }}</td>
+    <td class="explanation">{{ word.explanation }}</td>
+    <td>{{ word.strength0 }}</td>
+    <td>{{ word.strength1 }}</td>
+    <td>{{ word.date0 }}</td>
+    <td>{{ word.date1 }}</td>
+    <td><a href="edit_link">Edit</a></td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}

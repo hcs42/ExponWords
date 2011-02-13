@@ -3,7 +3,7 @@ from ExponWords import settings
 
 urlpatterns = patterns('ew.views',
     (r'^$', 'index'),
-    #(r'^(?P<poll_id>\d+)/$', 'menu'),
+    (r'^dict/(?P<wordlist_id>\d+)/edit/$', 'edit_wordlist'),
     #(r'^(?P<poll_id>\d+)/results/$', 'results'),
     #(r'^(?P<poll_id>\d+)/vote/$', 'vote'),
 )
