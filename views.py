@@ -3,9 +3,10 @@ from ew.models import Word, WordList
 from django.contrib.auth import authenticate
 
 def index(request):
-    if request.user.is_authenticated():
-        username = request.user.username
-        wordlists = WordList.objects.all()
+    user = request.user
+    if user.is_authenticated():
+        username = user.username
+        wordlists = WordList.objects.filter(user=user)
     else:
         username = None
         wordlists = None

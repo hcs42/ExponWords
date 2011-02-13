@@ -1,9 +1,11 @@
 from django.db import models
+from django.contrib.auth.models import User
 import datetime
 
 
 class WordList(models.Model):
 
+    user = models.ForeignKey(User)
     name = models.CharField(max_length=255) # the name of the wordlist
 
     def __unicode__(self):
