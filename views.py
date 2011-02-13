@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
-from ew.models import Word, WordList
 from django.contrib.auth import authenticate
+from ExponWords.ew.models import Word, WordList
 
 def index(request):
     user = request.user
@@ -15,4 +15,3 @@ def index(request):
                'ew/index.html',
                {'wordlists': wordlists,
                 'username': username})
-
