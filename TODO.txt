@@ -8,22 +8,33 @@ Important
 
 - English help page
 - remove word (probably a button into the /edit-word page)
+- using only relative links
 
 Would be nice
 -------------
 
 - edit raw word list
-- random should not be totally random: it could be deterministic within a day
+- random should not be totally random: it could be deterministic within a day,
+  but it should also have a pointer about which word is next so that if you say
+  NO to a word, it will not come back if you reload the page only after
+  answering the words not yet asked
 - number of hits and misses in stats
 - authentication using openid
 - password should be pwd so that it will be remembered by the browser
 - show the future
 - "I said I knew that word but I have just realized I did not"
 - showing "(n)" when having multiple occurrences of the same word
+- word queue for words to be learnt
+- turnaround time set by the user according to his timezone
+- update_word should update the word only if the strength and date match
+- update_word should send back an OK even if it realizes that the word has
+  previously been update, because otherwise the green number will indicate that
+  the word has not been processes by the server (the problematic scenario is
+  when the ACK gets lost)
 
 Wishlist
 --------
 
 - "We will have a word test tomorrow at school" mode:
-    - asking only words added at a certain date
+    - asking only words added at a certain date, but asking them again and again
 - importing/exporting CSV files
