@@ -1,3 +1,10 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+ExponWords (index)
+{% endblock %}
+
+{% block content %}
 <h1>ExponWords</h1>
 
 {% if username == None %}
@@ -11,7 +18,7 @@ Welcome, {{ username }}!
   <!-- Menu items for not logged in users -->
 
   {% if username == None %}
-  <li><a href="login">Log in</a></li>
+  <li><a href="login" >Log in</a></li>
   {% endif %}
 
   <!-- Menu items for logged in users -->
@@ -43,3 +50,4 @@ Welcome, {{ username }}!
   <li><a href="">Help</a></li>
 
 </ul>
+{% endblock %}
