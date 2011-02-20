@@ -23,23 +23,30 @@ def index(request):
                 'username': username})
 
 
-def auth_dict_usage(request, wdict_id):
-
-    user = request.user
+def auth_user(request):
 
     # If the user is not logged in, send him to the index page
-    if not user.is_authenticated():
+    if not request.user.is_authenticated():
         response = render_to_response(
                        'ew/index.html',
                        {'wdicts': None,
                         'username': None})
         return {'response': response}
 
+    return {}
+
+
+def auth_dict_usage(request, wdict_id):
+
+    auth_result = auth_user(request)
+    if 'response' in auth_result:
+        return auth_result['response']
+
     # Get the dictionary; of it does not exist, send him to page 404
     wdict = get_object_or_404(WDict, pk=wdict_id)
 
     # If the user does not own the dictionary, send him to page 404
-    if wdict.user != user:
+    if wdict.user != request.user:
         raise Http404
 
     return {'wdict': wdict}
@@ -91,7 +98,6 @@ def add_word_pair(request, wdict_id):
         explanation = forms.CharField(widget=forms.Textarea)
 
     if request.method == 'POST':
-
         form = AddWordPairForm(request.POST)
         if form.is_valid():
             add_word_pair_to_wdict(wdict, form)
@@ -106,4 +112,37 @@ def add_word_pair(request, wdict_id):
                {'form':  AddWordPairForm(),
                 'message': message,
                 'wdict': wdict},
+                context_instance=RequestContext(request))
+
+
+def add_wdict(request):
+
+    auth_result = auth_user(request)
+    if 'response' in auth_result:
+        return auth_result['response']
+
+    class AddWDictForm(forms.Form):
+        name = forms.CharField(max_length=255, label="Name of the dictionary:")
+        lang1 = forms.CharField(max_length=255, label="Language 1:")
+        lang2 = forms.CharField(max_length=255, label="Language 2:")
+
+    if request.method == 'POST':
+        form = AddWDictForm(request.POST)
+        if form.is_valid():
+            wdict = WDict()
+            wdict.user = request.user
+            wdict.name = form.cleaned_data['name']
+            wdict.lang1 = form.cleaned_data['lang1']
+            wdict.lang2 = form.cleaned_data['lang2']
+            wdict.save()
+            message = 'Dictionary created.'
+        else:
+            message = 'Some fields are invalid.'
+    else:
+        message = ''
+
+    return render_to_response(
+               'ew/add_wdict.html',
+               {'form':  AddWDictForm(),
+                'message': message},
                 context_instance=RequestContext(request))

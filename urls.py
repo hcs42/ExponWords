@@ -5,6 +5,7 @@ urlpatterns = patterns('ew.views',
     (r'^$', 'index'),
     (r'^dict/(?P<wdict_id>\d+)/view/$', 'view_wdict'),
     (r'^dict/(?P<wdict_id>\d+)/add-word-pair/$', 'add_word_pair'),
+    (r'^create-dict/$', 'add_wdict'),
 )
 
 urlpatterns += patterns('django.contrib.auth.views',

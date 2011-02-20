@@ -42,10 +42,11 @@ Welcome, {{ username }}!
       <a href="/dict/{{ d.id }}/add-word-pair-with-tabs/">Add new word pairs (as tab separated values)</a>
     </li>
     {% endfor %}
-  </ul>
   {% else %}
   You have no dictionaries.
   {% endif %}
+    <li><a href="/create-dict/">Create new dictionary</a></li>
+  </ul>
   </li>
 
   <!-- Menu items for everyone -->
