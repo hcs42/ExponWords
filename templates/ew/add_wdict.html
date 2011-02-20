@@ -1,0 +1,20 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+ExponWords (Create new dictionary)
+{% endblock %}
+
+{% block content %}
+<h1>Create new dictionary</h1>
+
+<p>{{ message }}</p>
+
+<form action="./" method="post">{% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="Create dictionary" />
+</form>
+
+<a href="..">Go to main page</a>
+{% endblock %}

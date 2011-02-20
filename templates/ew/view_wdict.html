@@ -1,11 +1,11 @@
 {% extends "ew/base.html" %}
 
 {% block title %}
-ExponWords (Dictionary: "{{ wdict.name }}")
+ExponWords (View dictionary: "{{ wdict.name }}")
 {% endblock %}
 
 {% block content %}
-Dictionary: "{{ wdict.name }}"
+<h1>View dictionary: "{{ wdict.name }}"</h1>
 
 <table border="1">
   <tr>
@@ -25,9 +25,11 @@ Dictionary: "{{ wdict.name }}"
     <td>{{ wp.strength2 }}</td>
     <td>{{ wp.date1 }}</td>
     <td>{{ wp.date2 }}</td>
-    <td><a href="edit_link">Edit</a></td>
+    <td><a href="../../../word-pair/{{ wp.id }}/edit/">Edit</a></td>
   </tr>
   {% endfor %}
 </table>
+
+<p><a href="../../..">Go back to main page</a></p>
 
 {% endblock %}

@@ -1,11 +1,11 @@
 {% extends "ew/base.html" %}
 
 {% block title %}
-ExponWords (Add new word to dictionary "{{ wdict.name }}")
+ExponWords (Edit word pair)
 {% endblock %}
 
 {% block content %}
-<h1>Add new word to dictionary "{{ wdict.name }}"</h1>
+<h1>Edit word pair</h1>
 
 <p>{{ message }}</p>
 
@@ -13,7 +13,7 @@ ExponWords (Add new word to dictionary "{{ wdict.name }}")
   <table>
     {{ form.as_table }}
   </table>
-  <input type="submit" value="Add word pair" />
+  <input type="submit" value="Save" />
 </form>
 
 <!-- FIXME  The URL is ugly. -->

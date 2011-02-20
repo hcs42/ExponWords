@@ -1,11 +1,11 @@
 {% extends "ew/base.html" %}
 
 {% block title %}
-ExponWords (index)
+ExponWords (main page)
 {% endblock %}
 
 {% block content %}
-<h1>ExponWords</h1>
+<h1>ExponWords main page</h1>
 
 {% if username == None %}
 You are not logged in.
@@ -39,7 +39,7 @@ Welcome, {{ username }}!
       <a href="/dict/{{ d.id }}/practice/">Practice</a>,
       <a href="/dict/{{ d.id }}/view/">View</a>,
       <a href="/dict/{{ d.id }}/add-word-pair/">Add new word pair</a>,
-      <a href="/dict/{{ d.id }}/add-word-pair-with-tabs/">Add new word pairs (as tab separated values)</a>
+      <a href="/dict/{{ d.id }}/">More...</a>
     </li>
     {% endfor %}
   {% else %}

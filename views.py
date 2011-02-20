@@ -15,8 +15,6 @@ def index(request):
         username = None
         wdicts = None
 
-    print wdicts
-
     return render_to_response(
                'ew/index.html',
                {'wdicts': wdicts,
@@ -50,6 +48,37 @@ def auth_dict_usage(request, wdict_id):
         raise Http404
 
     return {'wdict': wdict}
+
+
+def auth_word_pair_usage(request, word_pair_id):
+
+    auth_result = auth_user(request)
+    if 'response' in auth_result:
+        return auth_result['response']
+
+    # Get the dictionary; of it does not exist, send him to page 404
+    wp = get_object_or_404(WordPair, pk=word_pair_id)
+    wdict = wp.wdict
+
+    # If the user does not own the dictionary, send him to page 404
+    if wp.wdict.user != request.user:
+        raise Http404
+
+    return {'word_pair': wp,
+            'wdict': wdict}
+
+
+def wdict(request, wdict_id):
+
+    auth_result = auth_dict_usage(request, wdict_id)
+    if 'response' in auth_result:
+        return auth_result['response']
+    else:
+        wdict = auth_result['wdict']
+
+    return render_to_response(
+               'ew/wdict.html',
+               {'wdict': wdict})
 
 
 def view_wdict(request, wdict_id):
@@ -112,6 +141,54 @@ def add_word_pair(request, wdict_id):
                {'form':  AddWordPairForm(),
                 'message': message,
                 'wdict': wdict},
+                context_instance=RequestContext(request))
+
+
+def modify_word_pair(word_pair, form):
+
+    # Creating the new word
+    wp = word_pair
+    wp.word_in_lang1 = form.cleaned_data['word_in_lang1']
+    wp.word_in_lang2 = form.cleaned_data['word_in_lang2']
+    wp.explanation = form.cleaned_data['explanation']
+    wp.save()
+
+
+def edit_word_pair(request, word_pair_id):
+
+    auth_result = auth_word_pair_usage(request, word_pair_id)
+    if 'response' in auth_result:
+        return auth_result['response']
+    else:
+        wp = auth_result['word_pair']
+        wdict = auth_result['wdict']
+
+    label1 = 'Word in "%s":' % (wdict.lang1,)
+    label2 = 'Word in "%s":' % (wdict.lang2,)
+    class EditWordPairForm(forms.Form):
+        word_in_lang1 = forms.CharField(max_length=255, label=label1)
+        word_in_lang2 = forms.CharField(max_length=255, label=label2)
+        explanation = forms.CharField(widget=forms.Textarea)
+
+    if request.method == 'POST':
+        form = EditWordPairForm(request.POST)
+        if form.is_valid():
+            modify_word_pair(wp, form)
+            message = 'Word pair modified.'
+        else:
+            message = 'Some fields are invalid.'
+    else:
+        message = ''
+        data = {'word_in_lang1': wp.word_in_lang1,
+                'word_in_lang2': wp.word_in_lang2,
+                'explanation': wp.explanation}
+        form = EditWordPairForm(data)
+
+    return render_to_response(
+               'ew/edit_word_pair.html',
+               {'form': form,
+                'message': message,
+                'word_pair': wp},
                 context_instance=RequestContext(request))
 
 
