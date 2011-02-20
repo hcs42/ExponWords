@@ -1,6 +1,6 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate
-from ExponWords.ew.models import Word, WordList
+from ExponWords.ew.models import WordPair, WDict
 from django.http import Http404
 from django import forms
 from django.template import RequestContext
@@ -10,96 +10,100 @@ def index(request):
     user = request.user
     if user.is_authenticated():
         username = user.username
-        wordlists = WordList.objects.filter(user=user)
+        wdicts = WDict.objects.filter(user=user)
     else:
         username = None
-        wordlists = None
+        wdicts = None
+
+    print wdicts
 
     return render_to_response(
                'ew/index.html',
-               {'wordlists': wordlists,
+               {'wdicts': wdicts,
                 'username': username})
 
 
-def auth_dict_usage(request, wordlist_id):
+def auth_dict_usage(request, wdict_id):
 
     user = request.user
 
-    # If the user is not logged in, send him
+    # If the user is not logged in, send him to the index page
     if not user.is_authenticated():
         response = render_to_response(
                        'ew/index.html',
-                       {'wordlists': None,
+                       {'wdicts': None,
                         'username': None})
         return {'response': response}
 
-    # If the user does not own the word list, raise an exception
-    wordlist = get_object_or_404(WordList, pk=wordlist_id)
-    if wordlist.user != user:
+    # Get the dictionary; of it does not exist, send him to page 404
+    wdict = get_object_or_404(WDict, pk=wdict_id)
+
+    # If the user does not own the dictionary, send him to page 404
+    if wdict.user != user:
         raise Http404
 
-    return {'wordlist': wordlist}
+    return {'wdict': wdict}
 
 
-def edit_wordlist(request, wordlist_id):
+def view_wdict(request, wdict_id):
 
-    auth_result = auth_dict_usage(request, wordlist_id)
+    auth_result = auth_dict_usage(request, wdict_id)
     if 'response' in auth_result:
         return auth_result['response']
     else:
-        wordlist = auth_result['wordlist']
+        wdict = auth_result['wdict']
 
-    words = wordlist.word_set.all()
+    word_pairs = wdict.wordpair_set.all()
 
     return render_to_response(
-               'ew/wordlist.html',
-               {'wordlist': wordlist,
-                'words': words})
+               'ew/view_wdict.html',
+               {'wdict': wdict,
+                'word_pairs': word_pairs})
 
 
-def add_word_to_wordlist(wordlist, form):
+def add_word_pair_to_wdict(wdict, form):
 
     # Creating the new word
-    word = Word()
-    word.lang0 = form.cleaned_data['lang0']
-    word.lang1 = form.cleaned_data['lang1']
-    word.explanation = form.cleaned_data['explanation']
+    wp = WordPair()
+    wp.word_in_lang1 = form.cleaned_data['word_in_lang1']
+    wp.word_in_lang2 = form.cleaned_data['word_in_lang2']
+    wp.explanation = form.cleaned_data['explanation']
 
     # Adding the new word
-    wordlist.word_set.add(word)
-    word.save()
-    wordlist.save()
+    wdict.wordpair_set.add(wp)
+    wp.save()
+    wdict.save()
 
 
-class AddWordForm(forms.Form):
-    lang0 = forms.CharField(max_length=255,
-                            label="Word in the first language:")
-    lang1 = forms.CharField(max_length=255,
-                            label="Word in the second language:")
-    explanation = forms.CharField(widget=forms.Textarea)
+def add_word_pair(request, wdict_id):
 
-
-def add_word(request, wordlist_id):
-
-    auth_result = auth_dict_usage(request, wordlist_id)
+    auth_result = auth_dict_usage(request, wdict_id)
     if 'response' in auth_result:
         return auth_result['response']
     else:
-        wordlist = auth_result['wordlist']
+        wdict = auth_result['wdict']
+
+    label1 = 'Word in "%s":' % (wdict.lang1,)
+    label2 = 'Word in "%s":' % (wdict.lang2,)
+    class AddWordPairForm(forms.Form):
+        word_in_lang1 = forms.CharField(max_length=255, label=label1)
+        word_in_lang2 = forms.CharField(max_length=255, label=label2)
+        explanation = forms.CharField(widget=forms.Textarea)
 
     if request.method == 'POST':
-        form = AddWordForm(request.POST)
+
+        form = AddWordPairForm(request.POST)
         if form.is_valid():
-            add_word_to_wordlist(wordlist, form)
-            message = 'Word added.'
+            add_word_pair_to_wdict(wdict, form)
+            message = 'Word pair added.'
         else:
             message = 'Some fields are invalid.'
     else:
         message = ''
 
     return render_to_response(
-               'ew/add_word.html',
-               {'form':  AddWordForm(),
+               'ew/add_word_pair.html',
+               {'form':  AddWordPairForm(),
                 'message': message,
-                'wordlist': wordlist},
+                'wdict': wdict},
                 context_instance=RequestContext(request))

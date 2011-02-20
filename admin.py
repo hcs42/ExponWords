@@ -1,11 +1,11 @@
 import ew.models
 from django.contrib import admin
 
-class WordInline(admin.TabularInline):
-    model = ew.models.Word
+class WordPairInline(admin.TabularInline):
+    model = ew.models.WordPair
     extra = 1
 
 class WordListAdmin(admin.ModelAdmin):
-    inlines = [WordInline]
+    inlines = [WordPairInline]
 
-admin.site.register(ew.models.WordList, WordListAdmin)
+admin.site.register(ew.models.WDict, WordListAdmin)

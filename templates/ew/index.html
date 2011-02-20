@@ -27,23 +27,26 @@ Welcome, {{ username }}!
   <li><a href="logout">Log out</a></li>
   {% endif %}
 
-  <!-- Listing word lists -->
-
-  {% if wordlists %}
-  <li>Dictionaries:
+  <!-- Listing dictionaries -->
+  
+  <li>
+  {% if wdicts %}
+  Dictionaries:
   <ul>
-    {% for wordlist in wordlists %}
+    {% for d in wdicts%}
     <li>
-      {{ wordlist.name }}:
-      <a href="/dict/{{ wordlist.id }}/practice/">Practice</a>,
-      <a href="/dict/{{ wordlist.id }}/edit/">View/edit</a>,
-      <a href="/dict/{{ wordlist.id }}/add-word/">Add new word</a>,
-      <a href="/dict/{{ wordlist.id }}/add-words-tabs/">Add new words (as tab separated values)</a>
+      {{ d.name }}:
+      <a href="/dict/{{ d.id }}/practice/">Practice</a>,
+      <a href="/dict/{{ d.id }}/view/">View</a>,
+      <a href="/dict/{{ d.id }}/add-word-pair/">Add new word pair</a>,
+      <a href="/dict/{{ d.id }}/add-word-pair-with-tabs/">Add new word pairs (as tab separated values)</a>
     </li>
     {% endfor %}
   </ul>
-  </li>
+  {% else %}
+  You have no dictionaries.
   {% endif %}
+  </li>
 
   <!-- Menu items for everyone -->
 
