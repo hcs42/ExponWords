@@ -31,6 +31,7 @@ class WordPair(models.Model):
     strength2 = models.IntegerField(default=0)
 
     # dates of the next practice
+    date_added = models.DateField(default=datetime.date.today())
     date1 = models.DateField(default=datetime.date.today())
     date2 = models.DateField(default=datetime.date.today())
 
