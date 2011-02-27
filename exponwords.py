@@ -436,6 +436,11 @@ def update_word(word, direction, answer):
     assert(isinstance(answer, bool))
     today = datetime.date.today()
     strength = word.strengths[direction]
+
+    if word.dates[direction] > today:
+        # This update have already been performed
+        return
+
     if answer:
         # The user knew the answer
         word.strengths[direction] += 1
