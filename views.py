@@ -1,10 +1,14 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate
 from ExponWords.ew.models import WordPair, WDict
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django import forms
 from django.template import RequestContext
 import datetime
+import json
+import traceback
+import re
+import sys
 
 
 def index(request):
@@ -245,3 +249,103 @@ def add_wdict(request):
                {'form':  AddWDictForm(),
                 'message': message},
                 context_instance=RequestContext(request))
+
+
+def practice_wdict(request, wdict_id):
+
+    auth_result = auth_dict_usage(request, wdict_id)
+    if 'response' in auth_result:
+        return auth_result['response']
+    else:
+        wdict = auth_result['wdict']
+
+    return render_to_response(
+               'ew/practice_wdict.html',
+               {'wdict': wdict,
+                'message': ''},
+                context_instance=RequestContext(request))
+
+
+def explanation_to_html(explanation):
+    """Escapes the given explanation so that it can be printed as HTML.
+
+    **Argument:**
+
+    - `explanation` (str)
+
+    **Returns:** str
+    """
+
+    def insert_nbps(matchobject):
+        """Returns the same number of "&nbsp;":s as the number of matched
+        characters."""
+        spaces = matchobject.group(1)
+        return '&nbsp;' * (4 + len(spaces))
+
+    regexp = re.compile(r'^( *)', re.MULTILINE)
+    if (len(explanation) > 1) and (explanation[-1] == '\n'):
+        explanation = explanation[:-1]
+    exp2 = re.sub(regexp, insert_nbps, explanation)
+    exp3 = '<br/>'.join(exp2.splitlines())
+    return exp3
+
+
+def get_words_to_practice_today(request, wdict_id):
+
+    try:
+        auth_result = auth_dict_usage(request, wdict_id)
+        if 'response' in auth_result:
+            return auth_result['response']
+        else:
+            wdict = auth_result['wdict']
+
+        words_to_practice = wdict.get_words_to_practice_today()
+    
+        result = []
+        for wp, direction in words_to_practice:
+            result.append([wp.word_in_lang1,
+                           wp.word_in_lang2,
+                           direction,
+                           wp.id,
+                           explanation_to_html(wp.explanation)])
+    
+        return HttpResponse(json.dumps(result),
+                             mimetype='application/json')
+    except Exception, e:
+        traceback.print_stack()
+        exc_info = sys.exc_info()
+        traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
+        raise exc_info[0], exc_info[1], exc_info[2]
+
+
+def update_word(request, wdict_id):
+    print 'update_word start'
+    try:
+
+        answer = json.loads(request.POST['answer'])
+        word_pair_id = json.loads(request.POST['word_index'])
+        direction = json.loads(request.POST['direction'])
+
+        auth_result = auth_word_pair_usage(request, word_pair_id)
+        if 'response' in auth_result:
+            return auth_result['response']
+        else:
+            wp = auth_result['word_pair']
+            wdict = auth_result['wdict']
+
+        assert(isinstance(answer, bool))
+        if answer:
+            # The user knew the answer
+            wp.strengthen(direction)
+        else:
+            # The user did not know the answer
+            wp.weaken(direction)
+        wp.save()
+
+        return HttpResponse(json.dumps('ok'),
+                             mimetype='application/json')
+    except Exception, e:
+        traceback.print_stack()
+        exc_info = sys.exc_info()
+        traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
+        raise exc_info[0], exc_info[1], exc_info[2]
