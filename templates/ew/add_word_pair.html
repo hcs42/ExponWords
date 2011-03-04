@@ -5,6 +5,15 @@ ExponWords (Add new word to dictionary "{{ wdict.name }}")
 {% endblock %}
 
 {% block content %}
+
+<p>
+<a href="../../..">Main page</a>
+&raquo;
+<a href="..">Dictionary "{{ wdict.name }}"</a>
+&raquo;
+Add new word to dictionary
+</p>
+
 <h1>Add new word to dictionary "{{ wdict.name }}"</h1>
 
 <p>{{ message }}</p>
@@ -15,8 +24,4 @@ ExponWords (Add new word to dictionary "{{ wdict.name }}")
   </table>
   <input type="submit" value="Add word pair" />
 </form>
-
-<!-- FIXME  The URL is ugly. -->
-<a href="../../..">Go to main page</a>
-
 {% endblock %}

@@ -5,6 +5,17 @@ ExponWords (Edit word pair)
 {% endblock %}
 
 {% block content %}
+
+<p>
+<a href="../../..">Main page</a>
+&raquo;
+<a href="../../../dict/{{ wdict.id }}/">Dictionary "{{ wdict.name }}"</a>
+&raquo;
+<a href="../../../dict/{{ wdict.id }}/view/">View dictionary</a>
+&raquo;
+Edit word pair
+</p>
+
 <h1>Edit word pair</h1>
 
 <p>{{ message }}</p>
@@ -15,8 +26,5 @@ ExponWords (Edit word pair)
   </table>
   <input type="submit" value="Save" />
 </form>
-
-<!-- FIXME  The URL is ugly. -->
-<a href="../../..">Go to main page</a>
 
 {% endblock %}

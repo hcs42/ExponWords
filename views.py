@@ -214,7 +214,8 @@ def edit_word_pair(request, word_pair_id):
                'ew/edit_word_pair.html',
                {'form': form,
                 'message': message,
-                'word_pair': wp},
+                'word_pair': wp,
+                'wdict': wdict},
                 context_instance=RequestContext(request))
 
 

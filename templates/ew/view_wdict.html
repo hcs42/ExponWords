@@ -5,6 +5,15 @@ ExponWords (View dictionary: "{{ wdict.name }}")
 {% endblock %}
 
 {% block content %}
+
+<p>
+<a href="../../..">Main page</a>
+&raquo;
+<a href="..">Dictionary "{{ wdict.name }}"</a>
+&raquo;
+View dictionary
+</p>
+
 <h1>View dictionary: "{{ wdict.name }}"</h1>
 
 <table border="1">
@@ -29,7 +38,5 @@ ExponWords (View dictionary: "{{ wdict.name }}")
   </tr>
   {% endfor %}
 </table>
-
-<p><a href="../../..">Go back to main page</a></p>
 
 {% endblock %}

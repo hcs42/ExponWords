@@ -5,6 +5,13 @@ ExponWords (Dictionary "{{ wdict.name }}")
 {% endblock %}
 
 {% block content %}
+
+<p>
+<a href="../..">Main page</a>
+&raquo;
+Actions to dictionary "{{ wdict.name }}"
+</p>
+
 <h1>Actions to dictionary "{{ wdict.name }}"</h1>
 
 <ul>
@@ -13,6 +20,4 @@ ExponWords (Dictionary "{{ wdict.name }}")
   <li><a href="/dict/{{ wdict.id }}/add-word-pair/">Add new word pair</a></li>
   <li><a href="/dict/{{ wdict.id }}/add-word-pair-with-tabs/">Add new word pairs (as tab separated values)</a></li>
 </ul>
-
-<a href="../..">Go to main page</a>
 {% endblock %}
