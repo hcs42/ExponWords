@@ -43,6 +43,7 @@ def auth_dict_usage(request, wdict_id):
 
     auth_result = auth_user(request)
     if 'response' in auth_result:
+        # TODO redirect
         return auth_result['response']
 
     # Get the dictionary; of it does not exist, send him to page 404

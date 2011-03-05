@@ -7,12 +7,10 @@ ExponWords (Dictionary "{{ wdict.name }}")
 {% block content %}
 
 <p>
-<a href="../..">Main page</a>
+<span class="current_menu"><a href="../..">ExponWords</a></span>
 &raquo;
-Actions to dictionary "{{ wdict.name }}"
+<span class="current_menu">Dictionary "{{ wdict.name }}"</span>
 </p>
-
-<h1>Actions to dictionary "{{ wdict.name }}"</h1>
 
 <ul>
   <li><a href="/dict/{{ wdict.id }}/practice/">Practice</a></li>

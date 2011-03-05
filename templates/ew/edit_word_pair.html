@@ -7,16 +7,14 @@ ExponWords (Edit word pair)
 {% block content %}
 
 <p>
-<a href="../../..">Main page</a>
+<span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<a href="../../../dict/{{ wdict.id }}/">Dictionary "{{ wdict.name }}"</a>
+<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/">Dictionary "{{ wdict.name }}"</a></span>
 &raquo;
-<a href="../../../dict/{{ wdict.id }}/view/">View dictionary</a>
+<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/view/">View dictionary</a></span>
 &raquo;
-Edit word pair
+<span class="current_menu">Edit word pair</span>
 </p>
-
-<h1>Edit word pair</h1>
 
 <p>{{ message }}</p>
 

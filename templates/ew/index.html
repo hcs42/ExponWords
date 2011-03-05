@@ -5,7 +5,8 @@ ExponWords (main page)
 {% endblock %}
 
 {% block content %}
-<h1>ExponWords main page</h1>
+
+<p><span class="current_menu">ExponWords</span></p>
 
 {% if username == None %}
 You are not logged in.
@@ -35,11 +36,7 @@ Welcome, {{ username }}!
   <ul>
     {% for d in wdicts%}
     <li>
-      {{ d.name }}:
-      <a href="/dict/{{ d.id }}/practice/">Practice</a>,
-      <a href="/dict/{{ d.id }}/view/">View</a>,
-      <a href="/dict/{{ d.id }}/add-word-pair/">Add new word pair</a>,
-      <a href="/dict/{{ d.id }}/">More...</a>
+      <a href="/dict/{{ d.id }}/">"{{ d.name }}"</a>
     </li>
     {% endfor %}
   {% else %}

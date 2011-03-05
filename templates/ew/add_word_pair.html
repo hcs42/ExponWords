@@ -7,14 +7,12 @@ ExponWords (Add new word to dictionary "{{ wdict.name }}")
 {% block content %}
 
 <p>
-<a href="../../..">Main page</a>
+<span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<a href="..">Dictionary "{{ wdict.name }}"</a>
+<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
 &raquo;
-Add new word to dictionary
+<span class="current_menu">Add new word</span>
 </p>
-
-<h1>Add new word to dictionary "{{ wdict.name }}"</h1>
 
 <p>{{ message }}</p>
 

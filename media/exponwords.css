@@ -66,3 +66,9 @@
     color: darkgray;
 }
 
+.current_menu
+{
+    background-color: #eee;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
