@@ -1,5 +1,6 @@
 import datetime
 import random
+import re
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -27,8 +28,6 @@ class WDict(models.Model):
                 result.append((wp, 2))
         random.shuffle(result)
         return result
-
-
 
 
 class WordPair(models.Model):
@@ -93,3 +92,94 @@ class WordPair(models.Model):
     def weaken(self, direction):
         self.set_date(direction, datetime.date.today())
         self.set_strength(direction, 0)
+
+
+class EWException(Exception):
+    """A very simple exception class used."""
+
+    def __init__(self, value):
+        """Constructor.
+
+        **Argument:**
+
+        - `value` (object) -- The reason of the error.
+        """
+        Exception.__init__(self)
+        self.value = value
+
+    def __str__(self):
+        """Returns the string representation of the error reason.
+
+        **Returns:** str
+        """
+
+        value = self.value
+        if isinstance(value, str) or isinstance(value, unicode):
+            return value
+        else:
+            return repr(value)
+
+
+def import_textfile(s, wdict):
+    """Adds words from a text file to a dictionary.
+
+    Arguments:
+    - s (str)
+    - wdict (WDict)
+    """
+
+    i = 1
+    word_pairs = []
+    for line in s.splitlines():
+        line = line.rstrip()
+        if (line == '') or (line[0] == ' '):
+            # This line is part of an explanation.
+            if len(word_pairs) != 0:
+                line = re.sub('^ {1,4}', '', line) # removing prefix spaces
+                word_pairs[-1].explanation += line + '\n'
+            elif line == '':
+                pass
+            else:
+                msg = ('Line %s should not have spaces in the beginning: %s' %
+                       (i, line))
+                raise EWException(msg)
+        else:
+            # This line contains a word pair.
+            strength_date_regexp = '<(-?\d+) +(\d\d\d\d)-(\d\d)-(\d\d)>'
+            regexp = (r'^(\{(\d+)\})? *(.*?) -- (.*?)' +
+                      '( ' + strength_date_regexp * 2 + ')?' +
+                      '$')
+            r = re.search(regexp, line)
+            if r is None:
+                msg = 'Line %s is incorrect: %s' % (i, line)
+                raise EWException(msg)
+
+            wp = WordPair()
+            word_pairs.append(wp)
+
+            wp.word_in_lang1 = r.group(3)
+            wp.word_in_lang2 = r.group(4)
+            wp.explanation = ''
+            if r.group(5) is not None:
+                wp.date_added = datetime.date.today()
+                wp.date1 = datetime.date(int(r.group(7)),
+                                         int(r.group(8)),
+                                         int(r.group(9)))
+                wp.date2 = datetime.date(int(r.group(11)),
+                                         int(r.group(12)),
+                                         int(r.group(13)))
+                wp.strength1 = int(r.group(6))
+                wp.strength2 = int(r.group(10))
+            else:
+                wp.date_added = datetime.date.today()
+                wp.date1 = datetime.date.today()
+                wp.date2 = datetime.date.today()
+                wp.strength1 = 0
+                wp.strength2 = 0
+
+        i += 1
+
+    for wp in word_pairs:
+        wdict.wordpair_set.add(wp)
+        wp.save()
+        wdict.save()

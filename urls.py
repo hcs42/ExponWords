@@ -11,6 +11,10 @@ urlpatterns = patterns('ew.views',
     (r'^dict/(?P<wdict_id>\d+)/update-word/?$', 'update_word'),
     (r'^dict/(?P<wdict_id>\d+)/view/?$', 'view_wdict'),
     (r'^dict/(?P<wdict_id>\d+)/add-word-pair/?$', 'add_word_pair'),
+    (r'^dict/(?P<wdict_id>\d+)/import-word-pairs-from-text/?$',
+     'import_word_pairs_from_text'),
+    (r'^dict/(?P<wdict_id>\d+)/import-word-pairs-from-tsv/?$',
+     'import_word_pairs_from_tsv'),
     (r'^create-dict/?$', 'add_wdict'),
 )
 

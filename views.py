@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate
 from ExponWords.ew.models import WordPair, WDict
+import ExponWords.ew.models as models
 from django.http import Http404, HttpResponse
 from django import forms
 from django.template import RequestContext
@@ -354,3 +355,46 @@ def update_word(request, wdict_id):
         exc_info = sys.exc_info()
         traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
         raise exc_info[0], exc_info[1], exc_info[2]
+
+
+def CreateImportWordPairsFromTextForm(wdict):
+
+    class ImportForm(forms.Form):
+         text = forms.CharField(widget=forms.Textarea)
+
+    return ImportForm
+
+
+def import_word_pairs_from_text(request, wdict_id):
+
+    auth_result = auth_dict_usage(request, wdict_id)
+    if 'response' in auth_result:
+        return auth_result['response']
+    else:
+        wdict = auth_result['wdict']
+
+    ImportForm = CreateImportWordPairsFromTextForm(wdict)
+    if request.method == 'POST':
+        form = ImportForm(request.POST)
+        if form.is_valid():
+            try:
+                models.import_textfile(form.cleaned_data['text'], wdict)
+                message = 'Word pairs added.'
+                form = None
+            except Exception, e:
+                message = 'Error: ' + str(e)
+        else:
+            message = 'Some fields are invalid.'
+    else:
+        form = None
+        message = ''
+
+    if form is None:
+        form = ImportForm()
+
+    return render_to_response(
+               'ew/import_word_pairs_from_text.html',
+               {'form':  form,
+                'message': message,
+                'wdict': wdict},
+                context_instance=RequestContext(request))
