@@ -39,11 +39,11 @@ Welcome, {{ username }}!
       <a href="/dict/{{ d.id }}/">"{{ d.name }}"</a>
     </li>
     {% endfor %}
+  </ul>
   {% else %}
   You have no dictionaries.
   {% endif %}
     <li><a href="/create-dict/">Create new dictionary</a></li>
-  </ul>
   </li>
 
   {% endif %}
