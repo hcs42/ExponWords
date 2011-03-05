@@ -2,7 +2,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.auth import authenticate
 from ExponWords.ew.models import WordPair, WDict
 import ExponWords.ew.models as models
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django import forms
 from django.template import RequestContext
 import datetime
@@ -28,24 +28,16 @@ def index(request):
 
 
 def auth_user(request):
-
-    # If the user is not logged in, send him to the index page
     if not request.user.is_authenticated():
-        response = render_to_response(
-                       'ew/index.html',
-                       {'wdicts': None,
-                        'username': None})
-        return {'response': response}
-
-    return {}
+        return False
+    else:
+        return True
 
 
 def auth_dict_usage(request, wdict_id):
 
-    auth_result = auth_user(request)
-    if 'response' in auth_result:
-        # TODO redirect
-        return auth_result['response']
+    if not auth_user(request):
+        return {'response': HttpResponseRedirect('/')}
 
     # Get the dictionary; of it does not exist, send him to page 404
     wdict = get_object_or_404(WDict, pk=wdict_id)
@@ -59,9 +51,8 @@ def auth_dict_usage(request, wdict_id):
 
 def auth_word_pair_usage(request, word_pair_id):
 
-    auth_result = auth_user(request)
-    if 'response' in auth_result:
-        return auth_result['response']
+    if not auth_user(request):
+        return {'response': HttpResponseRedirect('/')}
 
     # Get the dictionary; of it does not exist, send him to page 404
     wp = get_object_or_404(WordPair, pk=word_pair_id)
@@ -226,9 +217,8 @@ def edit_word_pair(request, word_pair_id):
 
 def add_wdict(request):
 
-    auth_result = auth_user(request)
-    if 'response' in auth_result:
-        return auth_result['response']
+    if not auth_user(request):
+        return HttpResponseRedirect('/')
 
     class AddWDictForm(forms.Form):
         name = forms.CharField(max_length=255, label="Name of the dictionary:")
