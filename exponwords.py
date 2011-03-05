@@ -57,7 +57,7 @@ getch = _Getch()
 
 ##### Utilities #####
 
-version = '0.1'
+version = '0.1.1'
 
 def file_to_string(file_name, return_none=False):
     """Reads a file's content into a string.
