@@ -96,11 +96,14 @@ def view_wdict(request, wdict_id):
         wdict = auth_result['wdict']
 
     word_pairs = wdict.wordpair_set.all()
+    word_pairs_and_exps = []
+    for wp in word_pairs:
+        word_pairs_and_exps.append((wp, explanation_to_html(wp.explanation)))
 
     return render_to_response(
                'ew/view_wdict.html',
                {'wdict': wdict,
-                'word_pairs': word_pairs})
+                'word_pairs_and_exps': word_pairs_and_exps})
 
 def CreateWordPairForm(wdict):
 

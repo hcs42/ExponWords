@@ -23,11 +23,11 @@ ExponWords (View dictionary: "{{ wdict.name }}")
     <td class="tbl_header" colspan="2">Dates</td>
     <td class="tbl_header">Action</td>
   </tr>
-  {% for wp in word_pairs %}
+  {% for wp, explanation in word_pairs_and_exps %}
   <tr>
     <td>{{ wp.word_in_lang1 }}</td>
     <td>{{ wp.word_in_lang2 }}</td>
-    <td class="explanation">{{ wp.explanation }}</td>
+    <td class="explanation">{{ explanation|safe }}</td>
     <td>{{ wp.strength1 }}</td>
     <td>{{ wp.strength2 }}</td>
     <td>{{ wp.date1 }}</td>
