@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from ExponWords import settings
+from django.conf import settings
 
 urlpatterns = patterns('ew.views',
     (r'^$', 'index'),
