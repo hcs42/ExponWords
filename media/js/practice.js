@@ -11,11 +11,13 @@ var answered_incorrectly = 0;
 
 // Details of the current word
 var word;
-var word_index;
+var word_index = false;
 var direction;
 var question_word;
 var solution_word;
 var explanation;
+
+var prev_word_index;
 
 function get_todays_wordlist() {
     // Get the list of today's word from the server and ask the first one.
@@ -45,13 +47,22 @@ function ask_word() {
         direction = word[2];
         question_word = word[direction - 1];
         solution_word = word[2 - direction];
+        prev_word_index = word_index;
         word_index = word[3];
         explanation = word[4];
         $('#question').text(question_word);
         $('#answer').text('');
         $('#explanation').text('');
-        var edit_link = '/edit-word?word_index=' + word_index;
+
+        // Setting the "Edit current word" and "Edit previous word" links
+        var edit_link = '../../../word-pair/' + word_index + '/edit/';
         $('#edit-word-button').attr('href', edit_link);
+        if (prev_word_index != false) {
+            var prev_edit_link = '../../../word-pair/' + prev_word_index + '/edit/';
+            $('#edit-prev-word-button').attr('href', prev_edit_link);
+            $('#edit-prev-word-button').show();
+        }
+
         todays_wordlist.shift();
     }
 }
