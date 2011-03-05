@@ -315,7 +315,6 @@ def get_words_to_practice_today(request, wdict_id):
 
 
 def update_word(request, wdict_id):
-    print 'update_word start'
     try:
 
         answer = json.loads(request.POST['answer'])
