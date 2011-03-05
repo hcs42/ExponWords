@@ -16,7 +16,7 @@ def index(request):
     user = request.user
     if user.is_authenticated():
         username = user.username
-        wdicts = WDict.objects.filter(user=user)
+        wdicts = WDict.objects.filter(user=user, deleted=False)
     else:
         username = None
         wdicts = None
@@ -394,6 +394,51 @@ def import_word_pairs_from_text(request, wdict_id):
 
     return render_to_response(
                'ew/import_word_pairs_from_text.html',
+               {'form':  form,
+                'message': message,
+                'wdict': wdict},
+                context_instance=RequestContext(request))
+
+
+def CreateDeleteWDictForm(wdict):
+    label = ('Are you sure that you want to delete dictionary "%s"?' %
+             wdict.name)
+    class DeleteWDictForm(forms.Form):
+         sure = forms.BooleanField(label=label, required=False)
+    return DeleteWDictForm
+
+
+def delete_wdict(request, wdict_id):
+
+    auth_result = auth_dict_usage(request, wdict_id)
+    if 'response' in auth_result:
+        return auth_result['response']
+    else:
+        wdict = auth_result['wdict']
+
+    DeleteWDictForm = CreateDeleteWDictForm(wdict)
+    if request.method == 'POST':
+        form = DeleteWDictForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['sure']:
+                wdict.deleted = True
+                wdict.save()
+                message = 'Dictionary deleted.'
+                form = None
+            else:
+                message = ('Please check in the "Are you sure" checkbox if '
+                           'you really want to delete the dictionary.')
+        else:
+            message = 'Some fields are invalid.'
+    else:
+        form = None
+        message = ''
+
+    if form is None:
+        form = DeleteWDictForm()
+
+    return render_to_response(
+               'ew/delete_wdict.html',
                {'form':  form,
                 'message': message,
                 'wdict': wdict},

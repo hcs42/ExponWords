@@ -1,0 +1,25 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+ExponWords (Delete dictionary "{{ wdict.name }}")
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="../../..">ExponWords</a></span>
+&raquo;
+<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
+&raquo;
+<span class="current_menu">Delete dictionary</span>
+</p>
+
+<p>{{ message }}</p>
+
+<form action="./" method="post">{% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="Delete" />
+</form>
+{% endblock %}

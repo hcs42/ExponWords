@@ -25,8 +25,8 @@ Welcome, {{ username }}!
   <!-- Menu items for logged in users -->
 
   {% if username != None %}
+
   <li><a href="logout">Log out</a></li>
-  {% endif %}
 
   <!-- Listing dictionaries -->
   
@@ -45,6 +45,8 @@ Welcome, {{ username }}!
     <li><a href="/create-dict/">Create new dictionary</a></li>
   </ul>
   </li>
+
+  {% endif %}
 
   <!-- Menu items for everyone -->
 
