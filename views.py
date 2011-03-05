@@ -389,6 +389,22 @@ def import_word_pairs_from_text(request, wdict_id):
                 context_instance=RequestContext(request))
 
 
+def export_word_pairs_to_text(request, wdict_id):
+
+    auth_result = auth_dict_usage(request, wdict_id)
+    if 'response' in auth_result:
+        return auth_result['response']
+    else:
+        wdict = auth_result['wdict']
+
+    text = models.export_textfile(wdict)
+
+    return render_to_response(
+               'ew/export_wdict_as_text.html',
+               {'wdict': wdict,
+                'text': text})
+
+
 def CreateDeleteWDictForm(wdict):
     label = ('Are you sure that you want to delete dictionary "%s"?' %
              wdict.name)

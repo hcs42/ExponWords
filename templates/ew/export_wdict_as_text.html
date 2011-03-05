@@ -1,0 +1,21 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+ExponWords (Export dictionary as text: "{{ wdict.name }}")
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="../../..">ExponWords</a></span>
+&raquo;
+<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
+&raquo;
+<span class="current_menu">Export dictionary as text</span>
+</p>
+
+<pre>
+{{ text }}
+</pre>
+
+{% endblock %}

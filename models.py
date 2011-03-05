@@ -184,3 +184,31 @@ def import_textfile(s, wdict):
         wdict.wordpair_set.add(wp)
         wp.save()
         wdict.save()
+
+
+def export_textfile(wdict):
+    """Prints a dictionary in the old text format.
+
+    Arguments:
+    - wdict (WDict)
+
+    Returns: str
+    """
+
+    result = []
+    for wp in wdict.wordpair_set.all():
+        result.append(
+            '%s -- %s <%s %s><%s %s>\n' %
+            (wp.word_in_lang1,
+             wp.word_in_lang2,
+             str(wp.strength1),
+             str(wp.date1),
+             str(wp.strength2),
+             str(wp.date2)))
+        for expl_line in wp.explanation.splitlines():
+            if expl_line != '':
+                result.append('    ')
+                result.append(expl_line)
+            result.append('\n')
+    return ''.join(result)
+
