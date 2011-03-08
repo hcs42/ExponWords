@@ -5,6 +5,7 @@ import ExponWords.ew.models as models
 from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django import forms
 from django.template import RequestContext
+from django.utils.translation import ugettext as _
 import datetime
 import json
 import traceback
@@ -25,6 +26,15 @@ def index(request):
                'ew/index.html',
                {'wdicts': wdicts,
                 'username': username})
+
+
+def options(request):
+    languages = (('en', 'English'),
+                 ('hu', 'Magyar'))
+    return render_to_response(
+               'ew/options.html',
+               {'languages': languages},
+               context_instance=RequestContext(request))
 
 
 def auth_user(request):
@@ -99,8 +109,8 @@ def view_wdict(request, wdict_id):
 
 def CreateWordPairForm(wdict):
 
-    label1 = 'Word in "%s":' % (wdict.lang1,)
-    label2 = 'Word in "%s":' % (wdict.lang2,)
+    label1 = _('Word in "%(lang)s":') % {'lang': wdict.lang1}
+    label2 = _('Word in "%(lang)s":') % {'lang': wdict.lang2}
     label_date_added = 'Date of addition:'
     label_date1 = 'Date of next practice from "%s":' % (wdict.lang1,)
     label_date2 = 'Date of next practice from "%s":' % (wdict.lang2,)

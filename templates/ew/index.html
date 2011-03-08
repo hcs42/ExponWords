@@ -1,4 +1,5 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
 ExponWords (main page)
@@ -9,15 +10,14 @@ ExponWords (main page)
 <p><span class="current_menu">ExponWords</span></p>
 
 {% if username == None %}
-You are not logged in.
+{% trans "You are not logged in." %}
 {% else %}
-Welcome, {{ username }}!
+{% trans "Welcome" %}, {{ username }}!
 {% endif %}
 
 <ul>
 
   <!-- Menu items for not logged in users -->
-
   {% if username == None %}
   <li><a href="login" >Log in</a></li>
   {% endif %}
@@ -50,6 +50,7 @@ Welcome, {{ username }}!
 
   <!-- Menu items for everyone -->
 
+  <li><a href="options/">Options</a></li>
   <li><a href="">Help</a></li>
 
 </ul>

@@ -1,0 +1,30 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+ExponWords (Options)
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="../..">ExponWords</a></span>
+&raquo;
+<span class="current_menu">Options</span>
+</p>
+
+<p>
+Language:
+</p>
+
+<form action="/i18n/setlang/" method="post">
+  {% csrf_token %}
+  <input name="next" type="hidden" value="/" />
+  <select name="language">
+    {% for lang in languages %}
+    <option value="{{ lang.0 }}">{{ lang.1 }}</option>
+    {% endfor %}
+  </select>
+  <input type="submit" value="Save" />
+</form>
+
+{% endblock %}

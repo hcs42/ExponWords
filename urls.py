@@ -19,11 +19,15 @@ urlpatterns = patterns('ew.views',
      'import_word_pairs_from_tsv'),
     (r'^dict/(?P<wdict_id>\d+)/delete/?$', 'delete_wdict'),
     (r'^create-dict/?$', 'add_wdict'),
+    (r'^options/$', 'options'),
 )
 
 urlpatterns += patterns('django.contrib.auth.views',
     (r'^login/$', 'login'),
     (r'^logout/$', 'logout', {'next_page': '..'}),
+)
+urlpatterns += patterns('',
+    (r'^i18n/', include('django.conf.urls.i18n')),
 )
 
 if settings.DEBUG:
