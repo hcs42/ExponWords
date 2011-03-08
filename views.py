@@ -440,7 +440,7 @@ def export_word_pairs_to_text(request, wdict_id):
 
 def CreateDeleteWDictForm(wdict):
     label = (_('Are you sure that you want to delete dictionary "%(wdict)s"?') %
-             wdict.name)
+             {'wdict': wdict.name})
     class DeleteWDictForm(forms.Form):
          sure = forms.BooleanField(label=label, required=False)
     return DeleteWDictForm
