@@ -97,7 +97,7 @@ def view_wdict(request, wdict_id):
     else:
         wdict = auth_result['wdict']
 
-    word_pairs = wdict.wordpair_set.all()
+    word_pairs = wdict.wordpair_set.filter(deleted=False)
     word_pairs_and_exps = []
     for wp in word_pairs:
         word_pairs_and_exps.append((wp, explanation_to_html(wp.explanation)))
@@ -110,7 +110,8 @@ def view_wdict(request, wdict_id):
                {'wdict': wdict,
                 'word_pairs_and_exps': word_pairs_and_exps,
                 'lang_label1': lang_label1,
-                'lang_label2': lang_label2})
+                'lang_label2': lang_label2},
+                context_instance=RequestContext(request))
 
 def CreateWordPairForm(wdict):
 
@@ -362,6 +363,28 @@ def update_word(request, wdict_id):
         exc_info = sys.exc_info()
         traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
         raise exc_info[0], exc_info[1], exc_info[2]
+
+
+def delete_word_pairs(request, wdict_id):
+
+    auth_result = auth_dict_usage(request, wdict_id)
+    if 'response' in auth_result:
+        return auth_result['response']
+    else:
+        wdict = auth_result['wdict']
+
+    word_pairs = wdict.wordpair_set.filter(deleted=False)
+    word_pairs_to_delete = []
+    for wp in word_pairs:
+        if unicode(wp.id) in request.POST:
+            word_pairs_to_delete.append(wp)
+    print word_pairs_to_delete
+
+    for wp in word_pairs_to_delete:
+        wp.deleted = True
+        wp.save()
+
+    return HttpResponseRedirect('../view/')
 
 
 def CreateImportWordPairsForm(wdict):

@@ -23,7 +23,7 @@ class WDict(models.Model):
     def get_words_to_practice_today(self):
         today = datetime.date.today()
         result = []
-        for wp in self.wordpair_set.all():
+        for wp in self.wordpair_set.filter(deleted=False):
             if wp.date1 <= today:
                 result.append((wp, 1))
             if wp.date2 <= today:
@@ -52,6 +52,9 @@ class WordPair(models.Model):
 
     # explanation, examples, comments, etc.
     explanation = models.TextField(blank=True)
+
+    # whether the word pair is deleted or not
+    deleted = models.BooleanField(default=False)
 
     def __unicode__(self):
         return ('<%s -- %s>' %
@@ -242,7 +245,7 @@ def export_textfile(wdict):
     """
 
     result = []
-    for wp in wdict.wordpair_set.all():
+    for wp in wdict.wordpair_set.filter(deleted=False):
         result.append(
             '%s -- %s <%s %s><%s %s>\n' %
             (wp.word_in_lang1,
