@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords (Export dictionary as text: "{{ wdict.name }}")
+{% trans "Export dictionary as text" %}: "{{ wdict.name }}"
 {% endblock %}
 
 {% block content %}
@@ -9,9 +10,9 @@ ExponWords (Export dictionary as text: "{{ wdict.name }}")
 <p>
 <span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
+<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
-<span class="current_menu">Export dictionary as text</span>
+<span class="current_menu">{% trans "Export dictionary as text" %}</span>
 </p>
 
 <pre>

@@ -102,20 +102,25 @@ def view_wdict(request, wdict_id):
     for wp in word_pairs:
         word_pairs_and_exps.append((wp, explanation_to_html(wp.explanation)))
 
+    lang_label1 = (_('Word in "%(lang)s"') % {'lang': wdict.lang1})
+    lang_label2 = (_('Word in "%(lang)s"') % {'lang': wdict.lang2})
+
     return render_to_response(
                'ew/view_wdict.html',
                {'wdict': wdict,
-                'word_pairs_and_exps': word_pairs_and_exps})
+                'word_pairs_and_exps': word_pairs_and_exps,
+                'lang_label1': lang_label1,
+                'lang_label2': lang_label2})
 
 def CreateWordPairForm(wdict):
 
-    label1 = _('Word in "%(lang)s":') % {'lang': wdict.lang1}
-    label2 = _('Word in "%(lang)s":') % {'lang': wdict.lang2}
-    label_date_added = 'Date of addition:'
-    label_date1 = 'Date of next practice from "%s":' % (wdict.lang1,)
-    label_date2 = 'Date of next practice from "%s":' % (wdict.lang2,)
-    label_strength1 = 'Strengh of word from "%s":' % (wdict.lang1,)
-    label_strength2 = 'Strengh of word from "%s":' % (wdict.lang2,)
+    label1 = (_('Word in "%(lang)s"') % {'lang': wdict.lang1}) + ':'
+    label2 = (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
+    label_date_added = _('Date of addition:')
+    label_date1 = _('Date of next practice from "%(lang)s":') % {'lang': wdict.lang1}
+    label_date2 = _('Date of next practice from "%(lang)s":') % {'lang': wdict.lang2}
+    label_strength1 = _('Strengh of word from "%(lang)s":') % {'lang': wdict.lang1}
+    label_strength2 = _('Strengh of word from "%(lang)s":') % {'lang': wdict.lang2}
 
     class WordPairForm(forms.Form):
         word_in_lang1 = forms.CharField(max_length=255, label=label1)
@@ -162,10 +167,10 @@ def add_word_pair(request, wdict_id):
             wp.save()
             wdict.save()
 
-            message = 'Word pair added.'
+            message = _('Word pair added.')
             form = None
         else:
-            message = 'Some fields are invalid.'
+            message = _('Some fields are invalid.')
     else:
         form = None
         message = ''
@@ -201,9 +206,9 @@ def edit_word_pair(request, word_pair_id):
         if form.is_valid():
             set_word_pair_from_form(wp, form)
             wp.save()
-            message = 'Word pair modified.'
+            message = _('Word pair modified.')
         else:
-            message = 'Some fields are invalid.'
+            message = _('Some fields are invalid.')
     else:
         message = ''
         data = {'word_in_lang1': wp.word_in_lang1,
@@ -231,9 +236,12 @@ def add_wdict(request):
         return HttpResponseRedirect('/')
 
     class AddWDictForm(forms.Form):
-        name = forms.CharField(max_length=255, label="Name of the dictionary:")
-        lang1 = forms.CharField(max_length=255, label="Language 1:")
-        lang2 = forms.CharField(max_length=255, label="Language 2:")
+        name = forms.CharField(max_length=255,
+                               label=_("Name of the dictionary:"))
+        lang1 = forms.CharField(max_length=255,
+                                label=_("Language 1:"))
+        lang2 = forms.CharField(max_length=255,
+                                label=_("Language 2:"))
 
     if request.method == 'POST':
         form = AddWDictForm(request.POST)
@@ -244,9 +252,9 @@ def add_wdict(request):
             wdict.lang1 = form.cleaned_data['lang1']
             wdict.lang2 = form.cleaned_data['lang2']
             wdict.save()
-            message = 'Dictionary created.'
+            message = _('Dictionary created.')
         else:
-            message = 'Some fields are invalid.'
+            message = _('Some fields are invalid.')
     else:
         message = ''
 
@@ -359,12 +367,12 @@ def update_word(request, wdict_id):
 def CreateImportWordPairsForm(wdict):
 
     class ImportForm(forms.Form):
-         text = forms.CharField(widget=forms.Textarea)
+         text = forms.CharField(widget=forms.Textarea, label=_("Text:"))
 
     return ImportForm
 
 
-def import_word_pairs(request, wdict_id, import_fun, page_title1, page_title2):
+def import_word_pairs(request, wdict_id, import_fun, page_title):
 
     auth_result = auth_dict_usage(request, wdict_id)
     if 'response' in auth_result:
@@ -378,12 +386,12 @@ def import_word_pairs(request, wdict_id, import_fun, page_title1, page_title2):
         if form.is_valid():
             try:
                 import_fun(form.cleaned_data['text'], wdict)
-                message = 'Word pairs added.'
+                message = _('Word pairs added.')
                 form = None
             except Exception, e:
-                message = 'Error: ' + str(e)
+                message = _('Error: ') + unicode(e)
         else:
-            message = 'Some fields are invalid.'
+            message = _('Some fields are invalid.')
     else:
         form = None
         message = ''
@@ -391,33 +399,27 @@ def import_word_pairs(request, wdict_id, import_fun, page_title1, page_title2):
     if form is None:
         form = ImportForm()
 
-    page_title1 = page_title1 % wdict.name
-
     return render_to_response(
                'ew/import_word_pairs.html',
                {'form':  form,
                 'message': message,
                 'wdict': wdict,
-                'page_title1': page_title1,
-                'page_title2': page_title2},
+                'page_title': page_title},
                 context_instance=RequestContext(request))
 
 
 def import_word_pairs_from_text(request, wdict_id):
 
-    page_title1 = 'Import word pairs from text to dictionary "%s"'
-    page_title2 = 'Import word pairs from text'
+    page_title = _('Import word pairs from text')
     return import_word_pairs(request, wdict_id, models.import_textfile,
-                             page_title1, page_title2)
+                             page_title)
 
 
 def import_word_pairs_from_tsv(request, wdict_id):
 
-    page_title1 = ('Import word pairs from tab-separated values to dictionary '
-                   '"%s"')
-    page_title2 = 'Import word pairs from tab-separated values'
+    page_title = _('Import word pairs from tab-separated values')
     return import_word_pairs(request, wdict_id, models.import_tsv,
-                             page_title1, page_title2)
+                             page_title)
 
 
 def export_word_pairs_to_text(request, wdict_id):
@@ -437,7 +439,7 @@ def export_word_pairs_to_text(request, wdict_id):
 
 
 def CreateDeleteWDictForm(wdict):
-    label = ('Are you sure that you want to delete dictionary "%s"?' %
+    label = (_('Are you sure that you want to delete dictionary "%(wdict)s"?') %
              wdict.name)
     class DeleteWDictForm(forms.Form):
          sure = forms.BooleanField(label=label, required=False)
@@ -459,13 +461,13 @@ def delete_wdict(request, wdict_id):
             if form.cleaned_data['sure']:
                 wdict.deleted = True
                 wdict.save()
-                message = 'Dictionary deleted.'
+                message = _('Dictionary deleted.')
                 form = None
             else:
-                message = ('Please check in the "Are you sure" checkbox if '
-                           'you really want to delete the dictionary.')
+                message = _('Please check in the "Are you sure" checkbox if '
+                            'you really want to delete the dictionary.')
         else:
-            message = 'Some fields are invalid.'
+            message = _('Some fields are invalid.')
     else:
         form = None
         message = ''

@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords (Edit word pair)
+{% trans "Edit word pair" %}
 {% endblock %}
 
 {% block content %}
@@ -9,11 +10,11 @@ ExponWords (Edit word pair)
 <p>
 <span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/">Dictionary "{{ wdict.name }}"</a></span>
+<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
-<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/view/">View dictionary</a></span>
+<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/view/">{% trans "View dictionary" %}</a></span>
 &raquo;
-<span class="current_menu">Edit word pair</span>
+<span class="current_menu">{% trans "Edit word pair" %}</span>
 </p>
 
 <p>{{ message }}</p>
@@ -22,7 +23,7 @@ ExponWords (Edit word pair)
   <table>
     {{ form.as_table }}
   </table>
-  <input type="submit" value="Save" />
+  <input type="submit" value="{% trans 'Save' %}" />
 </form>
 
 {% endblock %}

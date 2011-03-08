@@ -3,6 +3,7 @@ import random
 import re
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
 
 
 class WDict(models.Model):
@@ -108,15 +109,18 @@ class EWException(Exception):
         Exception.__init__(self)
         self.value = value
 
-    def __str__(self):
+    def __unicode__(self):
         """Returns the string representation of the error reason.
 
         **Returns:** str
         """
 
         value = self.value
-        if isinstance(value, str) or isinstance(value, unicode):
+        print 'type(value):', type(value)
+        if isinstance(value, unicode):
             return value
+        elif isinstance(value, str):
+            return unicode(value)
         else:
             return repr(value)
 
@@ -148,8 +152,9 @@ def import_textfile(s, wdict):
             elif line == '':
                 pass
             else:
-                msg = ('Line %s should not have spaces in the beginning: %s' %
-                       (i, line))
+                msg = (_('Line %(linenumber)s should not have spaces in '
+                         'the beginning: %(line)s') %
+                       {'linenumber': i, 'line': line})
                 raise EWException(msg)
         else:
             # This line contains a word pair.
@@ -159,7 +164,8 @@ def import_textfile(s, wdict):
                       '$')
             r = re.search(regexp, line)
             if r is None:
-                msg = 'Line %s is incorrect: %s' % (i, line)
+                msg = (_('Line %(linenumber)s is incorrect: %(line)s') %
+                       {'linenumber': i, 'line': line})
                 raise EWException(msg)
 
             wp = WordPair()
@@ -206,7 +212,8 @@ def import_tsv(s, wdict):
 
         fields = line.split('\t')
         if len(fields) < 2:
-            msg = ('Not enough fields in line %s: %s' % (i, line))
+            msg = (_('Not enough fields in line %(linenumber)s: %(line)s') %
+                   {'linenumber': i, 'line': line})
             raise EWException(msg)
         elif 2 <= len(fields) <= 3:
             wp = WordPair()
@@ -216,7 +223,8 @@ def import_tsv(s, wdict):
                 wp.explanation = fields[2]
             word_pairs.append(wp)
         else:
-            msg = ('Too many fields in line %s: %s' % (i, line))
+            msg = (_('Too many fields in line %(linenumber)s: %(line)s') %
+                   {'linenumber': i, 'line': line})
             raise EWException(msg)
 
         i += 1

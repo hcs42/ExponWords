@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords (Add new word to dictionary "{{ wdict.name }}")
+{% trans "Add new word" %}: "{{ wdict.name }}"
 {% endblock %}
 
 {% block content %}
@@ -9,9 +10,9 @@ ExponWords (Add new word to dictionary "{{ wdict.name }}")
 <p>
 <span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
+<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
-<span class="current_menu">Add new word</span>
+<span class="current_menu">{% trans "Add new word" %}</span>
 </p>
 
 <p>{{ message }}</p>
@@ -20,6 +21,6 @@ ExponWords (Add new word to dictionary "{{ wdict.name }}")
   <table>
     {{ form.as_table }}
   </table>
-  <input type="submit" value="Add word pair" />
+  <input type="submit" value="{% trans 'Add word pair' %}" />
 </form>
 {% endblock %}

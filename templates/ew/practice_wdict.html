@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords (Practice dictionary "{{ wdict.name }}")
+{% trans "Practice" %}: "{{ wdict.name }}"
 {% endblock %}
 
 {% block content %}
@@ -9,9 +10,9 @@ ExponWords (Practice dictionary "{{ wdict.name }}")
 <p>
 <span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
+<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
-<span class="current_menu">Practice</span>
+<span class="current_menu">{% trans "Practice" %}</span>
 </p>
 
 <p>{{ message }}</p>
@@ -27,13 +28,13 @@ ExponWords (Practice dictionary "{{ wdict.name }}")
     </div>
     <div id="main">
       <div id="current_word_buttons">
-        <a id="edit-word-button">Edit current word</a>
-        <a id="edit-prev-word-button" style="display:none">Edit previous word</a>
+        <a id="edit-word-button">{% trans "Edit current word" %}</a>
+        <a id="edit-prev-word-button" style="display:none">{% trans "Edit previous word" %}</a>
       </div>
       <div id="buttons">
-        <span class="button" style="display:none;" id="yes-button">YES</span>
-        <span class="button" style="display:none;" id="no-button">NO</span>
-        <span class="button" style="display:none;" id="ok-button">ANSWER</span>
+        <span class="button" style="display:none;" id="yes-button">{% trans "YES" %}</span>
+        <span class="button" style="display:none;" id="no-button">{% trans "NO" %}</span>
+        <span class="button" style="display:none;" id="ok-button">{% trans "ANSWER" %}</span>
       </div>
       <div id="question"></div>
       <div id="answer"></div>

@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords (Options)
+{% trans "Options" %}
 {% endblock %}
 
 {% block content %}
@@ -9,11 +10,11 @@ ExponWords (Options)
 <p>
 <span class="current_menu"><a href="../..">ExponWords</a></span>
 &raquo;
-<span class="current_menu">Options</span>
+<span class="current_menu">{% trans "Options" %}</span>
 </p>
 
 <p>
-Language:
+{% trans "Language:" %}
 </p>
 
 <form action="/i18n/setlang/" method="post">
@@ -24,7 +25,7 @@ Language:
     <option value="{{ lang.0 }}">{{ lang.1 }}</option>
     {% endfor %}
   </select>
-  <input type="submit" value="Save" />
+  <input type="submit" value="{% trans 'Save' %}" />
 </form>
 
 {% endblock %}

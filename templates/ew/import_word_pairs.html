@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords ({{ page_title1 }}))
+{{ page_title }}: "{{ wdict.name }}"
 {% endblock %}
 
 {% block content %}
@@ -9,9 +10,9 @@ ExponWords ({{ page_title1 }}))
 <p>
 <span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
+<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
-<span class="current_menu">{{ page_title2 }}</span>
+<span class="current_menu">{{ page_title }}</span>
 </p>
 
 <p>{{ message }}</p>
@@ -20,6 +21,6 @@ ExponWords ({{ page_title1 }}))
   <table>
     {{ form.as_table }}
   </table>
-  <input type="submit" value="Import word pairs" />
+  <input type="submit" value="{% trans 'Import word pairs' %}" />
 </form>
 {% endblock %}

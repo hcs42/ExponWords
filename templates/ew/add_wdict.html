@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords (Create new dictionary)
+{% trans "Create new dictionary" %}
 {% endblock %}
 
 {% block content %}
@@ -9,7 +10,7 @@ ExponWords (Create new dictionary)
 <p>
 <span class="current_menu"><a href="..">ExponWords</a></span>
 &raquo;
-<span class="current_menu">Create new dictionary</span>
+<span class="current_menu">{% trans "Create new dictionary" %}</span>
 </p>
 
 <p>{{ message }}</p>
@@ -18,6 +19,6 @@ ExponWords (Create new dictionary)
   <table>
     {{ form.as_table }}
   </table>
-  <input type="submit" value="Create dictionary" />
+  <input type="submit" value="{% trans 'Create dictionary' %}" />
 </form>
 {% endblock %}

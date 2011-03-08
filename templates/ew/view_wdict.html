@@ -1,7 +1,8 @@
 {% extends "ew/base.html" %}
+{% load i18n %}
 
 {% block title %}
-ExponWords (View dictionary: "{{ wdict.name }}")
+{% trans "View dictionary" %}: "{{ wdict.name }}"
 {% endblock %}
 
 {% block content %}
@@ -9,19 +10,19 @@ ExponWords (View dictionary: "{{ wdict.name }}")
 <p>
 <span class="current_menu"><a href="../../..">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
+<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
-<span class="current_menu">View dictionary</span>
+<span class="current_menu">{%trans "View dictionary" %}</span>
 </p>
 
 <table border="1">
   <tr>
-    <td class="tbl_header">Word in language 1</td>
-    <td class="tbl_header">Word in language 2</td>
-    <td class="tbl_header">Explanation</td>
-    <td class="tbl_header" colspan="2">Strengths</td>
-    <td class="tbl_header" colspan="2">Dates</td>
-    <td class="tbl_header">Action</td>
+    <td class="tbl_header">{{ lang_label1 }}</td>
+    <td class="tbl_header">{{ lang_label2 }}</td>
+    <td class="tbl_header">{% trans "Explanation" %}</td>
+    <td class="tbl_header" colspan="2">{% trans "Strengths" %}</td>
+    <td class="tbl_header" colspan="2">{% trans "Dates" %}</td>
+    <td class="tbl_header">{% trans "Action" %}</td>
   </tr>
   {% for wp, explanation in word_pairs_and_exps %}
   <tr>
@@ -32,7 +33,7 @@ ExponWords (View dictionary: "{{ wdict.name }}")
     <td>{{ wp.strength2 }}</td>
     <td>{{ wp.date1 }}</td>
     <td>{{ wp.date2 }}</td>
-    <td><a href="../../../word-pair/{{ wp.id }}/edit/">Edit</a></td>
+    <td><a href="../../../word-pair/{{ wp.id }}/edit/">{% trans "Edit" %}</a></td>
   </tr>
   {% endfor %}
 </table>

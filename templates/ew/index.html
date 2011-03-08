@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block title %}
-ExponWords (main page)
+{% trans "Main page" %}
 {% endblock %}
 
 {% block content %}
@@ -19,39 +19,39 @@ ExponWords (main page)
 
   <!-- Menu items for not logged in users -->
   {% if username == None %}
-  <li><a href="login" >Log in</a></li>
+  <li><a href="login" >{% trans "Log in" %}</a></li>
   {% endif %}
 
   <!-- Menu items for logged in users -->
 
   {% if username != None %}
 
-  <li><a href="logout">Log out</a></li>
+  <li><a href="logout">{% trans "Log out" %}</a></li>
 
   <!-- Listing dictionaries -->
   
   <li>
   {% if wdicts %}
-  Dictionaries:
+  {% trans "Dictionaries:" %}
   <ul>
-    {% for d in wdicts%}
+    {% for d in wdicts %}
     <li>
       <a href="/dict/{{ d.id }}/">"{{ d.name }}"</a>
     </li>
     {% endfor %}
   </ul>
   {% else %}
-  You have no dictionaries.
+  {% trans "You have no dictionaries." %}
   {% endif %}
-    <li><a href="/create-dict/">Create new dictionary</a></li>
+    <li><a href="/create-dict/">{% trans "Create new dictionary" %}</a></li>
   </li>
 
   {% endif %}
 
   <!-- Menu items for everyone -->
 
-  <li><a href="options/">Options</a></li>
-  <li><a href="">Help</a></li>
+  <li><a href="options/">{% trans "Options" %}</a></li>
+  <li><a href="">{% trans "Help" %}</a></li>
 
 </ul>
 {% endblock %}
