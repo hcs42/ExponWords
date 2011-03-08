@@ -346,7 +346,7 @@ def update_word(request, wdict_id):
         raise exc_info[0], exc_info[1], exc_info[2]
 
 
-def CreateImportWordPairsFromTextForm(wdict):
+def CreateImportWordPairsForm(wdict):
 
     class ImportForm(forms.Form):
          text = forms.CharField(widget=forms.Textarea)
@@ -354,7 +354,7 @@ def CreateImportWordPairsFromTextForm(wdict):
     return ImportForm
 
 
-def import_word_pairs_from_text(request, wdict_id):
+def import_word_pairs(request, wdict_id, import_fun, page_title1, page_title2):
 
     auth_result = auth_dict_usage(request, wdict_id)
     if 'response' in auth_result:
@@ -362,12 +362,12 @@ def import_word_pairs_from_text(request, wdict_id):
     else:
         wdict = auth_result['wdict']
 
-    ImportForm = CreateImportWordPairsFromTextForm(wdict)
+    ImportForm = CreateImportWordPairsForm(wdict)
     if request.method == 'POST':
         form = ImportForm(request.POST)
         if form.is_valid():
             try:
-                models.import_textfile(form.cleaned_data['text'], wdict)
+                import_fun(form.cleaned_data['text'], wdict)
                 message = 'Word pairs added.'
                 form = None
             except Exception, e:
@@ -381,12 +381,33 @@ def import_word_pairs_from_text(request, wdict_id):
     if form is None:
         form = ImportForm()
 
+    page_title1 = page_title1 % wdict.name
+
     return render_to_response(
-               'ew/import_word_pairs_from_text.html',
+               'ew/import_word_pairs.html',
                {'form':  form,
                 'message': message,
-                'wdict': wdict},
+                'wdict': wdict,
+                'page_title1': page_title1,
+                'page_title2': page_title2},
                 context_instance=RequestContext(request))
+
+
+def import_word_pairs_from_text(request, wdict_id):
+
+    page_title1 = 'Import word pairs from text to dictionary "%s"'
+    page_title2 = 'Import word pairs from text'
+    return import_word_pairs(request, wdict_id, models.import_textfile,
+                             page_title1, page_title2)
+
+
+def import_word_pairs_from_tsv(request, wdict_id):
+
+    page_title1 = ('Import word pairs from tab-separated values to dictionary '
+                   '"%s"')
+    page_title2 = 'Import word pairs from tab-separated values'
+    return import_word_pairs(request, wdict_id, models.import_tsv,
+                             page_title1, page_title2)
 
 
 def export_word_pairs_to_text(request, wdict_id):

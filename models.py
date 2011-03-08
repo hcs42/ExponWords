@@ -121,6 +121,13 @@ class EWException(Exception):
             return repr(value)
 
 
+def create_add_word_pairs(wdict, word_pairs):
+    for wp in word_pairs:
+        wdict.wordpair_set.add(wp)
+        wp.save()
+        wdict.save()
+
+
 def import_textfile(s, wdict):
     """Adds words from a text file to a dictionary.
 
@@ -180,10 +187,41 @@ def import_textfile(s, wdict):
 
         i += 1
 
-    for wp in word_pairs:
-        wdict.wordpair_set.add(wp)
-        wp.save()
-        wdict.save()
+    create_add_word_pairs(wdict, word_pairs)
+
+def import_tsv(s, wdict):
+    """Adds words from a text of tab-separeted values to a dictionary.
+
+    Arguments:
+    - s (str)
+    - wdict (WDict)
+    """
+
+    i = 1
+    word_pairs = []
+    for line in s.splitlines():
+        line = line.strip()
+        if (line == ''):
+            continue
+
+        fields = line.split('\t')
+        if len(fields) < 2:
+            msg = ('Not enough fields in line %s: %s' % (i, line))
+            raise EWException(msg)
+        elif 2 <= len(fields) <= 3:
+            wp = WordPair()
+            wp.word_in_lang1 = fields[0]
+            wp.word_in_lang2 = fields[1]
+            if len(fields) == 3:
+                wp.explanation = fields[2]
+            word_pairs.append(wp)
+        else:
+            msg = ('Too many fields in line %s: %s' % (i, line))
+            raise EWException(msg)
+
+        i += 1
+    
+    create_add_word_pairs(wdict, word_pairs)
 
 
 def export_textfile(wdict):

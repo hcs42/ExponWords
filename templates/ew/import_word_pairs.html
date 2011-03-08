@@ -1,7 +1,7 @@
 {% extends "ew/base.html" %}
 
 {% block title %}
-ExponWords (Import word pairs from text to dictionary "{{ wdict.name }}")
+ExponWords ({{ page_title1 }}))
 {% endblock %}
 
 {% block content %}
@@ -11,7 +11,7 @@ ExponWords (Import word pairs from text to dictionary "{{ wdict.name }}")
 &raquo;
 <span class="current_menu"><a href="..">Dictionary "{{ wdict.name }}"</a></span>
 &raquo;
-<span class="current_menu">Import word pairs from text</span>
+<span class="current_menu">{{ page_title2 }}</span>
 </p>
 
 <p>{{ message }}</p>
