@@ -51,7 +51,10 @@
   <!-- Menu items for everyone -->
 
   <li><a href="options/">{% trans "Options" %}</a></li>
-  <li><a href="">{% trans "Help" %}</a></li>
+
+  {% get_current_language as LANGUAGE_CODE %}
+  <li><a href="help/{{ LANGUAGE_CODE }}/">{% trans "Help" %}</a></li>
+
 
 </ul>
 {% endblock %}

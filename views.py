@@ -29,11 +29,9 @@ def index(request):
 
 
 def options(request):
-    languages = (('en', 'English'),
-                 ('hu', 'Magyar'))
     return render_to_response(
                'ew/options.html',
-               {'languages': languages},
+               {},
                context_instance=RequestContext(request))
 
 
