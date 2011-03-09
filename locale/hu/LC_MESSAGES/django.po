@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-09 12:35+0100\n"
+"POT-Creation-Date: 2011-03-09 12:38+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -93,7 +93,7 @@ msgstr "Szöveg"
 
 #: views.py:423
 msgid "Word pairs added."
-msgstr "Szópárak hozzáadva."
+msgstr "Szópárok hozzáadva."
 
 #: views.py:426
 msgid "Error: "
@@ -101,11 +101,11 @@ msgstr "Hiba: "
 
 #: views.py:447 templates/ew/wdict.html:22
 msgid "Import word pairs from text"
-msgstr "Szópárak importálása szövegből"
+msgstr "Szópárok importálása szövegből"
 
 #: views.py:454
 msgid "Import word pairs from tab-separated values"
-msgstr "Szópárak importálása tabbal elválasztott értékekből"
+msgstr "Szópárok importálása tabbal elválasztott értékekből"
 
 #: views.py:476
 #, python-format
@@ -169,7 +169,7 @@ msgstr "Szótár exportálása szövegként"
 
 #: templates/ew/import_word_pairs.html:24
 msgid "Import word pairs"
-msgstr "Szópárak importálása"
+msgstr "Szópárok importálása"
 
 #: templates/ew/index.html:5
 msgid "Main page"
@@ -178,7 +178,7 @@ msgstr "Főoldal"
 #: templates/ew/index.html:13 templates/ew/index.html.py:59
 #: templates/ew/wdict.html:15
 msgid "Help"
-msgstr "Segítség"
+msgstr "Súgó"
 
 #: templates/ew/index.html:17
 msgid "You are not logged in."

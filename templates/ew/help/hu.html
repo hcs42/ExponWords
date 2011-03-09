@@ -1,0 +1,234 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+Súgó
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="../..">ExponWords</a></span>
+&raquo;
+<span class="current_menu">Súgó</span>
+</p>
+
+<!-- Templates:
+
+<p></p>
+
+<ul>
+  <li></li>
+</ul>
+
+<ul>
+  <li>
+  <ol>
+    <li>
+    </li>
+  </ol>
+  </li>
+</ul>
+
+-->
+
+<h2>Az alapok</h2>
+<p>Az ExponWords egy szótanító program, ami a felhasználó által bevitt
+szópárokat segít megtanulni azt az elvet felhasználva, hogy minél többször
+elevenítettünk már fel egy szót, annál ritkábban kell újra
+feleleveníteteni.</p>
+<p>A program lényege tehát, hogy minél többször tudta a felhasználó az adott
+szót, az ExponWords annál ritkábban kérdezi (mert a szót annál "erősebbnek"
+véli). Ha a felhasználó először mondja azt egy szóra, hogy már tudja, akkor 1
+nap múlva fogja ismét kérdezni, ha 1 nap múlva is tudja, akkor legközelebb 2
+nappal később kérdezi, ha akkor is tudja, akkor 4 nappal később; és így tovább
+kettő-hatványokkal. Ha a felhasználó valamelyik alkalommal azt mondja, hogy nem
+tudja a szót, akkor a szó erőssége visszaáll a kezdeti szinte, és ismét először
+1, aztán 2, majd 4, stb. napos időközökkel lesz kérdezve.</p>
+<p>A program megtanulandó szópárokat tárol. Ezek nem csak szavakból állhatnak,
+hanem kifejezésekből, vagy bármiből, amit a felhasználó szeretne megtanulni. Az
+egyszerűség azonban ezeket szópároknak fogjuk hívni. A szópároknak a következő
+elemeik vannak:</p>
+<ul>
+  <li>Szó az egyik nyelven: a megtanulandó idegen nyelvű szó.</li>
+  <li>Szó a másik nyelven: a megtanulandó szó anyanyelvi megfelelője vagy (akár
+  idegen nyelvű) magyarázata.</li>
+  <li>Magyarázat: bármilyen szöveg, amit csak akkor szeretnénk hogy megjelenjen,
+  amikor a program a megoldást mutatja. Tartalmazhat példamondatokat az adott
+  szóval, de akár azt is leírhatja, hogy hol és mikor találkoztunk a
+  szóval.</li>
+  <li>Szópár erősségei és dátumai: a program külön tárolja az 1&rarr;2 irányú
+  erősségeket (tehát a felhasználónak mennyire jut eszébe a szó a második
+  nyelven, ha a program az első nyelven írja ki) és a 2&rarr;1 irányúakat (ami
+  ennek a fordítottja). Szintén külön tárolja a dátumokat is (mikor kell a szót
+  legközelebb kérdezni).</li>
+</ul>
+
+<h2>Felhasználói felület</h2>
+<p>Az ExponWords-nek van egy globális menüje, és egy külön menüje mindegyik
+szótárhoz.</p>
+<p>A globális menü a főoldalról elérhető: itt tudsz bejelentkezni,
+kijelentkezni, szótárakat készíteni és beállításokat beállítani.</p>
+<p>A szótárak menüi a szótárak oldalairól érhetőek el, ahova a főoldalról a
+szótárak nevére kattintva tudsz eljutni. Itt tudod a szótáraidat megtekinteni,
+szerkeszteni, törölni, és itt tudsz új szavakat hozzáadni, gyakorolni.</p>
+
+<h3 id="main-page">Főoldal</h3>
+
+A főoldal a következő menüpontokat tartalmazza:
+
+<ul>
+  <li>Bejelentkezés</li>
+  <li>Kijelentkezés</li>
+  <li>Szótárak: Itt látod a szótáraidat, és ezekre kattintva tudod elérni a
+  szótárak oldalait.</li>
+  <li>Új szótár készítése</li>
+  <li>Beállítások: Itt tudod változtatni a beállításaid. Egyelőre csak a nyelvet
+  lehet állítani. A beállítások nincsenek elmentve; ha kijelentkezel, nem
+  maradnak meg.</li>
+  <li>Súgó: Ez az oldal.</li>
+</ul>
+
+<h3 id="dict-page">Szótár oldal</h3>
+
+A szótár oldal azt mutatja, hogy miket lehet a kiválasztott szótárral csinálni.
+A következő menüpontjai vannak:
+
+<ul>
+  <li>Gyakorlás: A mai szavak gyakorlása. Lásd részletesebben
+  <a href="#practice">itt</a>.</li>
+  <li>Megtekintés: Ez az oldal megmutatja a szótárban lévő szavakat, amiket
+  szerkeszteni is lehet.</li>
+  <li>Új szópár hozzáadása</li>
+  <li>Szópárok importálása szövegből: Egy szöveges formátumból importál
+  szópárokat a kiválasztott szótárba.</li>
+  <li>Szópárok exportálása szövegbe: Egy szöveges formátumban írja ki a
+  szótárban található szópárokat.</li>
+  <li>Szópárok importálása tabbal elválasztott értékekből: Ez a módszer arra
+  optimális, hogy táblázatkezelő programokból másoljunk be szavakat.</li>
+  <li>Törlés: a szótár törlése. A kitörölt szótárakat csak az adminisztrátor
+  tudja visszaállítani.</li>
+</ul>
+
+<h3 id="practice">Gyakorlás</h3>
+<p>A "Gyakorlás" oldal a következő elemeket tartalmazza:</p>
+<ul>
+  <li>Statisztika (például "<span class="transfer-related">5 (1)</span> / 6
+  (<span id="answered-incorrectly">2</span>) / 10"): ezek a számok mutatják
+  az aktuális szótanulási gyakorlat állapotát. A számok jelentése:
+  <ol>
+    <li>Eddig megválaszolt szavak száma, amiről a válasz visszament a
+    szerverre.</li>
+    <li>Azok a szavak, amikről a választ nem sikerült egyből visszaküldeni
+    a szerverre, és a kliens még próbálkozik.</li>
+    <li>Eddig megválaszolt szavak száma.</li>
+    <li>Eddigi olyan szavak száma, amiket a felhasználó nem tudott.</li>
+    <li>Összes szavak száma, amiket a gyakorlat során a program kérdezni
+    fog.</li>
+  </ol>
+  </li>
+  <li>Menü
+  <ol>
+    <li>Aktuális szó szerkesztése: annak a szónak a szerkesztése, amelyiket
+    épp kérdezi a program. A szerkesztés hatása csak akkor fog látszani, ha
+    a felhasználó frissíti a felkérdező oldalt.</li>
+    <li>Előző szó szerkesztése: annak a szónak a szerkesztése, amelyiket
+    ezelőtt kérdezte a program.</li>
+    program.</li>
+  </ol>
+  </li>
+  <li>Gombok:</li>
+  <ol>
+    <li class="small_button_li"><span class="small-button">MUTASD A VÁLASZT</span>:
+    a felhasználó ennek a gombnak a megnyomásával jelzi, hogy végiggondolta,
+    tudja-e az adott szót. A gomb megnyomása után a ExponWords megmutatja a
+    megoldást.</li>
+    <li class="small_button_li"><span class="small-button">IGEN</span>: a
+    felhasználó ezzel jelzi, hogy tudta az adott szót, és legközelebb több idő
+    teljen el, mire újra kérdezi.</li>
+    <li class="small_button_li"><span class="small-button">NEM</span>: a
+    felhasználó ezzel jelzi, hogy nem tudta az adott szót, amit a program
+    kérdezzen aznap ismét, továbbá 1, 2, 4, 8, stb. nap múlva.</li>
+  </ol>
+  <li class="small_button_li">Szó: a kikérdezett szó feketével jelenik meg.
+  A <span class="small-button">MUTASD A VÁLASZT</span> gomb megnyomása után a
+  megoldás kékkel jelenik meg, a magyarázat kisebb betűkkel szürkével.
+  </li>
+</ul>
+
+<h2>Gyakran Ismételt Kérések (GYIK)</h2>
+<ul>
+
+  <li>
+  <p><em>Mi történik, ha gyakorlás közben otthagyom a programot, és csak a
+    szavak egy részét válaszoltam meg?</em></p>
+  <p>Ez nem okoz gondot. Azokat a szavakat, amiket tudtál, a program el fogja
+  tárolni megváltozott erősséggel, és ezeket annak megfelelően fogja legközelebb
+  kérdezni. A többi szót (amire nem válaszoltál) legközelebb kérdezni fogja.</p>
+  </li>
+
+  <li>
+  <p><em>Mi történik, ha kihagyok egy vagy több napot?</em></p>
+  <p>Ez sem okoz gondot, nem fognak emiatt szavak kimaradni. A program azokat a
+  szavakat is mindig kérdezi, amiket már korábbi napokon kellett volna
+  kérdeznie.</p>
+  </li>
+
+  <li>
+  <p><em>Honnan tudja a program, hogy valóban tudtam-e a kérdezett
+    szót?</em></p>
+  <p>Sehonnan, ezt önbevallással közlöd a programmal. Mivel annak, hogy azt
+  mondod-e a programnak, hogy tudtál-e egy szót vagy nem, nincs következménye
+  azon kívül, hogy a szó erőssége megváltozik és ezáltal más időpontban lesz
+  legközelebb kérdezve, ezt jó szándékkal is manipulálhatod. Például ha én
+  reggel tanulok egy új szót, amit beviszek a programba, és délelőtt a gyakorlás
+  során a program felkérdezi ezt a szót, akkor gyakran akkor is a NEM-re
+  kattintok (mintha nem tudtam volna a szót), ha tudtam, mivel így az esti
+  gyakorlás során is vissza fogja kérdezni.</p>
+  </li>
+
+  <li>
+  <p><em>Egy szópárat kétféleképp is lehet kérdezni. Ha például angol szavakat
+    tanulunk, akkor lehet angol&rarr;magyar vagy magyar&rarr;angol irányban is
+    kérdezni. A program ezt hogy kezeli?</em></p>
+  <p>Gyakorláskor a két irányt gyakorlatilag két külön szóként kezeli. Külön
+  erősségük van és külön dátumuk (hogy mikor kell őket legközelebb
+  kérdezni).</p>
+  </li>
+
+  <li>
+  <p><em>A programmal nem lehet megcsinálni, valamit, amit szeretnék. Mi a
+    teendő?</em></p>
+  <p>Van jónéhány dolog a <a
+    href="https://github.com/hcs42/ExponWords/blob/master/TODO.txt">tennivalóim
+    listáján</a> (angolul). Ha valamire szükséged van, szólj, és felteszem a
+  listára vagy megpróbálom előrébb venni.</p>
+  </li>
+
+  <li>
+  <p><em>Milyen nyelv tanulására használható a program?</em></p>
+  <p>Bármilyenre, mivel a szavakat a felhasználó viszi fel.</p>
+  </li>
+
+  <li>
+  <p><em>Milyen sorrendben kérdezi a program az adott nap kikérdezendő
+    szavakat?</em></p>
+  <p>Teljesen véletlenszerűen.</p>
+  </li>
+
+  <!-- FAQ entry template:
+  <li>
+  <p><em></em></p>
+  <p></p>
+  </li>
+  -->
+
+</ul>
+
+<h2>Névjegy</h2>
+<a href="https://github.com/hcs42/ExponWords">ExponWords</a>
+{{ version }}<br/>
+Copyright (C) 2010-2011 Hoch Csaba
+</body>
+</html>
+
+{% endblock %}
