@@ -6,8 +6,12 @@
 {% endblock %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
 
-<p><span class="current_menu">ExponWords</span></p>
+<p>
+<span class="current_menu">ExponWords</span>
+<a class="help" href="help/{{ LANGUAGE_CODE }}#main-page">({% trans "Help" %})</a>
+</p>
 
 {% if username == None %}
 {% trans "You are not logged in." %}
@@ -43,7 +47,7 @@
   {% else %}
   {% trans "You have no dictionaries." %}
   {% endif %}
-    <li><a href="/create-dict/">{% trans "Create new dictionary" %}</a></li>
+  <li><a href="/create-dict/">{% trans "Create new dictionary" %}</a></li>
   </li>
 
   {% endif %}
@@ -52,7 +56,6 @@
 
   <li><a href="options/">{% trans "Options" %}</a></li>
 
-  {% get_current_language as LANGUAGE_CODE %}
   <li><a href="help/{{ LANGUAGE_CODE }}/">{% trans "Help" %}</a></li>
 
 

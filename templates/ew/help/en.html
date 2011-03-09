@@ -1,0 +1,169 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+Help
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="../..">ExponWords</a></span>
+&raquo;
+<span class="current_menu">Help</span>
+</p>
+
+<!-- Templates:
+
+<p></p>
+
+<ul>
+  <li></li>
+</ul>
+
+<ul>
+  <li>
+  <ol>
+    <li>
+    </li>
+  </ol>
+  </li>
+</ul>
+
+-->
+
+<h2>The basics</h2>
+<p>ExponWords is a program for learning words. It helps learn the word
+pairs fed by the user using the principle that the more we have already
+practiced a word, the more rarely we need to practice it again.</p>
+<p>So the main point of ExponWords is that the more times the user was able
+to remember a word when the program asked, the less frequently it will be
+asked (because it will be considered "stronger"). When a word is asked and
+the user states that he remembers it, the word will be asked the next day;
+if the users remembers the word the next day, it will be asked in 2 days;
+if he knows it in 2 days, it will be asked in 4 days; and so on with powers
+of 2. If the users admits on any of these occasions that he does not
+remember the word, the strength of the word as stored by ExponWords will go
+back to the initial level, and it will be asked again in 1 day, then 2
+days afterwards, then 4 days afterwards etc. </p>
+<p>ExponWords stores word pairs to be learnt. These can not only contain words,
+but also expressions or anything the users wants to learn. For the sake of
+simplicity though, they will be only referred to as word pairs. Word pairs have
+the following elements:</p>
+<ul>
+  <li>Word in the first language: the word in the foreign language to be
+  learnt.</li>
+  <li>Word in the second language: the translation of the word to the
+  native language of the user, or the definition of the word (in either
+  language)</li>
+  <li>Explanation: any text that should appear only when the program shows
+  the solution. It may contain examples with the word, or it may even
+  describe where the user first encountered the word.</li>
+  <li>Strengths and dates of the word: the program stores the 1&rarr;2
+  direction strength (i.e. how well the user can remember the word in the
+  second language if the program prints it in the first language) and the
+  2&rarr;1 direction strength (which is the opposite of the previous one)
+  separately. The dates (when the word should be next asked) are also
+  stored separately for the two directions.</li>
+</ul>
+
+<h2>User interface</h2>
+<p>ExponWords has a global menu and a separate menu for each dictionary.</p>
+<p>The global menu is available on the main page: the user can log in, log out, create dictionaries, set the options.</p>
+<p>The dictionary menus are available from the dictionary page, which can be accessed from the main page by clicking on the name of the dictionary. The user can view, edit and delete the dictionary, add and import new words, and practice.</p>
+
+<h3 id="main-page">Main page</h3>
+
+The main page has the following menu items:
+
+<ul>
+  <li>Login: Logs in the user.</li>
+  <li>Logout: Logs out the user.</li>
+  <li>Dictionaries: List of dictionaries the user has.</li>
+  <li>Create new dictionary: Creates a new dictionary for the user.</li>
+  <li>Options: The users can set their preferences here. It is not yet saved,
+  so if the user logs out, the options have to be set again.</li>
+  <li>Help: This page.</li>
+</ul>
+
+<h3 id="dict-page">Dictionary page</h3>
+
+The dictionary page shows activities that can be done to the selected
+dictionary. It has the following menu items:
+
+<ul>
+  <li>Practice: Practices today's words with the user. See <a href="#practice">here</a> in more detail.</li>
+  <li>View: A page that shows all words in a table. The words can also be edited.</li>
+  <li>Add new word pair: Adding a new word to the database.</li>
+  <li>Import word pairs from text: Imports word pairs from a text format.</li>
+  <li>Export word pairs to text: Export word pairs to a text format.</li>
+  <li>Import word pairs from tab separated values: The input format of this menu item is optimized for words copied from a spreadsheet application.</li>
+  <li>Help: This page.</li>
+</ul>
+
+<h3 id="practice">Practice</h3>
+<p>The practice page contains the following elements:</p>
+<ul>
+  <li>Statistics (e.g. "<span class="transfer-related">5 (1)</span> / 6
+  (<span id="answered-incorrectly">2</span>) / 10"): these numbers show the
+  state of the current practice session. The meaning of the numbers is the
+  following:
+  <ol>
+    <li>Number of the words answered and acknowledged by the server so far.</li>
+    <li>Number of the words that the server has not yet acknowledged but
+    the client is still trying to send them.</li>
+    <li>Number of words answered so far.</li>
+    <li>Number of words so far that the user did not remember.</li>
+    <li>Number of all words that have been and will be asked by the server
+    today.</li>
+  </ol>
+  </li>
+  <li>Menu
+  <ol>
+    <li>Edit current word: editing the word being asked by the program. The
+    effect of the modification will be seen only after refreshing the main
+    page.</li>
+    <li>Edit the previous word: editing the word previously asked by the
+    program.</li>
+  </ol>
+  </li>
+  <li>Buttons:</li>
+  <ol>
+    <li class="small_button_li"><span class="small-button">ANSWER</span>:
+    the user shall press this button when he thought through whether he
+    remembered the given word or not. After pressing the button, ExponWords
+    will show the solution.</li>
+    <li class="small_button_li"><span class="small-button">YES</span>: the
+    user uses this button to show that he remembered the given word, so the
+    interval before it is asked again can be longer than last time.</li>
+    <li class="small_button_li"><span class="small-button">NO</span>: the
+    user uses this button to show that he did not remember the given word,
+    so it shall be asked again that day, then again 1, 2, 4, 8, etc. days
+    later. </li>
+  </ol>
+  <li class="small_button_li">Word: the word being asked is shown with
+  black color. After the <span class="small-button">ANSWER</span> button is
+  pressed, the solution will be shown with blue, and the explanation will
+  be shown in gray.</li>
+  </li>
+</ul>
+
+<h3>Frequently Asked Questions (FAQ)</h3>
+<ul>
+
+  To be done...
+
+  <!-- FAQ entry template:
+  <li>
+  <p><em></em></p>
+  <p></p>
+  </li>
+  -->
+
+</ul>
+
+<h2>About</h2>
+<a href="https://github.com/hcs42/ExponWords">ExponWords</a>
+{{ version }}<br/>
+Copyright (C) 2010-2011 Csaba Hoch
+
+{% endblock %}

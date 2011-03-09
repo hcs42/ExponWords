@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
+version = '0.2'
+
+
 class WDict(models.Model):
 
     # WDict = word dictionary (as opposed to the dictionary data type which is

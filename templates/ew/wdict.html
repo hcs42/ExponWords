@@ -6,11 +6,13 @@
 {% endblock %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
 
 <p>
 <span class="current_menu"><a href="../..">ExponWords</a></span>
 &raquo;
 <span class="current_menu">{% include "ew/menuitem_dict.html" %}</span>
+<a class="help" href="/help/{{ LANGUAGE_CODE }}#dict-page">({% trans "Help" %})</a>
 </p>
 
 <ul>

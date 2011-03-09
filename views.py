@@ -6,6 +6,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from django import forms
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
+from django.conf import settings
 import datetime
 import json
 import traceback
@@ -33,6 +34,18 @@ def options(request):
                'ew/options.html',
                {},
                context_instance=RequestContext(request))
+
+
+def help(request, lang):
+    langs = [langcode for langcode, langname in settings.LANGUAGES]
+    print 'lang:', lang
+    print 'langs:', langs
+    if lang in langs:
+        return render_to_response(
+                   'ew/help/%s.html' % lang,
+                   {'version': models.version})
+    else:
+        raise Http404
 
 
 def auth_user(request):

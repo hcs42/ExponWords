@@ -21,6 +21,7 @@ urlpatterns = patterns('ew.views',
     (r'^dict/(?P<wdict_id>\d+)/delete/?$', 'delete_wdict'),
     (r'^create-dict/?$', 'add_wdict'),
     (r'^options/$', 'options'),
+    (r'^help/(?P<lang>[a-zA-Z-]+)/?.*', 'help'),
 )
 
 urlpatterns += patterns('django.contrib.auth.views',
