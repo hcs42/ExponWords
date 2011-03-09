@@ -128,11 +128,11 @@ def CreateWordPairForm(wdict):
 
     label1 = (_('Word in "%(lang)s"') % {'lang': wdict.lang1}) + ':'
     label2 = (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
-    label_date_added = _('Date of addition:')
-    label_date1 = _('Date of next practice from "%(lang)s":') % {'lang': wdict.lang1}
-    label_date2 = _('Date of next practice from "%(lang)s":') % {'lang': wdict.lang2}
-    label_strength1 = _('Strengh of word from "%(lang)s":') % {'lang': wdict.lang1}
-    label_strength2 = _('Strengh of word from "%(lang)s":') % {'lang': wdict.lang2}
+    label_date_added = _('Date of addition') + ':'
+    label_date1 = _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang1} + ':'
+    label_date2 = _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang2} + ':'
+    label_strength1 = _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang1} + ':'
+    label_strength2 = _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang2} + ':'
 
     class WordPairForm(forms.Form):
         word_in_lang1 = forms.CharField(max_length=255, label=label1)
@@ -249,11 +249,11 @@ def add_wdict(request):
 
     class AddWDictForm(forms.Form):
         name = forms.CharField(max_length=255,
-                               label=_("Name of the dictionary:"))
+                               label=_("Name of the dictionary") + ':')
         lang1 = forms.CharField(max_length=255,
-                                label=_("Language 1:"))
+                                label=_("Language 1") + ':')
         lang2 = forms.CharField(max_length=255,
-                                label=_("Language 2:"))
+                                label=_("Language 2") + ':')
 
     if request.method == 'POST':
         form = AddWDictForm(request.POST)
@@ -401,7 +401,7 @@ def delete_word_pairs(request, wdict_id):
 def CreateImportWordPairsForm(wdict):
 
     class ImportForm(forms.Form):
-         text = forms.CharField(widget=forms.Textarea, label=_("Text:"))
+         text = forms.CharField(widget=forms.Textarea, label=_("Text") + ':')
 
     return ImportForm
 

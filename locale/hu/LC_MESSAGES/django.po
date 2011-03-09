@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-08 21:53+0100\n"
+"POT-Creation-Date: 2011-03-09 12:35+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,105 +18,105 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: models.py:158
+#: models.py:161
 #, python-format
 msgid "Line %(linenumber)s should not have spaces in the beginning: %(line)s"
 msgstr ""
 "A következő sor elején nem kellene szóközöknek lenni: %(linenumber)s. sor: "
 "%(line)s"
 
-#: models.py:170
+#: models.py:173
 #, python-format
 msgid "Line %(linenumber)s is incorrect: %(line)s"
 msgstr "A következő sor helytelen: %(linenumber)s. sor: %(line)s"
 
-#: models.py:218
+#: models.py:221
 #, python-format
 msgid "Not enough fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban nincs elég oszlop: %(linenumber)s. sor: %(line)s"
 
-#: models.py:229
+#: models.py:232
 #, python-format
 msgid "Too many fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
 
-#: views.py:105 views.py:106 views.py:118 views.py:119
+#: views.py:116 views.py:117 views.py:129 views.py:130
 #, python-format
 msgid "Word in \"%(lang)s\""
 msgstr "A szó \"%(lang)s\" nyelven"
 
-#: views.py:120
-msgid "Date of addition:"
-msgstr "Hozzáadás dátuma:"
+#: views.py:131
+msgid "Date of addition"
+msgstr "Hozzáadás dátuma"
 
-#: views.py:121 views.py:122
+#: views.py:132 views.py:133
 #, python-format
-msgid "Date of next practice from \"%(lang)s\":"
-msgstr "A következő, \"%(lang)s\" nyelv felőli gyakorlás dátuma:"
+msgid "Date of next practice from \"%(lang)s\""
+msgstr "A következő, \"%(lang)s\" nyelv felőli gyakorlás dátuma"
 
-#: views.py:123 views.py:124
+#: views.py:134 views.py:135
 #, python-format
-msgid "Strengh of word from \"%(lang)s\":"
-msgstr "A szó \"%(lang)s\" nyelv felőli ereje:"
+msgid "Strengh of word from \"%(lang)s\""
+msgstr "A szó \"%(lang)s\" nyelv felőli ereje"
 
-#: views.py:171
+#: views.py:182
 msgid "Word pair added."
 msgstr "Szópár hozzáadva."
 
-#: views.py:174 views.py:212 views.py:258 views.py:417 views.py:493
+#: views.py:185 views.py:223 views.py:269 views.py:428 views.py:504
 msgid "Some fields are invalid."
 msgstr "Néhány mező érvénytelen."
 
-#: views.py:210
+#: views.py:221
 msgid "Word pair modified."
 msgstr "Szópár módosítva."
 
-#: views.py:241
-msgid "Name of the dictionary:"
-msgstr "Szótár neve:"
+#: views.py:252
+msgid "Name of the dictionary"
+msgstr "Szótár neve"
 
-#: views.py:243
-msgid "Language 1:"
-msgstr "Első nyelv:"
-
-#: views.py:245
-msgid "Language 2:"
-msgstr "Második nyelv:"
+#: views.py:254
+msgid "Language 1"
+msgstr "Első nyelv"
 
 #: views.py:256
+msgid "Language 2"
+msgstr "Második nyelv"
+
+#: views.py:267
 msgid "Dictionary created."
 msgstr "Szótár létrehozva."
 
-#: views.py:393
-msgid "Text:"
-msgstr "Szöveg:"
+#: views.py:404
+msgid "Text"
+msgstr "Szöveg"
 
-#: views.py:412
+#: views.py:423
 msgid "Word pairs added."
 msgstr "Szópárak hozzáadva."
 
-#: views.py:415
+#: views.py:426
 msgid "Error: "
 msgstr "Hiba: "
 
-#: views.py:436 templates/ew/wdict.html:20
+#: views.py:447 templates/ew/wdict.html:22
 msgid "Import word pairs from text"
 msgstr "Szópárak importálása szövegből"
 
-#: views.py:443
+#: views.py:454
 msgid "Import word pairs from tab-separated values"
 msgstr "Szópárak importálása tabbal elválasztott értékekből"
 
-#: views.py:465
+#: views.py:476
 #, python-format
 msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
 msgstr "Biztos, hogy törölni akarod a következő szótárat: \"%(wdict)s\"?"
 
-#: views.py:487
+#: views.py:498
 msgid "Dictionary deleted."
 msgstr "Szótár törölve."
 
-#: views.py:490
+#: views.py:501
 msgid ""
 "Please check in the \"Are you sure\" checkbox if you really want to delete "
 "the dictionary."
@@ -125,7 +125,7 @@ msgstr ""
 "akarod a szótárat!"
 
 #: templates/ew/add_wdict.html:5 templates/ew/add_wdict.html.py:13
-#: templates/ew/index.html:46
+#: templates/ew/index.html:50
 msgid "Create new dictionary"
 msgstr "Új szótár készítése"
 
@@ -145,7 +145,7 @@ msgstr "Szópár hozzáadása"
 msgid "Delete dictionary"
 msgstr "Szótár törlése"
 
-#: templates/ew/delete_wdict.html:24 templates/ew/wdict.html:23
+#: templates/ew/delete_wdict.html:24 templates/ew/wdict.html:25
 msgid "Delete"
 msgstr "Törlés"
 
@@ -175,38 +175,39 @@ msgstr "Szópárak importálása"
 msgid "Main page"
 msgstr "Főoldal"
 
-#: templates/ew/index.html:13
+#: templates/ew/index.html:13 templates/ew/index.html.py:59
+#: templates/ew/wdict.html:15
+msgid "Help"
+msgstr "Segítség"
+
+#: templates/ew/index.html:17
 msgid "You are not logged in."
 msgstr "Nem vagy bejelentkezve."
 
-#: templates/ew/index.html:15
+#: templates/ew/index.html:19
 msgid "Welcome"
 msgstr "Üdv"
 
-#: templates/ew/index.html:22
+#: templates/ew/index.html:26
 msgid "Log in"
 msgstr "Bejelentkezés"
 
-#: templates/ew/index.html:29
+#: templates/ew/index.html:33
 msgid "Log out"
 msgstr "Kijelentkezés"
 
-#: templates/ew/index.html:35
-msgid "Dictionaries:"
-msgstr "Szótárak:"
+#: templates/ew/index.html:39
+msgid "Dictionaries"
+msgstr "Szótárak"
 
-#: templates/ew/index.html:44
+#: templates/ew/index.html:48
 msgid "You have no dictionaries."
 msgstr "Még nincs szótárad."
 
-#: templates/ew/index.html:53 templates/ew/options.html:5
+#: templates/ew/index.html:57 templates/ew/options.html:5
 #: templates/ew/options.html.py:13
 msgid "Options"
 msgstr "Beállítások"
-
-#: templates/ew/index.html:54
-msgid "Help"
-msgstr "Segítség"
 
 #: templates/ew/menuitem_dict.html:2
 #, python-format
@@ -214,11 +215,11 @@ msgid "Dictionary \"%(wdictname)s\""
 msgstr "\"%(wdictname)s\" szótár"
 
 #: templates/ew/options.html:17
-msgid "Language:"
-msgstr "Nyelv:"
+msgid "Language"
+msgstr "Nyelv"
 
 #: templates/ew/practice_wdict.html:5 templates/ew/practice_wdict.html:15
-#: templates/ew/wdict.html:17
+#: templates/ew/wdict.html:19
 msgid "Practice"
 msgstr "Gyakorlás"
 
@@ -274,18 +275,18 @@ msgstr "Kiválasztott szavak törlése"
 msgid "Dictionary"
 msgstr "Szótár"
 
-#: templates/ew/wdict.html:18
+#: templates/ew/wdict.html:20
 msgid "View"
 msgstr "Megtekintés"
 
-#: templates/ew/wdict.html:19
+#: templates/ew/wdict.html:21
 msgid "Add new word pair"
 msgstr "Új szópár hozzáadása"
 
-#: templates/ew/wdict.html:21
+#: templates/ew/wdict.html:23
 msgid "Export word pairs to text"
 msgstr "Szópárok exportálása szövegbe"
 
-#: templates/ew/wdict.html:22
+#: templates/ew/wdict.html:24
 msgid "Import word pairs from tab separated values"
 msgstr "Szópárok importálása tabbal elválasztott értékekből"
