@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-09 12:38+0100\n"
+"POT-Creation-Date: 2011-03-10 15:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -242,6 +242,14 @@ msgstr "NEM"
 #: templates/ew/practice_wdict.html:37
 msgid "ANSWER"
 msgstr "VÁLASZ"
+
+#: templates/ew/practice_wdict.html:46
+msgid ""
+"No more words for today. Good job! (If you hit Refresh, you will iterate "
+"only on the words that you did not know.)"
+msgstr ""
+"Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, "
+"végigmehetsz még egyszer azokon a szavakon, amiket nem tudtál.)"
 
 #: templates/ew/view_wdict.html:23
 msgid "Explanation"

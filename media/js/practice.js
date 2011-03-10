@@ -40,7 +40,7 @@ function get_todays_wordlist() {
 
 function ask_word() {
     if (todays_wordlist.length == 0) {
-        $('#main').text('NO_MORE_FOR_TODAY');
+        $('#main').text($('#translation_no_more_words').text());
     } else {
         show_ok_button();
         word = todays_wordlist[0];
