@@ -23,6 +23,8 @@ def index(request):
         username = None
         wdicts = None
 
+    models.log(request, 'index')
+
     return render_to_response(
                'ew/index.html',
                {'wdicts': wdicts,
@@ -37,9 +39,8 @@ def options(request):
 
 
 def help(request, lang):
+    models.log(request, 'help')
     langs = [langcode for langcode, langname in settings.LANGUAGES]
-    print 'lang:', lang
-    print 'langs:', langs
     if lang in langs:
         return render_to_response(
                    'ew/help/%s.html' % lang,
@@ -108,6 +109,8 @@ def view_wdict(request, wdict_id):
     else:
         wdict = auth_result['wdict']
 
+    models.log(request, 'view_wdict')
+
     word_pairs = wdict.wordpair_set.filter(deleted=False)
     word_pairs_and_exps = []
     for wp in word_pairs:
@@ -170,6 +173,7 @@ def add_word_pair(request, wdict_id):
 
     AddWordPairForm = CreateWordPairForm(wdict)
     if request.method == 'POST':
+        models.log(request, 'add_word_pair')
         form = AddWordPairForm(request.POST)
         if form.is_valid():
 
@@ -214,6 +218,7 @@ def edit_word_pair(request, word_pair_id):
 
     EditWordPairForm = CreateWordPairForm(wdict)
     if request.method == 'POST':
+        models.log(request, 'edit_word_pair')
         form = EditWordPairForm(request.POST)
         if form.is_valid():
             set_word_pair_from_form(wp, form)
@@ -256,6 +261,7 @@ def add_wdict(request):
                                 label=_("Language 2") + ':')
 
     if request.method == 'POST':
+        models.log(request, 'add_wdict')
         form = AddWDictForm(request.POST)
         if form.is_valid():
             wdict = WDict()
@@ -284,6 +290,9 @@ def practice_wdict(request, wdict_id):
         return auth_result['response']
     else:
         wdict = auth_result['wdict']
+    
+    text = 'dict: "%s"' % wdict.name
+    models.log(request, 'practice_wdict', text)
 
     return render_to_response(
                'ew/practice_wdict.html',
@@ -384,6 +393,8 @@ def delete_word_pairs(request, wdict_id):
     else:
         wdict = auth_result['wdict']
 
+    models.log(request, 'delete_word_pairs')
+
     word_pairs = wdict.wordpair_set.filter(deleted=False)
     word_pairs_to_delete = []
     for wp in word_pairs:
@@ -416,6 +427,7 @@ def import_word_pairs(request, wdict_id, import_fun, page_title, help_text):
 
     ImportForm = CreateImportWordPairsForm(wdict)
     if request.method == 'POST':
+        models.log(request, 'import_word_pairs', page_title)
         form = ImportForm(request.POST)
         if form.is_valid():
             try:
@@ -474,6 +486,8 @@ def export_word_pairs_to_text(request, wdict_id):
     else:
         wdict = auth_result['wdict']
 
+    models.log(request, 'export_word_pairs_to_text')
+
     text = models.export_textfile(wdict)
 
     return render_to_response(
@@ -500,6 +514,7 @@ def delete_wdict(request, wdict_id):
 
     DeleteWDictForm = CreateDeleteWDictForm(wdict)
     if request.method == 'POST':
+        models.log(request, 'delete_wdict')
         form = DeleteWDictForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['sure']:

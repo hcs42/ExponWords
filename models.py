@@ -266,3 +266,30 @@ def export_textfile(wdict):
             result.append('\n')
     return ''.join(result)
 
+
+class EWLogEntry(models.Model):
+    
+    datetime = models.DateTimeField()
+    action = models.TextField()
+    user = models.ForeignKey(User, blank=True, null=True)
+    username = models.TextField(blank=True)
+    text = models.TextField(blank=True)
+    ipaddress = models.TextField(blank=True)
+
+
+def log(request, action, text=''):
+
+    logentry = EWLogEntry()
+    logentry.datetime = datetime.datetime.now()
+    try:
+        logentry.action = action
+        logentry.ipaddress = (request.META.get('REMOTE_ADDR' , '') + ', ' +
+                              request.META.get('HTTP_X_FORWARDED_FOR', ''))
+        if request.user.is_authenticated():
+            logentry.user = request.user
+            logentry.username = request.user.username
+
+        logentry.text = text
+    except Exception, e:
+        logentry.action = 'Logging failed'
+    logentry.save()
