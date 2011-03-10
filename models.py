@@ -49,9 +49,9 @@ class WordPair(models.Model):
     strength2 = models.IntegerField(default=0)
 
     # dates of the next practice
-    date_added = models.DateField(default=datetime.date.today())
-    date1 = models.DateField(default=datetime.date.today())
-    date2 = models.DateField(default=datetime.date.today())
+    date_added = models.DateField()
+    date1 = models.DateField()
+    date2 = models.DateField()
 
     # explanation, examples, comments, etc.
     explanation = models.TextField(blank=True)
@@ -227,6 +227,8 @@ def import_tsv(s, wdict):
             wp.word_in_lang2 = fields[1]
             if len(fields) == 3:
                 wp.explanation = fields[2]
+            wp.date1 = datetime.date.today()
+            wp.date2 = datetime.date.today()
             word_pairs.append(wp)
         else:
             msg = (_('Too many fields in line %(linenumber)s: %(line)s') %
