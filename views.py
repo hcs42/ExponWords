@@ -400,7 +400,6 @@ def delete_word_pairs(request, wdict_id):
     for wp in word_pairs:
         if unicode(wp.id) in request.POST:
             word_pairs_to_delete.append(wp)
-    print word_pairs_to_delete
 
     for wp in word_pairs_to_delete:
         wp.deleted = True

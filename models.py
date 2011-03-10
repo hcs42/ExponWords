@@ -122,7 +122,6 @@ class EWException(Exception):
         """
 
         value = self.value
-        print 'type(value):', type(value)
         if isinstance(value, unicode):
             return value
         elif isinstance(value, str):
