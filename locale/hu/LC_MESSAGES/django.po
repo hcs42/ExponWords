@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-10 15:37+0100\n"
+"POT-Creation-Date: 2011-03-10 15:42+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -63,7 +63,7 @@ msgstr "A szó \"%(lang)s\" nyelv felőli ereje"
 msgid "Word pair added."
 msgstr "Szópár hozzáadva."
 
-#: views.py:185 views.py:223 views.py:269 views.py:428 views.py:504
+#: views.py:185 views.py:223 views.py:269 views.py:428 views.py:513
 msgid "Some fields are invalid."
 msgstr "Néhány mező érvénytelen."
 
@@ -103,20 +103,37 @@ msgstr "Hiba: "
 msgid "Import word pairs from text"
 msgstr "Szópárok importálása szövegből"
 
-#: views.py:454
+#: views.py:455
 msgid "Import word pairs from tab-separated values"
 msgstr "Szópárok importálása tabbal elválasztott értékekből"
 
-#: views.py:476
+#: views.py:456
+msgid ""
+"Write one word per line. Each word should contain two or three fields: word "
+"in the first language; word in the second language; explanation. The last "
+"one is optional. The fields should be separated by a TAB character. If a "
+"spreadsheet is opened in as spreadsheet editor application (such as "
+"LibreOffice, OpenOffice.org or Mircosoft Excel), and it contains these three "
+"columns, which are copied and pasted here, then it will have exactly this "
+"format."
+msgstr ""
+"Minden sorba egy új szót írj, ami a következő mezőkből áll: szó az első "
+"nyelven; szó a második nyelven; magyarázat. A \"magyarázat\" mező "
+"elhagyható. A mezőket TAB karakterrel válaszd el egymástól. Ha egy "
+"táblázatkezelő programban (például LibreOffice-ban, OpenOffice.org-ban "
+"vagy Mircosoft Excelben) megnyitott táblázat ezt a három oszlopot "
+"tartalmazza, és azt ide bemásolod, akkor az épp ilyen formátumban lesz."
+
+#: views.py:485
 #, python-format
 msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
 msgstr "Biztos, hogy törölni akarod a következő szótárat: \"%(wdict)s\"?"
 
-#: views.py:498
+#: views.py:507
 msgid "Dictionary deleted."
 msgstr "Szótár törölve."
 
-#: views.py:501
+#: views.py:510
 msgid ""
 "Please check in the \"Are you sure\" checkbox if you really want to delete "
 "the dictionary."
@@ -248,8 +265,8 @@ msgid ""
 "No more words for today. Good job! (If you hit Refresh, you will iterate "
 "only on the words that you did not know.)"
 msgstr ""
-"Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, "
-"végigmehetsz még egyszer azokon a szavakon, amiket nem tudtál.)"
+"Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz "
+"még egyszer azokon a szavakon, amiket nem tudtál.)"
 
 #: templates/ew/view_wdict.html:23
 msgid "Explanation"

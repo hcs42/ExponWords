@@ -406,7 +406,7 @@ def CreateImportWordPairsForm(wdict):
     return ImportForm
 
 
-def import_word_pairs(request, wdict_id, import_fun, page_title):
+def import_word_pairs(request, wdict_id, import_fun, page_title, help_text):
 
     auth_result = auth_dict_usage(request, wdict_id)
     if 'response' in auth_result:
@@ -436,6 +436,7 @@ def import_word_pairs(request, wdict_id, import_fun, page_title):
     return render_to_response(
                'ew/import_word_pairs.html',
                {'form':  form,
+                'help_text': help_text,
                 'message': message,
                 'wdict': wdict,
                 'page_title': page_title},
@@ -445,15 +446,24 @@ def import_word_pairs(request, wdict_id, import_fun, page_title):
 def import_word_pairs_from_text(request, wdict_id):
 
     page_title = _('Import word pairs from text')
+    help_text = ""
     return import_word_pairs(request, wdict_id, models.import_textfile,
-                             page_title)
+                             page_title, help_text)
 
 
 def import_word_pairs_from_tsv(request, wdict_id):
 
     page_title = _('Import word pairs from tab-separated values')
+    help_text = _("Write one word per line. Each word should contain two or "
+                "three fields: word in the first language; word in the "
+                "second language; explanation. The last one is optional. "
+                "The fields should be separated by a TAB character. If a "
+                "spreadsheet is opened in as spreadsheet editor application "
+                "(such as LibreOffice, OpenOffice.org or Mircosoft Excel), "
+                "and it contains these three columns, which are copied and "
+                "pasted here, then it will have exactly this format.")
     return import_word_pairs(request, wdict_id, models.import_tsv,
-                             page_title)
+                             page_title, help_text)
 
 
 def export_word_pairs_to_text(request, wdict_id):
