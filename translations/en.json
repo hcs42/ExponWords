@@ -1,4 +1,0 @@
-{
-    "NO_MORE_FOR_TODAY": "No more words for today. Good job! (If you hit Refresh, you will iterate only on the words that you did not know.)",
-    "WORDS-INPUT-DESCRIPTION": "Write one word per line. Each word should contain two or three fields: word in the first language; word in the second language; explanation. The last one is optional. The fields should be separated by a TAB character. If a spreadsheet is opened in as spreadsheet editor application (such as LibreOffice, OpenOffice.org or Mircosoft Excel), and it contains these three columns, which are copied and pasted here, then it will have exactly this format."
-}
