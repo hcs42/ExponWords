@@ -367,6 +367,11 @@ def update_word(request, wdict_id):
             wp = auth_result['word_pair']
             wdict = auth_result['wdict']
 
+        if wp.get_date(direction) > datetime.date.today():
+            # This update have already been performed
+            return HttpResponse(json.dumps('ok'),
+                                 mimetype='application/json')
+    
         assert(isinstance(answer, bool))
         if answer:
             # The user knew the answer
