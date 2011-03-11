@@ -1,3 +1,5 @@
+v0.1:
+
 - adding new words
 - number of hits and misses in stats
 - favicon
@@ -14,3 +16,14 @@
     - "Edit" link next to each word to /edit-word?word=12
 - adding words copied from a spreadsheet application
 - "-f" should be relative to the starting path
+
+v0.2:
+
+- Rewrite ExponWords using Django
+- Hungarian translation
+- remove words
+- Hungarian help pages
+- English help pages
+- translate "NO MORE WORDS"
+- start on the server automatically when the server restarts
+- remove non-django stuff
