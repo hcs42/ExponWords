@@ -1,16 +1,14 @@
-Fairly important (before releasing on GitHub as "master" branch)
-----------------
-
-- publish INSTALL.txt
-
-Quite important (before releasing as a public web service)
----------------
+Important (before releasing as a public web service)
+----------------------------------------------------
 
 - English help pages: FAQ
 - fix ip address in logs
 - userprofile for settings like locale
 - turnaround time set by the user according to his timezone
 - using only relative links (HttpResponseRedirect)
+- HTTPS
+- interface for registration
+- interface for changing the password
 
 Would be nice
 -------------

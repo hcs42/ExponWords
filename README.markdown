@@ -1,94 +1,139 @@
-This program helps practicing word pairs stored in a file. It has both a console
-interface and a web interface.
+This web application helps practicing word pairs.
+
+It is used at http://exponwords.zapto.org/, which is yet a private beta. If you want to use it or try it out, please send me an email.
 
 Installation
 ============
 
-1. Install git and virtualenv. On Ubuntu Linux:
+This section describe how to set up an ExponWords server on Debian or Ubuntu Linux using the nginx web server and the sqlite database engine. These steps apply only if you want to run no other web service. If you do want that, then you can adjust these steps accordingly.
 
-         $ sudo apt-get install git
-         $ sudo easy_install virtualenv
+Install the prerequisites
+-------------------------
 
-2. Download and install web.py into a virtual Python environment and download
-   ExponWords:
+        $ apt-get install python-django gettext
+        $ apt-get install nginx python-flup
+        $ apt-get install python-sqlite sqlite3
 
-        $ mkdir exponwords
-        $ cd exponwords
-        $ virtualenv python
-        New python executable in python/bin/python
-        Installing setuptools............done.
-        $ git clone git://github.com/hcs42/webpy.git
-        [...]
-        $ git clone git://github.com/hcs42/ExponWords.git
-        [...]
-        $ ls
-        ExponWords  python  webpy
-        $ cd webpy/
-        $ ../python/bin/python setup.py build
-        [...]
-        $ ../python/bin/python setup.py install
-        [...]
-        $ cd ..
-        $ python/bin/python ExponWords/exponwords.py --help
-        Usage: exponwords.py [options]
-        [...]
+I used the following versions of these programs:
 
+* Python: 2.6
+* Django: 1.2
+* nginx: 0.7
+* sqlite3: 3.7
+* gettext: 0.18
 
-Console interface
-=================
+All of these are the default on the latest Ubuntu (10.10).
 
-See the "Data format" section about how the input file should look like.
+Set up ExponWords and run it in debug mode
+------------------------------------------
 
-Example invocation (`y`, `n` and `q` are typed by the user):
+1. Create a Django project (this will create a directory called `ExponWords` with some Python files):
 
-    $ python/bin/python ExponWords/exponwords.py -f my_words.txt
-    4 word pairs read.
-    Total number of words: 8
-    Words to ask now: 8
-    8/1 <0>: Word in English: like --
-    szeret
-        I like you a lot.
-        I really don't like this restaurant.
-    Did you know this word? [y/n/q]y
+        $ django-admin startproject ExponWords
 
+2. Clone the ExponWords repository as a Django application called `ew`:
 
-    8/2 <0>: Word in Hungarian: kutya --
-    dog
-    Did you know this word? [y/n/q]n
+        $ cd ExponWords
+        $ git clone git://github.com/hcs42/ExponWords.git ew
 
+3. Edit `settings.py` (you will find an example in `ew/setup/settings.py`):
 
-    8/3 <0>: Word in Hungarian: szeret -- q
+   * `DATABASES`: fill it in according to the database you want to use. I used sqlite.
+   * `MEDIA_ROOT`: set it to `'<path to exponwords>/ExponWords/ew/media/'`
+   * `TEMPLATE_DIRS`: add `'<path to exponwords>/ExponWords/ew/templates'`
+   * `ADMIN_ROOT`: change it to `'/admin/media/'`
+   * `LOGIN_REDIRECT_URL`: set it to `'..'`
+   * `MIDDLEWARE_CLASSES`: insert `'django.middleware.locale.LocaleMiddleware'` after `SessionMiddleware`
+   * `INSTALLED_APPS`: append `'ew'`
+   * `LANGUAGES`: copy it from the example
+   * Anything else you want to customize (e.g. timezone)
+   * Move the `DEBUG` and `TEMPLATE_DEBUG` variables into `debug_settings.py` (see the next step)
 
-Example invocation with `getch()` used instead of `readline()` (`-g` option) and
-with colors (`-c` option):
+4. Edit `debug_settings.py` (you will find an example in `ew/setup/debug_settings.py`):
 
-    $ python/bin/python exponwords.py -gcf my_words.txt ask-words
+   * `DATABASES`: fill it in
+   * `STATIC_DOC_ROOT`: set it to `'<path to exponwords>/ExponWords/ew/media'`
+   * Move the `DEBUG` and `TEMPLATE_DEBUG` variables here from `settings.py` (see the previous step)
 
-This features might not work on all system.
+5. Overwrite `urls.py` with the one in the `setup` directory:
 
-Web interface
-=============
+        $ cp ew/setup/urls.py .
 
-The web interface can be started in the following way:
+6. Set up the database files. When asked about whether to create a superuser, create them.
 
-    $ python/bin/python exponwords.py -f my_words.txt \
-          --port 5656 --password mypassword start-webserver
+        $ python manage.py syncdb
+        $ python manage.py syncdb --settings=debug_settings
 
-In the web interface, new words can be added and existing words can be
-practiced. If the `--password` parameter is specified, the users have to log in
-with this password.
+7. Compile the translation files:
 
-Data format
-===========
+        $ cd ew; django-admin compilemessages; cd ..
 
-Example word list file:
+8. Copy the startup scripts and change the ports in them if you need to:
 
-    CONFIG: lang1=English
-    CONFIG: lang2=Hungarian
-    dog -- kutya
-    cat -- macska
-    like -- szeret
-        I like you a lot.
-        I really don't like this restaurant.
-    go -- megy
-        I would like to go to the cinema.
+        $ cp ew/setup/start_production.sh ew/setup/start_debug.sh .
+        $ vim ew/setup/start_production.sh ew/setup/start_debug.sh
+
+9. Start the server in debug mode:
+
+        $ ./start_debug.sh
+
+   Try it from the browser:
+
+        $ google-chrome http://localhost:8002
+
+   Finally close it:
+
+        Kill `start_debug.sh` with CTRL-C
+
+Set up the nginx web server and run ExponWords in production mode
+-----------------------------------------------------------------
+
+1. Perform the following steps as root:
+
+   Rename the original nginx configuration file:
+
+        # mv /etc/nginx/nginx.conf{,.old}
+
+   Copy the provided config file instead and modify its content to match your paths:
+
+        # cp ew/setup/nginx.conf /etc/nginx/nginx.conf
+        # vim /etc/nginx/nginx.conf
+
+   Restart nginx:
+
+        # /etc/init.d/nginx restart
+
+2. Start the production server, try it and kill it:
+
+        $ ./start_production
+        $ google-chrome http://localhost/
+        Kill start_production with CTRL-C
+
+Start ExponWords automatically after boot
+-----------------------------------------
+
+In Debian or Ubuntu, ExponWords can be set to start up automatically by performing the following steps as root.
+
+1. Copy the provided init script to the directory of the init scripts:
+
+        # cp ew/setup/exponwords.d /etc/init.d/exponwords
+
+2. Modify the `SITE_PATH` variable in it to `<path to exponwords>/ExponWords` and modify `RUN_AS` to your Linux username:
+
+        # vim /etc/init.d/exponwords
+
+3. Try the script:
+
+        # /etc/init.d/exponwords start
+        $ google-chrome http://localhost/   # web page is there
+        # /etc/init.d/exponwords stop
+        $ google-chrome http://localhost/   # web page is not there
+
+4. Run `update-rc.d` to create symbolic links in the `/etc/rc*.d/` directories, which will make operating system call `/etc/init.d/exponwords` automatically with the `start` parameter after the system has booted, and with the `stop` parameter before it shuts down.
+
+        # update-rc.d exponwords defaults
+
+Usage
+=====
+
+You can read the user documentation at http://exponwords.zapto.org/help/en/.
