@@ -27,3 +27,4 @@ v0.2:
 - translate "NO MORE WORDS"
 - start on the server automatically when the server restarts
 - remove non-django stuff
+- view wdict: show the number of all words

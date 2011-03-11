@@ -2,7 +2,6 @@ Fairly important (before releasing on GitHub as "master" branch)
 ----------------
 
 - publish INSTALL.txt
-- view wdict: show the number of all words
 
 Quite important (before releasing as a public web service)
 ---------------

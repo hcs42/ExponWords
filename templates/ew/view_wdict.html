@@ -15,6 +15,8 @@
 <span class="current_menu">{%trans "View dictionary" %}</span>
 </p>
 
+{% trans "Number of word pairs" %}: {{ word_pairs_and_exps|length }}
+
 <form action="../delete-word-pairs/" method="post">{% csrf_token %}
 <table border="1">
   <tr>
