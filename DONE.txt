@@ -29,3 +29,4 @@ v0.2:
 - remove non-django stuff
 - view wdict: show the number of all words
 - publish INSTALL.txt
+- touch icon
