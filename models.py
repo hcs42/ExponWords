@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-version = '0.2'
+version = '0.3.0'
 
 
 class WDict(models.Model):
