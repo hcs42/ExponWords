@@ -38,4 +38,4 @@ v0.3:
 - "(Help)" -> "(Help for this page)"
 - English help pages: FAQ
 - "select all" on the "view" page
-- using higher timeous for practice sessions
+- using higher timeout for practice sessions
