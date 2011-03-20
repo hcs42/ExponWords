@@ -23,11 +23,6 @@ Would be nice
 - show the future
 - showing "(n)" when having multiple occurrences of the same word
 - word queue for words to be learnt
-- update_word should update the word only if the strength and date match
-- update_word should send back an OK even if it realizes that the word has
-  previously been update, because otherwise the green number will indicate that
-  the word has not been processes by the server (the problematic scenario is
-  when the ACK gets lost)
 
 Wishlist
 --------

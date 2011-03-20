@@ -17,8 +17,10 @@
 
 
 // Constants
-RETRIES_COUNT = 24;
-RETRY_DELAY_TIME = 10 * 1000; // 10 seconds
+var RETRIES_COUNT = 24;
+var INITIAL_TIMEOUT = 3 * 1000; // 3 seconds
+var TIMEOUT_INTERVAL = 3 * 1000; // 3 second
+var MAX_TIMEOUT = 20 * 1000; // 20 seconds
 
 // Global state
 var todays_wordlist;
@@ -103,7 +105,16 @@ function ok_button() {
     show_yesno_buttons();
 }
 
-function update_error(data, result, retries)
+function next_timeout(timeout) {
+    var maybe_next_timeout = timeout + TIMEOUT_INTERVAL;
+    if (maybe_next_timeout > MAX_TIMEOUT) {
+        return timeout;
+    } else {
+        return maybe_next_timeout;
+    }
+}
+
+function update_error(data, result, retries, timeout)
 {
     if (retries == RETRIES_COUNT) {
         transfer_in_progress++;
@@ -111,11 +122,11 @@ function update_error(data, result, retries)
     };
     setTimeout(
         function() {
-            update_word(data, retries - 1);
-        }, RETRY_DELAY_TIME);
+            update_word(data, retries - 1, next_timeout(timeout));
+        }, timeout);
 }
 
-function update_word(data, retries)
+function update_word(data, retries, timeout)
 {
     if (retries != 0) {
         $.ajax({
@@ -123,7 +134,7 @@ function update_word(data, retries)
             dataType: 'json',
             data: data,
             type: 'post',
-            timeout: 2000,
+            timeout: timeout,
             success: function(result) {
                 if (result == 'ok') {
                     transferred++;
@@ -133,11 +144,11 @@ function update_word(data, retries)
                         $('#transfer-in-progress').text(transfer_in_progress);
                     }
                 } else {
-                    update_error(data, result, retries);
+                    update_error(data, result, retries, timeout);
                 }
             },
             error: function(result) {
-                update_error(data, result, retries);
+                update_error(data, result, retries, timeout);
             }
         });
     } else {
@@ -161,7 +172,7 @@ function yesno_button(answer) {
                 'word_index': JSON.stringify(old_word_index),
                 'direction': JSON.stringify(old_direction),
                 'csrfmiddlewaretoken': csrf_token};
-    update_word(data, RETRIES_COUNT);
+    update_word(data, RETRIES_COUNT, INITIAL_TIMEOUT);
 }
 
 $(document).ready(function() {
