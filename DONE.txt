@@ -37,3 +37,4 @@ v0.3:
 - more "(Help)" links
 - "(Help)" -> "(Help for this page)"
 - English help pages: FAQ
+- "select all" on the "view" page

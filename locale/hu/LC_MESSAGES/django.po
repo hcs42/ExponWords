@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-03-20 15:44+0100\n"
+"POT-Creation-Date: 2011-03-20 16:58+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -303,6 +303,14 @@ msgstr "Szerkesztés"
 #: templates/ew/view_wdict.html:46
 msgid "Delete selected words"
 msgstr "Kiválasztott szavak törlése"
+
+#: templates/ew/view_wdict.html:47
+msgid "Select all"
+msgstr "Mindegyik kijelölése"
+
+#: templates/ew/view_wdict.html:52
+msgid "Select none"
+msgstr "Egyik kijelölése sem"
 
 #: templates/ew/wdict.html:5
 msgid "Dictionary"

@@ -18,7 +18,7 @@
 {% trans "Number of word pairs" %}: {{ word_pairs_and_exps|length }}
 
 <form action="../delete-word-pairs/" method="post">{% csrf_token %}
-<table border="1">
+<table border="1" id="table">
   <tr>
     <td class="tbl_header">{{ lang_label1 }}</td>
     <td class="tbl_header">{{ lang_label2 }}</td>
@@ -43,8 +43,18 @@
   {% endfor %}
 </table>
 <p>
-  <input type="submit" value="{% trans 'Delete selected words' %}">
+  <input type="submit" id="delete-button" value="{% trans 'Delete selected words' %}">
+  <span class="small-button" id="select-all-button">{% trans "Select all" %}</span>
 </p>
 </form>
 
+  <!-- Translations -->
+  <span style="display:none" id="translation-select-none">{% trans "Select none" %}</span>
+{% endblock %}
+{% block javascript %}
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/json2.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/exponwordslib.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/view_wdict.js"></script>
+  <script>var csrf_token = "{{ csrf_token }}";</script>
 {% endblock %}

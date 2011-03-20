@@ -12,7 +12,6 @@ Important (before releasing as a public web service)
 Would be nice
 -------------
 
-- "select all" on the "view" page
 - labels
 - The "Edit previous word" link should be gray and not non-existent in the
   beginning
