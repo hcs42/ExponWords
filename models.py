@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-version = '0.3.0'
+version = '0.3.1'
 
 
 class WDict(models.Model):
@@ -245,6 +245,7 @@ def import_tsv(s, wdict):
                 wp.explanation = fields[2]
             wp.date1 = datetime.date.today()
             wp.date2 = datetime.date.today()
+            wp.date_added = datetime.date.today()
             word_pairs.append(wp)
         else:
             msg = (_('Too many fields in line %(linenumber)s: %(line)s') %
