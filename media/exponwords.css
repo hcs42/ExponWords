@@ -72,7 +72,8 @@
 
 #explanation
 {
-    color: darkgray;
+    font-size: 20;
+    color: #777;
 }
 
 .tbl_header
