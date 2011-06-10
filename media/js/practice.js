@@ -37,7 +37,7 @@ var question_word;
 var solution_word;
 var explanation;
 
-var prev_word_index;
+var prev_word_index = false;
 
 function get_todays_wordlist() {
     // Get the list of today's word from the server and ask the first one.
@@ -58,10 +58,44 @@ function get_todays_wordlist() {
     });
 }
 
-function ask_word() {
-    if (todays_wordlist.length == 0) {
-        $('#main').text($('#translation_no_more_words').text());
+
+function update_edit_word(button, curr_word_index) {
+    // Sets the given "Edit ... word" link. If there is no word, it will remove
+    // the "href" part and make the class of the link "nonlink", which will
+    // make it gray.
+    if (curr_word_index == false) {
+        $(button).removeAttr('href');
+        $(button).attr('class', 'nonlink');
     } else {
+        var edit_link = '../../../word-pair/' + curr_word_index + '/edit/';
+        $(button).attr('href', edit_link);
+        $(button).removeAttr('class');
+    }
+}
+
+function update_edit_words(button, curr_word_index) {
+    // Sets the "Edit current word" and "Edit previous word" links
+    
+    update_edit_word('#edit-word-button', word_index);
+    update_edit_word('#edit-prev-word-button', prev_word_index);
+}
+
+function ask_word() {
+
+    if (todays_wordlist.length == 0) {
+
+        prev_word_index = word_index;
+        word_index = false;
+
+        $('#buttons').text($('#translation_no_more_words').text());
+        $('#question').hide();
+        $('#answer').hide();
+        $('#explanation').hide();
+
+        update_edit_words();
+
+    } else {
+
         show_ok_button();
         word = todays_wordlist[0];
         direction = word[2];
@@ -73,15 +107,7 @@ function ask_word() {
         $('#question').text(question_word);
         $('#answer').text('');
         $('#explanation').text('');
-
-        // Setting the "Edit current word" and "Edit previous word" links
-        var edit_link = '../../../word-pair/' + word_index + '/edit/';
-        $('#edit-word-button').attr('href', edit_link);
-        if (prev_word_index != false) {
-            var prev_edit_link = '../../../word-pair/' + prev_word_index + '/edit/';
-            $('#edit-prev-word-button').attr('href', prev_edit_link);
-            $('#edit-prev-word-button').show();
-        }
+        update_edit_words();
 
         todays_wordlist.shift();
     }
