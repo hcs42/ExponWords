@@ -2,7 +2,6 @@ Important (before releasing as a public web service)
 ----------------------------------------------------
 
 - use Django 1.3
-- handle negative stengths
 - fix ip address in logs
 - userprofile for settings like locale
 - turnaround time set by the user according to his timezone

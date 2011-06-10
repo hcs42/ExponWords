@@ -116,7 +116,8 @@ class WordPair(models.Model):
 
     def weaken(self, direction):
         self.set_date(direction, datetime.date.today())
-        self.set_strength(direction, 0)
+        new_strength = min(self.get_strength(direction), 0)
+        self.set_strength(direction, new_strength)
 
 
 class EWException(Exception):

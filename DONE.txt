@@ -39,3 +39,4 @@ v0.3:
 - English help pages: FAQ
 - "select all" on the "view" page
 - using higher timeout for practice sessions
+- handle negative stengths
