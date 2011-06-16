@@ -80,12 +80,9 @@ def auth_dict_usage(request, wdict_id):
     if not auth_user(request):
         return {'response': HttpResponseRedirect('/')}
 
-    # Get the dictionary; of it does not exist, send him to page 404
-    wdict = get_object_or_404(WDict, pk=wdict_id)
-
-    # If the user does not own the dictionary, send him to page 404
-    if wdict.user != request.user:
-        raise Http404
+    # Get the dictionary; if it does not exist or the user does not own it,
+    # send him to page 404
+    wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
 
     return {'wdict': wdict}
 
@@ -95,13 +92,10 @@ def auth_word_pair_usage(request, word_pair_id):
     if not auth_user(request):
         return {'response': HttpResponseRedirect('/')}
 
-    # Get the dictionary; of it does not exist, send him to page 404
-    wp = get_object_or_404(WordPair, pk=word_pair_id)
+    # Get the dictionary; if it does not exist or the user does not own it,
+    # send him to page 404
+    wp = get_object_or_404(WordPair, pk=word_pair_id, wdict__user=request.user)
     wdict = wp.wdict
-
-    # If the user does not own the dictionary, send him to page 404
-    if wp.wdict.user != request.user:
-        raise Http404
 
     return {'word_pair': wp,
             'wdict': wdict}
