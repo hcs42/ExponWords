@@ -76,9 +76,7 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'ExponWords.urls'
 
-TEMPLATE_DIRS = (
-    "/home/hcs/ExponWords/ew/templates"
-)
+TEMPLATE_DIRS = ()
 
 INSTALLED_APPS = (
     'django.contrib.auth',
