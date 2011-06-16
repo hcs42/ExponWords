@@ -1,15 +1,20 @@
 # Django settings for ExponWords project.
 
+import os
+
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
 
 MANAGERS = ADMINS
 
+PROJECT_DIR = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/home/hcs/ExponWords/production.db',
+        'NAME': os.path.join(PROJECT_DIR, 'production.db'),
     }
 }
 
@@ -43,7 +48,7 @@ USE_L10N = True
 
 # Absolute path to the directory that holds media.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = '/home/hcs/ExponWords/ew/media/'
+MEDIA_ROOT = os.path.join(PROJECT_DIR, 'ew/media/')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).

@@ -41,8 +41,6 @@ Set up ExponWords and run it in debug mode
 3. Edit `settings.py` (you will find an example in `ew/setup/settings.py`):
 
    * `DATABASES`: fill it in according to the database you want to use. I used sqlite.
-   * `MEDIA_ROOT`: set it to `'<path to exponwords>/ExponWords/ew/media/'`
-   * `TEMPLATE_DIRS`: add `'<path to exponwords>/ExponWords/ew/templates'`
    * `ADMIN_ROOT`: change it to `'/admin/media/'`
    * `LOGIN_REDIRECT_URL`: set it to `'..'`
    * `MIDDLEWARE_CLASSES`: insert `'django.middleware.locale.LocaleMiddleware'` after `SessionMiddleware`
@@ -54,7 +52,6 @@ Set up ExponWords and run it in debug mode
 4. Edit `debug_settings.py` (you will find an example in `ew/setup/debug_settings.py`):
 
    * `DATABASES`: fill it in
-   * `STATIC_DOC_ROOT`: set it to `'<path to exponwords>/ExponWords/ew/media'`
    * Move the `DEBUG` and `TEMPLATE_DEBUG` variables here from `settings.py` (see the previous step)
 
 5. Overwrite `urls.py` with the one in the `setup` directory:
