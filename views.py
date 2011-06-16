@@ -15,7 +15,7 @@
 
 # Copyright (C) 2011 Csaba Hoch
 
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
 from ExponWords.ew.models import WordPair, WDict
 import ExponWords.ew.models as models
@@ -42,24 +42,26 @@ def index(request):
 
     models.log(request, 'index')
 
-    return render_to_response(
+    return render(
+               request,
                'ew/index.html',
                {'wdicts': wdicts,
                 'username': username})
 
 
 def options(request):
-    return render_to_response(
+    return render(
+               request,
                'ew/options.html',
-               {},
-               context_instance=RequestContext(request))
+               {})
 
 
 def help(request, lang):
     models.log(request, 'help')
     langs = [langcode for langcode, langname in settings.LANGUAGES]
     if lang in langs:
-        return render_to_response(
+        return render(
+                   request,
                    'ew/help/%s.html' % lang,
                    {'version': models.version})
     else:
@@ -113,7 +115,8 @@ def wdict(request, wdict_id):
     else:
         wdict = auth_result['wdict']
 
-    return render_to_response(
+    return render(
+               request,
                'ew/wdict.html',
                {'wdict': wdict})
 
@@ -136,7 +139,8 @@ def view_wdict(request, wdict_id):
     lang_label1 = (_('Word in "%(lang)s"') % {'lang': wdict.lang1})
     lang_label2 = (_('Word in "%(lang)s"') % {'lang': wdict.lang2})
 
-    return render_to_response(
+    return render(
+               request,
                'ew/view_wdict.html',
                {'wdict': wdict,
                 'word_pairs_and_exps': word_pairs_and_exps,
@@ -216,12 +220,12 @@ def add_word_pair(request, wdict_id):
                 'strength2': 0}
         form = AddWordPairForm(data)
 
-    return render_to_response(
+    return render(
+               request,
                'ew/add_word_pair.html',
                {'form':  form,
                 'message': message,
-                'wdict': wdict},
-                context_instance=RequestContext(request))
+                'wdict': wdict})
 
 
 def edit_word_pair(request, word_pair_id):
@@ -255,13 +259,13 @@ def edit_word_pair(request, word_pair_id):
                 'strength2': wp.strength2}
         form = EditWordPairForm(data)
 
-    return render_to_response(
+    return render(
+               request,
                'ew/edit_word_pair.html',
                {'form': form,
                 'message': message,
                 'word_pair': wp,
-                'wdict': wdict},
-                context_instance=RequestContext(request))
+                'wdict': wdict})
 
 
 def add_wdict(request):
@@ -293,11 +297,11 @@ def add_wdict(request):
     else:
         message = ''
 
-    return render_to_response(
+    return render(
+               request,
                'ew/add_wdict.html',
                {'form':  AddWDictForm(),
-                'message': message},
-                context_instance=RequestContext(request))
+                'message': message})
 
 
 def practice_wdict(request, wdict_id):
@@ -311,11 +315,11 @@ def practice_wdict(request, wdict_id):
     text = 'dict: "%s"' % wdict.name
     models.log(request, 'practice_wdict', text)
 
-    return render_to_response(
+    return render(
+               request,
                'ew/practice_wdict.html',
                {'wdict': wdict,
-                'message': ''},
-                context_instance=RequestContext(request))
+                'message': ''})
 
 
 def explanation_to_html(explanation):
@@ -466,14 +470,14 @@ def import_word_pairs(request, wdict_id, import_fun, page_title, help_text):
     if form is None:
         form = ImportForm()
 
-    return render_to_response(
+    return render(
+               request,
                'ew/import_word_pairs.html',
                {'form':  form,
                 'help_text': help_text,
                 'message': message,
                 'wdict': wdict,
-                'page_title': page_title},
-                context_instance=RequestContext(request))
+                'page_title': page_title})
 
 
 def import_word_pairs_from_text(request, wdict_id):
@@ -511,7 +515,8 @@ def export_word_pairs_to_text(request, wdict_id):
 
     text = models.export_textfile(wdict)
 
-    return render_to_response(
+    return render(
+               request,
                'ew/export_wdict_as_text.html',
                {'wdict': wdict,
                 'text': text})
@@ -555,9 +560,9 @@ def delete_wdict(request, wdict_id):
     if form is None:
         form = DeleteWDictForm()
 
-    return render_to_response(
+    return render(
+               request,
                'ew/delete_wdict.html',
                {'form':  form,
                 'message': message,
-                'wdict': wdict},
-                context_instance=RequestContext(request))
+                'wdict': wdict})
