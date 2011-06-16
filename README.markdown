@@ -10,19 +10,21 @@ This section describe how to set up an ExponWords server on Debian or Ubuntu Lin
 Install the prerequisites
 -------------------------
 
-        $ apt-get install python-django gettext
+        $ apt-get install gettext
         $ apt-get install nginx python-flup
         $ apt-get install python-sqlite sqlite3
 
+Get Django: https://docs.djangoproject.com/en/1.3/topics/install/#installing-an-official-release
+
 I used the following versions of these programs:
 
-* Python: 2.6
-* Django: 1.2
-* nginx: 0.7
+* Python: 2.7
+* Django: 1.3
+* nginx: 0.8
 * sqlite3: 3.7
 * gettext: 0.18
 
-All of these are the default on the latest Ubuntu (10.10).
+All of these are the default on the latest Ubuntu except for Django.
 
 Set up ExponWords and run it in debug mode
 ------------------------------------------
