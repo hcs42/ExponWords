@@ -198,22 +198,25 @@ def add_word_pair(request, wdict_id):
             wdict.wordpair_set.add(wp)
             wp.save()
             wdict.save()
-
-            message = _('Word pair added.')
-            form = None
+            wdict_url = reverse('ew.views.add_word_pair', args=[wdict_id])
+            return HttpResponseRedirect(wdict_url + '?success=true')
         else:
             message = _('Some fields are invalid.')
-    else:
-        form = None
-        message = ''
 
-    if form is None:
+    elif request.method == 'GET':
+        if request.GET.get('success') == 'true':
+            message = _('Word pair added.')
+        else:
+            message = ''
         data = {'date_added': datetime.date.today(),
                 'date1': datetime.date.today(),
                 'date2': datetime.date.today(),
                 'strength1': 0,
                 'strength2': 0}
         form = AddWordPairForm(data)
+
+    else:
+        assert(False)
 
     return render(
                request,
