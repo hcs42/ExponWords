@@ -17,6 +17,7 @@
 
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
 from ExponWords.ew.models import WordPair, WDict
 import ExponWords.ew.models as models
 from django.http import Http404, HttpResponse, HttpResponseRedirect
@@ -26,6 +27,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.conf import settings
 import datetime
+import functools
 import json
 import traceback
 import re
@@ -69,60 +71,45 @@ def help(request, lang):
         raise Http404
 
 
-def auth_user(request):
-    if not request.user.is_authenticated():
-        return False
-    else:
-        return True
+def wdict_access_required(f):
+
+    @login_required
+    @functools.wraps(f)
+    def wrapper(request, wdict_id, *args, **kw):
+
+        # Get the dictionary; if it does not exist or the user does not own it,
+        # send him to page 404
+        wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
+
+        return f(request, wdict, *args, **kw)
+
+    return wrapper
 
 
-def auth_dict_usage(request, wdict_id):
+def word_pair_access_required(f):
 
-    if not auth_user(request):
-        return {'response': HttpResponseRedirect('/')}
+    @login_required
+    @functools.wraps(f)
+    def wrapper(request, word_pair_id, *args, **kw):
 
-    # Get the dictionary; if it does not exist or the user does not own it,
-    # send him to page 404
-    wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
+        # Get the dictionary; if it does not exist or the user does not own it,
+        # send him to page 404
+        wp = get_object_or_404(WordPair, pk=word_pair_id, wdict__user=request.user)
+        wdict = wp.wdict
+        return f(request, wp, wdict, *args, **kw)
 
-    return {'wdict': wdict}
-
-
-def auth_word_pair_usage(request, word_pair_id):
-
-    if not auth_user(request):
-        return {'response': HttpResponseRedirect('/')}
-
-    # Get the dictionary; if it does not exist or the user does not own it,
-    # send him to page 404
-    wp = get_object_or_404(WordPair, pk=word_pair_id, wdict__user=request.user)
-    wdict = wp.wdict
-
-    return {'word_pair': wp,
-            'wdict': wdict}
+    return wrapper
 
 
-def wdict(request, wdict_id):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
-
-    return render(
-               request,
-               'ew/wdict.html',
-               {'wdict': wdict})
+@wdict_access_required
+def wdict(request, wdict):
+    return render(request,
+                  'ew/wdict.html',
+                  {'wdict': wdict})
 
 
-def view_wdict(request, wdict_id):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
+@wdict_access_required
+def view_wdict(request, wdict):
 
     models.log(request, 'view_wdict')
 
@@ -179,13 +166,8 @@ def set_word_pair_from_form(word_pair, form):
     word_pair.strength2 = form.cleaned_data['strength2']
 
 
-def add_word_pair(request, wdict_id):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
+@wdict_access_required
+def add_word_pair(request, wdict):
 
     AddWordPairForm = CreateWordPairForm(wdict)
     if request.method == 'POST':
@@ -198,7 +180,7 @@ def add_word_pair(request, wdict_id):
             wdict.wordpair_set.add(wp)
             wp.save()
             wdict.save()
-            wdict_url = reverse('ew.views.add_word_pair', args=[wdict_id])
+            wdict_url = reverse('ew.views.add_word_pair', args=[wdict.id])
             return HttpResponseRedirect(wdict_url + '?success=true')
         else:
             message = _('Some fields are invalid.')
@@ -226,14 +208,8 @@ def add_word_pair(request, wdict_id):
                 'wdict': wdict})
 
 
-def edit_word_pair(request, word_pair_id):
-
-    auth_result = auth_word_pair_usage(request, word_pair_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wp = auth_result['word_pair']
-        wdict = auth_result['wdict']
+@word_pair_access_required
+def edit_word_pair(request, wp, wdict):
 
     EditWordPairForm = CreateWordPairForm(wdict)
     if request.method == 'POST':
@@ -266,10 +242,8 @@ def edit_word_pair(request, word_pair_id):
                 'wdict': wdict})
 
 
+@login_required
 def add_wdict(request):
-
-    if not auth_user(request):
-        return HttpResponseRedirect('/')
 
     class AddWDictForm(forms.Form):
         name = forms.CharField(max_length=255,
@@ -308,22 +282,16 @@ def add_wdict(request):
                 'message': message})
 
 
-def practice_wdict(request, wdict_id):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
+@wdict_access_required
+def practice_wdict(request, wdict):
 
     text = 'dict: "%s"' % wdict.name
     models.log(request, 'practice_wdict', text)
 
-    return render(
-               request,
-               'ew/practice_wdict.html',
-               {'wdict': wdict,
-                'message': ''})
+    return render(request,
+                  'ew/practice_wdict.html',
+                  {'wdict': wdict,
+                   'message': ''})
 
 
 def explanation_to_html(explanation):
@@ -350,15 +318,10 @@ def explanation_to_html(explanation):
     return exp3
 
 
-def get_words_to_practice_today(request, wdict_id):
+@wdict_access_required
+def get_words_to_practice_today(request, wdict):
 
     try:
-        auth_result = auth_dict_usage(request, wdict_id)
-        if 'response' in auth_result:
-            return auth_result['response']
-        else:
-            wdict = auth_result['wdict']
-
         words_to_practice = wdict.get_words_to_practice_today()
 
         result = []
@@ -378,19 +341,18 @@ def get_words_to_practice_today(request, wdict_id):
         raise exc_info[0], exc_info[1], exc_info[2]
 
 
-def update_word(request, wdict_id):
+@wdict_access_required
+def update_word(request, wdict):
     try:
 
         answer = json.loads(request.POST['answer'])
         word_pair_id = json.loads(request.POST['word_index'])
         direction = json.loads(request.POST['direction'])
 
-        auth_result = auth_word_pair_usage(request, word_pair_id)
-        if 'response' in auth_result:
-            return auth_result['response']
-        else:
-            wp = auth_result['word_pair']
-            wdict = auth_result['wdict']
+        wp = get_object_or_404(WordPair,
+                               pk=word_pair_id,
+                               wdict__user=request.user)
+        assert(wdict.id == wp.wdict.id)
 
         if wp.get_date(direction) > datetime.date.today():
             # This update have already been performed
@@ -415,13 +377,8 @@ def update_word(request, wdict_id):
         raise exc_info[0], exc_info[1], exc_info[2]
 
 
-def delete_word_pairs(request, wdict_id):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
+@wdict_access_required
+def delete_word_pairs(request, wdict):
 
     models.log(request, 'delete_word_pairs')
 
@@ -446,13 +403,7 @@ def CreateImportWordPairsForm(wdict):
     return ImportForm
 
 
-def import_word_pairs(request, wdict_id, import_fun, page_title, help_text):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
+def import_word_pairs(request, wdict, import_fun, page_title, help_text):
 
     ImportForm = CreateImportWordPairsForm(wdict)
     if request.method == 'POST':
@@ -484,15 +435,17 @@ def import_word_pairs(request, wdict_id, import_fun, page_title, help_text):
                 'page_title': page_title})
 
 
-def import_word_pairs_from_text(request, wdict_id):
+@wdict_access_required
+def import_word_pairs_from_text(request, wdict):
 
     page_title = _('Import word pairs from text')
     help_text = ""
-    return import_word_pairs(request, wdict_id, models.import_textfile,
+    return import_word_pairs(request, wdict, models.import_textfile,
                              page_title, help_text)
 
 
-def import_word_pairs_from_tsv(request, wdict_id):
+@wdict_access_required
+def import_word_pairs_from_tsv(request, wdict):
 
     page_title = _('Import word pairs from tab-separated values')
     help_text = _("Write one word per line. Each word should contain two or "
@@ -503,22 +456,14 @@ def import_word_pairs_from_tsv(request, wdict_id):
                 "(such as LibreOffice, OpenOffice.org or Mircosoft Excel), "
                 "and it contains these three columns, which are copied and "
                 "pasted here, then it will have exactly this format.")
-    return import_word_pairs(request, wdict_id, models.import_tsv,
+    return import_word_pairs(request, wdict, models.import_tsv,
                              page_title, help_text)
 
 
-def export_word_pairs_to_text(request, wdict_id):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
-
+@wdict_access_required
+def export_word_pairs_to_text(request, wdict):
     models.log(request, 'export_word_pairs_to_text')
-
     text = models.export_textfile(wdict)
-
     return render(
                request,
                'ew/export_wdict_as_text.html',
@@ -534,13 +479,8 @@ def CreateDeleteWDictForm(wdict):
     return DeleteWDictForm
 
 
-def delete_wdict(request, wdict_id):
-
-    auth_result = auth_dict_usage(request, wdict_id)
-    if 'response' in auth_result:
-        return auth_result['response']
-    else:
-        wdict = auth_result['wdict']
+@wdict_access_required
+def delete_wdict(request, wdict):
 
     DeleteWDictForm = CreateDeleteWDictForm(wdict)
     if request.method == 'POST':
