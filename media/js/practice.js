@@ -75,7 +75,7 @@ function update_edit_word(button, curr_word_index) {
 
 function update_edit_words(button, curr_word_index) {
     // Sets the "Edit current word" and "Edit previous word" links
-    
+
     update_edit_word('#edit-word-button', word_index);
     update_edit_word('#edit-prev-word-button', prev_word_index);
 }

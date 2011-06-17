@@ -315,7 +315,7 @@ def practice_wdict(request, wdict_id):
         return auth_result['response']
     else:
         wdict = auth_result['wdict']
-    
+
     text = 'dict: "%s"' % wdict.name
     models.log(request, 'practice_wdict', text)
 
@@ -360,7 +360,7 @@ def get_words_to_practice_today(request, wdict_id):
             wdict = auth_result['wdict']
 
         words_to_practice = wdict.get_words_to_practice_today()
-    
+
         result = []
         for wp, direction in words_to_practice:
             result.append([wp.word_in_lang1,
@@ -368,7 +368,7 @@ def get_words_to_practice_today(request, wdict_id):
                            direction,
                            wp.id,
                            explanation_to_html(wp.explanation)])
-    
+
         return HttpResponse(json.dumps(result),
                              mimetype='application/json')
     except Exception, e:
@@ -396,7 +396,7 @@ def update_word(request, wdict_id):
             # This update have already been performed
             return HttpResponse(json.dumps('ok'),
                                  mimetype='application/json')
-    
+
         assert(isinstance(answer, bool))
         if answer:
             # The user knew the answer

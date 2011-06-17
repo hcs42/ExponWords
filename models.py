@@ -254,7 +254,7 @@ def import_tsv(s, wdict):
             raise EWException(msg)
 
         i += 1
-    
+
     create_add_word_pairs(wdict, word_pairs)
 
 
@@ -286,7 +286,7 @@ def export_textfile(wdict):
 
 
 class EWLogEntry(models.Model):
-    
+
     datetime = models.DateTimeField()
     action = models.TextField()
     user = models.ForeignKey(User, blank=True, null=True)
