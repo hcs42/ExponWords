@@ -119,6 +119,17 @@ class WordPair(models.Model):
         new_strength = min(self.get_strength(direction), 0)
         self.set_strength(direction, new_strength)
 
+    @staticmethod
+    def get_fields_to_be_edited():
+        return ('word_in_lang1',
+                'word_in_lang2',
+                'explanation',
+                'date_added',
+                'date1',
+                'date2',
+                'strength1',
+                'strength2')
+
 
 class EWException(Exception):
     """A very simple exception class used."""

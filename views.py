@@ -130,53 +130,38 @@ def view_wdict(request, wdict):
                 'lang_label2': lang_label2},
                 context_instance=RequestContext(request))
 
-def CreateWordPairForm(wdict):
-
-    label1 = (_('Word in "%(lang)s"') % {'lang': wdict.lang1}) + ':'
-    label2 = (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
-    label_date_added = _('Date of addition') + ':'
-    label_date1 = _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang1} + ':'
-    label_date2 = _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang2} + ':'
-    label_strength1 = _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang1} + ':'
-    label_strength2 = _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang2} + ':'
-
-    class WordPairForm(forms.Form):
-        word_in_lang1 = forms.CharField(max_length=255, label=label1)
-        word_in_lang2 = forms.CharField(max_length=255, label=label2)
-        explanation = forms.CharField(widget=forms.Textarea, required=False)
-        date_added = forms.DateField(label=label_date_added)
-        date1 = forms.DateField(label=label_date1)
-        date2 = forms.DateField(label=label_date2)
-        strength1 = forms.IntegerField(label=label_strength1)
-        strength2 = forms.IntegerField(label=label_strength2)
-
-    return WordPairForm
+class WordPairForm(forms.ModelForm):
+    class Meta:
+        model = WordPair
+        fields = models.WordPair.get_fields_to_be_edited()
 
 
-def set_word_pair_from_form(word_pair, form):
-
-    # Creating the new word
-    word_pair.word_in_lang1 = form.cleaned_data['word_in_lang1']
-    word_pair.word_in_lang2 = form.cleaned_data['word_in_lang2']
-    word_pair.explanation = form.cleaned_data['explanation']
-    word_pair.date_added = form.cleaned_data['date_added']
-    word_pair.date1 = form.cleaned_data['date1']
-    word_pair.date2 = form.cleaned_data['date2']
-    word_pair.strength1 = form.cleaned_data['strength1']
-    word_pair.strength2 = form.cleaned_data['strength2']
+def set_word_pair_form_labels(wdict, form):
+    f = form.fields
+    f['word_in_lang1'].label = \
+        (_('Word in "%(lang)s"') % {'lang': wdict.lang1}) + ':'
+    f['word_in_lang2'].label = \
+        (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
+    f['date_added'].label = \
+        _('Date of addition') + ':'
+    f['date1'].label = \
+        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang1} + ':'
+    f['date2'].label = \
+        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang2} + ':'
+    f['strength1'].label = \
+        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang1} + ':'
+    f['strength2'].label = \
+        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang2} + ':'
 
 
 @wdict_access_required
 def add_word_pair(request, wdict):
 
-    AddWordPairForm = CreateWordPairForm(wdict)
     if request.method == 'POST':
         models.log(request, 'add_word_pair')
-        form = AddWordPairForm(request.POST)
+        form = WordPairForm(request.POST)
         if form.is_valid():
-
-            wp = WordPair()
-            set_word_pair_from_form(wp, form)
+            wp = form.save(commit=False)
             wdict.wordpair_set.add(wp)
             wp.save()
             wdict.save()
@@ -195,11 +180,11 @@ def add_word_pair(request, wdict):
                 'date2': datetime.date.today(),
                 'strength1': 0,
                 'strength2': 0}
-        form = AddWordPairForm(data)
-
+        form = WordPairForm(data)
     else:
         assert(False)
 
+    set_word_pair_form_labels(wdict, form)
     return render(
                request,
                'ew/add_word_pair.html',
@@ -211,13 +196,12 @@ def add_word_pair(request, wdict):
 @word_pair_access_required
 def edit_word_pair(request, wp, wdict):
 
-    EditWordPairForm = CreateWordPairForm(wdict)
-
     if request.method == 'POST':
         models.log(request, 'edit_word_pair')
-        form = EditWordPairForm(request.POST)
+        form = WordPairForm(request.POST)
         if form.is_valid():
-            set_word_pair_from_form(wp, form)
+            for field in models.WordPair.get_fields_to_be_edited():
+                setattr(wp, field, form.cleaned_data[field])
             wp.save()
             wdict_url = reverse('ew.views.edit_word_pair', args=[wp.id])
             return HttpResponseRedirect(wdict_url + '?success=true')
@@ -229,19 +213,12 @@ def edit_word_pair(request, wp, wdict):
             message = _('Word pair modified.')
         else:
             message = ''
-        data = {'word_in_lang1': wp.word_in_lang1,
-                'word_in_lang2': wp.word_in_lang2,
-                'explanation': wp.explanation,
-                'date_added': wp.date_added,
-                'date1': wp.date1,
-                'date2': wp.date2,
-                'strength1': wp.strength1,
-                'strength2': wp.strength2}
-        form = EditWordPairForm(data)
+        form = WordPairForm(instance=wp)
 
     else:
         assert(False)
 
+    set_word_pair_form_labels(wdict, form)
     return render(
                request,
                'ew/edit_word_pair.html',
