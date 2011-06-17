@@ -13,7 +13,7 @@
 <a class="help" href="help/{{ LANGUAGE_CODE }}#main-page">({% trans "Help for this page" %})</a>
 </p>
 
-{% if username == None %}
+{% if not user.is_authenticated %}
 {% trans "You are not logged in." %}
 {% else %}
 {% trans "Welcome" %}, {{ username }}!
@@ -22,13 +22,13 @@
 <ul>
 
   <!-- Menu items for not logged in users -->
-  {% if username == None %}
+  {% if not user.is_authenticated %}
   <li><a href="login" >{% trans "Log in" %}</a></li>
   {% endif %}
 
   <!-- Menu items for logged in users -->
 
-  {% if username != None %}
+  {% if user.is_authenticated %}
 
   <li><a href="logout">{% trans "Log out" %}</a></li>
 
