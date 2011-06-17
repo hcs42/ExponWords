@@ -212,17 +212,23 @@ def add_word_pair(request, wdict):
 def edit_word_pair(request, wp, wdict):
 
     EditWordPairForm = CreateWordPairForm(wdict)
+
     if request.method == 'POST':
         models.log(request, 'edit_word_pair')
         form = EditWordPairForm(request.POST)
         if form.is_valid():
             set_word_pair_from_form(wp, form)
             wp.save()
-            message = _('Word pair modified.')
+            wdict_url = reverse('ew.views.edit_word_pair', args=[wp.id])
+            return HttpResponseRedirect(wdict_url + '?success=true')
         else:
             message = _('Some fields are invalid.')
-    else:
-        message = ''
+
+    elif request.method == 'GET':
+        if request.GET.get('success') == 'true':
+            message = _('Word pair modified.')
+        else:
+            message = ''
         data = {'word_in_lang1': wp.word_in_lang1,
                 'word_in_lang2': wp.word_in_lang2,
                 'explanation': wp.explanation,
@@ -232,6 +238,9 @@ def edit_word_pair(request, wp, wdict):
                 'strength1': wp.strength1,
                 'strength2': wp.strength2}
         form = EditWordPairForm(data)
+
+    else:
+        assert(False)
 
     return render(
                request,
