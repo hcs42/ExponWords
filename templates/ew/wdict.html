@@ -9,19 +9,19 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <p>
-<span class="current_menu"><a href="../..">ExponWords</a></span>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">{% include "ew/menuitem_dict.html" %}</span>
-<a class="help" href="/help/{{ LANGUAGE_CODE }}#dict-page">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url help LANGUAGE_CODE %}#dict-page">({% trans "Help for this page" %})</a>
 </p>
 
 <ul>
-  <li><a href="/dict/{{ wdict.id }}/practice/">{% trans "Practice" %}</a></li>
-  <li><a href="/dict/{{ wdict.id }}/view/">{% trans "View" %}</a></li>
-  <li><a href="/dict/{{ wdict.id }}/add-word-pair/">{% trans "Add new word pair" %}</a></li>
-  <li><a href="/dict/{{ wdict.id }}/import-word-pairs-from-text/">{% trans "Import word pairs from text" %}</a></li>
-  <li><a href="/dict/{{ wdict.id }}/export-word-pairs-to-text/">{% trans "Export word pairs to text" %}</a></li>
-  <li><a href="/dict/{{ wdict.id }}/import-word-pairs-from-tsv/">{% trans "Import word pairs from tab separated values" %}</a></li>
-  <li><a href="/dict/{{ wdict.id }}/delete/">{% trans "Delete" %}</a></li>
+  <li><a href="{% url practice_wdict wdict.id %}">{% trans "Practice" %}</a></li>
+  <li><a href="{% url view_wdict wdict.id %}">{% trans "View" %}</a></li>
+  <li><a href="{% url add_word_pair wdict.id %}">{% trans "Add new word pair" %}</a></li>
+  <li><a href="{% url import_word_pairs_from_text wdict.id %}">{% trans "Import word pairs from text" %}</a></li>
+  <li><a href="{% url export_word_pairs_to_text wdict.id %}">{% trans "Export word pairs to text" %}</a></li>
+  <li><a href="{% url import_word_pairs_from_tsv wdict.id %}">{% trans "Import word pairs from tab separated values" %}</a></li>
+  <li><a href="{% url delete_wdict wdict.id %}">{% trans "Delete" %}</a></li>
 </ul>
 {% endblock %}

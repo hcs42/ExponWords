@@ -8,16 +8,16 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="../../..">ExponWords</a></span>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 <span class="current_menu">{% trans "Add new word" %}</span>
 </p>
 
 <p>{{ message }}</p>
 
-<form action="./" method="post">{% csrf_token %}
+<form action="{% url add_word_pair wdict.id %}" method="post">{% csrf_token %}
   <table>
     {{ form.as_table }}
   </table>

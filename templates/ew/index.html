@@ -9,7 +9,7 @@
 
 <p>
 <span class="current_menu">ExponWords</span>
-<a class="help" href="help/{{ LANGUAGE_CODE }}#main-page">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url help LANGUAGE_CODE %}#main-page">({% trans "Help for this page" %})</a>
 </p>
 
 {% if not user.is_authenticated %}
@@ -22,14 +22,14 @@
 
   <!-- Menu items for not logged in users -->
   {% if not user.is_authenticated %}
-  <li><a href="login" >{% trans "Log in" %}</a></li>
+  <li><a href="{% url login %}" >{% trans "Log in" %}</a></li>
   {% endif %}
 
   <!-- Menu items for logged in users -->
 
   {% if user.is_authenticated %}
 
-  <li><a href="logout">{% trans "Log out" %}</a></li>
+  <li><a href="{%url logout %}">{% trans "Log out" %}</a></li>
 
   <!-- Listing dictionaries -->
 
@@ -39,23 +39,23 @@
   <ul>
     {% for d in wdicts %}
     <li>
-      <a href="/dict/{{ d.id }}/">"{{ d.name }}"</a>
+    <a href="{% url wdict d.id %}">"{{ d.name }}"</a>
     </li>
     {% endfor %}
   </ul>
   {% else %}
   {% trans "You have no dictionaries." %}
   {% endif %}
-  <li><a href="/create-dict/">{% trans "Create new dictionary" %}</a></li>
+  <li><a href="{% url add_wdict %}">{% trans "Create new dictionary" %}</a></li>
   </li>
 
   {% endif %}
 
   <!-- Menu items for everyone -->
 
-  <li><a href="options/">{% trans "Options" %}</a></li>
+  <li><a href="{% url options %}">{% trans "Options" %}</a></li>
 
-  <li><a href="help/{{ LANGUAGE_CODE }}/">{% trans "Help" %}</a></li>
+  <li><a href="{% url help LANGUAGE_CODE %}">{% trans "Help" %}</a></li>
 
 
 </ul>

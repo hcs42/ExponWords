@@ -8,18 +8,18 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="../../..">ExponWords</a></span>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
-<span class="current_menu"><a href="../../../dict/{{ wdict.id }}/view/">{% trans "View dictionary" %}</a></span>
+<span class="current_menu"><a href="{% url view_wdict wdict.id %}">{% trans "View dictionary" %}</a></span>
 &raquo;
 <span class="current_menu">{% trans "Edit word pair" %}</span>
 </p>
 
 <p>{{ message }}</p>
 
-<form action="./" method="post">{% csrf_token %}
+<form action="{% url edit_word_pair wdict.id %}" method="post">{% csrf_token %}
   <table>
     {{ form.as_table }}
   </table>

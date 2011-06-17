@@ -8,12 +8,12 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="../../..">ExponWords</a></span>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 <span class="current_menu">{% trans "Practice" %}</span>
-<a class="help" href="/help/{{ LANGUAGE_CODE }}#practice">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url help LANGUAGE_CODE %}#practice">({% trans "Help for this page" %})</a>
 </p>
 
 <p>{{ message }}</p>
