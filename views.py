@@ -20,6 +20,7 @@ from django.contrib.auth import authenticate
 from ExponWords.ew.models import WordPair, WDict
 import ExponWords.ew.models as models
 from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from django import forms
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -285,16 +286,22 @@ def add_wdict(request):
             wdict.lang1 = form.cleaned_data['lang1']
             wdict.lang2 = form.cleaned_data['lang2']
             wdict.save()
-            message = _('Dictionary created.')
+            wdict_url = reverse('ew.views.wdict', args=[wdict.id])
+            return HttpResponseRedirect(wdict_url)
         else:
             message = _('Some fields are invalid.')
-    else:
+
+    elif request.method == 'GET':
+        form = AddWDictForm()
         message = ''
+
+    else:
+        assert(False)
 
     return render(
                request,
                'ew/add_wdict.html',
-               {'form':  AddWDictForm(),
+               {'form':  form,
                 'message': message})
 
 
