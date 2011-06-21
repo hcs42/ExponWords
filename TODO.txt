@@ -1,3 +1,16 @@
+Top priority
+------------
+
+- better links instead of "../.."
+- labels (makes sense only if there is search)
+- search
+- actions on multiple word pairs:
+    - move to other dictionary
+    - practice
+- show the future
+- word queue for words to be learnt
+- shift dates
+
 Important (before releasing as a public web service)
 ----------------------------------------------------
 
@@ -12,15 +25,11 @@ Important (before releasing as a public web service)
 Would be nice
 -------------
 
-- labels
-- better links instead of "../.."
 - random should not be totally random: it could be deterministic within a day,
   but it should also have a pointer about which word is next so that if you say
   NO to a word, it will not come back if you reload the page only after
   answering the words not yet asked
-- show the future
 - showing "(n)" when having multiple occurrences of the same word
-- word queue for words to be learnt
 
 Wishlist
 --------
