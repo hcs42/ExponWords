@@ -1,15 +1,24 @@
 Top priority
 ------------
 
-- better links instead of "../.."
+- better links instead of "../.." {0:20}
+- search {1:00}
 - labels (makes sense only if there is search)
-- search
+    - label field {0:30}
+    - view should show it {0:15}
+    - search by label in a dropbox {0:30}
+    - search by label in search expression {0:15}
+- practice search {0:30}
+- copy fields when adding a new word pair {0:30}
 - actions on multiple word pairs:
-    - move to other dictionary
-    - practice
-- show the future
+    - move to other dictionary {1:00}
+- shift dates {1:00}
 - word queue for words to be learnt
-- shift dates
+    - active field {0:30}
+    - view should show it {0:15}
+    - "Activate words" page {0:30}
+
+- show the future {4:00}
 
 Important (before releasing as a public web service)
 ----------------------------------------------------
