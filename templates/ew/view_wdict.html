@@ -8,16 +8,16 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="../../..">ExponWords</a></span>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="..">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 <span class="current_menu">{%trans "View dictionary" %}</span>
 </p>
 
 {% trans "Number of word pairs" %}: {{ word_pairs_and_exps|length }}
 
-<form action="../delete-word-pairs/" method="post">{% csrf_token %}
+<form action="{% url delete_word_pairs wdict.id %}" method="post">{% csrf_token %}
 <table border="1" id="table">
   <tr>
     <td class="tbl_header">{{ lang_label1 }}</td>
@@ -37,7 +37,7 @@
     <td>{{ wp.strength2 }}</td>
     <td>{{ wp.date1 }}</td>
     <td>{{ wp.date2 }}</td>
-    <td><a href="../../../word-pair/{{ wp.id }}/edit/">{% trans "Edit" %}</a></td>
+    <td><a href="{% url edit_word_pair wp.id %}">{% trans "Edit" %}</a></td>
     <td><input type="checkbox" name="{{ wp.id }}"></input></td>
   </tr>
   {% endfor %}

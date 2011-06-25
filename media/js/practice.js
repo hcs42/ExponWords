@@ -42,7 +42,7 @@ var prev_word_index = false;
 function get_todays_wordlist() {
     // Get the list of today's word from the server and ask the first one.
     $.ajax({
-        url: '../words-to-practice-today/',
+        url: GET_WORDS_TO_PRACTICE_TODAY_URL,
         dataType: 'json',
         data: {'csrfmiddlewaretoken': csrf_token},
         type: 'post',
@@ -67,8 +67,8 @@ function update_edit_word(button, curr_word_index) {
         $(button).removeAttr('href');
         $(button).attr('class', 'nonlink');
     } else {
-        var edit_link = '../../../word-pair/' + curr_word_index + '/edit/';
-        $(button).attr('href', edit_link);
+        var edit_url = EDIT_WORD_PAIR_URL.replace('999', curr_word_index);
+        $(button).attr('href', edit_url);
         $(button).removeAttr('class');
     }
 }
@@ -156,7 +156,7 @@ function update_word(data, retries, timeout)
 {
     if (retries != 0) {
         $.ajax({
-            url: '../update-word/',
+            url: UPDATE_WORD_URL,
             dataType: 'json',
             data: data,
             type: 'post',

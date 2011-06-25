@@ -54,5 +54,11 @@
   <script type="text/javascript" language="JavaScript" src="/site_media/js/exponwordslib.js"></script>
   <script type="text/javascript" language="JavaScript" src="/site_media/js/practice.js"></script>
   <script>{{ js_vars }}</script>
-  <script>var csrf_token = "{{ csrf_token }}";</script>
+  <script>
+    var csrf_token = "{{ csrf_token }}";
+    var EDIT_WORD_PAIR_URL = "{% url edit_word_pair '999' %}";
+    var UPDATE_WORD_URL = "{% url update_word wdict.id %}";
+    var GET_WORDS_TO_PRACTICE_TODAY_URL =
+            "{% url get_words_to_practice_today wdict.id %}";
+  </script>
 {% endblock %}

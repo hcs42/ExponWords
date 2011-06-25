@@ -378,7 +378,8 @@ def delete_word_pairs(request, wdict):
         wp.deleted = True
         wp.save()
 
-    return HttpResponseRedirect('../view/')
+    view_url = reverse('ew.views.view_wdict', args=[wdict.id])
+    return HttpResponseRedirect(view_url)
 
 
 def CreateImportWordPairsForm(wdict):
