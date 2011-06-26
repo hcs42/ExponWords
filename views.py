@@ -527,6 +527,9 @@ def search(request):
     wdicts = WDict.objects.filter(user=request.user, deleted=False)
     wdict_choices = ([('all', _('All'))] + 
                      [(wdict.id, wdict.name) for wdict in wdicts])
+    label_choices = ([('all', _('All'))] + 
+                     [(label, label)
+                      for label in models.get_labels(request.user)])
 
     class SearchForm(forms.Form):
         q = forms.CharField(max_length=255,
@@ -534,6 +537,9 @@ def search(request):
                             required=False)
         dict = forms.ChoiceField(choices=wdict_choices,
                                  label=_('Dictionary') + ':',
+                                 required=False)
+        label = forms.ChoiceField(choices=label_choices,
+                                 label=_('Label') + ':',
                                  required=False)
 
     if request.method != 'GET':
@@ -547,6 +553,12 @@ def search(request):
     wdict = None
     query_text = form.cleaned_data['q']
     query_wdict = form.cleaned_data['dict']
+
+    query_label_raw = form.cleaned_data['label']
+    if query_label_raw in ('', 'all'):
+        query_label = None
+    else:
+        query_label = query_label_raw
 
     # If we don't have a 'q' parameter, we will show the basic search page. If
     # we do have one, we will perform the search, even if it is empty.
@@ -582,6 +594,11 @@ def search(request):
                 
         for wp in all_word_pairs:
             wp_matches_all = True
+            if ((query_label is not None) and
+                (unicode(wp.labels).find(query_label) == -1)):
+                # We require a certain label but wp does not have it
+                continue
+
             for query_item_type, query_item_value in query_items:
                 query_item_matches = False
                 if query_item_type == 'label':

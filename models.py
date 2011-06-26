@@ -170,6 +170,16 @@ def create_add_word_pairs(wdict, word_pairs):
         wdict.save()
 
 
+def get_labels(user):
+    all_word_pairs = WordPair.objects.filter(wdict__user=user,
+                                             wdict__deleted=False,
+                                             deleted=False)
+    labels = set()
+    for wp in all_word_pairs:
+        labels.update(wp.labels.split())
+    return labels
+
+
 def import_textfile(s, wdict):
     """Adds words from a text file to a dictionary.
 
