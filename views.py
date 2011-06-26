@@ -573,16 +573,27 @@ def search(request):
         word_pairs = []
         query_words = [normalize_string(query_word)
                        for query_word in query_text.split()]
+        query_items = []
+        for query_word in query_words:
+            if query_word.startswith('label:'):
+                query_items.append(('label', query_word[6:]))
+            else:
+                query_items.append(('text', query_word))
+                
         for wp in all_word_pairs:
             wp_matches_all = True
-            for query_word in query_words:
-                query_word_matches = False
-                for field in models.WordPair.get_fields_to_be_edited():
-                    field_text = normalize_string(unicode(getattr(wp, field)))
-                    if (field_text.find(query_word) != -1):
-                        query_word_matches = True
-                        break
-                if not query_word_matches:
+            for query_item_type, query_item_value in query_items:
+                query_item_matches = False
+                if query_item_type == 'label':
+                    labels = normalize_string(unicode(wp.labels))
+                    query_item_matches = (labels.find(query_item_value) != -1)
+                else: # query_item_type == 'text'
+                    for field in models.WordPair.get_fields_to_be_edited():
+                        field_text = normalize_string(unicode(getattr(wp, field)))
+                        if (field_text.find(query_item_value) != -1):
+                            query_item_matches = True
+                            break
+                if not query_item_matches:
                     wp_matches_all = False
                     break
             if wp_matches_all:
