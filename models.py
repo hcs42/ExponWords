@@ -73,6 +73,9 @@ class WordPair(models.Model):
     # explanation, examples, comments, etc.
     explanation = models.TextField(blank=True)
 
+    # labels
+    labels = models.CharField(max_length=255, blank=True)
+
     # whether the word pair is deleted or not
     deleted = models.BooleanField(default=False)
 
@@ -124,6 +127,7 @@ class WordPair(models.Model):
         return ('word_in_lang1',
                 'word_in_lang2',
                 'explanation',
+                'labels',
                 'date_added',
                 'date1',
                 'date2',

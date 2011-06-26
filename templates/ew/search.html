@@ -39,6 +39,7 @@
     <td class="tbl_header">{% trans "Explanation" %}</td>
     <td class="tbl_header" colspan="2">{% trans "Strengths" %}</td>
     <td class="tbl_header" colspan="2">{% trans "Dates" %}</td>
+    <td class="tbl_header">{% trans "Labels" %}</td>
     {% if wdict == None %}
     <td class="tbl_header">{% trans "Dictionary" %}</td>
     {% endif %}
@@ -54,6 +55,7 @@
     <td>{{ wp.strength2 }}</td>
     <td>{{ wp.date1 }}</td>
     <td>{{ wp.date2 }}</td>
+    <td>{{ wp.labels }}</td>
     {% if wdict == None %}
     <td><a href="{% url wdict wp.wdict.id %}">{{ wp.wdict.name }}</a></td>
     {% endif %}
