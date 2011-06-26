@@ -33,6 +33,7 @@ import json
 import traceback
 import re
 import sys
+import unicodedata
 import urllib
 import urlparse
 
@@ -514,6 +515,12 @@ def remove_query_param(url, param_name):
     return new_url
 
 
+def normalize_string(s):
+    # Code copied from: http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string/518232#518232
+    return ''.join((c for c in unicodedata.normalize('NFD', s.lower())
+                    if unicodedata.category(c) != 'Mn'))
+
+
 @login_required
 def search(request):
 
@@ -563,14 +570,23 @@ def search(request):
             wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
             all_word_pairs = WordPair.objects.filter(wdict=wdict,
                                                      deleted=False)
-        if query_text == '':
-            word_pairs = all_word_pairs
-        else:
-            word_pairs = []
-            for wp in all_word_pairs:
-                if (re.search(query_text, wp.word_in_lang1) or
-                    re.search(query_text, wp.word_in_lang2)):
-                    word_pairs.append(wp)
+        word_pairs = []
+        query_words = [normalize_string(query_word)
+                       for query_word in query_text.split()]
+        for wp in all_word_pairs:
+            wp_matches_all = True
+            for query_word in query_words:
+                query_word_matches = False
+                for field in models.WordPair.get_fields_to_be_edited():
+                    field_text = normalize_string(unicode(getattr(wp, field)))
+                    if (field_text.find(query_word) != -1):
+                        query_word_matches = True
+                        break
+                if not query_word_matches:
+                    wp_matches_all = False
+                    break
+            if wp_matches_all:
+                word_pairs.append(wp)
 
         word_pairs_and_exps = [(wp, explanation_to_html(wp.explanation))
                                for wp in word_pairs]
