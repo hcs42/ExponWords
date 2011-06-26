@@ -34,7 +34,7 @@
 
 <form action="{% url delete_word_pairs %}" method="post">{% csrf_token %}
 <table border="1" id="table">
-  <tr>
+  <tr class="center_cell">
     <td class="tbl_header" colspan="2">{% trans "Words" %}</td>
     <td class="tbl_header">{% trans "Explanation" %}</td>
     <td class="tbl_header" colspan="2">{% trans "Strengths" %}</td>
