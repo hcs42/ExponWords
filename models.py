@@ -176,7 +176,7 @@ def get_labels(user):
                                              deleted=False)
     labels = set()
     for wp in all_word_pairs:
-        labels.update(wp.labels.split())
+        labels.update(unicode(wp.labels).split())
     return labels
 
 
