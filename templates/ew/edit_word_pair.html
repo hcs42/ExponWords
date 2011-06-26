@@ -17,7 +17,7 @@
 
 <p>{{ message }}</p>
 
-<form action="{% url edit_word_pair wdict.id %}" method="post">{% csrf_token %}
+<form action="{% url edit_word_pair word_pair.id %}" method="post">{% csrf_token %}
   <table>
     {{ form.as_table }}
   </table>
