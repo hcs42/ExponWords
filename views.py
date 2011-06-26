@@ -111,27 +111,6 @@ def wdict(request, wdict):
                   {'wdict': wdict})
 
 
-@wdict_access_required
-def view_wdict(request, wdict):
-
-    models.log(request, 'view_wdict')
-
-    word_pairs = wdict.wordpair_set.filter(deleted=False)
-    word_pairs_and_exps = []
-    for wp in word_pairs:
-        word_pairs_and_exps.append((wp, explanation_to_html(wp.explanation)))
-
-    lang_label1 = (_('Word in "%(lang)s"') % {'lang': wdict.lang1})
-    lang_label2 = (_('Word in "%(lang)s"') % {'lang': wdict.lang2})
-
-    return render(
-               request,
-               'ew/view_wdict.html',
-               {'wdict': wdict,
-                'word_pairs_and_exps': word_pairs_and_exps,
-                'lang_label1': lang_label1,
-                'lang_label2': lang_label2})
-
 class WordPairForm(forms.ModelForm):
     class Meta:
         model = WordPair
