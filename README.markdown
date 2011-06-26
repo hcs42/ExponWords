@@ -132,6 +132,11 @@ In Debian or Ubuntu, ExponWords can be set to start up automatically by performi
 
         # update-rc.d exponwords defaults
 
+Upgrading ExponWords
+--------------------
+
+There is a file in this directory called UPDATE.txt which describes what actions should be performed when Upgrading ExponWords.
+
 Usage
 =====
 

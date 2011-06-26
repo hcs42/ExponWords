@@ -1,0 +1,12 @@
+This text describes what actions to perform when upgrading ExponWords to a
+newer version.
+
+0.3.3
+-----
+
+Add the "labels" column to the ew_wordpair table:
+
+    $ sqlite3 production.db
+    sqlite> alter table ew_wordpair add column labels string;
+    sqlite> update ew_wordpair set labels='';
+    sqlite> ^D
