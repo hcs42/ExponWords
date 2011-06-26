@@ -520,6 +520,18 @@ def normalize_string(s):
     return ''.join((c for c in unicodedata.normalize('NFD', s.lower())
                     if unicodedata.category(c) != 'Mn'))
 
+class LenientChoiceField(forms.ChoiceField):
+
+    def __init__(self, *args, **kw):
+        super(LenientChoiceField, self).__init__(*args, **kw)
+
+    def validate(self, value):
+        super(forms.ChoiceField, self).validate(value)
+        if value and not self.valid_value(value):
+            self.is_really_valid = False
+        else:
+            self.is_really_valid = True
+
 
 @login_required
 def search(request):
@@ -538,9 +550,9 @@ def search(request):
         dict = forms.ChoiceField(choices=wdict_choices,
                                  label=_('Dictionary') + ':',
                                  required=False)
-        label = forms.ChoiceField(choices=label_choices,
-                                 label=_('Label') + ':',
-                                 required=False)
+        label = LenientChoiceField(choices=label_choices,
+                                   label=_('Label') + ':',
+                                   required=False)
 
     if request.method != 'GET':
         raise Http404
