@@ -1,0 +1,83 @@
+{% extends "ew/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Search" %}
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+&raquo;
+{% if wdict != None %}
+<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
+&raquo;
+{% endif %}
+<span class="current_menu">{% trans "Search" %}</span>
+</p>
+
+<form action="{% url search %}" method="get">
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="{% trans 'Search' %}" />
+</form>
+
+<p>{{ message }}</p>
+
+{% if word_pairs_and_exps != None %}
+{% trans "Number of word pairs found" %}: {{ word_pairs_and_exps|length }}
+{% endif %}
+
+{% if word_pairs_and_exps %}
+
+<form action="{% url delete_word_pairs %}" method="post">{% csrf_token %}
+<table border="1" id="table">
+  <tr>
+    <td class="tbl_header" colspan="2">{% trans "Words" %}</td>
+    <td class="tbl_header">{% trans "Explanation" %}</td>
+    <td class="tbl_header" colspan="2">{% trans "Strengths" %}</td>
+    <td class="tbl_header" colspan="2">{% trans "Dates" %}</td>
+    {% if wdict == None %}
+    <td class="tbl_header">{% trans "Dictionary" %}</td>
+    {% endif %}
+    <td class="tbl_header">{% trans "Action" %}</td>
+    <td class="tbl_header">{% trans "Selection" %}</td>
+  </tr>
+  {% for wp, explanation in word_pairs_and_exps %}
+  <tr>
+    <td>{{ wp.word_in_lang1 }}</td>
+    <td>{{ wp.word_in_lang2 }}</td>
+    <td class="explanation">{{ explanation|safe }}</td>
+    <td>{{ wp.strength1 }}</td>
+    <td>{{ wp.strength2 }}</td>
+    <td>{{ wp.date1 }}</td>
+    <td>{{ wp.date2 }}</td>
+    {% if wdict == None %}
+    <td><a href="{% url wdict wp.wdict.id %}">{{ wp.wdict.name }}</a></td>
+    {% endif %}
+    <td><a href="{% url edit_word_pair wp.id %}">{% trans "Edit" %}</a></td>
+    <td><input type="checkbox" name="{{ wp.id }}"></input></td>
+  </tr>
+  {% endfor %}
+</table>
+<p>
+  <input type="hidden" name="source_url" value="{{source_url}}">
+  <input type="submit" id="delete-button" value="{% trans 'Delete selected words' %}">
+  <span class="small-button" id="select-all-button">{% trans "Select all" %}</span>
+</p>
+</form>
+
+{% endif %} <!-- word_pairs_and_exps -->
+
+  <!-- Translations -->
+  <span style="display:none" id="translation-select-none">{% trans "Select none" %}</span>
+{% endblock %}
+{% block javascript %}
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/json2.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/exponwordslib.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/view_wdict.js"></script>
+  <script>var csrf_token = "{{ csrf_token }}";</script>
+{% endblock %}

@@ -20,7 +20,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from ExponWords.ew.models import WordPair, WDict
 import ExponWords.ew.models as models
-from django.http import Http404, HttpResponse, HttpResponseRedirect
+from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django import forms
 from django.template import RequestContext
@@ -32,6 +33,8 @@ import json
 import traceback
 import re
 import sys
+import urllib
+import urlparse
 
 
 def index(request):
@@ -127,8 +130,7 @@ def view_wdict(request, wdict):
                {'wdict': wdict,
                 'word_pairs_and_exps': word_pairs_and_exps,
                 'lang_label1': lang_label1,
-                'lang_label2': lang_label2},
-                context_instance=RequestContext(request))
+                'lang_label2': lang_label2})
 
 class WordPairForm(forms.ModelForm):
     class Meta:
@@ -363,12 +365,14 @@ def update_word(request, wdict):
         raise exc_info[0], exc_info[1], exc_info[2]
 
 
-@wdict_access_required
-def delete_word_pairs(request, wdict):
+@login_required
+def delete_word_pairs(request):
 
     models.log(request, 'delete_word_pairs')
 
-    word_pairs = wdict.wordpair_set.filter(deleted=False)
+    word_pairs = WordPair.objects.filter(wdict__user=request.user,
+                                         wdict__deleted=False,
+                                         deleted=False)
     word_pairs_to_delete = []
     for wp in word_pairs:
         if unicode(wp.id) in request.POST:
@@ -378,8 +382,23 @@ def delete_word_pairs(request, wdict):
         wp.deleted = True
         wp.save()
 
-    view_url = reverse('ew.views.view_wdict', args=[wdict.id])
-    return HttpResponseRedirect(view_url)
+    source_url = request.POST.get('source_url')
+    if source_url:
+        word_count = len(word_pairs_to_delete)
+        if word_count == 0:
+            message = _('No word pair deleted.')
+        elif word_count == 1:
+            message = _('1 word pair deleted.')
+        else:
+            message = _('%(count)s word pairs deleted.') % {'count': word_count}
+
+        redirect_url = (source_url +
+                        '&message=' +
+                        urllib.quote_plus(message.encode("utf-8")))
+    else:
+        redirect_url = reverse('ew.views.index', args=[])
+
+    return HttpResponseRedirect(redirect_url)
 
 
 def CreateImportWordPairsForm(wdict):
@@ -497,3 +516,93 @@ def delete_wdict(request, wdict):
                {'form':  form,
                 'message': message,
                 'wdict': wdict})
+
+
+def bad_unicode_to_str(u):
+    """This function converts a unicode object that actually contains UTF-8
+    encoded text (instead of unicode characters) to a UTF-8 encoded string."""
+    return ''.join([chr(ord(ch)) for ch in u])
+
+
+def remove_query_param(url, param_name):
+    url_list = list(urlparse.urlparse(url))
+    query_list = urlparse.parse_qsl(url_list[4])
+    new_query_list = [(k, bad_unicode_to_str(v))
+                      for k, v in query_list if k != param_name]
+    new_raw_query = urllib.urlencode(new_query_list)
+    url_list[4] = new_raw_query
+    new_url = urlparse.urlunparse(url_list)
+    return new_url
+
+
+@login_required
+def search(request):
+
+    wdicts = WDict.objects.filter(user=request.user, deleted=False)
+    wdict_choices = ([('all', _('All'))] + 
+                     [(wdict.id, wdict.name) for wdict in wdicts])
+
+    class SearchForm(forms.Form):
+        q = forms.CharField(max_length=255,
+                            label=_('Search expression') + ':',
+                            required=False)
+        dict = forms.ChoiceField(choices=wdict_choices,
+                                 label=_('Dictionary') + ':',
+                                 required=False)
+
+    if request.method != 'GET':
+        raise Http404
+
+    form = SearchForm(request.GET)
+    if not form.is_valid():
+        raise Http404
+
+    message = request.GET.get('message', '')
+    wdict = None
+    query_text = form.cleaned_data['q']
+    query_wdict = form.cleaned_data['dict']
+
+    # If we don't have a 'q' parameter, we will show the basic search page. If
+    # we do have one, we will perform the search, even if it is empty.
+
+    if 'q' not in request.GET:
+        if query_wdict in ('', 'all'):
+            form = SearchForm()
+        else:
+            wdict = get_object_or_404(WDict, pk=int(query_wdict),
+                                      user=request.user)
+            form = SearchForm({'dict': query_wdict})
+        word_pairs_and_exps = None
+
+    else:
+        if query_wdict in ('', 'all'):
+            all_word_pairs = WordPair.objects.filter(wdict__user=request.user,
+                                                     wdict__deleted=False,
+                                                     deleted=False)
+        else:
+            wdict_id = int(query_wdict)
+            wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
+            all_word_pairs = WordPair.objects.filter(wdict=wdict,
+                                                     deleted=False)
+        if query_text == '':
+            word_pairs = all_word_pairs
+        else:
+            word_pairs = []
+            for wp in all_word_pairs:
+                if (re.search(query_text, wp.word_in_lang1) or
+                    re.search(query_text, wp.word_in_lang2)):
+                    word_pairs.append(wp)
+
+        word_pairs_and_exps = [(wp, explanation_to_html(wp.explanation))
+                               for wp in word_pairs]
+
+    source_url = remove_query_param(request.get_full_path(), 'message')
+
+    return render(
+               request,
+               'ew/search.html',
+               {'form': form,
+                'message': message,
+                'wdict': wdict,
+                'word_pairs_and_exps': word_pairs_and_exps,
+                'source_url': source_url})
