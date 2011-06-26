@@ -42,3 +42,8 @@ v0.3:
 - handle negative stengths
 - The "Edit previous word" link should be gray and not non-existent in the
   beginning
+
+v0.4:
+- better links instead of "../.."
+- search
+- labels (makes sense only if there is search)
