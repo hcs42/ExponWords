@@ -15,6 +15,7 @@
 &raquo;
 {% endif %}
 <span class="current_menu">{% trans "Search" %}</span>
+<a class="help" href="{% url help LANGUAGE_CODE %}#search">({% trans "Help for this page" %})</a>
 </p>
 
 <form action="{% url search %}" method="get">
