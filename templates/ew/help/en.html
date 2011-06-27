@@ -168,6 +168,12 @@ the label in which the search shall be performed can be selected. The text
 typed into the textbox will be split into words (words shall be separated by
 spaces). Only the word pairs containing all search words will be shown. If the
 search box is empty, all word pairs will be printed.</p>
+<p>The searchbox is case insensitive and accent insensitive, so for example a search for "haz" will found the word pairs containing the text "Ház".</p>
+<p>The "label:" prefix can also be used to search for a specific label, e.g.
+the search expression "label:oldwords cat" will show the word pairs that
+contain the "cat" word and have a label that contains the "oldwords" label,
+even in part (so e.g.the words with "veryoldword" label will be found as
+well).</p>
 <p>Words selected using the checkboxes in the "Selection" column can be deleted
 using the "Delete selected words" button.</p>
 
