@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-26 19:11+0200\n"
+"POT-Creation-Date: 2011-07-03 13:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -122,7 +122,7 @@ msgid ""
 "in the first language; word in the second language; explanation. The last "
 "one is optional. The fields should be separated by a TAB character. If a "
 "spreadsheet is opened in as spreadsheet editor application (such as "
-"LibreOffice, OpenOffice.org or Mircosoft Excel), and it contains these three "
+"LibreOffice, OpenOffice.org or Microsoft Excel), and it contains these three "
 "columns, which are copied and pasted here, then it will have exactly this "
 "format."
 msgstr ""
@@ -130,7 +130,7 @@ msgstr ""
 "nyelven; szó a második nyelven; magyarázat. A \"magyarázat\" mező "
 "elhagyható. A mezőket TAB karakterrel válaszd el egymástól. Ha egy "
 "táblázatkezelő programban (például LibreOffice-ban, OpenOffice.org-ban vagy "
-"Mircosoft Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza, és "
+"Microsoft Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza, és "
 "azt ide bemásolod, akkor az épp ilyen formátumban lesz."
 
 #: views.py:461
@@ -150,19 +150,19 @@ msgstr ""
 "Jelöld be a \"Biztos vagy benne?\" jelölőnégyzetet, ha tényleg törölni "
 "akarod a szótárat!"
 
-#: views.py:521 views.py:523
+#: views.py:540 views.py:542
 msgid "All"
 msgstr "Mind"
 
-#: views.py:529
+#: views.py:548
 msgid "Search expression"
 msgstr "Keresett szöveg"
 
-#: views.py:532 templates/ew/search.html:44 templates/ew/wdict.html:5
+#: views.py:551 templates/ew/search.html:45 templates/ew/wdict.html:5
 msgid "Dictionary"
 msgstr "Szótár"
 
-#: views.py:535
+#: views.py:554
 msgid "Label"
 msgstr "Címke"
 
@@ -213,7 +213,7 @@ msgid "Main page"
 msgstr "Főoldal"
 
 #: templates/ew/index.html:12 templates/ew/practice_wdict.html:16
-#: templates/ew/wdict.html:15
+#: templates/ew/search.html:18 templates/ew/wdict.html:15
 msgid "Help for this page"
 msgstr "Súgó ehhez az oldalhoz"
 
@@ -242,7 +242,7 @@ msgid "You have no dictionaries."
 msgstr "Még nincs szótárad."
 
 #: templates/ew/index.html:50 templates/ew/search.html:5
-#: templates/ew/search.html.py:17 templates/ew/search.html:24
+#: templates/ew/search.html.py:17 templates/ew/search.html:25
 #: templates/ew/wdict.html:20
 msgid "Search"
 msgstr "Keresés"
@@ -302,51 +302,51 @@ msgstr ""
 "Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz "
 "még egyszer azokon a szavakon, amiket nem tudtál.)"
 
-#: templates/ew/search.html:30
+#: templates/ew/search.html:31
 msgid "Number of word pairs found"
 msgstr "Talált szópárok száma"
 
-#: templates/ew/search.html:38
+#: templates/ew/search.html:39
 msgid "Words"
 msgstr "Szavak"
 
-#: templates/ew/search.html:39
+#: templates/ew/search.html:40
 msgid "Explanation"
 msgstr "Magyarázat"
 
-#: templates/ew/search.html:40
+#: templates/ew/search.html:41
 msgid "Strengths"
 msgstr "Erősség"
 
-#: templates/ew/search.html:41
+#: templates/ew/search.html:42
 msgid "Dates"
 msgstr "Dátumok"
 
-#: templates/ew/search.html:42
+#: templates/ew/search.html:43
 msgid "Labels"
 msgstr "Címkék"
 
-#: templates/ew/search.html:46
+#: templates/ew/search.html:47
 msgid "Action"
 msgstr "Akció"
 
-#: templates/ew/search.html:47
+#: templates/ew/search.html:48
 msgid "Selection"
 msgstr "Kijelölés"
 
-#: templates/ew/search.html:62
+#: templates/ew/search.html:63
 msgid "Edit"
 msgstr "Szerkesztés"
 
-#: templates/ew/search.html:69
+#: templates/ew/search.html:70
 msgid "Delete selected words"
 msgstr "Kiválasztott szavak törlése"
 
-#: templates/ew/search.html:70
+#: templates/ew/search.html:71
 msgid "Select all"
 msgstr "Mindegyik kijelölése"
 
-#: templates/ew/search.html:77
+#: templates/ew/search.html:78
 msgid "Select none"
 msgstr "Egyik kijelölése sem"
 

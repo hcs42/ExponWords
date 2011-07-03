@@ -439,7 +439,7 @@ def import_word_pairs_from_tsv(request, wdict):
                 "second language; explanation. The last one is optional. "
                 "The fields should be separated by a TAB character. If a "
                 "spreadsheet is opened in as spreadsheet editor application "
-                "(such as LibreOffice, OpenOffice.org or Mircosoft Excel), "
+                "(such as LibreOffice, OpenOffice.org or Microsoft Excel), "
                 "and it contains these three columns, which are copied and "
                 "pasted here, then it will have exactly this format.")
     return import_word_pairs(request, wdict, models.import_tsv,
