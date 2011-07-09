@@ -346,31 +346,39 @@ def update_word(request, wdict):
 
 
 @login_required
-def delete_word_pairs(request):
+def action_on_word_pairs(request):
 
-    models.log(request, 'delete_word_pairs')
+    models.log(request, 'action_on_word_pairs')
+
+    # Select the word pairs to use (i.e. to do the action with)
 
     word_pairs = WordPair.objects.filter(wdict__user=request.user,
                                          wdict__deleted=False,
                                          deleted=False)
-    word_pairs_to_delete = []
+    word_pairs_to_use = []
     for wp in word_pairs:
         if unicode(wp.id) in request.POST:
-            word_pairs_to_delete.append(wp)
+            word_pairs_to_use.append(wp)
 
-    for wp in word_pairs_to_delete:
-        wp.deleted = True
+    # Perform the action
+
+    action = request.POST.get('action')
+    for wp in word_pairs_to_use:
+        if action == 'delete':
+            wp.deleted = True
         wp.save()
+
+    # Redirect the user to the search page where which he issue the action
 
     source_url = request.POST.get('source_url')
     if source_url:
-        word_count = len(word_pairs_to_delete)
+        word_count = len(word_pairs_to_use)
         if word_count == 0:
-            message = _('No word pair deleted.')
+            message = _('No word pair modified.')
         elif word_count == 1:
-            message = _('1 word pair deleted.')
+            message = _('1 word pair modified.')
         else:
-            message = _('%(count)s word pairs deleted.') % {'count': word_count}
+            message = _('%(count)s word pairs modified.') % {'count': word_count}
 
         redirect_url = (source_url +
                         '&message=' +

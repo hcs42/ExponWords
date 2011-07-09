@@ -33,7 +33,7 @@
 
 {% if word_pairs_and_exps %}
 
-<form action="{% url delete_word_pairs %}" method="post">{% csrf_token %}
+<form action="{% url action_on_word_pairs %}" method="post">{% csrf_token %}
 <table border="1" id="table">
   <tr class="center_cell">
     <td class="tbl_header" colspan="2">{% trans "Words" %}</td>
@@ -66,9 +66,17 @@
   {% endfor %}
 </table>
 <p>
+
   <input type="hidden" name="source_url" value="{{source_url}}">
-  <input type="submit" id="delete-button" value="{% trans 'Delete selected words' %}">
+
+  <select name="action" id="action-selection"> 
+    <option value="none">{% trans 'Please select an action'%}</option> 
+    <option value="delete">{% trans 'Delete selected words'%}</option> 
+  </select>
+
+  <input type="submit" id="do-button" value="{% trans 'Do!' %}">
   <span class="small-button" id="select-all-button">{% trans "Select all" %}</span>
+
 </p>
 </form>
 
