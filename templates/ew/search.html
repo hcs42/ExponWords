@@ -33,7 +33,15 @@
 
 {% if word_pairs_and_exps %}
 
-<form action="{% url action_on_word_pairs %}" method="post">{% csrf_token %}
+<form action="{% url action_on_word_pairs %}" method="post">
+  
+<!-- hidden fields -->
+
+{% csrf_token %}
+<input type="hidden" name="source_url" value="{{source_url}}">
+  
+<!-- table -->
+
 <table border="1" id="table">
   <tr class="center_cell">
     <td class="tbl_header" colspan="2">{% trans "Words" %}</td>
@@ -66,16 +74,25 @@
   {% endfor %}
 </table>
 <p>
+  <span class="small-button" id="select-all-button">{% trans "Select all" %}</span>
+</p>
 
-  <input type="hidden" name="source_url" value="{{source_url}}">
+<!-- action --> 
 
+<p>
   <select name="action" id="action-selection"> 
     <option value="none">{% trans 'Please select an action'%}</option> 
     <option value="delete">{% trans 'Delete selected words'%}</option> 
-  </select>
+    <option value="shift_days">
+      {% trans 'Shift the dates of selected words'%}
+    </option> 
+  </select><br/>
+
+  <span style="display:none" id="span-shift-days">
+    Days: <input type="text" name="days" value=""><br/>
+  </span>
 
   <input type="submit" id="do-button" value="{% trans 'Do!' %}">
-  <span class="small-button" id="select-all-button">{% trans "Select all" %}</span>
 
 </p>
 </form>

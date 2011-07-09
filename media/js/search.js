@@ -34,10 +34,22 @@ function select_all() {
     }
 }
 
+function selection_changed() {
+    var value = $('#action-selection').val();
+    if (value == 'none') {
+        $('#span-shift-days').hide();
+    } else if (value == 'delete') {
+        $('#span-shift-days').hide();
+    } else if (value == 'shift_days') {
+        $('#span-shift-days').show();
+    }
+}
+
 $(document).ready(function() {
 
     // Event handlers
     $('#select-all-button').click(select_all);
+    $('#action-selection').change(selection_changed);
 
     select_all_text = $("#select-all-button").text();
     select_none_text = $("#translation-select-none").text();

@@ -363,9 +363,15 @@ def action_on_word_pairs(request):
     # Perform the action
 
     action = request.POST.get('action')
+    if action == 'shift_days':
+        days = datetime.timedelta(days=int(request.POST.get('days')))
+
     for wp in word_pairs_to_use:
         if action == 'delete':
             wp.deleted = True
+        elif action == 'shift_days':
+            wp.date1 += days
+            wp.date2 += days
         wp.save()
 
     # Redirect the user to the search page where which he issue the action
