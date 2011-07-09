@@ -362,29 +362,39 @@ def action_on_word_pairs(request):
 
     # Perform the action
 
+    message = None
     action = request.POST.get('action')
-    if action == 'shift_days':
-        days = datetime.timedelta(days=int(request.POST.get('days')))
+    do_action = False
+    if action == 'delete':
+        do_action = True
+    elif action == 'shift_days':
+        try:
+            days = datetime.timedelta(days=int(request.POST.get('days')))
+            do_action = True
+        except ValueError:
+            message = _('Please specify the number of days!')
 
-    for wp in word_pairs_to_use:
-        if action == 'delete':
-            wp.deleted = True
-        elif action == 'shift_days':
-            wp.date1 += days
-            wp.date2 += days
-        wp.save()
+    if do_action:
+        for wp in word_pairs_to_use:
+            if action == 'delete':
+                wp.deleted = True
+            elif action == 'shift_days':
+                wp.date1 += days
+                wp.date2 += days
+            wp.save()
 
     # Redirect the user to the search page where which he issue the action
 
     source_url = request.POST.get('source_url')
     if source_url:
-        word_count = len(word_pairs_to_use)
-        if word_count == 0:
-            message = _('No word pair modified.')
-        elif word_count == 1:
-            message = _('1 word pair modified.')
-        else:
-            message = _('%(count)s word pairs modified.') % {'count': word_count}
+        if message is None:
+            word_count = len(word_pairs_to_use)
+            if word_count == 0:
+                message = _('No word pair modified.')
+            elif word_count == 1:
+                message = _('1 word pair modified.')
+            else:
+                message = _('%(count)s word pairs modified.') % {'count': word_count}
 
         redirect_url = (source_url +
                         '&message=' +

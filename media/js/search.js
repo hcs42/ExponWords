@@ -37,10 +37,13 @@ function select_all() {
 function selection_changed() {
     var value = $('#action-selection').val();
     if (value == 'none') {
+        $('#span-delete').hide();
         $('#span-shift-days').hide();
     } else if (value == 'delete') {
+        $('#span-delete').show();
         $('#span-shift-days').hide();
     } else if (value == 'shift_days') {
+        $('#span-delete').hide();
         $('#span-shift-days').show();
     }
 }

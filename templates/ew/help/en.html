@@ -168,14 +168,25 @@ the label in which the search shall be performed can be selected. The text
 typed into the textbox will be split into words (words shall be separated by
 spaces). Only the word pairs containing all search words will be shown. If the
 search box is empty, all word pairs will be printed.</p>
-<p>The searchbox is case insensitive and accent insensitive, so for example a search for "haz" will found the word pairs containing the text "Ház".</p>
+<p>The searchbox is case insensitive and accent insensitive, so for example a
+search for "haz" will found the word pairs containing the text "Ház".</p>
 <p>The "label:" prefix can also be used to search for a specific label, e.g.
 the search expression "label:oldwords cat" will show the word pairs that
 contain the "cat" word and have a label that contains the "oldwords" label,
 even in part (so e.g.the words with "veryoldword" label will be found as
 well).</p>
-<p>Words selected using the checkboxes in the "Selection" column can be deleted
-using the "Delete selected words" button.</p>
+
+<h3 id="actions">Actions</h3>
+<p>The "Search" page can also be used to perform certain actions on word pairs
+that have been selected using the checkboxes in the "Selection" column.</p>
+<ul>
+  <li>Delete word pairs: deletes the selected word pairs.</li>
+  <li>Shift dates: shifts the dates of the word pairs (based on which the
+  program decides when to ask the word pair) with the given days. For example
+  if 3 days is typed, then a word which would otherwise be asked on 1st January
+  will be asked only on 4th January. Negative numbers can also be specified: in
+  this case the dates will be changed to earlier ones.</li>
+</ul>
 
 <h2>Frequently Asked Questions (FAQ)</h2>
 <ul>

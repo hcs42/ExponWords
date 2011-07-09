@@ -167,14 +167,26 @@ milyen szótárban és milyen címkéjű szavak között keressen. A szövegdobo
 beírt szöveget a program a szóközök mentén szavakra bontja, és csak azokat a
 szópárokat listázza ki, amelyekben az összes szó megtalálható. Ha a szövegdoboz
 üres, a keresés minden szót mutatni fog.</p>
-<p>A keresőmező érzéketlen a kis-nagybetű különbségekre és az ékezetekre, tehát például a "haz" keresés meg fogja találni a "Ház" szót tartalmazó szópárokat is.</p>
+<p>A keresőmező érzéketlen a kis-nagybetű különbségekre és az ékezetekre, tehát
+például a "haz" keresés meg fogja találni a "Ház" szót tartalmazó szópárokat
+is.</p>
 <p>A címkéket tartalmazó legördülő doboz mellett a "label:" előtag is
 használható címkék keresésére, például a "label:régi macska" keresési kifejezés
 csak azokat a szavakat fogja megtalálni, amik tartalmazzák a "macska" szót, és
 van olyan címkéjük, ami tartalmazza a "régi" szót, akár részben is (tehát
 például a "nagyonrégi" címkével rendelkező szavakat is megtaláljuk).</p>
-<p>A táblázat "Kijelölés" oszlopában lévő jelölődobozokkal kijelölt szavakat a
-"Kiválasztott szavak törlése" gombbal lehet kitörölni.</p>
+
+<h3 id="actions">Akciók</h3>
+<p>"Keresés" oldalon a "Kijelölés" oszlopban lévő jelölődobozokkal kijelölt
+szavakkal különböző akciókat hajthatunk végre.</p>
+<ul>
+  <li>Szópárok törlése: a kijelölt szópárokat törli.</li>
+  <li>Dátumok eltolása: a kijelölt szópárok dátumjait (amik alapján a program
+  eldönti, hogy mikor kérdezi a szavakat legközelebb) eltolja a megadott
+  nappal. Például ha 3 napot adunk meg, akkor az a szó, ami egyébként január
+  elsején lett volna kérdezve, január negyedikén lesz kérdezve. Negatív számot
+  is meg lehet adni, ekkor a dátumok előre lesznek hozva.</li>
+</ul>
 
 <h2>Gyakran Ismételt Kérések (GYIK)</h2>
 <ul>

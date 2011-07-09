@@ -25,7 +25,7 @@
   <input type="submit" value="{% trans 'Search' %}" />
 </form>
 
-<p>{{ message }}</p>
+<p class="message">{{ message }}</p>
 
 {% if word_pairs_and_exps != None %}
 {% trans "Number of word pairs found" %}: {{ word_pairs_and_exps|length }}
@@ -82,17 +82,21 @@
 <p>
   <select name="action" id="action-selection"> 
     <option value="none">{% trans 'Please select an action'%}</option> 
-    <option value="delete">{% trans 'Delete selected words'%}</option> 
-    <option value="shift_days">
-      {% trans 'Shift the dates of selected words'%}
-    </option> 
-  </select><br/>
+    <option value="delete">{% trans 'Delete word pairs'%}</option> 
+    <option value="shift_days">{% trans 'Shift dates'%}</option> 
+  </select>
+  <a class="help" href="{% url help LANGUAGE_CODE %}#actions">({% trans "Help for actions" %})</a>
+  <br/>
 
-  <span style="display:none" id="span-shift-days">
-    Days: <input type="text" name="days" value=""><br/>
+  <span style="display:none" id="span-delete">
+    <input type="submit" id="delete-button" value="{% trans 'Delete the selected word pairs!' %}">
   </span>
 
-  <input type="submit" id="do-button" value="{% trans 'Do!' %}">
+  <span style="display:none" id="span-shift-days">
+    {% trans 'Days' %}: <input type="text" name="days" value=""><br/>
+    <input type="submit" id="do-button" value="{% trans 'Shift the dates of the selected word pairs!' %}">
+  </span>
+
 
 </p>
 </form>
