@@ -520,7 +520,7 @@ def bad_unicode_to_str(u):
 
 def remove_query_param(url, param_name):
     url_list = list(urlparse.urlparse(url))
-    query_list = urlparse.parse_qsl(url_list[4])
+    query_list = urlparse.parse_qsl(url_list[4], keep_blank_values=True)
     new_query_list = [(k, bad_unicode_to_str(v))
                       for k, v in query_list if k != param_name]
     new_raw_query = urllib.urlencode(new_query_list)
