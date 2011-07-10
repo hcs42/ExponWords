@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-09 11:41+0200\n"
+"POT-Creation-Date: 2011-07-10 16:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -71,6 +71,9 @@ msgstr "Második nyelv"
 
 msgid "Please specify the number of days!"
 msgstr "Add meg a napok számát!"
+
+msgid "Action not recognized"
+msgstr "Ismeretlen akció"
 
 msgid "No word pair modified."
 msgstr "Egy szópár sem lett módosítva."
@@ -273,6 +276,9 @@ msgstr "Válassz ki egy akciót"
 msgid "Delete word pairs"
 msgstr "Szópárok törlése"
 
+msgid "Move word pairs"
+msgstr "Szópárok mozgatása"
+
 msgid "Shift dates"
 msgstr "Dátumok eltolása"
 
@@ -281,6 +287,9 @@ msgstr "Súgó az akciókhoz"
 
 msgid "Delete the selected word pairs!"
 msgstr "Töröld a kijelölt szópárokat!"
+
+msgid "Move the selected word pairs!"
+msgstr "Mozgasd a kijelölt szópárokat!"
 
 msgid "Days"
 msgstr "Napok"

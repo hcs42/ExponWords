@@ -39,12 +39,19 @@ function selection_changed() {
     if (value == 'none') {
         $('#span-delete').hide();
         $('#span-shift-days').hide();
+        $('#span-move').hide();
     } else if (value == 'delete') {
         $('#span-delete').show();
         $('#span-shift-days').hide();
+        $('#span-move').hide();
     } else if (value == 'shift_days') {
         $('#span-delete').hide();
         $('#span-shift-days').show();
+        $('#span-move').hide();
+    } else if (value == 'move') {
+        $('#span-delete').hide();
+        $('#span-shift-days').hide();
+        $('#span-move').show();
     }
 }
 

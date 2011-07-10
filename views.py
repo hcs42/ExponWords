@@ -367,17 +367,26 @@ def action_on_word_pairs(request):
     do_action = False
     if action == 'delete':
         do_action = True
+    elif action == 'move':
+        target_wdict_id = int(request.POST.get('move_word_pairs_wdict'))
+        target_wdict = get_object_or_404(WDict, pk=target_wdict_id,
+                                         user=request.user)
+        do_action = True
     elif action == 'shift_days':
         try:
             days = datetime.timedelta(days=int(request.POST.get('days')))
             do_action = True
         except ValueError:
             message = _('Please specify the number of days!')
+    else:
+        message = _('Action not recognized') + ': ' + str(action)
 
     if do_action:
         for wp in word_pairs_to_use:
             if action == 'delete':
                 wp.deleted = True
+            elif action == 'move':
+                wp.wdict = target_wdict
             elif action == 'shift_days':
                 wp.date1 += days
                 wp.date2 += days
@@ -561,20 +570,20 @@ class LenientChoiceField(forms.ChoiceField):
 def search(request):
 
     wdicts = WDict.objects.filter(user=request.user, deleted=False)
-    wdict_choices = ([('all', _('All'))] + 
-                     [(wdict.id, wdict.name) for wdict in wdicts])
-    label_choices = ([('all', _('All'))] + 
-                     [(label, label)
-                      for label in models.get_labels(request.user)])
+    wdict_choices = [(wdict.id, wdict.name) for wdict in wdicts]
+    wdict_choices_full = [('all', _('All'))] + wdict_choices
+    label_choices_full = ([('all', _('All'))] + 
+                          [(label, label)
+                           for label in models.get_labels(request.user)])
 
     class SearchForm(forms.Form):
         q = forms.CharField(max_length=255,
                             label=_('Search expression') + ':',
                             required=False)
-        dict = forms.ChoiceField(choices=wdict_choices,
+        dict = forms.ChoiceField(choices=wdict_choices_full,
                                  label=_('Dictionary') + ':',
                                  required=False)
-        label = LenientChoiceField(choices=label_choices,
+        label = LenientChoiceField(choices=label_choices_full,
                                    label=_('Label') + ':',
                                    required=False)
 
@@ -664,4 +673,5 @@ def search(request):
                 'message': message,
                 'wdict': wdict,
                 'word_pairs_and_exps': word_pairs_and_exps,
-                'source_url': source_url})
+                'source_url': source_url,
+                'wdict_choices': wdict_choices})

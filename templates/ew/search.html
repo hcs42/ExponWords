@@ -83,6 +83,7 @@
   <select name="action" id="action-selection"> 
     <option value="none">{% trans 'Please select an action'%}</option> 
     <option value="delete">{% trans 'Delete word pairs'%}</option> 
+    <option value="move">{% trans 'Move word pairs'%}</option> 
     <option value="shift_days">{% trans 'Shift dates'%}</option> 
   </select>
   <a class="help" href="{% url help LANGUAGE_CODE %}#actions">({% trans "Help for actions" %})</a>
@@ -90,6 +91,17 @@
 
   <span style="display:none" id="span-delete">
     <input type="submit" id="delete-button" value="{% trans 'Delete the selected word pairs!' %}">
+  </span>
+
+  <span style="display:none" id="span-move">
+    <select name="move_word_pairs_wdict" id="id-move-word-pairs-wdict"> 
+
+      {% for wdict_id, wdict_name in wdict_choices %}
+      <option value="{{ wdict_id }}">{{ wdict_name }}</option> 
+      {% endfor %}
+
+    </select><br/>
+    <input type="submit" id="move-button" value="{% trans 'Move the selected word pairs!' %}">
   </span>
 
   <span style="display:none" id="span-shift-days">
