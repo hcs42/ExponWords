@@ -1,7 +1,6 @@
 Top priority
 ------------
 
-- practice search {0:30}
 - word queue for words to be learnt
     - active field {0:30}
     - view should show it {0:15}

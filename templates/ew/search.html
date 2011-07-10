@@ -89,6 +89,7 @@
     <option value="remove_labels">{% trans 'Remove labels'%}</option> 
     <option value="set_labels">{% trans 'Set labels'%}</option> 
     <option value="shift_days">{% trans 'Shift dates'%}</option> 
+    <option value="practice">{% trans 'Practice'%}</option> 
   </select>
   <a class="help" href="{% url help LANGUAGE_CODE %}#actions">({% trans "Help for actions" %})</a>
   <br/>
@@ -151,6 +152,14 @@
     <input type="submit" value="{% trans 'Shift the dates of the selected word pairs!' %}">
   </span>
 
+  <span style="display:none" id="span-practice">
+    {% trans 'Words to practice' %}:
+    <select name="practice_scope"> 
+      <option value="all">{% trans 'All selected words' %}</option> 
+      <option value="due">{% trans 'Only those selected words that are due today' %}</option> 
+    </select><br/>
+    <input type="submit" value="{% trans 'Go to the practice page!' %}">
+  </span>
 
 </p>
 </form>

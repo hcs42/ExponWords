@@ -39,25 +39,15 @@ var explanation;
 
 var prev_word_index = false;
 
-function get_todays_wordlist() {
-    // Get the list of today's word from the server and ask the first one.
-    $.ajax({
-        url: GET_WORDS_TO_PRACTICE_TODAY_URL,
-        dataType: 'json',
-        data: {'csrfmiddlewaretoken': csrf_token},
-        type: 'post',
-        success: function(result) {
-            todays_wordlist = result;
-            $('#all').text(todays_wordlist.length);
-            $('#transferred').text('0');
-            $('#transfer-in-progress').text('0');
-            $('#answered').text('0');
-            $('#answered-incorrectly').text('0');
-            ask_word();
-        }
-    });
+function ask_first_word(result) {
+    todays_wordlist = WORDS_TO_PRACTICE_TODAY;
+    $('#all').text(todays_wordlist.length);
+    $('#transferred').text('0');
+    $('#transfer-in-progress').text('0');
+    $('#answered').text('0');
+    $('#answered-incorrectly').text('0');
+    ask_word();
 }
-
 
 function update_edit_word(button, curr_word_index) {
     // Sets the given "Edit ... word" link. If there is no word, it will remove
@@ -209,5 +199,5 @@ $(document).ready(function() {
     $('#ok-button').click(ok_button);
 
     // The first word
-    get_todays_wordlist();
+    ask_first_word();
 });

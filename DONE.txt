@@ -47,3 +47,14 @@ v0.4:
 - better links instead of "../.."
 - search
 - labels (makes sense only if there is search)
+
+v0.5:
+- moving multiple word pairs to another dictionary
+- shift dates
+
+v0.6:
+- copy fields when adding a new word pair
+- modifying labels, dates, strengths of multiple words
+
+v0.7:
+- practice search

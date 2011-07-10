@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-30 10:22+0200\n"
+"POT-Creation-Date: 2011-08-07 18:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -221,6 +221,9 @@ msgstr "Nyelv"
 msgid "Practice"
 msgstr "Gyakorlás"
 
+msgid "Custom"
+msgstr "Saját"
+
 msgid "Edit current word"
 msgstr "Aktuális szó szerkesztése"
 
@@ -334,6 +337,18 @@ msgstr "Napok"
 
 msgid "Shift the dates of the selected word pairs!"
 msgstr "Told el a kiválasztott szópárok dátumát!"
+
+msgid "Words to practice"
+msgstr "Gyakorlandó szavak"
+
+msgid "All selected words"
+msgstr "Minden kijelölt szópár"
+
+msgid "Only those selected words that are due today"
+msgstr "Csak azok, amiket már kérdezni kellene"
+
+msgid "Go to the practice page!"
+msgstr "Menj a gyakorló oldalra!"
 
 msgid "Select none"
 msgstr "Egyik kijelölése sem"

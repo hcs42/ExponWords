@@ -30,9 +30,10 @@ from django.conf import settings
 import datetime
 import functools
 import json
-import traceback
+import random
 import re
 import sys
+import traceback
 import unicodedata
 import urllib
 import urlparse
@@ -263,16 +264,40 @@ def add_wdict(request):
                 'message': message})
 
 
+def words_to_practice_to_json(words_to_practice):
+    result = []
+    for wp, direction in words_to_practice:
+        result.append([wp.word_in_lang1,
+                       wp.word_in_lang2,
+                       direction,
+                       wp.id,
+                       explanation_to_html(wp.explanation)])
+    return json.dumps(result)
+
+
 @wdict_access_required
 def practice_wdict(request, wdict):
-
     text = 'dict: "%s"' % wdict.name
     models.log(request, 'practice_wdict', text)
-
+    words_to_practice = wdict.get_words_to_practice_today()
+    json_str = words_to_practice_to_json(words_to_practice)
     return render(request,
                   'ew/practice_wdict.html',
                   {'wdict': wdict,
-                   'message': ''})
+                   'message': '',
+                   'words_to_practice': json_str})
+
+
+@login_required
+def practice(request):
+    models.log(request, 'practice')
+    words_to_practice = request.session['ew_words_to_practice']
+    json_str = words_to_practice_to_json(words_to_practice)
+    return render(request,
+                  'ew/practice_wdict.html',
+                  {'wdict': None,
+                   'message': '',
+                   'words_to_practice': json_str})
 
 
 def explanation_to_html(explanation):
@@ -299,31 +324,8 @@ def explanation_to_html(explanation):
     return exp3
 
 
-@wdict_access_required
-def get_words_to_practice_today(request, wdict):
-
-    try:
-        words_to_practice = wdict.get_words_to_practice_today()
-
-        result = []
-        for wp, direction in words_to_practice:
-            result.append([wp.word_in_lang1,
-                           wp.word_in_lang2,
-                           direction,
-                           wp.id,
-                           explanation_to_html(wp.explanation)])
-
-        return HttpResponse(json.dumps(result),
-                             mimetype='application/json')
-    except Exception, e:
-        traceback.print_stack()
-        exc_info = sys.exc_info()
-        traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
-        raise exc_info[0], exc_info[1], exc_info[2]
-
-
-@wdict_access_required
-def update_word(request, wdict):
+@login_required
+def update_word(request):
     try:
 
         answer = json.loads(request.POST['answer'])
@@ -333,7 +335,6 @@ def update_word(request, wdict):
         wp = get_object_or_404(WordPair,
                                pk=word_pair_id,
                                wdict__user=request.user)
-        assert(wdict.id == wp.wdict.id)
 
         if wp.get_date(direction) > datetime.date.today():
             # This update have already been performed
@@ -357,14 +358,7 @@ def update_word(request, wdict):
         traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
         raise exc_info[0], exc_info[1], exc_info[2]
 
-
-@login_required
-def action_on_word_pairs(request):
-
-    models.log(request, 'action_on_word_pairs')
-
-    # Select the word pairs to use (i.e. to do the action with)
-
+def get_word_pairs_to_use(request):
     word_pairs = WordPair.objects.filter(wdict__user=request.user,
                                          wdict__deleted=False,
                                          deleted=False)
@@ -372,6 +366,16 @@ def action_on_word_pairs(request):
     for wp in word_pairs:
         if unicode(wp.id) in request.POST:
             word_pairs_to_use.append(wp)
+    return word_pairs_to_use
+
+
+@login_required
+def action_on_word_pairs(request):
+
+    models.log(request, 'action_on_word_pairs')
+
+    # Select the word pairs to use (i.e. to do the action with)
+    word_pairs_to_use = get_word_pairs_to_use(request)
 
     # Perform the action
 
@@ -412,6 +416,10 @@ def action_on_word_pairs(request):
             do_action = True
         except ValueError:
             message = _('Please specify the number of days!')
+    elif action == 'practice':
+        # We don't do an action to the words themselves
+        practice_scope = request.POST.get('practice_scope')
+        do_action = False
     else:
         message = _('Action not recognized') + ': ' + str(action)
 
@@ -439,7 +447,21 @@ def action_on_word_pairs(request):
     # Redirect the user to the search page where which he issue the action
 
     source_url = request.POST.get('source_url')
-    if source_url:
+
+    if action == 'practice':
+        today = datetime.date.today()
+        words_to_practice = []
+        for wp in word_pairs_to_use:
+            if (practice_scope == 'all' or wp.date1 <= today):
+                words_to_practice.append((wp, 1))
+            if (practice_scope == 'all' or wp.date2 <= today):
+                words_to_practice.append((wp, 2))
+        random.shuffle(words_to_practice)
+
+        request.session['ew_words_to_practice'] = words_to_practice
+        redirect_url = reverse('ew.views.practice', args=[])
+
+    elif source_url:
         if message is None:
             word_count = len(word_pairs_to_use)
             if word_count == 0:
