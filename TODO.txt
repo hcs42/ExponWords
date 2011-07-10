@@ -1,13 +1,8 @@
 Top priority
 ------------
 
-- document search and tags
-
 - practice search {0:30}
 - copy fields when adding a new word pair {0:30}
-- actions on multiple word pairs:
-    - move to other dictionary {1:00}
-- shift dates {1:00}
 - word queue for words to be learnt
     - active field {0:30}
     - view should show it {0:15}

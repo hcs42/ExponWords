@@ -95,11 +95,9 @@
 
   <span style="display:none" id="span-move">
     <select name="move_word_pairs_wdict" id="id-move-word-pairs-wdict"> 
-
       {% for wdict_id, wdict_name in wdict_choices %}
       <option value="{{ wdict_id }}">{{ wdict_name }}</option> 
       {% endfor %}
-
     </select><br/>
     <input type="submit" id="move-button" value="{% trans 'Move the selected word pairs!' %}">
   </span>
