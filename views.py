@@ -385,6 +385,27 @@ def action_on_word_pairs(request):
         target_wdict = get_object_or_404(WDict, pk=target_wdict_id,
                                          user=request.user)
         do_action = True
+    elif action == 'set_labels':
+        labels = request.POST.get('labels')
+        do_action = True
+    elif action == 'set_dates_strengths':
+        try:
+            values = {}
+            fields = ('date1', 'date2', 'strength1', 'strength2')
+            for field in fields:
+                raw_value = request.POST.get(field, '').strip()
+                if raw_value == '':
+                    value = None
+                elif field.startswith('date'):
+                    value = models.parse_date(raw_value)
+                elif field.startswith('strength'):
+                    value = int(raw_value)
+                else:
+                    assert(False)
+                values[field] = value
+            do_action = True
+        except ValueError:
+            message = _('Please specify the fields correctly!')
     elif action == 'shift_days':
         try:
             days = datetime.timedelta(days=int(request.POST.get('days')))
@@ -400,6 +421,12 @@ def action_on_word_pairs(request):
                 wp.deleted = True
             elif action == 'move':
                 wp.wdict = target_wdict
+            elif action == 'set_labels':
+                wp.labels = labels
+            elif action == 'set_dates_strengths':
+                for field in fields:
+                    if values[field] is not None:
+                        setattr(wp, field, values[field])
             elif action == 'shift_days':
                 wp.date1 += days
                 wp.date2 += days

@@ -361,3 +361,6 @@ def log(request, action, text=''):
     except Exception, e:
         logentry.action = 'Logging failed'
     logentry.save()
+
+def parse_date(s):
+    return datetime.datetime.strptime(s, '%Y-%m-%d')

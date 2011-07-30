@@ -46,8 +46,8 @@
   <tr class="center_cell">
     <td class="tbl_header" colspan="2">{% trans "Words" %}</td>
     <td class="tbl_header">{% trans "Explanation" %}</td>
-    <td class="tbl_header" colspan="2">{% trans "Strengths" %}</td>
     <td class="tbl_header" colspan="2">{% trans "Dates" %}</td>
+    <td class="tbl_header" colspan="2">{% trans "Strengths" %}</td>
     <td class="tbl_header">{% trans "Labels" %}</td>
     {% if wdict == None %}
     <td class="tbl_header">{% trans "Dictionary" %}</td>
@@ -60,10 +60,10 @@
     <td>{{ wp.word_in_lang1 }}</td>
     <td>{{ wp.word_in_lang2 }}</td>
     <td class="explanation">{{ explanation|safe }}</td>
-    <td>{{ wp.strength1 }}</td>
-    <td>{{ wp.strength2 }}</td>
     <td>{{ wp.date1 }}</td>
     <td>{{ wp.date2 }}</td>
+    <td>{{ wp.strength1 }}</td>
+    <td>{{ wp.strength2 }}</td>
     <td>{{ wp.labels }}</td>
     {% if wdict == None %}
     <td><a href="{% url wdict wp.wdict.id %}">{{ wp.wdict.name }}</a></td>
@@ -84,6 +84,8 @@
     <option value="none">{% trans 'Please select an action'%}</option> 
     <option value="delete">{% trans 'Delete word pairs'%}</option> 
     <option value="move">{% trans 'Move word pairs'%}</option> 
+    <option value="set_dates_strengths">{% trans 'Set dates and strengths'%}</option> 
+    <option value="set_labels">{% trans 'Set labels'%}</option> 
     <option value="shift_days">{% trans 'Shift dates'%}</option> 
   </select>
   <a class="help" href="{% url help LANGUAGE_CODE %}#actions">({% trans "Help for actions" %})</a>
@@ -100,6 +102,35 @@
       {% endfor %}
     </select><br/>
     <input type="submit" value="{% trans 'Move the selected word pairs!' %}">
+  </span>
+
+  <span style="display:none" id="span-set_dates_strengths">
+    <table>
+      <tr>
+        <td>
+          {% trans 'Dates of next practices' %}:
+        </td>
+        <td>
+          <input type="text" name="date1" value="">
+          <input type="text" name="date2" value="">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          {% trans 'Strenghs of words' %}:
+        </td>
+        <td>
+          <input type="text" name="strength1" value="">
+          <input type="text" name="strength2" value="">
+        </td>
+      </tr>
+    </table>
+    <input type="submit" value="{% trans 'Set the dates and strengths of the selected word pairs!' %}">
+  </span>
+
+  <span style="display:none" id="span-set_labels">
+    {% trans 'Labels' %}: <input type="text" name="labels" value=""><br/>
+    <input type="submit" value="{% trans 'Set the labels of the selected word pairs!' %}">
   </span>
 
   <span style="display:none" id="span-shift_days">

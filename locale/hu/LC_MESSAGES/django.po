@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-10 16:27+0200\n"
+"POT-Creation-Date: 2011-07-30 10:10+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,6 +68,9 @@ msgstr "Első nyelv"
 
 msgid "Language 2"
 msgstr "Második nyelv"
+
+msgid "Please specify the fields correctly!"
+msgstr "Add meg a mezőket helyesen!"
 
 msgid "Please specify the number of days!"
 msgstr "Add meg a napok számát!"
@@ -249,11 +252,11 @@ msgstr "Szavak"
 msgid "Explanation"
 msgstr "Magyarázat"
 
-msgid "Strengths"
-msgstr "Erősség"
-
 msgid "Dates"
 msgstr "Dátumok"
+
+msgid "Strengths"
+msgstr "Erősség"
 
 msgid "Labels"
 msgstr "Címkék"
@@ -279,6 +282,12 @@ msgstr "Szópárok törlése"
 msgid "Move word pairs"
 msgstr "Szópárok mozgatása"
 
+msgid "Set dates and strengths"
+msgstr "Dátumok és erősségek módosítása"
+
+msgid "Set labels"
+msgstr "Címkék módosítása"
+
 msgid "Shift dates"
 msgstr "Dátumok eltolása"
 
@@ -290,6 +299,18 @@ msgstr "Töröld a kijelölt szópárokat!"
 
 msgid "Move the selected word pairs!"
 msgstr "Mozgasd a kijelölt szópárokat!"
+
+msgid "Dates of next practices"
+msgstr "A következő gyakorlások dátumai"
+
+msgid "Strenghs of words"
+msgstr "A szópárok erősségei"
+
+msgid "Set the dates and strengths of the selected word pairs!"
+msgstr "Módosítsd a kiválasztott szópárok dátumjait és erősségeit!"
+
+msgid "Set the labels of the selected word pairs!"
+msgstr "Módosítsd a kiválasztott szópárok címkéit!"
 
 msgid "Days"
 msgstr "Napok"
