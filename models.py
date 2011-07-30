@@ -79,6 +79,17 @@ class WordPair(models.Model):
     # whether the word pair is deleted or not
     deleted = models.BooleanField(default=False)
 
+    def save(self):
+        self.normalize()
+        return models.Model.save(self)
+
+    def normalize(self):
+        self.word_in_lang1 = self.word_in_lang1.strip()
+        self.word_in_lang2 = self.word_in_lang2.strip()
+        self.explanation = self.explanation.rstrip()
+        self.labels = self.labels.strip()
+        self.labels = re.sub(' +', ' ', self.labels)
+
     def __unicode__(self):
         return ('<%s -- %s>' %
                 (repr(self.word_in_lang1), repr(self.word_in_lang2)))
