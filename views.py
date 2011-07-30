@@ -385,8 +385,8 @@ def action_on_word_pairs(request):
         target_wdict = get_object_or_404(WDict, pk=target_wdict_id,
                                          user=request.user)
         do_action = True
-    elif action == 'set_labels':
-        labels = request.POST.get('labels')
+    elif action in ('add_labels', 'remove_labels', 'set_labels'):
+        labels = request.POST.get(action + '-labels')
         do_action = True
     elif action == 'set_dates_strengths':
         try:
@@ -421,8 +421,12 @@ def action_on_word_pairs(request):
                 wp.deleted = True
             elif action == 'move':
                 wp.wdict = target_wdict
+            elif action == 'add_labels':
+                wp.add_labels(labels)
+            elif action == 'remove_labels':
+                wp.remove_labels(labels)
             elif action == 'set_labels':
-                wp.labels = labels
+                wp.set_labels(labels)
             elif action == 'set_dates_strengths':
                 for field in fields:
                     if values[field] is not None:

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-07-30 10:10+0200\n"
+"POT-Creation-Date: 2011-07-30 10:22+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -285,6 +285,12 @@ msgstr "Szópárok mozgatása"
 msgid "Set dates and strengths"
 msgstr "Dátumok és erősségek módosítása"
 
+msgid "Add labels"
+msgstr "Címkék hozzáadása"
+
+msgid "Remove labels"
+msgstr "Címkék törlése"
+
 msgid "Set labels"
 msgstr "Címkék módosítása"
 
@@ -308,6 +314,17 @@ msgstr "A szópárok erősségei"
 
 msgid "Set the dates and strengths of the selected word pairs!"
 msgstr "Módosítsd a kiválasztott szópárok dátumjait és erősségeit!"
+
+msgid "Add the labels to the selected word pairs!"
+msgstr "Add a címkéket a kiválasztott szópárokhoz!"
+
+msgid "Remove the labels from the selected word pairs!"
+msgstr "Töröld a címkéket a kiválasztott szópárokról!"
+
+msgid ""
+"Warning: this action will remove all other labels from the selected words."
+msgstr ""
+"Vigyázat: ez az akció minden más címkét töröl a kiválasztott szópárokról."
 
 msgid "Set the labels of the selected word pairs!"
 msgstr "Módosítsd a kiválasztott szópárok címkéit!"

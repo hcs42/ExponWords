@@ -87,8 +87,7 @@ class WordPair(models.Model):
         self.word_in_lang1 = self.word_in_lang1.strip()
         self.word_in_lang2 = self.word_in_lang2.strip()
         self.explanation = self.explanation.rstrip()
-        self.labels = self.labels.strip()
-        self.labels = re.sub(' +', ' ', self.labels)
+        self.normalize_labels()
 
     def __unicode__(self):
         return ('<%s -- %s>' %
@@ -132,6 +131,33 @@ class WordPair(models.Model):
         self.set_date(direction, datetime.date.today())
         new_strength = min(self.get_strength(direction), 0)
         self.set_strength(direction, new_strength)
+
+    @staticmethod
+    def get_label_set_from_str(s):
+        return set(unicode(s).split())
+
+    def get_label_set(self):
+        return self.get_label_set_from_str(self.labels)
+
+    def set_label_set(self, label_set):
+        self.labels = ' '.join(sorted(label_set))
+
+    def normalize_labels(self):
+        self.set_label_set(self.get_label_set())
+
+    def add_labels(self, labels):
+        print self.get_label_set()
+        print self.get_label_set_from_str(labels)
+        print self.get_label_set() | self.get_label_set_from_str(labels)
+        self.set_label_set(self.get_label_set() |
+                           self.get_label_set_from_str(labels))
+
+    def remove_labels(self, labels):
+        self.set_label_set(self.get_label_set() -
+                           self.get_label_set_from_str(labels))
+
+    def set_labels(self, labels):
+        self.set_label_set(self.get_label_set_from_str(labels))
 
     @staticmethod
     def get_fields_to_be_edited():

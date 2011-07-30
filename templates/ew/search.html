@@ -85,6 +85,8 @@
     <option value="delete">{% trans 'Delete word pairs'%}</option> 
     <option value="move">{% trans 'Move word pairs'%}</option> 
     <option value="set_dates_strengths">{% trans 'Set dates and strengths'%}</option> 
+    <option value="add_labels">{% trans 'Add labels'%}</option> 
+    <option value="remove_labels">{% trans 'Remove labels'%}</option> 
     <option value="set_labels">{% trans 'Set labels'%}</option> 
     <option value="shift_days">{% trans 'Shift dates'%}</option> 
   </select>
@@ -128,8 +130,19 @@
     <input type="submit" value="{% trans 'Set the dates and strengths of the selected word pairs!' %}">
   </span>
 
+  <span style="display:none" id="span-add_labels">
+    {% trans 'Labels' %}: <input type="text" name="add_labels-labels" value=""><br/>
+    <input type="submit" value="{% trans 'Add the labels to the selected word pairs!' %}">
+  </span>
+
+  <span style="display:none" id="span-remove_labels">
+    {% trans 'Labels' %}: <input type="text" name="remove_labels-labels" value=""><br/>
+    <input type="submit" value="{% trans 'Remove the labels from the selected word pairs!' %}">
+  </span>
+
   <span style="display:none" id="span-set_labels">
-    {% trans 'Labels' %}: <input type="text" name="labels" value=""><br/>
+    {% trans 'Warning: this action will remove all other labels from the selected words.' %}<br/>
+    {% trans 'Labels' %}: <input type="text" name="set_labels-labels" value=""><br/>
     <input type="submit" value="{% trans 'Set the labels of the selected word pairs!' %}">
   </span>
 
