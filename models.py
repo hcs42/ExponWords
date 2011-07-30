@@ -145,6 +145,20 @@ class WordPair(models.Model):
                 'strength1',
                 'strength2')
 
+    @staticmethod
+    def get_fields_to_be_saved():
+        return ('labels',
+                'date1',
+                'date2',
+                'strength1',
+                'strength2')
+
+    def get_saved_fields(self):
+        saved_fields = {}
+        for field in self.get_fields_to_be_saved():
+            saved_fields[field] = getattr(self, field)
+        return saved_fields
+
 
 class EWException(Exception):
     """A very simple exception class used."""

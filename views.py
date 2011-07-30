@@ -143,10 +143,17 @@ def add_word_pair(request, wdict):
         models.log(request, 'add_word_pair')
         form = WordPairForm(request.POST)
         if form.is_valid():
+
+            # creating the new word pair
             wp = form.save(commit=False)
             wdict.wordpair_set.add(wp)
             wp.save()
             wdict.save()
+
+            # saving some fields to the session
+            request.session['ew_add_wp_fields'] = wp.get_saved_fields()
+            
+            # redirection
             wdict_url = reverse('ew.views.add_word_pair', args=[wdict.id])
             return HttpResponseRedirect(wdict_url + '?success=true')
         else:
@@ -157,11 +164,17 @@ def add_word_pair(request, wdict):
             message = _('Word pair added.')
         else:
             message = ''
+
         data = {'date_added': datetime.date.today(),
                 'date1': datetime.date.today(),
                 'date2': datetime.date.today(),
                 'strength1': 0,
                 'strength2': 0}
+
+        saved_field = request.session.get('ew_add_wp_fields', {})
+        for field, value in saved_field.items():
+            data[field] = value
+
         form = WordPairForm(data)
     else:
         assert(False)
