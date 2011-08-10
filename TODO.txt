@@ -23,6 +23,7 @@ Important (before releasing as a public web service)
 Would be nice
 -------------
 
+- more efficient representation of words to practice within the practice page
 - random should not be totally random: it could be deterministic within a day,
   but it should also have a pointer about which word is next so that if you say
   NO to a word, it will not come back if you reload the page only after
