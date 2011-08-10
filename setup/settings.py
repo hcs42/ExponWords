@@ -93,4 +93,5 @@ INSTALLED_APPS = (
     'ew',
 )
 
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '..'
