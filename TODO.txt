@@ -2,9 +2,8 @@ Top priority
 ------------
 
 - word queue for words to be learnt
-    - active field {0:30}
-    - view should show it {0:15}
     - "Activate words" page {0:30}
+    - document that 9999-01-01 is special
 
 - show the future {4:00}
 
@@ -18,6 +17,8 @@ Important (before releasing as a public web service)
 - HTTPS
 - interface for registration
 - interface for changing the password
+- using the "message" framework or at least the session instead of having
+  messages in the GET request
 
 Would be nice
 -------------
