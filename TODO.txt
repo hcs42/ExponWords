@@ -4,6 +4,9 @@ Top priority
 - word queue for words to be learnt
     - "Activate words" page {0:30}
     - document that 9999-01-01 is special
+- import words: add label
+- don't always show the search results but do something with them
+- selecting somehow several words at a time
 
 - show the future {4:00}
 
@@ -33,8 +36,6 @@ Would be nice
 Wishlist
 --------
 
-- "We will have a word test tomorrow at school" mode:
-    - asking only words added at a certain date, but asking them again and again
 - importing/exporting CSV files
 - authentication using openid
 - logging

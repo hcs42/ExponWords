@@ -58,3 +58,6 @@ v0.6:
 
 v0.7:
 - practice search
+
+v0.8:
+- handling keyboard keys in the practice page
