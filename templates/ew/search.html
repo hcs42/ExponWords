@@ -27,20 +27,22 @@
 
 <p class="message">{{ message }}</p>
 
-{% if word_pairs_and_exps != None %}
-{% trans "Number of word pairs found" %}: {{ word_pairs_and_exps|length }}
+{% if result_exists %}
+{% trans "Number of word pairs found" %}: {{ hits_count }}
 {% endif %}
 
-{% if word_pairs_and_exps %}
+{% if result_exists %}
 
 <form action="{% url action_on_word_pairs %}" method="post">
   
 <!-- hidden fields -->
 
 {% csrf_token %}
-<input type="hidden" name="source_url" value="{{source_url}}">
+<input type="hidden" name="source_url" value="{{ source_url }}">
   
 <!-- table -->
+
+{% if show_hits %}
 
 <table border="1" id="table">
   <tr class="center_cell">
@@ -76,6 +78,8 @@
 <p>
   <span class="small-button" id="select-all-button">{% trans "Select all" %}</span>
 </p>
+
+{% endif %} <!-- show_hits -->
 
 <!-- action --> 
 
@@ -164,7 +168,7 @@
 </p>
 </form>
 
-{% endif %} <!-- word_pairs_and_exps -->
+{% endif %} <!-- result_exists -->
 
   <!-- Translations -->
   <span style="display:none" id="translation-select-none">{% trans "Select none" %}</span>

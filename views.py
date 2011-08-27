@@ -359,14 +359,40 @@ def update_word(request):
         raise exc_info[0], exc_info[1], exc_info[2]
 
 def get_word_pairs_to_use(request):
-    word_pairs = WordPair.objects.filter(wdict__user=request.user,
-                                         wdict__deleted=False,
-                                         deleted=False)
-    word_pairs_to_use = []
-    for wp in word_pairs:
-        if unicode(wp.id) in request.POST:
-            word_pairs_to_use.append(wp)
-    return word_pairs_to_use
+
+    # Deciding whether:
+    # - to use an explicit list of word pair ids (if show_hits is true); or
+    # - to rerun the query (if show_hits is false)
+    
+    source_url = request.POST.get('source_url')
+    if source_url:
+        url_list = list(urlparse.urlparse(source_url))
+        query_list = urlparse.parse_qsl(url_list[4], keep_blank_values=True)
+        query_dict = dict(query_list)
+        show_hits = ('show_hits' in query_dict)
+    else:
+        show_hits = True
+
+    # Calculating the list of word pairs
+
+    if show_hits:
+        word_pairs = WordPair.objects.filter(wdict__user=request.user,
+                                             wdict__deleted=False,
+                                             deleted=False)
+        word_pairs_to_use = []
+        for wp in word_pairs:
+            if unicode(wp.id) in request.POST:
+                word_pairs_to_use.append(wp)
+        return word_pairs_to_use
+
+    else:
+        query_text = query_dict['q']
+        query_wdict = query_dict['dict']
+        query_label = parse_query_label(query_dict['label'])
+
+        word_pairs = \
+            search_in_db(request.user, query_wdict, query_label, query_text)
+        return word_pairs
 
 
 @login_required
@@ -632,6 +658,58 @@ class LenientChoiceField(forms.ChoiceField):
             self.is_really_valid = True
 
 
+def parse_query_label(query_label_raw):
+    if query_label_raw in ('', 'all'):
+        return None
+    else:
+        return query_label_raw
+
+def search_in_db(user, query_wdict, query_label, query_text):
+    if query_wdict in ('', 'all'):
+        all_word_pairs = WordPair.objects.filter(wdict__user=user,
+                                                 wdict__deleted=False,
+                                                 deleted=False)
+    else:
+        wdict_id = int(query_wdict)
+        wdict = get_object_or_404(WDict, pk=wdict_id, user=user)
+        all_word_pairs = WordPair.objects.filter(wdict=wdict,
+                                                 deleted=False)
+    word_pairs = []
+    query_words = [normalize_string(query_word)
+                   for query_word in query_text.split()]
+    query_items = []
+    for query_word in query_words:
+        if query_word.startswith('label:'):
+            query_items.append(('label', query_word[6:]))
+        else:
+            query_items.append(('text', query_word))
+            
+    for wp in all_word_pairs:
+        wp_matches_all = True
+        if ((query_label is not None) and
+            (unicode(wp.labels).find(query_label) == -1)):
+            # We require a certain label but wp does not have it
+            continue
+
+        for query_item_type, query_item_value in query_items:
+            query_item_matches = False
+            if query_item_type == 'label':
+                labels = normalize_string(unicode(wp.labels))
+                query_item_matches = (labels.find(query_item_value) != -1)
+            else: # query_item_type == 'text'
+                for field in models.WordPair.get_fields_to_be_edited():
+                    field_text = normalize_string(unicode(getattr(wp, field)))
+                    if (field_text.find(query_item_value) != -1):
+                        query_item_matches = True
+                        break
+            if not query_item_matches:
+                wp_matches_all = False
+                break
+        if wp_matches_all:
+            word_pairs.append(wp)
+    return word_pairs
+
+
 @login_required
 def search(request):
 
@@ -652,6 +730,8 @@ def search(request):
         label = LenientChoiceField(choices=label_choices_full,
                                    label=_('Label') + ':',
                                    required=False)
+        show_hits = forms.BooleanField(label=_('Show hits') + ':',
+                                         required=False)
 
     if request.method != 'GET':
         raise Http404
@@ -664,71 +744,35 @@ def search(request):
     wdict = None
     query_text = form.cleaned_data['q']
     query_wdict = form.cleaned_data['dict']
-
-    query_label_raw = form.cleaned_data['label']
-    if query_label_raw in ('', 'all'):
-        query_label = None
-    else:
-        query_label = query_label_raw
+    query_label = parse_query_label(form.cleaned_data['label'])
+    show_hits = form.cleaned_data['show_hits']
 
     # If we don't have a 'q' parameter, we will show the basic search page. If
     # we do have one, we will perform the search, even if it is empty.
 
     if 'q' not in request.GET:
         if query_wdict in ('', 'all'):
-            form = SearchForm()
+            form = SearchForm({'show_hits': True})
         else:
             wdict = get_object_or_404(WDict, pk=int(query_wdict),
                                       user=request.user)
-            form = SearchForm({'dict': query_wdict})
+            form = SearchForm({'dict': query_wdict, 'show_hits': True})
         word_pairs_and_exps = None
+        result_exists = False
+        hits_count = 0
+        show_hits = False
 
     else:
-        if query_wdict in ('', 'all'):
-            all_word_pairs = WordPair.objects.filter(wdict__user=request.user,
-                                                     wdict__deleted=False,
-                                                     deleted=False)
+        word_pairs = \
+            search_in_db(request.user, query_wdict, query_label, query_text)
+
+        result_exists = True
+        hits_count = len(word_pairs)
+        if show_hits:
+            word_pairs_and_exps = [(wp, explanation_to_html(wp.explanation))
+                                   for wp in word_pairs]
         else:
-            wdict_id = int(query_wdict)
-            wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
-            all_word_pairs = WordPair.objects.filter(wdict=wdict,
-                                                     deleted=False)
-        word_pairs = []
-        query_words = [normalize_string(query_word)
-                       for query_word in query_text.split()]
-        query_items = []
-        for query_word in query_words:
-            if query_word.startswith('label:'):
-                query_items.append(('label', query_word[6:]))
-            else:
-                query_items.append(('text', query_word))
-                
-        for wp in all_word_pairs:
-            wp_matches_all = True
-            if ((query_label is not None) and
-                (unicode(wp.labels).find(query_label) == -1)):
-                # We require a certain label but wp does not have it
-                continue
-
-            for query_item_type, query_item_value in query_items:
-                query_item_matches = False
-                if query_item_type == 'label':
-                    labels = normalize_string(unicode(wp.labels))
-                    query_item_matches = (labels.find(query_item_value) != -1)
-                else: # query_item_type == 'text'
-                    for field in models.WordPair.get_fields_to_be_edited():
-                        field_text = normalize_string(unicode(getattr(wp, field)))
-                        if (field_text.find(query_item_value) != -1):
-                            query_item_matches = True
-                            break
-                if not query_item_matches:
-                    wp_matches_all = False
-                    break
-            if wp_matches_all:
-                word_pairs.append(wp)
-
-        word_pairs_and_exps = [(wp, explanation_to_html(wp.explanation))
-                               for wp in word_pairs]
+            word_pairs_and_exps = []
 
     source_url = remove_query_param(request.get_full_path(), 'message')
 
@@ -740,4 +784,7 @@ def search(request):
                 'wdict': wdict,
                 'word_pairs_and_exps': word_pairs_and_exps,
                 'source_url': source_url,
+                'result_exists': result_exists,
+                'show_hits': show_hits,
+                'hits_count': hits_count,
                 'wdict_choices': wdict_choices})

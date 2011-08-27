@@ -5,7 +5,6 @@ Top priority
     - "Activate words" page {0:30}
     - document that 9999-01-01 is special
 - import words: add label
-- don't always show the search results but do something with them
 - selecting somehow several words at a time
 
 - show the future {4:00}
