@@ -29,6 +29,14 @@ var transfer_in_progress = 0;
 var answered = 0;
 var answered_incorrectly = 0;
 
+// State of the UI. Possible states:
+// - init
+// - intermediate: when the UI is doing some work
+// - answer: when we are waiting for the "answer" button to be pushed
+// - yesno: when we are waiting for the "yes" or "no" button to be pushed
+// - finished: when there are no more words to ask
+var state = 'init';
+
 // Details of the current word
 var word;
 var word_index = false;
@@ -83,10 +91,11 @@ function ask_word() {
         $('#explanation').hide();
 
         update_edit_words();
+        state = 'finished';
 
     } else {
 
-        show_ok_button();
+        show_answer_button();
         word = todays_wordlist[0];
         direction = word[2];
         question_word = word[direction - 1];
@@ -100,10 +109,11 @@ function ask_word() {
         update_edit_words();
 
         todays_wordlist.shift();
+        state = 'answer';
     }
 }
 
-function show_ok_button() {
+function show_answer_button() {
     $('#ok-button').show();
     $('#yes-button').hide();
     $('#no-button').hide();
@@ -115,10 +125,12 @@ function show_yesno_buttons() {
     $('#no-button').show();
 }
 
-function ok_button() {
+function answer_button() {
+    state = 'intermediate';
     $('#answer').text(solution_word);
     $('#explanation').html(explanation);
     show_yesno_buttons();
+    state = 'yesno';
 }
 
 function next_timeout(timeout) {
@@ -174,6 +186,7 @@ function update_word(data, retries, timeout)
 }
 
 function yesno_button(answer) {
+    state = 'intermediate';
     var old_word_index = word_index;
     var old_direction = direction;
     var old_answer = answer;
@@ -191,12 +204,28 @@ function yesno_button(answer) {
     update_word(data, RETRIES_COUNT, INITIAL_TIMEOUT);
 }
 
+function ew_keypress(e) {
+    if (state == 'answer') {
+        state = 'intermediate';
+        answer_button();
+    } else if (state == 'yesno') {
+        if (e.which == 105 || e.which == 121) { 
+            state = 'intermediate';
+            yesno_button(true);
+        } else if (e.which == 110) {
+            state = 'intermediate';
+            yesno_button(false);
+        }
+    }
+}
+
 $(document).ready(function() {
 
     // Event handlers
     $('#yes-button').click(function() { yesno_button(true); });
     $('#no-button').click(function() { yesno_button(false); });
-    $('#ok-button').click(ok_button);
+    $('#ok-button').click(answer_button);
+    $('body').keypress(ew_keypress);
 
     // The first word
     ask_first_word();
