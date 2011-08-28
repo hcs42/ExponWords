@@ -1,0 +1,53 @@
+{% extends "ew/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Show my future" %}
+{% endblock %}
+
+{% block css %}
+<link rel=stylesheet href="/site_media/css/visualize.css" type="text/css">
+<link rel=stylesheet href="/site_media/css/visualize-light.css" type="text/css">
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+&raquo;
+<span class="current_menu">{% trans "Show my future" %}</span>
+</p>
+
+<p>{{ message }}</p>
+
+<table id='word_pairs_table'>
+  <caption>{% trans "Number of word pairs that will be asked" %}</caption>
+  <thead>
+    <tr>
+      <td></td>
+      {% for date in dates %}
+      <th scope="col">{{ date }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for wdict_data in wdicts_data %}
+    <tr>
+      <th scope="row">{{ wdict_data.name }}</th>
+      {% for question_count in wdict_data.question_counts %}
+      <td>{{ question_count }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/visualize.jQuery.js"></script>
+  <script>
+    $('#word_pairs_table').visualize({'type': 'bar'});
+  </script>
+{% endblock %}

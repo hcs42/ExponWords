@@ -2,7 +2,6 @@ Top priority
 ------------
 
 - selecting somehow several words at a time
-- show the future {4:00}
 
 Important (before releasing as a public web service)
 ----------------------------------------------------

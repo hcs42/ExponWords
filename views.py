@@ -57,6 +57,33 @@ def index(request):
                 'username': username})
 
 
+def visualize(request):
+    class WDictData(object):
+        def __init__(self, name, question_counts):
+            object.__init__(self)
+            self.name = name
+            self.question_counts = question_counts
+
+    dates, wdicts, date_to_question_count = \
+        models.calc_future(request.user, 60, datetime.date.today())
+
+    sum_data = WDictData(_('Sum'), [0 for date in dates])
+    wdicts_data = [sum_data]
+    for wdict in wdicts:
+        wdict_data = WDictData(wdict.name, [])
+        wdicts_data.append(wdict_data)
+        for index, date in enumerate(dates):
+            question_count = date_to_question_count[(wdict, date)]
+            wdict_data.question_counts.append(question_count)
+            sum_data.question_counts[index] += question_count
+
+    return render(
+               request,
+               'ew/visualize.html',
+               {'wdicts_data': wdicts_data,
+                'dates': [date.isoformat() for date in dates]})
+
+
 def options(request):
     return render(
                request,

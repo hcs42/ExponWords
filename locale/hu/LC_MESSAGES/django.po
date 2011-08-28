@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-08-27 15:30+0200\n"
+"POT-Creation-Date: 2011-08-28 22:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,6 +35,9 @@ msgstr "A következő sorban nincs elég oszlop: %(linenumber)s. sor: %(line)s"
 #, python-format
 msgid "Too many fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
+
+msgid "Sum"
+msgstr "Összesen"
 
 #, python-format
 msgid "Word in \"%(lang)s\""
@@ -90,6 +93,9 @@ msgstr "%(count)s szópár módosítva."
 
 msgid "Text"
 msgstr "Szöveg"
+
+msgid "Labels"
+msgstr "Címkék"
 
 msgid "Word pairs added."
 msgstr "Szópárok hozzáadva."
@@ -208,6 +214,9 @@ msgstr "Keresés"
 msgid "List all words"
 msgstr "Minden szó kilistázása"
 
+msgid "Show my future"
+msgstr "Mutasd a jövőm"
+
 msgid "Options"
 msgstr "Beállítások"
 
@@ -263,9 +272,6 @@ msgstr "Dátumok"
 
 msgid "Strengths"
 msgstr "Erősség"
-
-msgid "Labels"
-msgstr "Címkék"
 
 msgid "Action"
 msgstr "Akció"
@@ -355,6 +361,9 @@ msgstr "Menj a gyakorló oldalra!"
 
 msgid "Select none"
 msgstr "Egyik kijelölése sem"
+
+msgid "Number of word pairs that will be asked"
+msgstr "Adott napon kérdezendő szópárok száma"
 
 msgid "Add new word pair"
 msgstr "Új szópár hozzáadása"

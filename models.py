@@ -117,14 +117,16 @@ class WordPair(models.Model):
         else:
             self.date2 = value
 
-    def next_date(self, strength):
+    @staticmethod
+    def next_date(strength, date):
         if strength < 0:
             strength = 0
-        return datetime.date.today() + datetime.timedelta(2 ** strength)
+        return date + datetime.timedelta(2 ** strength)
 
     def strengthen(self, direction):
         strength = self.get_strength(direction)
-        self.set_date(direction, self.next_date(strength))
+        self.set_date(direction,
+                      self.next_date(strength, datetime.date.today()))
         self.set_strength(direction, self.get_strength(direction) + 1)
 
     def weaken(self, direction):
@@ -389,3 +391,59 @@ def log(request, action, text=''):
 
 def parse_date(s):
     return datetime.datetime.strptime(s, '%Y-%m-%d')
+
+
+##### show future #####
+
+
+def incr_wcd(wcd, wdict, strength, date, count):
+    strength_to_word_count = wcd.setdefault((wdict, date), {})
+    try:
+        strength_to_word_count[strength] += count
+    except KeyError:
+        strength_to_word_count[strength] = count
+
+
+def get_initial_word_counts_dict(user, start_date):
+    """
+    Returns: wdicts, {(wdict, date): {strength: word_count}}
+    """
+
+    def add_wp(wcd, wdict, strength, date):
+        if (start_date is not None) and (date < start_date):
+            date = start_date
+        incr_wcd(wcd, wdict, strength, date, 1)
+        
+    wcd = {}
+    wdicts = WDict.objects.filter(user=user, deleted=False)
+    word_pairs = WordPair.objects.filter(wdict__user=user,
+                                         wdict__deleted=False,
+                                         deleted=False)
+    for wp in word_pairs:
+        add_wp(wcd, wp.wdict, wp.strength1, wp.date1)
+        add_wp(wcd, wp.wdict, wp.strength2, wp.date2)
+    return wdicts, wcd
+
+
+def calc_future(user, days_count, start_date):
+    """
+    Returns: [date], [WDict], {(WDict, date): question_count}
+    """
+
+    dates = [start_date + datetime.timedelta(i)
+             for i in range(days_count)]
+
+    wdicts, wcd = get_initial_word_counts_dict(user, start_date)
+
+    date_to_question_count = {} # {(wdict, date): question_count}
+    for date in dates:
+        for wdict in wdicts:
+            strength_to_word_count = wcd.pop((wdict, date), {})
+            question_count = 0
+            for strength, word_count in strength_to_word_count.items():
+                question_count += word_count
+                new_date = WordPair.next_date(strength, date)
+                incr_wcd(wcd, wdict, strength + 1, new_date, word_count)
+            date_to_question_count[(wdict, date)] = question_count
+
+    return dates, wdicts, date_to_question_count

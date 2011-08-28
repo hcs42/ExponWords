@@ -63,3 +63,4 @@ v0.8:
 - handling keyboard keys in the practice page
 - don't always show the search results but do something with them
 - import words: add label
+- show the future {4:00}
