@@ -25,3 +25,8 @@ Upgrading to 0.7.0
 ------------------
 
 No action required.
+
+Upgrading to 0.8.0
+------------------
+
+No action required.
