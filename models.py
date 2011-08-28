@@ -146,9 +146,6 @@ class WordPair(models.Model):
         self.set_label_set(self.get_label_set())
 
     def add_labels(self, labels):
-        print self.get_label_set()
-        print self.get_label_set_from_str(labels)
-        print self.get_label_set() | self.get_label_set_from_str(labels)
         self.set_label_set(self.get_label_set() |
                            self.get_label_set_from_str(labels))
 
