@@ -290,6 +290,7 @@ def import_textfile(s, wdict):
         i += 1
 
     create_add_word_pairs(wdict, word_pairs)
+    return word_pairs
 
 def import_tsv(s, wdict):
     """Adds words from a text of tab-separeted values to a dictionary.
@@ -329,6 +330,7 @@ def import_tsv(s, wdict):
         i += 1
 
     create_add_word_pairs(wdict, word_pairs)
+    return word_pairs
 
 
 def export_textfile(wdict):

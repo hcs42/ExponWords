@@ -509,7 +509,10 @@ def action_on_word_pairs(request):
 def CreateImportWordPairsForm(wdict):
 
     class ImportForm(forms.Form):
-         text = forms.CharField(widget=forms.Textarea, label=_("Text") + ':')
+         text = forms.CharField(widget=forms.Textarea,
+                                label=_("Text") + ':')
+         labels = forms.CharField(label=_("Labels") + ':',
+                                 required=False)
 
     return ImportForm
 
@@ -522,7 +525,11 @@ def import_word_pairs(request, wdict, import_fun, page_title, help_text):
         form = ImportForm(request.POST)
         if form.is_valid():
             try:
-                import_fun(form.cleaned_data['text'], wdict)
+                word_pairs = import_fun(form.cleaned_data['text'], wdict)
+                labels = form.cleaned_data['labels']
+                for wp in word_pairs:
+                    wp.add_labels(labels)
+                    wp.save()
                 message = _('Word pairs added.')
                 form = None
             except Exception, e:

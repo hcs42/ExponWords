@@ -1,12 +1,7 @@
 Top priority
 ------------
 
-- word queue for words to be learnt
-    - "Activate words" page {0:30}
-    - document that 9999-01-01 is special
-- import words: add label
 - selecting somehow several words at a time
-
 - show the future {4:00}
 
 Important (before releasing as a public web service)
@@ -31,6 +26,9 @@ Would be nice
   NO to a word, it will not come back if you reload the page only after
   answering the words not yet asked
 - showing "(n)" when having multiple occurrences of the same word
+- word queue for words to be learnt
+    - "Activate words" page {0:30}
+    - document that 9999-01-01 is special
 
 Wishlist
 --------
