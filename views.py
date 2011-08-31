@@ -750,9 +750,10 @@ def search(request):
     wdicts = WDict.objects.filter(user=request.user, deleted=False)
     wdict_choices = [(wdict.id, wdict.name) for wdict in wdicts]
     wdict_choices_full = [('all', _('All'))] + wdict_choices
+
+    labels = sorted(models.get_labels(request.user))
     label_choices_full = ([('all', _('All'))] + 
-                          [(label, label)
-                           for label in models.get_labels(request.user)])
+                          [(label, label) for label in labels])
 
     class SearchForm(forms.Form):
         q = forms.CharField(max_length=255,
