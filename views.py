@@ -721,7 +721,7 @@ def search_in_db(user, query_wdict, query_label, query_text):
     for wp in all_word_pairs:
         wp_matches_all = True
         if ((query_label is not None) and
-            (unicode(wp.labels).find(query_label) == -1)):
+            (query_label not in wp.get_label_set())):
             # We require a certain label but wp does not have it
             continue
 
