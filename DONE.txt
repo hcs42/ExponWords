@@ -64,3 +64,6 @@ v0.8:
 - don't always show the search results but do something with them
 - import words: add label
 - show the future {4:00}
+
+v0.9:
+- selecting somehow several words at a time

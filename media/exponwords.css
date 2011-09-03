@@ -114,3 +114,8 @@
 {
     color: green;
 }
+
+.selected
+{
+    background-color: #eee;
+}

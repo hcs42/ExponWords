@@ -44,7 +44,7 @@
 
 {% if show_hits %}
 
-<table border="1" id="table">
+<table border="1" id="hits">
   <tr class="center_cell">
     <td class="tbl_header" colspan="2">{% trans "Words" %}</td>
     <td class="tbl_header">{% trans "Explanation" %}</td>
@@ -71,7 +71,11 @@
     <td><a href="{% url wdict wp.wdict.id %}">{{ wp.wdict.name }}</a></td>
     {% endif %}
     <td><a href="{% url edit_word_pair wp.id %}">{% trans "Edit" %}</a></td>
-    <td><input type="checkbox" name="{{ wp.id }}"></input></td>
+    <td class="checkbox_container">
+      <input type="checkbox" name="{{ wp.id }}">
+      <!-- <input type="checkbox" name="{{ wp.id }}" onclick="return false;"> -->
+      </input>
+    </td>
   </tr>
   {% endfor %}
 </table>

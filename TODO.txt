@@ -1,7 +1,6 @@
 Top priority
 ------------
 
-- selecting somehow several words at a time
 
 Important (before releasing as a public web service)
 ----------------------------------------------------
