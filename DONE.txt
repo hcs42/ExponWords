@@ -67,3 +67,4 @@ v0.8:
 
 v0.9:
 - selecting somehow several words at a time
+- after adding a new word, show a link that points to it

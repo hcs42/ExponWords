@@ -183,13 +183,16 @@ def add_word_pair(request, wdict):
             
             # redirection
             wdict_url = reverse('ew.views.add_word_pair', args=[wdict.id])
-            return HttpResponseRedirect(wdict_url + '?success=true')
+            return HttpResponseRedirect(wdict_url + '?wp=' + str(wp.id))
         else:
             message = _('Some fields are invalid.')
 
     elif request.method == 'GET':
-        if request.GET.get('success') == 'true':
-            message = _('Word pair added.')
+        wpid = request.GET.get('wp')
+        if wpid is not None:
+            wdict_url = reverse('ew.views.edit_word_pair', args=[wpid])
+            message = (_('Word pair added') +
+                       ': <a href="' + wdict_url + '">' + _('edit') + '</a>')
         else:
             message = ''
 
