@@ -108,6 +108,22 @@ Set up the nginx web server and run ExponWords in production mode
         $ google-chrome http://localhost/
         Kill start_production with CTRL-C
 
+Set up email sending
+--------------------
+
+1. Set up the name of your site:
+
+        $ python manage.py shell
+        >>> from django.contrib.sites.models import Site
+        >>> s = Site.objects.get(pk=1)
+        >>> s.domain = 'mysite.org'
+        >>> s.name = 'ExponWords'
+        >>> s.save()
+
+2. Set up SMTP server and configure Django to use it. See more information
+   here: https://docs.djangoproject.com/en/1.3/topics/email/
+
+
 Start ExponWords automatically after boot
 -----------------------------------------
 

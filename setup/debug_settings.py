@@ -6,6 +6,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 PROJECT_DIR = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
 STATIC_DOC_ROOT = os.path.join('ew/media/')
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DATABASES = {
     'default': {
