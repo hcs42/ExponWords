@@ -12,54 +12,59 @@
 <a class="help" href="{% url help LANGUAGE_CODE %}#main-page">({% trans "Help for this page" %})</a>
 </p>
 
+<!-- Interface for not logged in users -->
+
 {% if not user.is_authenticated %}
+
 {% trans "You are not logged in." %}
+<ul>
+  <li><a href="{% url login %}" >{% trans "Log in" %}</a></li>
+  <li><a href="{% url help LANGUAGE_CODE %}">{% trans "Help" %}</a></li>
+</ul>
+
+<!-- Interface for logged in users -->
+
 {% else %}
+
 {% trans "Welcome" %}, {{ username }}!
-{% endif %}
 
 <ul>
 
-  <!-- Menu items for not logged in users -->
-  {% if not user.is_authenticated %}
-  <li><a href="{% url login %}" >{% trans "Log in" %}</a></li>
-  {% endif %}
+  <li> {% trans "Dictionaries" %}
 
-  <!-- Menu items for logged in users -->
-
-  {% if user.is_authenticated %}
-
-  <li><a href="{%url logout %}">{% trans "Log out" %}</a></li>
-
-  <!-- Listing dictionaries -->
-
-  <li>
-  {% if wdicts %}
-  {% trans "Dictionaries" %}:
   <ul>
-    {% for d in wdicts %}
+    <!-- Listing dictionaries -->
+
     <li>
-    <a href="{% url wdict d.id %}">"{{ d.name }}"</a>
+    {% if wdicts %}
+    {% trans "My dictionaries" %}:
+    <ul>
+      {% for d in wdicts %}
+      <li>
+      <a href="{% url wdict d.id %}">"{{ d.name }}"</a>
+      </li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    {% trans "You have no dictionaries." %}
+    {% endif %}
+
+    <li><a href="{% url add_wdict %}">{% trans "Create new dictionary" %}</a></li>
+    <li><a href="{% url search %}">{% trans "Search" %}</a></li>
+    <li><a href="{% url search %}?q=&amp;show_hits=on">{% trans "List all words" %}</a></li>
+    <li><a href="{% url visualize %}">{% trans "Show my future" %}</a></li>
     </li>
-    {% endfor %}
+
   </ul>
-  {% else %}
-  {% trans "You have no dictionaries." %}
-  {% endif %}
-  <li><a href="{% url add_wdict %}">{% trans "Create new dictionary" %}</a></li>
-  <li><a href="{% url search %}">{% trans "Search" %}</a></li>
-  <li><a href="{% url search %}?q=&amp;show_hits=on">{% trans "List all words" %}</a></li>
-  <li><a href="{% url visualize %}">{% trans "Show my future" %}</a></li>
   </li>
-
-  {% endif %}
-
-  <!-- Menu items for everyone -->
-
-  <li><a href="{% url options %}">{% trans "Options" %}</a></li>
-
+  <li>{% trans "My user" %}
+  <ul>
+    <li><a href="{% url options %}">{% trans "Options" %}</a></li>
+    <li><a href="{% url password_change %}">{% trans "Change password" %}</a></li>
+    <li><a href="{% url logout %}">{% trans "Log out" %}</a></li>
+  </ul>
   <li><a href="{% url help LANGUAGE_CODE %}">{% trans "Help" %}</a></li>
-
-
 </ul>
+{% endif %}
+
 {% endblock %}

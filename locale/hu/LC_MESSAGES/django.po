@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-04 22:24+0200\n"
+"POT-Creation-Date: 2011-09-07 09:03+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,17 +196,23 @@ msgstr "Súgó ehhez az oldalhoz"
 msgid "You are not logged in."
 msgstr "Nem vagy bejelentkezve."
 
-msgid "Welcome"
-msgstr "Üdv"
-
 msgid "Log in"
 msgstr "Bejelentkezés"
 
-msgid "Log out"
-msgstr "Kijelentkezés"
+msgid "Options"
+msgstr "Beállítások"
+
+msgid "Help"
+msgstr "Súgó"
+
+msgid "Welcome"
+msgstr "Üdv"
 
 msgid "Dictionaries"
 msgstr "Szótárak"
+
+msgid "My dictionaries"
+msgstr "Az én szótáraim"
 
 msgid "You have no dictionaries."
 msgstr "Még nincs szótárad."
@@ -220,11 +226,14 @@ msgstr "Minden szó kilistázása"
 msgid "Show my future"
 msgstr "Mutasd a jövőm"
 
-msgid "Options"
-msgstr "Beállítások"
+msgid "My user"
+msgstr "Az én felhasználóm"
 
-msgid "Help"
-msgstr "Súgó"
+msgid "Change password"
+msgstr "Jelszó megváltoztatása"
+
+msgid "Log out"
+msgstr "Kijelentkezés"
 
 #, python-format
 msgid "Dictionary \"%(wdictname)s\""
