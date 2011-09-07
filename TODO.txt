@@ -1,19 +1,20 @@
 Top priority
 ------------
 
+- set up smtp server on yuno
 
 Important (before releasing as a public web service)
 ----------------------------------------------------
 
-- fix ip address in logs
 - userprofile for settings like locale
 - turnaround time set by the user according to his timezone
-- using only relative links (HttpResponseRedirect)
-- HTTPS
-- interface for registration
-- interface for changing the password
 - using the "message" framework or at least the session instead of having
   messages in the GET request
+- fix ip address in logs
+- HTTPS
+- using only relative links (HttpResponseRedirect)
+- Action > Operation, Options > Settings
+- change email address
 
 Would be nice
 -------------
@@ -36,4 +37,5 @@ Wishlist
 - logging
     - number of hits and misses in stats
 - similar pages: memorize.com, szokincsfejleszto.hu
+- send newsletters from the EW server
 
