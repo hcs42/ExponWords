@@ -18,6 +18,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 from ExponWords.ew.models import WordPair, WDict
 import ExponWords.ew.models as models
 from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
@@ -27,6 +28,8 @@ from django import forms
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.conf import settings
+import django.db
+
 import datetime
 import functools
 import json
@@ -49,12 +52,14 @@ def index(request):
         wdicts = None
 
     models.log(request, 'index')
+    message = request.GET.get('message')
 
     return render(
                request,
                'ew/index.html',
                {'wdicts': wdicts,
-                'username': username})
+                'username': username,
+                'message': message})
 
 
 def visualize(request):
@@ -90,6 +95,77 @@ def options(request):
                'ew/options.html',
                {})
 
+
+def create_user(username, password1, password2, email_address, captcha):
+
+    if captcha.strip() != '6':
+        raise models.EWException(_('Some fields are invalid.'))
+    elif password1 != password2:
+        raise models.EWException(_('The two passwords do not match.'))
+    elif len(password1) < 6:
+        raise models.EWException(_('The password has to be at least 6 '
+                                   'characters long!'))
+    else:
+
+        try:
+            user = User.objects.create_user(username, email_address, password1)
+        except django.db.IntegrityError:
+            raise models.EWException(_('This username is already used.'))
+
+        user.save()
+        message = _('Successful registration. Please log in!')
+        index_url = reverse('ew.views.index', args=[])
+        redirect_url = (index_url +
+                        '?message=' +
+                        urllib.quote_plus(message.encode('utf-8')))
+        return HttpResponseRedirect(redirect_url)
+
+
+def register(request):
+
+    class RegisterForm(forms.Form):
+        username = forms.CharField(max_length=255,
+                                   label=_('Username'))
+        password1 = forms.CharField(max_length=255,
+                                    widget=forms.PasswordInput,
+                                    label=_('Password'))
+        password2 = forms.CharField(max_length=255,
+                                    widget=forms.PasswordInput,
+                                    label=_('Password again'))
+        email_address = forms.CharField(max_length=255,
+                                        label=_('Email address'))
+        c = forms.CharField(max_length=255,
+                            label='3 + 3 =')
+
+    if request.method == 'POST':
+        models.log(request, 'register')
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+            email_address = form.cleaned_data['email_address']
+            captcha = form.cleaned_data['c']
+            try:
+                return create_user(username, password1, password2,
+                                   email_address, captcha)
+            except models.EWException, e:
+                message = e.value
+        else:
+            message = _('Some fields are invalid.')
+
+    elif request.method == 'GET':
+        form = RegisterForm()
+        message = ''
+
+    else:
+        assert(False)
+
+    return render(
+               request,
+               'ew/register.html',
+               {'form':  form,
+                'message': message})
 
 def help(request, lang):
     models.log(request, 'help')

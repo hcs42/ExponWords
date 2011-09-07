@@ -1,0 +1,30 @@
+{% extends "ew/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Register" %}
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+&raquo;
+<span class="current_menu">{% trans "Register" %}</span>
+</p>
+
+<p>
+{{ message }}
+</p>
+
+<form action="." method="post">{% csrf_token %}
+ <!-- {% trans "Username" %}:<input name="username" type="text" />
+  {% trans "Password" %}:<input name="password" type="password" />
+  {% trans "3+3=" %}:<input name="six" type="text" /> -->
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="{% trans 'Register' %}" />
+</form>
+
+{% endblock %}

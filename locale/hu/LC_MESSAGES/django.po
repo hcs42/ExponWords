@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-07 09:03+0200\n"
+"POT-Creation-Date: 2011-09-07 19:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,6 +39,33 @@ msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
 msgid "Sum"
 msgstr "Összesen"
 
+msgid "Some fields are invalid."
+msgstr "Néhány mező érvénytelen."
+
+msgid "The two passwords do not match."
+msgstr "A két jelszó nem egyezik meg."
+
+msgid "The password has to be at least 6 characters long!"
+msgstr "A jelszónak legalább 6 karakter hosszúnak kell lennie!"
+
+msgid "This username is already used."
+msgstr "Ez a felhasználónév már foglalt."
+
+msgid "Successful registration. Please log in!"
+msgstr "Sikeres regisztráció. Jelentkezz be!"
+
+msgid "Username"
+msgstr "Felhasználónév"
+
+msgid "Password"
+msgstr "Jelszó"
+
+msgid "Password again"
+msgstr "Jelszó ismét"
+
+msgid "Email address"
+msgstr "Email cím"
+
 #, python-format
 msgid "Word in \"%(lang)s\""
 msgstr "A szó \"%(lang)s\" nyelven"
@@ -53,9 +80,6 @@ msgstr "A következő, \"%(lang)s\" nyelv felőli gyakorlás dátuma"
 #, python-format
 msgid "Strengh of word from \"%(lang)s\""
 msgstr "A szó \"%(lang)s\" nyelv felőli ereje"
-
-msgid "Some fields are invalid."
-msgstr "Néhány mező érvénytelen."
 
 msgid "Word pair added"
 msgstr "Szópár hozzáadva"
@@ -199,8 +223,11 @@ msgstr "Nem vagy bejelentkezve."
 msgid "Log in"
 msgstr "Bejelentkezés"
 
-msgid "Options"
-msgstr "Beállítások"
+msgid "Register"
+msgstr "Regisztráció"
+
+msgid "I forgot my password"
+msgstr "Elfelejtettem a jelszavamat"
 
 msgid "Help"
 msgstr "Súgó"
@@ -228,6 +255,9 @@ msgstr "Mutasd a jövőm"
 
 msgid "My user"
 msgstr "Az én felhasználóm"
+
+msgid "Options"
+msgstr "Beállítások"
 
 msgid "Change password"
 msgstr "Jelszó megváltoztatása"
@@ -269,6 +299,9 @@ msgid ""
 msgstr ""
 "Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz "
 "még egyszer azokon a szavakon, amiket nem tudtál.)"
+
+msgid "3+3="
+msgstr "3+3="
 
 msgid "Number of word pairs found"
 msgstr "Talált szópárok száma"
