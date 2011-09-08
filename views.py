@@ -799,7 +799,7 @@ def search(request):
                                    label=_('Label') + ':',
                                    required=False)
         show_hits = forms.BooleanField(label=_('Show hits') + ':',
-                                         required=False)
+                                       required=False)
 
     if request.method != 'GET':
         raise Http404
