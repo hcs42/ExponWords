@@ -27,8 +27,30 @@ msgstr "A következő sorban nincs elég oszlop: %(linenumber)s. sor: %(line)s"
 msgid "Too many fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
 
-msgid "Sum"
-msgstr "Összesen"
+#, python-format
+msgid "Word in \"%(lang)s\""
+msgstr "A szó \"%(lang)s\" nyelven"
+
+msgid "Date of addition"
+msgstr "Hozzáadás dátuma"
+
+#, python-format
+msgid "Date of next practice from \"%(lang)s\""
+msgstr "A következő, \"%(lang)s\" nyelv felőli gyakorlás dátuma"
+
+#, python-format
+msgid "Strengh of word from \"%(lang)s\""
+msgstr "A szó \"%(lang)s\" nyelv felőli ereje"
+
+msgid "Text"
+msgstr "Szöveg"
+
+msgid "Labels"
+msgstr "Címkék"
+
+#, python-format
+msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
+msgstr "Biztos, hogy törölni akarod a következő szótárat: \"%(wdict)s\"?"
 
 msgid "Some fields are invalid."
 msgstr "Néhány mező érvénytelen."
@@ -57,63 +79,11 @@ msgstr "Jelszó ismét"
 msgid "Email address"
 msgstr "Email cím"
 
-#, python-format
-msgid "Word in \"%(lang)s\""
-msgstr "A szó \"%(lang)s\" nyelven"
-
-msgid "Date of addition"
-msgstr "Hozzáadás dátuma"
-
-#, python-format
-msgid "Date of next practice from \"%(lang)s\""
-msgstr "A következő, \"%(lang)s\" nyelv felőli gyakorlás dátuma"
-
-#, python-format
-msgid "Strengh of word from \"%(lang)s\""
-msgstr "A szó \"%(lang)s\" nyelv felőli ereje"
-
 msgid "Word pair added"
 msgstr "Szópár hozzáadva"
 
 msgid "edit"
 msgstr "szerkesztés"
-
-msgid "Word pair modified."
-msgstr "Szópár módosítva."
-
-msgid "Name of the dictionary"
-msgstr "Szótár neve"
-
-msgid "Language 1"
-msgstr "Első nyelv"
-
-msgid "Language 2"
-msgstr "Második nyelv"
-
-msgid "Please specify the fields correctly!"
-msgstr "Add meg a mezőket helyesen!"
-
-msgid "Please specify the number of days!"
-msgstr "Add meg a napok számát!"
-
-msgid "Action not recognized"
-msgstr "Ismeretlen akció"
-
-msgid "No word pair modified."
-msgstr "Egy szópár sem lett módosítva."
-
-msgid "1 word pair modified."
-msgstr "1 szópár módosítva."
-
-#, python-format
-msgid "%(count)s word pairs modified."
-msgstr "%(count)s szópár módosítva."
-
-msgid "Text"
-msgstr "Szöveg"
-
-msgid "Labels"
-msgstr "Címkék"
 
 msgid "Word pairs added."
 msgstr "Szópárok hozzáadva."
@@ -143,10 +113,6 @@ msgstr ""
 "Microsoft Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza, és "
 "azt ide bemásolod, akkor az épp ilyen formátumban lesz."
 
-#, python-format
-msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
-msgstr "Biztos, hogy törölni akarod a következő szótárat: \"%(wdict)s\"?"
-
 msgid "Dictionary deleted."
 msgstr "Szótár törölve."
 
@@ -156,6 +122,30 @@ msgid ""
 msgstr ""
 "Jelöld be a \"Biztos vagy benne?\" jelölőnégyzetet, ha tényleg törölni "
 "akarod a szótárat!"
+
+msgid "Name of the dictionary"
+msgstr "Szótár neve"
+
+msgid "Language 1"
+msgstr "Első nyelv"
+
+msgid "Language 2"
+msgstr "Második nyelv"
+
+msgid "Sum"
+msgstr "Összesen"
+
+msgid "Language set in the web browser"
+msgstr "A böngészőben beállított nyelv"
+
+msgid "Language"
+msgstr "Nyelv"
+
+msgid "Settings saved."
+msgstr "Beállítások elmentve."
+
+msgid "Invalid language code"
+msgstr "Érvénytelen nyelvkód"
 
 msgid "All"
 msgstr "Mind"
@@ -171,6 +161,28 @@ msgstr "Címke"
 
 msgid "Show hits"
 msgstr "Találatok mutatása"
+
+msgid "Word pair modified."
+msgstr "Szópár módosítva."
+
+msgid "Please specify the fields correctly!"
+msgstr "Add meg a mezőket helyesen!"
+
+msgid "Please specify the number of days!"
+msgstr "Add meg a napok számát!"
+
+msgid "Action not recognized"
+msgstr "Ismeretlen akció"
+
+msgid "No word pair modified."
+msgstr "Egy szópár sem lett módosítva."
+
+msgid "1 word pair modified."
+msgstr "1 szópár módosítva."
+
+#, python-format
+msgid "%(count)s word pairs modified."
+msgstr "%(count)s szópár módosítva."
 
 msgid "Create new dictionary"
 msgstr "Új szótár készítése"
@@ -244,7 +256,7 @@ msgstr "Mutasd a jövőm"
 msgid "My user"
 msgstr "Az én felhasználóm"
 
-msgid "Options"
+msgid "Settings"
 msgstr "Beállítások"
 
 msgid "Change password"
@@ -256,9 +268,6 @@ msgstr "Kijelentkezés"
 #, python-format
 msgid "Dictionary \"%(wdictname)s\""
 msgstr "\"%(wdictname)s\" szótár"
-
-msgid "Language"
-msgstr "Nyelv"
 
 msgid "Practice"
 msgstr "Gyakorlás"

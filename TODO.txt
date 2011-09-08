@@ -7,6 +7,10 @@ Important (before releasing as a public web service)
 ----------------------------------------------------
 
 - userprofile for settings like locale
+    - language
+    - timezone
+    - version notifications
+    - colors
 - turnaround time set by the user according to his timezone
 - using the "message" framework or at least the session instead of having
   messages in the GET request

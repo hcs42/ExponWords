@@ -15,21 +15,6 @@
 
 # Copyright (C) 2011 Csaba Hoch
 
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth import authenticate
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from ExponWords.ew.models import WordPair, WDict
-import ExponWords.ew.models as models
-from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
-from django.http import HttpResponse, HttpResponseRedirect
-from django.core.urlresolvers import reverse
-from django import forms
-from django.template import RequestContext
-from django.utils.translation import ugettext as _
-from django.conf import settings
-import django.db
-
 import datetime
 import functools
 import json
@@ -41,10 +26,196 @@ import unicodedata
 import urllib
 import urlparse
 
+from django import forms
+from django.conf import settings
+from django.contrib.auth import authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.template import RequestContext
+from django.utils.translation import ugettext as _
+import django.db
+import django.utils.translation
+
+from ExponWords.ew.models import WordPair, WDict
+import ExponWords.ew.models as models
+
+
+##### General helper functions #####
+
+
+def set_message(request, message, translate=True):
+    request.session['ew_message'] = message
+    request.session['ew_message_translate'] = translate
+
+def pop_message(request):
+    message = request.session.pop('ew_message', '')
+    message_translate = request.session.get('ew_message_translate', False)
+    if message and message_translate:
+        return _(message)
+    else:
+        return message
+
+
+def get_ewuser(request):
+    try:
+        return models.EWUser.objects.get(pk=request.user)
+    except models.EWUser.DoesNotExist, e:
+        ewuser = models.EWUser(pk=request.user.pk)
+        ewuser.lang = 'default'
+        ewuser.save()
+        return models.EWUser.objects.get(pk=request.user)
+
+
+def set_lang_fun(request):
+    lang = get_ewuser(request).lang
+    if lang == 'default':
+        request.session.pop('django_language', None)
+    else:
+        request.session['django_language'] = lang
+        django.utils.translation.activate(lang)
+
+
+def set_word_pair_form_labels(wdict, form):
+    f = form.fields
+    f['word_in_lang1'].label = \
+        (_('Word in "%(lang)s"') % {'lang': wdict.lang1}) + ':'
+    f['word_in_lang2'].label = \
+        (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
+    f['date_added'].label = \
+        _('Date of addition') + ':'
+    f['date1'].label = \
+        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang1} + ':'
+    f['date2'].label = \
+        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang2} + ':'
+    f['strength1'].label = \
+        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang1} + ':'
+    f['strength2'].label = \
+        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang2} + ':'
+
+
+#### Helper functions > URLs and queries #####
+
+
+def bad_unicode_to_str(u):
+    """This function converts a unicode object that actually contains UTF-8
+    encoded text (instead of unicode characters) to a UTF-8 encoded string."""
+    return ''.join([chr(ord(ch)) for ch in u])
+
+
+def remove_query_param(url, param_name):
+    url_list = list(urlparse.urlparse(url))
+    query_list = urlparse.parse_qsl(url_list[4], keep_blank_values=True)
+    new_query_list = [(k, bad_unicode_to_str(v))
+                      for k, v in query_list if k != param_name]
+    new_raw_query = urllib.urlencode(new_query_list)
+    url_list[4] = new_raw_query
+    new_url = urlparse.urlunparse(url_list)
+    return new_url
+
+
+def normalize_string(s):
+    # Code copied from: http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string/518232#518232
+    return ''.join((c for c in unicodedata.normalize('NFD', s.lower())
+                    if unicodedata.category(c) != 'Mn'))
+
+
+##### Forms #####
+
+class LenientChoiceField(forms.ChoiceField):
+
+    def __init__(self, *args, **kw):
+        super(LenientChoiceField, self).__init__(*args, **kw)
+
+    def validate(self, value):
+        super(forms.ChoiceField, self).validate(value)
+        if value and not self.valid_value(value):
+            self.is_really_valid = False
+        else:
+            self.is_really_valid = True
+
+
+class WordPairForm(forms.ModelForm):
+    class Meta:
+        model = WordPair
+        fields = models.WordPair.get_fields_to_be_edited()
+
+
+def CreateImportWordPairsForm(wdict):
+
+    class ImportForm(forms.Form):
+         text = forms.CharField(widget=forms.Textarea,
+                                label=_("Text") + ':')
+         labels = forms.CharField(label=_("Labels") + ':',
+                                 required=False)
+
+    return ImportForm
+
+
+def CreateDeleteWDictForm(wdict):
+    label = (_('Are you sure that you want to delete dictionary "%(wdict)s"?') %
+             {'wdict': wdict.name})
+    class DeleteWDictForm(forms.Form):
+         sure = forms.BooleanField(label=label, required=False)
+    return DeleteWDictForm
+
+
+##### Decorators #####
+
+
+def wdict_access_required(f):
+
+    @login_required
+    @functools.wraps(f)
+    def wrapper(request, wdict_id, *args, **kw):
+
+        # Get the dictionary; if it does not exist or the user does not own it,
+        # send him to page 404
+        wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
+
+        return f(request, wdict, *args, **kw)
+
+    return wrapper
+
+
+def word_pair_access_required(f):
+
+    @login_required
+    @functools.wraps(f)
+    def wrapper(request, word_pair_id, *args, **kw):
+
+        # Get the dictionary; if it does not exist or the user does not own it,
+        # send him to page 404
+        wp = get_object_or_404(WordPair,
+                              pk=word_pair_id,
+                               wdict__user=request.user)
+        wdict = wp.wdict
+        return f(request, wp, wdict, *args, **kw)
+
+    return wrapper
+
+
+def set_lang(f):
+
+    @functools.wraps(f)
+    def wrapper(request, *args, **kw):
+        set_lang_fun(request)
+        return f(request, *args, **kw)
+
+    return wrapper
+
+
+##### Index view #####
+
 
 def index(request):
+
     user = request.user
     if user.is_authenticated():
+        set_lang_fun(request)
         username = user.username
         wdicts = WDict.objects.filter(user=user, deleted=False)
     else:
@@ -53,7 +224,6 @@ def index(request):
 
     models.log(request, 'index')
     message = request.GET.get('message')
-
     return render(
                request,
                'ew/index.html',
@@ -62,38 +232,7 @@ def index(request):
                 'message': message})
 
 
-def visualize(request):
-    class WDictData(object):
-        def __init__(self, name, question_counts):
-            object.__init__(self)
-            self.name = name
-            self.question_counts = question_counts
-
-    dates, wdicts, date_to_question_count = \
-        models.calc_future(request.user, 60, datetime.date.today())
-
-    sum_data = WDictData(_('Sum'), [0 for date in dates])
-    wdicts_data = [sum_data]
-    for wdict in wdicts:
-        wdict_data = WDictData(wdict.name, [])
-        wdicts_data.append(wdict_data)
-        for index, date in enumerate(dates):
-            question_count = date_to_question_count[(wdict, date)]
-            wdict_data.question_counts.append(question_count)
-            sum_data.question_counts[index] += question_count
-
-    return render(
-               request,
-               'ew/visualize.html',
-               {'wdicts_data': wdicts_data,
-                'dates': [date.isoformat() for date in dates]})
-
-
-def options(request):
-    return render(
-               request,
-               'ew/options.html',
-               {})
+##### Views when logged out #####
 
 
 def create_user(username, password1, password2, email_address, captcha):
@@ -167,6 +306,14 @@ def register(request):
                {'form':  form,
                 'message': message})
 
+
+def language(request):
+    return render(
+               request,
+               'ew/lang.html',
+               {})
+
+
 def help(request, lang):
     models.log(request, 'help')
     langs = [langcode for langcode, langname in settings.LANGUAGES]
@@ -179,68 +326,19 @@ def help(request, lang):
         raise Http404
 
 
-def wdict_access_required(f):
-
-    @login_required
-    @functools.wraps(f)
-    def wrapper(request, wdict_id, *args, **kw):
-
-        # Get the dictionary; if it does not exist or the user does not own it,
-        # send him to page 404
-        wdict = get_object_or_404(WDict, pk=wdict_id, user=request.user)
-
-        return f(request, wdict, *args, **kw)
-
-    return wrapper
-
-
-def word_pair_access_required(f):
-
-    @login_required
-    @functools.wraps(f)
-    def wrapper(request, word_pair_id, *args, **kw):
-
-        # Get the dictionary; if it does not exist or the user does not own it,
-        # send him to page 404
-        wp = get_object_or_404(WordPair, pk=word_pair_id, wdict__user=request.user)
-        wdict = wp.wdict
-        return f(request, wp, wdict, *args, **kw)
-
-    return wrapper
+##### Views when logged in #####
 
 
 @wdict_access_required
+@set_lang
 def wdict(request, wdict):
     return render(request,
                   'ew/wdict.html',
                   {'wdict': wdict})
 
 
-class WordPairForm(forms.ModelForm):
-    class Meta:
-        model = WordPair
-        fields = models.WordPair.get_fields_to_be_edited()
-
-
-def set_word_pair_form_labels(wdict, form):
-    f = form.fields
-    f['word_in_lang1'].label = \
-        (_('Word in "%(lang)s"') % {'lang': wdict.lang1}) + ':'
-    f['word_in_lang2'].label = \
-        (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
-    f['date_added'].label = \
-        _('Date of addition') + ':'
-    f['date1'].label = \
-        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang1} + ':'
-    f['date2'].label = \
-        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang2} + ':'
-    f['strength1'].label = \
-        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang1} + ':'
-    f['strength2'].label = \
-        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang2} + ':'
-
-
 @wdict_access_required
+@set_lang
 def add_word_pair(request, wdict):
 
     if request.method == 'POST':
@@ -256,7 +354,7 @@ def add_word_pair(request, wdict):
 
             # saving some fields to the session
             request.session['ew_add_wp_fields'] = wp.get_saved_fields()
-            
+
             # redirection
             wdict_url = reverse('ew.views.add_word_pair', args=[wdict.id])
             return HttpResponseRedirect(wdict_url + '?wp=' + str(wp.id))
@@ -295,42 +393,117 @@ def add_word_pair(request, wdict):
                 'wdict': wdict})
 
 
-@word_pair_access_required
-def edit_word_pair(request, wp, wdict):
+def import_word_pairs(request, wdict, import_fun, page_title, help_text):
 
+    ImportForm = CreateImportWordPairsForm(wdict)
     if request.method == 'POST':
-        models.log(request, 'edit_word_pair')
-        form = WordPairForm(request.POST)
+        models.log(request, 'import_word_pairs', page_title)
+        form = ImportForm(request.POST)
         if form.is_valid():
-            for field in models.WordPair.get_fields_to_be_edited():
-                setattr(wp, field, form.cleaned_data[field])
-            wp.save()
-            wdict_url = reverse('ew.views.edit_word_pair', args=[wp.id])
-            return HttpResponseRedirect(wdict_url + '?success=true')
+            try:
+                word_pairs = import_fun(form.cleaned_data['text'], wdict)
+                labels = form.cleaned_data['labels']
+                for wp in word_pairs:
+                    wp.add_labels(labels)
+                    wp.save()
+                message = _('Word pairs added.')
+                form = None
+            except Exception, e:
+                message = _('Error: ') + unicode(e)
         else:
             message = _('Some fields are invalid.')
-
-    elif request.method == 'GET':
-        if request.GET.get('success') == 'true':
-            message = _('Word pair modified.')
-        else:
-            message = ''
-        form = WordPairForm(instance=wp)
-
     else:
-        assert(False)
+        form = None
+        message = ''
 
-    set_word_pair_form_labels(wdict, form)
+    if form is None:
+        form = ImportForm()
+
     return render(
                request,
-               'ew/edit_word_pair.html',
-               {'form': form,
+               'ew/import_word_pairs.html',
+               {'form':  form,
+                'help_text': help_text,
                 'message': message,
-                'word_pair': wp,
+                'wdict': wdict,
+                'page_title': page_title})
+
+
+@wdict_access_required
+@set_lang
+def import_word_pairs_from_text(request, wdict):
+
+    page_title = _('Import word pairs from text')
+    help_text = ""
+    return import_word_pairs(request, wdict, models.import_textfile,
+                             page_title, help_text)
+
+
+@wdict_access_required
+@set_lang
+def export_word_pairs_to_text(request, wdict):
+    models.log(request, 'export_word_pairs_to_text')
+    text = models.export_textfile(wdict)
+    return render(
+               request,
+               'ew/export_wdict_as_text.html',
+               {'wdict': wdict,
+                'text': text})
+
+
+@wdict_access_required
+@set_lang
+def import_word_pairs_from_tsv(request, wdict):
+
+    page_title = _('Import word pairs from tab-separated values')
+    help_text = _("Write one word per line. Each word should contain two or "
+                "three fields: word in the first language; word in the "
+                "second language; explanation. The last one is optional. "
+                "The fields should be separated by a TAB character. If a "
+                "spreadsheet is opened in as spreadsheet editor application "
+                "(such as LibreOffice, OpenOffice.org or Microsoft Excel), "
+                "and it contains these three columns, which are copied and "
+                "pasted here, then it will have exactly this format.")
+    return import_word_pairs(request, wdict, models.import_tsv,
+                             page_title, help_text)
+
+
+@wdict_access_required
+@set_lang
+def delete_wdict(request, wdict):
+
+    DeleteWDictForm = CreateDeleteWDictForm(wdict)
+    if request.method == 'POST':
+        models.log(request, 'delete_wdict')
+        form = DeleteWDictForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['sure']:
+                wdict.deleted = True
+                wdict.save()
+                message = _('Dictionary deleted.')
+                form = None
+            else:
+                message = _('Please check in the "Are you sure" checkbox if '
+                            'you really want to delete the dictionary.')
+        else:
+            message = _('Some fields are invalid.')
+    else:
+        form = None
+        message = ''
+
+    if form is None:
+        form = DeleteWDictForm()
+
+    return render(
+               request,
+               'ew/delete_wdict.html',
+               {'form':  form,
+                'message': message,
                 'wdict': wdict})
 
 
 @login_required
+@set_lang
 def add_wdict(request):
 
     class AddWDictForm(forms.Form):
@@ -370,40 +543,84 @@ def add_wdict(request):
                 'message': message})
 
 
-def words_to_practice_to_json(words_to_practice):
-    result = []
-    for wp, direction in words_to_practice:
-        result.append([wp.word_in_lang1,
-                       wp.word_in_lang2,
-                       direction,
-                       wp.id,
-                       explanation_to_html(wp.explanation)])
-    return json.dumps(result)
+@login_required
+@set_lang
+def visualize(request):
+    class WDictData(object):
+        def __init__(self, name, question_counts):
+            object.__init__(self)
+            self.name = name
+            self.question_counts = question_counts
 
+    dates, wdicts, date_to_question_count = \
+        models.calc_future(request.user, 60, datetime.date.today())
 
-@wdict_access_required
-def practice_wdict(request, wdict):
-    text = 'dict: "%s"' % wdict.name
-    models.log(request, 'practice_wdict', text)
-    words_to_practice = wdict.get_words_to_practice_today()
-    json_str = words_to_practice_to_json(words_to_practice)
-    return render(request,
-                  'ew/practice_wdict.html',
-                  {'wdict': wdict,
-                   'message': '',
-                   'words_to_practice': json_str})
+    sum_data = WDictData(_('Sum'), [0 for date in dates])
+    wdicts_data = [sum_data]
+    for wdict in wdicts:
+        wdict_data = WDictData(wdict.name, [])
+        wdicts_data.append(wdict_data)
+        for index, date in enumerate(dates):
+            question_count = date_to_question_count[(wdict, date)]
+            wdict_data.question_counts.append(question_count)
+            sum_data.question_counts[index] += question_count
+
+    return render(
+               request,
+               'ew/visualize.html',
+               {'wdicts_data': wdicts_data,
+                'dates': [date.isoformat() for date in dates]})
 
 
 @login_required
-def practice(request):
-    models.log(request, 'practice')
-    words_to_practice = request.session['ew_words_to_practice']
-    json_str = words_to_practice_to_json(words_to_practice)
-    return render(request,
-                  'ew/practice_wdict.html',
-                  {'wdict': None,
-                   'message': '',
-                   'words_to_practice': json_str})
+@set_lang
+def ew_settings(request):
+
+    langs = ([('default', _('Language set in the web browser'))] +
+             [(langcode, langname)
+              for langcode, langname in settings.LANGUAGES])
+
+    class SettingsForm(forms.Form):
+        lang = forms.ChoiceField(choices=langs,
+                                 label=_('Language'))
+
+    if request.method == 'POST':
+        models.log(request, 'settings')
+        form = SettingsForm(request.POST)
+        if form.is_valid():
+            lang_code = form.cleaned_data['lang']
+            if (lang_code and
+                (lang_code == 'default' or
+                 django.utils.translation.check_for_language(lang_code))):
+                user = get_ewuser(request)
+                user.lang = lang_code
+                user.save()
+                set_lang_fun(request)
+                settings_url = reverse('ew.views.ew_settings', args=[])
+                if False: # trick to make the i18n fw find the expr.
+                    _('Settings saved.')
+                set_message(request, 'Settings saved.', translate=True)
+                return HttpResponseRedirect(settings_url)
+            else:
+                message = _('Invalid language code') + ': ' + lang_code
+        else:
+            message = _('Some fields are invalid.')
+
+    elif request.method == 'GET':
+        form = SettingsForm({'lang': get_ewuser(request).lang})
+        message = pop_message(request)
+
+    else:
+        assert(False)
+
+    return render(
+               request,
+               'ew/settings.html',
+               {'form':  form,
+                'message': message})
+
+
+##### Practice #####
 
 
 def explanation_to_html(explanation):
@@ -428,6 +645,44 @@ def explanation_to_html(explanation):
     exp2 = re.sub(regexp, insert_nbps, explanation)
     exp3 = '<br/>'.join(exp2.splitlines())
     return exp3
+
+
+def words_to_practice_to_json(words_to_practice):
+    result = []
+    for wp, direction in words_to_practice:
+        result.append([wp.word_in_lang1,
+                       wp.word_in_lang2,
+                       direction,
+                       wp.id,
+                       explanation_to_html(wp.explanation)])
+    return json.dumps(result)
+
+
+@wdict_access_required
+@set_lang
+def practice_wdict(request, wdict):
+    text = 'dict: "%s"' % wdict.name
+    models.log(request, 'practice_wdict', text)
+    words_to_practice = wdict.get_words_to_practice_today()
+    json_str = words_to_practice_to_json(words_to_practice)
+    return render(request,
+                  'ew/practice_wdict.html',
+                  {'wdict': wdict,
+                   'message': '',
+                   'words_to_practice': json_str})
+
+
+@login_required
+@set_lang
+def practice(request):
+    models.log(request, 'practice')
+    words_to_practice = request.session['ew_words_to_practice']
+    json_str = words_to_practice_to_json(words_to_practice)
+    return render(request,
+                  'ew/practice_wdict.html',
+                  {'wdict': None,
+                   'message': '',
+                   'words_to_practice': json_str})
 
 
 @login_required
@@ -464,12 +719,187 @@ def update_word(request):
         traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
         raise exc_info[0], exc_info[1], exc_info[2]
 
+
+##### Search and actions #####
+
+
+def parse_query_label(query_label_raw):
+    if query_label_raw in ('', 'all'):
+        return None
+    else:
+        return query_label_raw
+
+
+def search_in_db(user, query_wdict, query_label, query_text):
+    if query_wdict in ('', 'all'):
+        all_word_pairs = WordPair.objects.filter(wdict__user=user,
+                                                 wdict__deleted=False,
+                                                 deleted=False)
+    else:
+        wdict_id = int(query_wdict)
+        wdict = get_object_or_404(WDict, pk=wdict_id, user=user)
+        all_word_pairs = WordPair.objects.filter(wdict=wdict,
+                                                 deleted=False)
+    word_pairs = []
+    query_words = [normalize_string(query_word)
+                   for query_word in query_text.split()]
+    query_items = []
+    for query_word in query_words:
+        if query_word.startswith('label:'):
+            query_items.append(('label', query_word[6:]))
+        else:
+            query_items.append(('text', query_word))
+
+    for wp in all_word_pairs:
+        wp_matches_all = True
+        if ((query_label is not None) and
+            (query_label not in wp.get_label_set())):
+            # We require a certain label but wp does not have it
+            continue
+
+        for query_item_type, query_item_value in query_items:
+            query_item_matches = False
+            if query_item_type == 'label':
+                labels = normalize_string(unicode(wp.labels))
+                query_item_matches = (labels.find(query_item_value) != -1)
+            else: # query_item_type == 'text'
+                for field in models.WordPair.get_fields_to_be_edited():
+                    field_text = normalize_string(unicode(getattr(wp, field)))
+                    if (field_text.find(query_item_value) != -1):
+                        query_item_matches = True
+                        break
+            if not query_item_matches:
+                wp_matches_all = False
+                break
+        if wp_matches_all:
+            word_pairs.append(wp)
+    return word_pairs
+
+
+@login_required
+@set_lang
+def search(request):
+
+    wdicts = WDict.objects.filter(user=request.user, deleted=False)
+    wdict_choices = [(wdict.id, wdict.name) for wdict in wdicts]
+    wdict_choices_full = [('all', _('All'))] + wdict_choices
+
+    labels = sorted(models.get_labels(request.user))
+    label_choices_full = ([('all', _('All'))] +
+                          [(label, label) for label in labels])
+
+    class SearchForm(forms.Form):
+        q = forms.CharField(max_length=255,
+                            label=_('Search expression') + ':',
+                            required=False)
+        dict = forms.ChoiceField(choices=wdict_choices_full,
+                                 label=_('Dictionary') + ':',
+                                 required=False)
+        label = LenientChoiceField(choices=label_choices_full,
+                                   label=_('Label') + ':',
+                                   required=False)
+        show_hits = forms.BooleanField(label=_('Show hits') + ':',
+                                         required=False)
+
+    if request.method != 'GET':
+        raise Http404
+
+    form = SearchForm(request.GET)
+    if not form.is_valid():
+        raise Http404
+
+    message = request.GET.get('message', '')
+    wdict = None
+    query_text = form.cleaned_data['q']
+    query_wdict = form.cleaned_data['dict']
+    query_label = parse_query_label(form.cleaned_data['label'])
+    show_hits = form.cleaned_data['show_hits']
+
+    # If we don't have a 'q' parameter, we will show the basic search page. If
+    # we do have one, we will perform the search, even if it is empty.
+
+    if 'q' not in request.GET:
+        if query_wdict in ('', 'all'):
+            form = SearchForm({'show_hits': True})
+        else:
+            wdict = get_object_or_404(WDict, pk=int(query_wdict),
+                                      user=request.user)
+            form = SearchForm({'dict': query_wdict, 'show_hits': True})
+        word_pairs_and_exps = None
+        result_exists = False
+        hits_count = 0
+        show_hits = False
+
+    else:
+        word_pairs = \
+            search_in_db(request.user, query_wdict, query_label, query_text)
+
+        result_exists = True
+        hits_count = len(word_pairs)
+        if show_hits:
+            word_pairs_and_exps = [(wp, explanation_to_html(wp.explanation))
+                                   for wp in word_pairs]
+        else:
+            word_pairs_and_exps = []
+
+    source_url = remove_query_param(request.get_full_path(), 'message')
+
+    return render(
+               request,
+               'ew/search.html',
+               {'form': form,
+                'message': message,
+                'wdict': wdict,
+                'word_pairs_and_exps': word_pairs_and_exps,
+                'source_url': source_url,
+                'result_exists': result_exists,
+                'show_hits': show_hits,
+                'hits_count': hits_count,
+                'wdict_choices': wdict_choices})
+
+
+@word_pair_access_required
+@set_lang
+def edit_word_pair(request, wp, wdict):
+
+    if request.method == 'POST':
+        models.log(request, 'edit_word_pair')
+        form = WordPairForm(request.POST)
+        if form.is_valid():
+            for field in models.WordPair.get_fields_to_be_edited():
+                setattr(wp, field, form.cleaned_data[field])
+            wp.save()
+            wdict_url = reverse('ew.views.edit_word_pair', args=[wp.id])
+            return HttpResponseRedirect(wdict_url + '?success=true')
+        else:
+            message = _('Some fields are invalid.')
+
+    elif request.method == 'GET':
+        if request.GET.get('success') == 'true':
+            message = _('Word pair modified.')
+        else:
+            message = ''
+        form = WordPairForm(instance=wp)
+
+    else:
+        assert(False)
+
+    set_word_pair_form_labels(wdict, form)
+    return render(
+               request,
+               'ew/edit_word_pair.html',
+               {'form': form,
+                'message': message,
+                'word_pair': wp,
+                'wdict': wdict})
+
+
 def get_word_pairs_to_use(request):
 
     # Deciding whether:
     # - to use an explicit list of word pair ids (if show_hits is true); or
     # - to rerun the query (if show_hits is false)
-    
+
     source_url = request.POST.get('source_url')
     if source_url:
         url_list = list(urlparse.urlparse(source_url))
@@ -610,295 +1040,3 @@ def action_on_word_pairs(request):
         redirect_url = reverse('ew.views.index', args=[])
 
     return HttpResponseRedirect(redirect_url)
-
-
-def CreateImportWordPairsForm(wdict):
-
-    class ImportForm(forms.Form):
-         text = forms.CharField(widget=forms.Textarea,
-                                label=_("Text") + ':')
-         labels = forms.CharField(label=_("Labels") + ':',
-                                 required=False)
-
-    return ImportForm
-
-
-def import_word_pairs(request, wdict, import_fun, page_title, help_text):
-
-    ImportForm = CreateImportWordPairsForm(wdict)
-    if request.method == 'POST':
-        models.log(request, 'import_word_pairs', page_title)
-        form = ImportForm(request.POST)
-        if form.is_valid():
-            try:
-                word_pairs = import_fun(form.cleaned_data['text'], wdict)
-                labels = form.cleaned_data['labels']
-                for wp in word_pairs:
-                    wp.add_labels(labels)
-                    wp.save()
-                message = _('Word pairs added.')
-                form = None
-            except Exception, e:
-                message = _('Error: ') + unicode(e)
-        else:
-            message = _('Some fields are invalid.')
-    else:
-        form = None
-        message = ''
-
-    if form is None:
-        form = ImportForm()
-
-    return render(
-               request,
-               'ew/import_word_pairs.html',
-               {'form':  form,
-                'help_text': help_text,
-                'message': message,
-                'wdict': wdict,
-                'page_title': page_title})
-
-
-@wdict_access_required
-def import_word_pairs_from_text(request, wdict):
-
-    page_title = _('Import word pairs from text')
-    help_text = ""
-    return import_word_pairs(request, wdict, models.import_textfile,
-                             page_title, help_text)
-
-
-@wdict_access_required
-def import_word_pairs_from_tsv(request, wdict):
-
-    page_title = _('Import word pairs from tab-separated values')
-    help_text = _("Write one word per line. Each word should contain two or "
-                "three fields: word in the first language; word in the "
-                "second language; explanation. The last one is optional. "
-                "The fields should be separated by a TAB character. If a "
-                "spreadsheet is opened in as spreadsheet editor application "
-                "(such as LibreOffice, OpenOffice.org or Microsoft Excel), "
-                "and it contains these three columns, which are copied and "
-                "pasted here, then it will have exactly this format.")
-    return import_word_pairs(request, wdict, models.import_tsv,
-                             page_title, help_text)
-
-
-@wdict_access_required
-def export_word_pairs_to_text(request, wdict):
-    models.log(request, 'export_word_pairs_to_text')
-    text = models.export_textfile(wdict)
-    return render(
-               request,
-               'ew/export_wdict_as_text.html',
-               {'wdict': wdict,
-                'text': text})
-
-
-def CreateDeleteWDictForm(wdict):
-    label = (_('Are you sure that you want to delete dictionary "%(wdict)s"?') %
-             {'wdict': wdict.name})
-    class DeleteWDictForm(forms.Form):
-         sure = forms.BooleanField(label=label, required=False)
-    return DeleteWDictForm
-
-
-@wdict_access_required
-def delete_wdict(request, wdict):
-
-    DeleteWDictForm = CreateDeleteWDictForm(wdict)
-    if request.method == 'POST':
-        models.log(request, 'delete_wdict')
-        form = DeleteWDictForm(request.POST)
-        if form.is_valid():
-            if form.cleaned_data['sure']:
-                wdict.deleted = True
-                wdict.save()
-                message = _('Dictionary deleted.')
-                form = None
-            else:
-                message = _('Please check in the "Are you sure" checkbox if '
-                            'you really want to delete the dictionary.')
-        else:
-            message = _('Some fields are invalid.')
-    else:
-        form = None
-        message = ''
-
-    if form is None:
-        form = DeleteWDictForm()
-
-    return render(
-               request,
-               'ew/delete_wdict.html',
-               {'form':  form,
-                'message': message,
-                'wdict': wdict})
-
-
-def bad_unicode_to_str(u):
-    """This function converts a unicode object that actually contains UTF-8
-    encoded text (instead of unicode characters) to a UTF-8 encoded string."""
-    return ''.join([chr(ord(ch)) for ch in u])
-
-
-def remove_query_param(url, param_name):
-    url_list = list(urlparse.urlparse(url))
-    query_list = urlparse.parse_qsl(url_list[4], keep_blank_values=True)
-    new_query_list = [(k, bad_unicode_to_str(v))
-                      for k, v in query_list if k != param_name]
-    new_raw_query = urllib.urlencode(new_query_list)
-    url_list[4] = new_raw_query
-    new_url = urlparse.urlunparse(url_list)
-    return new_url
-
-
-def normalize_string(s):
-    # Code copied from: http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string/518232#518232
-    return ''.join((c for c in unicodedata.normalize('NFD', s.lower())
-                    if unicodedata.category(c) != 'Mn'))
-
-class LenientChoiceField(forms.ChoiceField):
-
-    def __init__(self, *args, **kw):
-        super(LenientChoiceField, self).__init__(*args, **kw)
-
-    def validate(self, value):
-        super(forms.ChoiceField, self).validate(value)
-        if value and not self.valid_value(value):
-            self.is_really_valid = False
-        else:
-            self.is_really_valid = True
-
-
-def parse_query_label(query_label_raw):
-    if query_label_raw in ('', 'all'):
-        return None
-    else:
-        return query_label_raw
-
-def search_in_db(user, query_wdict, query_label, query_text):
-    if query_wdict in ('', 'all'):
-        all_word_pairs = WordPair.objects.filter(wdict__user=user,
-                                                 wdict__deleted=False,
-                                                 deleted=False)
-    else:
-        wdict_id = int(query_wdict)
-        wdict = get_object_or_404(WDict, pk=wdict_id, user=user)
-        all_word_pairs = WordPair.objects.filter(wdict=wdict,
-                                                 deleted=False)
-    word_pairs = []
-    query_words = [normalize_string(query_word)
-                   for query_word in query_text.split()]
-    query_items = []
-    for query_word in query_words:
-        if query_word.startswith('label:'):
-            query_items.append(('label', query_word[6:]))
-        else:
-            query_items.append(('text', query_word))
-            
-    for wp in all_word_pairs:
-        wp_matches_all = True
-        if ((query_label is not None) and
-            (query_label not in wp.get_label_set())):
-            # We require a certain label but wp does not have it
-            continue
-
-        for query_item_type, query_item_value in query_items:
-            query_item_matches = False
-            if query_item_type == 'label':
-                labels = normalize_string(unicode(wp.labels))
-                query_item_matches = (labels.find(query_item_value) != -1)
-            else: # query_item_type == 'text'
-                for field in models.WordPair.get_fields_to_be_edited():
-                    field_text = normalize_string(unicode(getattr(wp, field)))
-                    if (field_text.find(query_item_value) != -1):
-                        query_item_matches = True
-                        break
-            if not query_item_matches:
-                wp_matches_all = False
-                break
-        if wp_matches_all:
-            word_pairs.append(wp)
-    return word_pairs
-
-
-@login_required
-def search(request):
-
-    wdicts = WDict.objects.filter(user=request.user, deleted=False)
-    wdict_choices = [(wdict.id, wdict.name) for wdict in wdicts]
-    wdict_choices_full = [('all', _('All'))] + wdict_choices
-
-    labels = sorted(models.get_labels(request.user))
-    label_choices_full = ([('all', _('All'))] + 
-                          [(label, label) for label in labels])
-
-    class SearchForm(forms.Form):
-        q = forms.CharField(max_length=255,
-                            label=_('Search expression') + ':',
-                            required=False)
-        dict = forms.ChoiceField(choices=wdict_choices_full,
-                                 label=_('Dictionary') + ':',
-                                 required=False)
-        label = LenientChoiceField(choices=label_choices_full,
-                                   label=_('Label') + ':',
-                                   required=False)
-        show_hits = forms.BooleanField(label=_('Show hits') + ':',
-                                         required=False)
-
-    if request.method != 'GET':
-        raise Http404
-
-    form = SearchForm(request.GET)
-    if not form.is_valid():
-        raise Http404
-
-    message = request.GET.get('message', '')
-    wdict = None
-    query_text = form.cleaned_data['q']
-    query_wdict = form.cleaned_data['dict']
-    query_label = parse_query_label(form.cleaned_data['label'])
-    show_hits = form.cleaned_data['show_hits']
-
-    # If we don't have a 'q' parameter, we will show the basic search page. If
-    # we do have one, we will perform the search, even if it is empty.
-
-    if 'q' not in request.GET:
-        if query_wdict in ('', 'all'):
-            form = SearchForm({'show_hits': True})
-        else:
-            wdict = get_object_or_404(WDict, pk=int(query_wdict),
-                                      user=request.user)
-            form = SearchForm({'dict': query_wdict, 'show_hits': True})
-        word_pairs_and_exps = None
-        result_exists = False
-        hits_count = 0
-        show_hits = False
-
-    else:
-        word_pairs = \
-            search_in_db(request.user, query_wdict, query_label, query_text)
-
-        result_exists = True
-        hits_count = len(word_pairs)
-        if show_hits:
-            word_pairs_and_exps = [(wp, explanation_to_html(wp.explanation))
-                                   for wp in word_pairs]
-        else:
-            word_pairs_and_exps = []
-
-    source_url = remove_query_param(request.get_full_path(), 'message')
-
-    return render(
-               request,
-               'ew/search.html',
-               {'form': form,
-                'message': message,
-                'wdict': wdict,
-                'word_pairs_and_exps': word_pairs_and_exps,
-                'source_url': source_url,
-                'result_exists': result_exists,
-                'show_hits': show_hits,
-                'hits_count': hits_count,
-                'wdict_choices': wdict_choices})

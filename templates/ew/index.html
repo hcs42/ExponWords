@@ -25,6 +25,7 @@
 <ul>
   <li><a href="{% url login %}" >{% trans "Log in" %}</a></li>
   <li><a href="{% url register %}" >{% trans "Register" %}</a></li>
+  <li><a href="{% url language %}" >{% trans "Language" %}</a></li>
   <li><a href="{% url help LANGUAGE_CODE %}">{% trans "Help" %}</a></li>
 </ul>
 
@@ -65,7 +66,7 @@
   </li>
   <li>{% trans "My user" %}
   <ul>
-    <li><a href="{% url options %}">{% trans "Options" %}</a></li>
+    <li><a href="{% url ew_settings %}">{% trans "Settings" %}</a></li>
     <li><a href="{% url password_change %}">{% trans "Change password" %}</a></li>
     <li><a href="{% url logout %}">{% trans "Log out" %}</a></li>
   </ul>

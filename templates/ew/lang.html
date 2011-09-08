@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block title %}
-{% trans "Options" %}
+{% trans "Language" %}
 {% endblock %}
 
 {% block content %}
@@ -10,7 +10,7 @@
 <p>
 <span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu">{% trans "Options" %}</span>
+<span class="current_menu">{% trans "Language" %}</span>
 </p>
 
 <form action="/i18n/setlang/" method="post">

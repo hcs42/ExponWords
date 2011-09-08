@@ -26,3 +26,4 @@ class WordListAdmin(admin.ModelAdmin):
     inlines = [WordPairInline]
 
 admin.site.register(ew.models.WDict, WordListAdmin)
+admin.site.register(ew.models.EWUser)

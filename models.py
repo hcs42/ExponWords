@@ -26,6 +26,15 @@ from django.utils.translation import ugettext as _
 version = '0.8.1'
 
 
+class EWUser(models.Model):
+
+    user = models.OneToOneField(User, primary_key=True)
+    lang = models.CharField(max_length=10)
+
+    def __unicode__(self):
+        return self.user.username
+
+
 class WDict(models.Model):
 
     # WDict = word dictionary (as opposed to the dictionary data type which is

@@ -1,0 +1,27 @@
+{% extends "ew/base.html" %}
+{% load i18n %}
+
+{% block title %}
+{% trans "Settings" %}
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+&raquo;
+<span class="current_menu">{% trans "Settings" %}</span>
+</p>
+
+<p>
+{{ message }}
+</p>
+
+<form action="." method="post">{% csrf_token %}
+  <table>
+    {{ form.as_table }}
+  </table>
+  <input type="submit" value="{% trans 'Save' %}" />
+</form>
+
+{% endblock %}
