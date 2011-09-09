@@ -71,3 +71,9 @@ v0.9:
 - ability to change the password
 - ability to reset the password
 - registration
+- store the UI language in the user's profile
+- turnaround time set by the user according to his timezone
+- practice page customization (arrangements, font sizes)
+- Action > Operation, Options > Settings, Search > Search & operations
+- fix ip address in logs
+- Google Analytics

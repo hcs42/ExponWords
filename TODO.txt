@@ -1,29 +1,20 @@
-Top priority
-------------
+Top priority (before releasing as a public web service)
+-------------------------------------------------------
 
-- set up smtp server on yuno
+- framework for sending emails about new versions
 
-Important (before releasing as a public web service)
-----------------------------------------------------
+Important
+---------
 
-- userprofile for settings like locale
-    - language
-    - timezone
-    - version notifications
-    - colors
-- turnaround time set by the user according to his timezone
-- using the "message" framework or at least the session instead of having
-  messages in the GET request
-- fix ip address in logs
+- screenshots
+- better design (CSS)
+- using the session for messages instead of having them in the GET request
 - HTTPS
 - using only relative links (HttpResponseRedirect)
-- Action > Operation, Options > Settings
-- change email address
 
 Would be nice
 -------------
 
-- more efficient representation of words to practice within the practice page
 - random should not be totally random: it could be deterministic within a day,
   but it should also have a pointer about which word is next so that if you say
   NO to a word, it will not come back if you reload the page only after
@@ -32,14 +23,14 @@ Would be nice
 - word queue for words to be learnt
     - "Activate words" page {0:30}
     - document that 9999-01-01 is special
+- using the "message" framework for logging
 
 Wishlist
 --------
 
-- importing/exporting CSV files
+- importing/exporting CSV/JSON files
 - authentication using openid
 - logging
     - number of hits and misses in stats
 - similar pages: memorize.com, szokincsfejleszto.hu
-- send newsletters from the EW server
-
+- more efficient representation of words to practice within the practice page
