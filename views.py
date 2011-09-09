@@ -87,6 +87,10 @@ def set_word_pair_form_labels(wdict, form):
         (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
     f['date_added'].label = \
         _('Date of addition') + ':'
+    f['explanation'].label = \
+        _('Explanation') + ':'
+    f['labels'].label = \
+        _('Labels') + ':'
     f['date1'].label = \
         _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang1} + ':'
     f['date2'].label = \
