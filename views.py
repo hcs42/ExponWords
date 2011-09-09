@@ -60,18 +60,8 @@ def pop_message(request):
         return message
 
 
-def get_ewuser(request):
-    try:
-        return models.EWUser.objects.get(pk=request.user)
-    except models.EWUser.DoesNotExist, e:
-        ewuser = models.EWUser(pk=request.user.pk)
-        ewuser.lang = 'default'
-        ewuser.save()
-        return models.EWUser.objects.get(pk=request.user)
-
-
 def set_lang_fun(request):
-    lang = get_ewuser(request).lang
+    lang = models.get_ewuser(request.user).lang
     if lang == 'default':
         request.session.pop('django_language', None)
     else:
@@ -374,9 +364,9 @@ def add_word_pair(request, wdict):
         else:
             message = ''
 
-        data = {'date_added': datetime.date.today(),
-                'date1': datetime.date.today(),
-                'date2': datetime.date.today(),
+        data = {'date_added': models.get_today(request.user),
+                'date1': models.get_today(request.user),
+                'date2': models.get_today(request.user),
                 'strength1': 0,
                 'strength2': 0}
 
@@ -557,7 +547,7 @@ def visualize(request):
             self.question_counts = question_counts
 
     dates, wdicts, date_to_question_count = \
-        models.calc_future(request.user, 60, datetime.date.today())
+        models.calc_future(request.user, 60, models.get_today(request.user))
 
     sum_data = WDictData(_('Sum'), [0 for date in dates])
     wdicts_data = [sum_data]
@@ -584,20 +574,32 @@ def ew_settings(request):
              [(langcode, langname)
               for langcode, langname in settings.LANGUAGES])
 
+    timezones = [(str(tz_index),
+                 'UTC' + ('' if tz_index < 0 else '+') + str(tz_index))
+                 for tz_index in range(-11, 13)]
+
     class SettingsForm(forms.Form):
         lang = forms.ChoiceField(choices=langs,
                                  label=_('Language'))
+        timezone = forms.ChoiceField(choices=timezones,
+                                     label=_('Time zone'))
+        turning_point = forms.CharField(max_length=10,
+                                        label=_('Turning point'))
 
     if request.method == 'POST':
         models.log(request, 'settings')
         form = SettingsForm(request.POST)
         if form.is_valid():
             lang_code = form.cleaned_data['lang']
+            timezone = form.cleaned_data['timezone']
+            turning_point = form.cleaned_data['turning_point']
             if (lang_code and
                 (lang_code == 'default' or
                  django.utils.translation.check_for_language(lang_code))):
-                user = get_ewuser(request)
+                user = models.get_ewuser(request.user)
                 user.lang = lang_code
+                user.timezone = timezone
+                user.set_turning_point_str(turning_point)
                 user.save()
                 set_lang_fun(request)
                 settings_url = reverse('ew.views.ew_settings', args=[])
@@ -611,7 +613,11 @@ def ew_settings(request):
             message = _('Some fields are invalid.')
 
     elif request.method == 'GET':
-        form = SettingsForm({'lang': get_ewuser(request).lang})
+        ewuser = models.get_ewuser(request.user)
+        form = SettingsForm({
+                   'lang': ewuser.lang,
+                   'timezone': ewuser.timezone,
+                   'turning_point': ewuser.get_turning_point_str()})
         message = pop_message(request)
 
     else:
@@ -701,7 +707,7 @@ def update_word(request):
                                pk=word_pair_id,
                                wdict__user=request.user)
 
-        if wp.get_date(direction) > datetime.date.today():
+        if wp.get_date(direction) > models.get_today(request.user):
             # This update have already been performed
             return HttpResponse(json.dumps('ok'),
                                  mimetype='application/json')
@@ -1015,12 +1021,15 @@ def action_on_word_pairs(request):
     source_url = request.POST.get('source_url')
 
     if action == 'practice':
-        today = datetime.date.today()
+        today = models.get_today(request.user)
         words_to_practice = []
+        user_time = models.get_user_time(request.user)
         for wp in word_pairs_to_use:
-            if (practice_scope == 'all' or wp.date1 <= today):
+            if (practice_scope == 'all' or
+                models.is_word_due(wp.date1, user_time)):
                 words_to_practice.append((wp, 1))
-            if (practice_scope == 'all' or wp.date2 <= today):
+            if (practice_scope == 'all' or
+                models.is_word_due(wp.date2, user_time)):
                 words_to_practice.append((wp, 2))
         random.shuffle(words_to_practice)
 

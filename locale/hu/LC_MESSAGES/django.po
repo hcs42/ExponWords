@@ -34,6 +34,12 @@ msgstr "A szó \"%(lang)s\" nyelven"
 msgid "Date of addition"
 msgstr "Hozzáadás dátuma"
 
+msgid "Explanation"
+msgstr "Magyarázat"
+
+msgid "Labels"
+msgstr "Címkék"
+
 #, python-format
 msgid "Date of next practice from \"%(lang)s\""
 msgstr "A következő, \"%(lang)s\" nyelv felőli gyakorlás dátuma"
@@ -44,9 +50,6 @@ msgstr "A szó \"%(lang)s\" nyelv felőli ereje"
 
 msgid "Text"
 msgstr "Szöveg"
-
-msgid "Labels"
-msgstr "Címkék"
 
 #, python-format
 msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
@@ -140,6 +143,12 @@ msgstr "A böngészőben beállított nyelv"
 
 msgid "Language"
 msgstr "Nyelv"
+
+msgid "Time zone"
+msgstr "Időzóna"
+
+msgid "Turning point"
+msgstr "Fordulópont"
 
 msgid "Settings saved."
 msgstr "Beállítások elmentve."
@@ -306,9 +315,6 @@ msgstr "Talált szópárok száma"
 msgid "Words"
 msgstr "Szavak"
 
-msgid "Explanation"
-msgstr "Magyarázat"
-
 msgid "Dates"
 msgstr "Dátumok"
 
@@ -403,6 +409,9 @@ msgstr "Menj a gyakorló oldalra!"
 
 msgid "Select none"
 msgstr "Egyik kijelölése sem"
+
+msgid "Time zone according to the web browser"
+msgstr "A böngésző szerint az időzóna"
 
 msgid "Number of word pairs that will be asked"
 msgstr "Adott napon kérdezendő szópárok száma"

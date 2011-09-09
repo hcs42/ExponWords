@@ -5,19 +5,32 @@ unittest). These will both pass when you run "manage.py test".
 Replace these with more appropriate tests for your application.
 """
 
+import datetime
+
 from django.test import TestCase
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+import ExponWords.ew.models as models
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+class DateHandlingTest(TestCase):
 
->>> 1 + 1 == 2
-True
-"""}
-
+    def test_date_handling(self):
+        dt = datetime.datetime
+        date = datetime.date
+        self.assertFalse(
+            models.is_word_due(
+                date(2011, 1, 10),
+                models.get_user_time(timezone=2,
+                                     turning_point=3 * 60,
+                                     now=dt(2011, 1, 10, 0, 59))))
+        self.assertTrue(
+            models.is_word_due(
+                date(2011, 1, 10),
+                models.get_user_time(timezone=2,
+                                     turning_point=3 * 60,
+                                     now=dt(2011, 1, 10, 1, 0))))
+        self.assertTrue(
+            models.is_word_due(
+                date(2011, 1, 10),
+                models.get_user_time(timezone=2,
+                                     turning_point=3 * 60,
+                                     now=dt(2011, 1, 10, 1, 1))))

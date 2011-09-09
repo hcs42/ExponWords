@@ -25,14 +25,109 @@ from django.utils.translation import ugettext as _
 
 version = '0.8.1'
 
+##### Date handling #####
+
+
+# General concept:
+#
+# words at DAY shall be asked
+# if user_time(utc) >= DAY_00:00
+# where user_time = now_utc + timezone - turning_point
+
+# Example (DAY example in backets):
+#
+# timezone: UTC+2 (CEST) -> 2:00
+# turning_point: 3:00
+# words at 2011-01-10 shall be asked
+# if user_time + 2:00 - 3:00 >= 2011-01-10_00:00
+# if user_time >= 2011-01-10_01:00
+
+
+def get_user_time(user=None, timezone=None, turning_point=None, now=None):
+
+    # set timezone and turning_point
+    if user is not None:
+        ewuser = get_ewuser(user)
+        timezone = ewuser.timezone
+        turning_point = ewuser.turning_point
+    elif (timezone is None or turning_point is None):
+        raise EWException('get_user_time: Either the user or the timezone '
+                          'and the turning_point parameter has to be not None')
+
+    # set `now`
+    if now is None:
+        now = datetime.datetime.utcnow()
+
+    return (now
+            + datetime.timedelta(hours=timezone)
+            - datetime.timedelta(minutes=turning_point))
+
+
+def is_word_due(word_date, user_time):
+    word_dt_0 = datetime.datetime(year=word_date.year,
+                                  month=word_date.month,
+                                  day=word_date.day)
+    return user_time >= word_dt_0
+
+
+def get_today(user=None, timezone=None, turning_point=None, now=None):
+    user_time = get_user_time(user, timezone, turning_point, now)
+    return datetime.date(user_time.year, user_time.month, user_time.day)
+
+
+def next_date(user, strength, today=None):
+    if today is None:
+        today = get_today(user)
+    if strength < 0:
+        strength = 0
+    return today + datetime.timedelta(2 ** strength)
+
+
+##### Model classes #####
+
 
 class EWUser(models.Model):
 
     user = models.OneToOneField(User, primary_key=True)
+
+    # The language of the user interface
     lang = models.CharField(max_length=10)
+
+    # Time difference with UTC in hours (positive value means east from GMT)
+    timezone = models.IntegerField()
+
+    # How many minutes after midnight should we ask the words of the new day
+    # (may be negative)
+    turning_point = models.IntegerField()
 
     def __unicode__(self):
         return self.user.username
+
+    def get_turning_point_str(self):
+        sign = '-' if self.turning_point < 0 else ''
+        tpa = abs(self.turning_point)
+        return '%s%02d:%02d' % (sign, tpa / 60, tpa % 60)
+
+    def set_turning_point_str(self, s):
+        s = s.strip()
+        r = re.match(r'^([+-]?)(\d+):(\d\d)$', s)
+        if r is None:
+            raise EWException('Invalid turning point string')
+        sign, hours, minutes = r.group(1), int(r.group(2)), int(r.group(3))
+        self.turning_point = ((-1 if sign == '-' else 1) *
+                              (hours * 60 + minutes))
+            
+
+def get_ewuser(user):
+    try:
+        return EWUser.objects.get(pk=user)
+    except EWUser.DoesNotExist, e:
+        ewuser = EWUser(pk=user.pk)
+        ewuser.lang = 'default'
+        ewuser.timezone = 0
+        ewuser.turning_point = 0
+        ewuser.save()
+        return EWUser.objects.get(pk=user)
 
 
 class WDict(models.Model):
@@ -50,12 +145,12 @@ class WDict(models.Model):
         return self.name
 
     def get_words_to_practice_today(self):
-        today = datetime.date.today()
+        user_time = get_user_time(user=self.user)
         result = []
         for wp in self.wordpair_set.filter(deleted=False):
-            if wp.date1 <= today:
+            if is_word_due(wp.date1, user_time):
                 result.append((wp, 1))
-            if wp.date2 <= today:
+            if is_word_due(wp.date2, user_time):
                 result.append((wp, 2))
         random.shuffle(result)
         return result
@@ -126,20 +221,13 @@ class WordPair(models.Model):
         else:
             self.date2 = value
 
-    @staticmethod
-    def next_date(strength, date):
-        if strength < 0:
-            strength = 0
-        return date + datetime.timedelta(2 ** strength)
-
     def strengthen(self, direction):
         strength = self.get_strength(direction)
-        self.set_date(direction,
-                      self.next_date(strength, datetime.date.today()))
+        self.set_date(direction, next_date(self.wdict.user, strength))
         self.set_strength(direction, self.get_strength(direction) + 1)
 
     def weaken(self, direction):
-        self.set_date(direction, datetime.date.today())
+        self.set_date(direction, get_today(self.wdict.user))
         new_strength = min(self.get_strength(direction), 0)
         self.set_strength(direction, new_strength)
 
@@ -194,32 +282,7 @@ class WordPair(models.Model):
         return saved_fields
 
 
-class EWException(Exception):
-    """A very simple exception class used."""
-
-    def __init__(self, value):
-        """Constructor.
-
-        **Argument:**
-
-        - `value` (object) -- The reason of the error.
-        """
-        Exception.__init__(self)
-        self.value = value
-
-    def __unicode__(self):
-        """Returns the string representation of the error reason.
-
-        **Returns:** str
-        """
-
-        value = self.value
-        if isinstance(value, unicode):
-            return value
-        elif isinstance(value, str):
-            return unicode(value)
-        else:
-            return repr(value)
+##### Importing and exporting word pairs #####
 
 
 def create_add_word_pairs(wdict, word_pairs):
@@ -227,16 +290,6 @@ def create_add_word_pairs(wdict, word_pairs):
         wdict.wordpair_set.add(wp)
         wp.save()
         wdict.save()
-
-
-def get_labels(user):
-    all_word_pairs = WordPair.objects.filter(wdict__user=user,
-                                             wdict__deleted=False,
-                                             deleted=False)
-    labels = set()
-    for wp in all_word_pairs:
-        labels.update(unicode(wp.labels).split())
-    return labels
 
 
 def import_textfile(s, wdict):
@@ -247,6 +300,7 @@ def import_textfile(s, wdict):
     - wdict (WDict)
     """
 
+    user = wdict.user
     i = 1
     word_pairs = []
     for line in s.splitlines():
@@ -282,7 +336,7 @@ def import_textfile(s, wdict):
             wp.word_in_lang2 = r.group(4)
             wp.explanation = ''
             if r.group(5) is not None:
-                wp.date_added = datetime.date.today()
+                wp.date_added = get_today(user)
                 wp.date1 = datetime.date(int(r.group(7)),
                                          int(r.group(8)),
                                          int(r.group(9)))
@@ -292,9 +346,9 @@ def import_textfile(s, wdict):
                 wp.strength1 = int(r.group(6))
                 wp.strength2 = int(r.group(10))
             else:
-                wp.date_added = datetime.date.today()
-                wp.date1 = datetime.date.today()
-                wp.date2 = datetime.date.today()
+                wp.date_added = get_today(user)
+                wp.date1 = get_today(user)
+                wp.date2 = get_today(user)
                 wp.strength1 = 0
                 wp.strength2 = 0
 
@@ -302,6 +356,7 @@ def import_textfile(s, wdict):
 
     create_add_word_pairs(wdict, word_pairs)
     return word_pairs
+
 
 def import_tsv(s, wdict):
     """Adds words from a text of tab-separeted values to a dictionary.
@@ -311,6 +366,7 @@ def import_tsv(s, wdict):
     - wdict (WDict)
     """
 
+    user = wdict.user
     i = 1
     word_pairs = []
     for line in s.splitlines():
@@ -329,9 +385,9 @@ def import_tsv(s, wdict):
             wp.word_in_lang2 = fields[1]
             if len(fields) == 3:
                 wp.explanation = fields[2]
-            wp.date1 = datetime.date.today()
-            wp.date2 = datetime.date.today()
-            wp.date_added = datetime.date.today()
+            wp.date1 = get_today(user)
+            wp.date2 = get_today(user)
+            wp.date_added = get_today(user)
             word_pairs.append(wp)
         else:
             msg = (_('Too many fields in line %(linenumber)s: %(line)s') %
@@ -371,6 +427,9 @@ def export_textfile(wdict):
     return ''.join(result)
 
 
+##### Logging #####
+
+
 class EWLogEntry(models.Model):
 
     datetime = models.DateTimeField()
@@ -398,11 +457,8 @@ def log(request, action, text=''):
         logentry.action = 'Logging failed'
     logentry.save()
 
-def parse_date(s):
-    return datetime.datetime.strptime(s, '%Y-%m-%d')
 
-
-##### show future #####
+##### Show the future #####
 
 
 def incr_wcd(wcd, wdict, strength, date, count):
@@ -451,8 +507,53 @@ def calc_future(user, days_count, start_date):
             question_count = 0
             for strength, word_count in strength_to_word_count.items():
                 question_count += word_count
-                new_date = WordPair.next_date(strength, date)
+                new_date = next_date(user, strength, date)
                 incr_wcd(wcd, wdict, strength + 1, new_date, word_count)
             date_to_question_count[(wdict, date)] = question_count
 
     return dates, wdicts, date_to_question_count
+
+
+##### Miscellaneous utilities #####
+
+
+class EWException(Exception):
+    """A very simple exception class used."""
+
+    def __init__(self, value):
+        """Constructor.
+
+        **Argument:**
+
+        - `value` (object) -- The reason of the error.
+        """
+        Exception.__init__(self)
+        self.value = value
+
+    def __unicode__(self):
+        """Returns the string representation of the error reason.
+
+        **Returns:** str
+        """
+
+        value = self.value
+        if isinstance(value, unicode):
+            return value
+        elif isinstance(value, str):
+            return unicode(value)
+        else:
+            return repr(value)
+
+
+def get_labels(user):
+    all_word_pairs = WordPair.objects.filter(wdict__user=user,
+                                             wdict__deleted=False,
+                                             deleted=False)
+    labels = set()
+    for wp in all_word_pairs:
+        labels.update(unicode(wp.labels).split())
+    return labels
+
+
+def parse_date(s):
+    return datetime.datetime.strptime(s, '%Y-%m-%d')

@@ -17,6 +17,11 @@
 {{ message }}
 </p>
 
+<p>
+{% trans 'Time zone according to the web browser' %}:
+<span id='timezone'></span>
+</p>
+
 <form action="." method="post">{% csrf_token %}
   <table>
     {{ form.as_table }}
@@ -24,4 +29,8 @@
   <input type="submit" value="{% trans 'Save' %}" />
 </form>
 
+{% endblock %}
+{% block javascript %}
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/settings.js"></script>
 {% endblock %}
