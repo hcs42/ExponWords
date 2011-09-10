@@ -79,11 +79,20 @@ practice.</p>
 
 <h3 id="main-page">Main page</h3>
 
-The main page has the following menu items:
+The main page has the following menu items if nobody is logged in:
 
 <ul>
   <li>Log in</li>
-  <li>Log out</li>
+  <li>Register</li>
+  <li>Language: The language to be used for the user interface before logging
+  in. Will be Nyelv: en afterwards. See more information about the languages
+  <a href="#ui_language">here</a>.</li>
+  <li>Help: This page.</li>
+</ul>
+
+The main page has the following menu items for logged in users:
+
+<ul>
   <li>Dictionaries: List of dictionaries the user has.</li>
   <li>Create new dictionary: Creates a new dictionary for the user.</li>
   <li>Search: A search page that find words any dictionary. See
@@ -92,8 +101,10 @@ The main page has the following menu items:
   <li>Show my future: A page that shows the number of words that will be asked
   in different days, supposing all word pairs in the dictionaries are known and
   that no new word pairs will be added.</li>
-  <li>Options: The users can set their preferences here. It is not yet saved,
-  so if the user logs out, the options have to be set again.</li>
+  <li>Settings: The users can set their preferences here. See
+  <a href="#settings">here</a> in more detail.</li>
+  <li>Change password</li>
+  <li>Log out</li>
   <li>Help: This page.</li>
 </ul>
 
@@ -212,6 +223,36 @@ state of their checkboxes in the "Selected" column.</p>
   pairs, or only those that are due today (based on their dates).</li>
 </ul>
 
+<h3 id="settings">Settings</h3>
+<p>The followings can be set:</p>
+<ul>
+  <li>Language: The language of the user interface. See more information about
+  the languages <a href="#ui_language">here</a>.</li>
+  <li>Time zone: The time zone used to calculate the words to ask. UTC+0 is
+  Greenwich Mean Time; the time zone is higher and higher as we go to the east
+  (UTC+1, UTC+2, etc.) and lower and lower as we go to the west (UTC-1, UTC-2,
+  etc.). The time zone set on the computer is shown on the Settings
+  page; in most cases, that is the best value to set here.</li>
+  <li>Turning point: By default, ExponWords will start asking the words that are
+  due at a certain date from the very beginning of that day, i.e. at midnight
+  (0:00), according to the time zone set above. A different turning point can
+  be set here; e.g. if 3:00 is set, then the words that are due on a day are
+  asked only after 3am that day. Negative values can also be set: -1:30 means
+  that the words that are due on a day will be asked from 22:30 the previous
+  day.</li>
+  <li>Practice page arrangement: The arrangement of the Practice page can be
+  set to "Normal" and "Less scrolling". The former fits better with the rest of
+  the user interface, but the latter can be better on a device on which the
+  browser automatically scrolls to the top after all clicks.</li>
+  <li>Button size, question size, answer size, explanation size: The font size
+  of different elements of the Practice page.</li>
+  <li>Email address: This email address can be used to reset the password and
+  to receive notifications.</li>
+  <li>Send me emails when new ExponWords has new features: If checked in,
+  emails about releasing and deploying new ExponWords versions will be sent to
+  the email address above.</li>
+</ul>
+
 <h2>Frequently Asked Questions (FAQ)</h2>
 <ul>
 
@@ -271,6 +312,18 @@ state of their checkboxes in the "Selected" column.</p>
   <li>
   <p><em>In which order are the word to be practiced asked?</em></p>
   <p>In a totally random order.</p>
+  </li>
+
+  <li id="ui_language">
+  <p><em>In which languages is the user interface available?</em></p>
+  <p>Currently English and Hungarian. If you are interested in doing the
+  translation for another language, please contact
+  <script type="text/javascript">document.write(
+    "<n uers=\"znvygb:pfnon.ubpu@tznvy.pbz\">zr</n>".replace(/[a-zA-Z]/g,
+      function(c){
+      return String.fromCharCode(
+        (c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));
+    </script>.</p>
   </li>
 
   <!-- FAQ entry template:

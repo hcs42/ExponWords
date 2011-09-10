@@ -76,11 +76,21 @@ szerkeszteni, törölni, és itt tudsz új szavakat hozzáadni, gyakorolni.</p>
 
 <h3 id="main-page">Főoldal</h3>
 
-A főoldal a következő menüpontokat tartalmazza:
+A főoldal a következő menüpontokat tartalmazza, amikor nincs bejelentkezett felhasználó:
 
 <ul>
   <li>Bejelentkezés</li>
-  <li>Kijelentkezés</li>
+  <li>Regisztráció</li>
+  <li>Nyelv: A felhasználói felület nyelve bejelentkezés előtt. Bejelentkezés
+  után elfelejtődik. Több információ a nyelvekről
+  <a href="#ui_language">itt</a> található.</li>
+  <li>Súgó: Ez az oldal.</li>
+</ul>
+
+A főoldal a következő menüpontokat tartalmazza a bejelentkezett felhasználók
+számára:
+
+<ul>
   <li>Szótárak: Itt látod a szótáraidat, és ezekre kattintva tudod elérni a
   szótárak oldalait.</li>
   <li>Új szótár készítése</li>
@@ -90,9 +100,10 @@ A főoldal a következő menüpontokat tartalmazza:
   <li>Mutas a jövőm: Megmutatja, hogy az ExponWords a különböző napokon hány
   szót kérdezne, feltéve, hogy a felhasználó minden kikérdezéskor minden szót
   tud és nem kerül új szópár a szótárakba.</li>
-  <li>Beállítások: Itt tudod változtatni a beállításaid. Egyelőre csak a nyelvet
-  lehet állítani. A beállítások nincsenek elmentve; ha kijelentkezel, nem
-  maradnak meg.</li>
+  <li>Beállítások: Itt tudod változtatni a beállításaid. A részletes
+  beállításokat lásd <a href="#settings">itt</a>.</li>
+  <li>Jelszó megváltoztatása</li>
+  <li>Kijelentkezés</li>
   <li>Súgó: Ez az oldal.</li>
 </ul>
 
@@ -214,6 +225,36 @@ program szürke háttérrel, valamit a Kijelölt oszlopban lévő jelölődoboz
   kérdez, vagy csak azokat, amiket már kérdezni kellene a dátumuk alapján.</li>
 </ul>
 
+<h3 id="settings">Beállítások</h3>
+<p>A következőket lehet beállítani:</p>
+<ul>
+  <li>Nyelv: A felhasználói felület nyelve. Több információ a nyelvekről
+  <a href="#ui_language">itt</a> található.</li>
+  <li>Időzóna: A kérdezendő szavak kiszámításához használt időzóna. UTC+0 a
+  Greenwich-i középidő; ahogy megyünk keletre, az időzóna egyre nagyobb (UTC+1,
+  UTC+2 stb.); ahogy pedig megyünk nyugatra, az időzóna egyre kisebb (UTC-1,
+  UTC-2 stb.). A Beállítások oldal mutatja a számítógépen beállított időzónát.
+  A legtöbb esetben ezt az értéket a legjobb beállítani.</li>
+  <li>Fordulópont: Alapból az ExponWords egy adott napon kérdezendő szavakat
+  legkorábban a nap legelején, azaz a fent beállított időzóna szerint éjfélkor
+  (0:00) kérdez. Itt a fordulópontot meg lehet változtatni; például ha 3:00 van
+  beállítva, akkor egy napon kérdezendő szavakat csak aznap 3:00-tól kezdi
+  kérdezni. Negatív számot is be lehet állítani: -1:30 esetén egy nap szavait
+  már előző este 22:30-tól kérdezi.</li>
+  <li>Gyakorlás oldal elrendezése: A Gyakorlás oldalt kétféleképp lehet
+  elrendezni: "Normál" vagy "Kevesebb görgetés" módszerrel. Az előbbi jobban
+  illeszkedik a felhasználói felület többi részéhez, de az utóbbi jobb lehet
+  olyan eszközön, amelyiknek a böngészője minden kattintás után az oldal
+  tetejét igazítja a képernyőhöz.</li>
+  <li>Gombok mérete, kérdés mérete, válasz mérete, magyarázat mérete: A
+  Gyakorlás oldal különböző elemeinek mérete.</li>
+  <li>Email-cím: Erre az email-címre van szükség elfelejtett jelszó
+  beállításához és értesítések fogadásához.</li>
+  <li>Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe: Ha
+  be van jelölve, az új ExponWords verziókról értesítések fognak érkezni a
+  fenti email-címre.</li>
+</ul>
+
 <h2>Gyakran Ismételt Kérések (GYIK)</h2>
 <ul>
 
@@ -272,6 +313,17 @@ program szürke háttérrel, valamit a Kijelölt oszlopban lévő jelölődoboz
   <p><em>Milyen sorrendben kérdezi a program az adott nap kikérdezendő
     szavakat?</em></p>
   <p>Teljesen véletlenszerűen.</p>
+  </li>
+
+  <li id="ui_language">
+  <p><em>Milyen nyelveken elérhető a felhasználói felület?</em></p>
+  <p>Jelenleg angolul és magyarul. Ha szívesen lefordítanád más nyelvre, írj
+  <script type="text/javascript">document.write(
+    "<n uers=\"znvygb:pfnon.ubpu@tznvy.pbz\">arxrz</n>".replace(/[a-zA-Z]/g,
+      function(c){
+      return String.fromCharCode(
+        (c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);}));
+    </script>.</p>
   </li>
 
   <!-- FAQ entry template:
