@@ -150,6 +150,9 @@ msgstr "Időzóna"
 msgid "Turning point"
 msgstr "Fordulópont"
 
+msgid "Send me emails when ExponWords has new features"
+msgstr "Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe"
+
 msgid "Settings saved."
 msgstr "Beállítások elmentve."
 

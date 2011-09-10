@@ -100,6 +100,9 @@ class EWUser(models.Model):
     # (may be negative)
     turning_point = models.IntegerField()
 
+    # Whether the user wants to receive emails about new ExponWords features
+    release_emails = models.BooleanField(default=True)
+
     def __unicode__(self):
         return self.user.username
 

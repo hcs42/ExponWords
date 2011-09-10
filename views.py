@@ -585,22 +585,33 @@ def ew_settings(request):
                                      label=_('Time zone'))
         turning_point = forms.CharField(max_length=10,
                                         label=_('Turning point'))
+        email_address = forms.CharField(max_length=255,
+                                        label=_('Email address'))
+        release_emails = \
+            forms.BooleanField(
+                label=_('Send me emails when ExponWords has new features'),
+                required=False)
 
     if request.method == 'POST':
         models.log(request, 'settings')
         form = SettingsForm(request.POST)
         if form.is_valid():
+            email_address = form.cleaned_data['email_address']
+            release_emails = form.cleaned_data['release_emails']
             lang_code = form.cleaned_data['lang']
             timezone = form.cleaned_data['timezone']
             turning_point = form.cleaned_data['turning_point']
             if (lang_code and
                 (lang_code == 'default' or
                  django.utils.translation.check_for_language(lang_code))):
-                user = models.get_ewuser(request.user)
-                user.lang = lang_code
-                user.timezone = timezone
-                user.set_turning_point_str(turning_point)
-                user.save()
+                ewuser = models.get_ewuser(request.user)
+                ewuser.lang = lang_code
+                ewuser.timezone = timezone
+                ewuser.set_turning_point_str(turning_point)
+                request.user.email = email_address
+                ewuser.release_emails = release_emails
+                request.user.save()
+                ewuser.save()
                 set_lang_fun(request)
                 settings_url = reverse('ew.views.ew_settings', args=[])
                 if False: # trick to make the i18n fw find the expr.
@@ -617,7 +628,9 @@ def ew_settings(request):
         form = SettingsForm({
                    'lang': ewuser.lang,
                    'timezone': ewuser.timezone,
-                   'turning_point': ewuser.get_turning_point_str()})
+                   'turning_point': ewuser.get_turning_point_str(),
+                   'email_address': request.user.email,
+                   'release_emails': ewuser.release_emails})
         message = pop_message(request)
 
     else:
