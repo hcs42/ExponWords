@@ -91,14 +91,23 @@ class EWUser(models.Model):
     user = models.OneToOneField(User, primary_key=True)
 
     # The language of the user interface
-    lang = models.CharField(max_length=10)
+    lang = models.CharField(max_length=10, default='default')
 
     # Time difference with UTC in hours (positive value means east from GMT)
-    timezone = models.IntegerField()
+    timezone = models.IntegerField(default=0)
 
     # How many minutes after midnight should we ask the words of the new day
     # (may be negative)
-    turning_point = models.IntegerField()
+    turning_point = models.IntegerField(default=0)
+
+    # Practice page arrangement
+    practice_arrangement = models.CharField(default='normal', max_length=20)
+
+    # Font sizes on the practice page
+    button_size = models.IntegerField(default=40)
+    question_size = models.IntegerField(default=20)
+    answer_size = models.IntegerField(default=20)
+    explanation_size = models.IntegerField(default=20)
 
     # Whether the user wants to receive emails about new ExponWords features
     release_emails = models.BooleanField(default=True)
@@ -126,9 +135,6 @@ def get_ewuser(user):
         return EWUser.objects.get(pk=user)
     except EWUser.DoesNotExist, e:
         ewuser = EWUser(pk=user.pk)
-        ewuser.lang = 'default'
-        ewuser.timezone = 0
-        ewuser.turning_point = 0
         ewuser.save()
         return EWUser.objects.get(pk=user)
 

@@ -570,6 +570,10 @@ def visualize(request):
 @set_lang
 def ew_settings(request):
 
+    practice_arrangements_choices = \
+        [('normal', _('Normal')),
+         ('less_scrolling', _('Less scrolling'))]
+
     langs = ([('default', _('Language set in the web browser'))] +
              [(langcode, langname)
               for langcode, langname in settings.LANGUAGES])
@@ -585,6 +589,14 @@ def ew_settings(request):
                                      label=_('Time zone'))
         turning_point = forms.CharField(max_length=10,
                                         label=_('Turning point'))
+        practice_arrangement = \
+            forms.ChoiceField(
+                choices=practice_arrangements_choices,
+                label=_('Practice page arrangement'))
+        button_size = forms.IntegerField(label=_('Button size'))
+        question_size = forms.IntegerField(label=_('Question size'))
+        answer_size = forms.IntegerField(label=_('Answer size'))
+        explanation_size = forms.IntegerField(label=_('Explanation size'))
         email_address = forms.CharField(max_length=255,
                                         label=_('Email address'))
         release_emails = \
@@ -596,20 +608,22 @@ def ew_settings(request):
         models.log(request, 'settings')
         form = SettingsForm(request.POST)
         if form.is_valid():
-            email_address = form.cleaned_data['email_address']
-            release_emails = form.cleaned_data['release_emails']
-            lang_code = form.cleaned_data['lang']
-            timezone = form.cleaned_data['timezone']
-            turning_point = form.cleaned_data['turning_point']
+            c = form.cleaned_data
+            lang_code = c['lang']
             if (lang_code and
                 (lang_code == 'default' or
                  django.utils.translation.check_for_language(lang_code))):
                 ewuser = models.get_ewuser(request.user)
                 ewuser.lang = lang_code
-                ewuser.timezone = timezone
-                ewuser.set_turning_point_str(turning_point)
-                request.user.email = email_address
-                ewuser.release_emails = release_emails
+                ewuser.timezone = c['timezone']
+                ewuser.set_turning_point_str(c['turning_point'])
+                ewuser.practice_arrangement = c['practice_arrangement']
+                ewuser.button_size = c['button_size']
+                ewuser.question_size = c['question_size']
+                ewuser.answer_size = c['answer_size']
+                ewuser.explanation_size = c['explanation_size']
+                request.user.email = c['email_address']
+                ewuser.release_emails = c['release_emails']
                 request.user.save()
                 ewuser.save()
                 set_lang_fun(request)
@@ -629,6 +643,11 @@ def ew_settings(request):
                    'lang': ewuser.lang,
                    'timezone': ewuser.timezone,
                    'turning_point': ewuser.get_turning_point_str(),
+                   'practice_arrangement': ewuser.practice_arrangement,
+                   'button_size': ewuser.button_size,
+                   'question_size': ewuser.question_size,
+                   'answer_size': ewuser.answer_size,
+                   'explanation_size': ewuser.explanation_size,
                    'email_address': request.user.email,
                    'release_emails': ewuser.release_emails})
         message = pop_message(request)
@@ -688,11 +707,13 @@ def practice_wdict(request, wdict):
     models.log(request, 'practice_wdict', text)
     words_to_practice = wdict.get_words_to_practice_today()
     json_str = words_to_practice_to_json(words_to_practice)
+    ewuser = models.get_ewuser(request.user)
     return render(request,
                   'ew/practice_wdict.html',
                   {'wdict': wdict,
                    'message': '',
-                   'words_to_practice': json_str})
+                   'words_to_practice': json_str,
+                   'ewuser': ewuser})
 
 
 @login_required
@@ -701,11 +722,13 @@ def practice(request):
     models.log(request, 'practice')
     words_to_practice = request.session['ew_words_to_practice']
     json_str = words_to_practice_to_json(words_to_practice)
+    ewuser = models.get_ewuser(request.user)
     return render(request,
                   'ew/practice_wdict.html',
                   {'wdict': None,
                    'message': '',
-                   'words_to_practice': json_str})
+                   'words_to_practice': json_str,
+                   'ewuser': ewuser})
 
 
 @login_required

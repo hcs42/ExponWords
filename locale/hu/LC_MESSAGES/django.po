@@ -138,6 +138,12 @@ msgstr "Második nyelv"
 msgid "Sum"
 msgstr "Összesen"
 
+msgid "Normal"
+msgstr "Normál"
+
+msgid "Less scrolling"
+msgstr "Kevesebb görgetés"
+
 msgid "Language set in the web browser"
 msgstr "A böngészőben beállított nyelv"
 
@@ -149,6 +155,21 @@ msgstr "Időzóna"
 
 msgid "Turning point"
 msgstr "Fordulópont"
+
+msgid "Practice page arrangement"
+msgstr "Gyakorlás oldal elrendezése"
+
+msgid "Button size"
+msgstr "Gombok mérete"
+
+msgid "Question size"
+msgstr "Kérdés mérete"
+
+msgid "Answer size"
+msgstr "Válasz mérete"
+
+msgid "Explanation size"
+msgstr "Magyarázat mérete"
 
 msgid "Send me emails when ExponWords has new features"
 msgstr "Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe"
@@ -287,12 +308,6 @@ msgstr "Gyakorlás"
 msgid "Custom"
 msgstr "Saját"
 
-msgid "Edit current word"
-msgstr "Aktuális szó szerkesztése"
-
-msgid "Edit previous word"
-msgstr "Előző szó szerkesztése"
-
 msgid "YES"
 msgstr "IGEN"
 
@@ -301,6 +316,12 @@ msgstr "NEM"
 
 msgid "ANSWER"
 msgstr "VÁLASZ"
+
+msgid "Edit current word"
+msgstr "Aktuális szó szerkesztése"
+
+msgid "Edit previous word"
+msgstr "Előző szó szerkesztése"
 
 msgid ""
 "No more words for today. Good job! (If you hit Refresh, you will iterate "

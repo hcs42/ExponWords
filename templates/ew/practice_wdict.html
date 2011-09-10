@@ -12,6 +12,17 @@
 
 {% block content %}
 
+{% if ewuser.practice_arrangement == 'less_scrolling' %}
+<div id="buttons">
+  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="yes-button">{% trans "YES" %}</span>
+  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</span>
+  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</span>
+</div>
+<div id="question" style="font-size:{{ ewuser.question_size }}"></div>
+<div id="answer" style="font-size:{{ ewuser.answer_size }}"></div>
+<div id="explanation" style="font-size:{{ ewuser.explanation_size }}"></div>
+{% endif %}
+
 <p>
 <span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 {% if wdict != None %}
@@ -25,34 +36,36 @@
 
 <p>{{ message }}</p>
 
-    <div>
-      <span class="transfer-related">
-        <span id="transferred"></span>
-        (<span id="transfer-in-progress"></span>)
-      </span>/
-      <span id="answered"></span>
-      (<span id="answered-incorrectly"></span>) /
-      <span id="all"></span>
-    </div>
-    <div id="main">
-      <div id="current_word_buttons">
-        <a id="edit-word-button">{% trans "Edit current word" %}</a>
-        <a id="edit-prev-word-button" class="nonlink">{% trans "Edit previous word" %}</a>
-      </div>
-      <div id="buttons">
-        <span class="button" style="display:none;" id="yes-button">{% trans "YES" %}</span>
-        <span class="button" style="display:none;" id="no-button">{% trans "NO" %}</span>
-        <span class="button" style="display:none;" id="ok-button">{% trans "ANSWER" %}</span>
-      </div>
-      <div id="question"></div>
-      <div id="answer"></div>
-      <div id="explanation"></div>
-    </div>
+<div>
+  <span class="transfer-related">
+    <span id="transferred"></span>
+    (<span id="transfer-in-progress"></span>)
+  </span>/
+  <span id="answered"></span>
+  (<span id="answered-incorrectly"></span>) /
+  <span id="all"></span>
+</div>
+<div id="main">
+  <div id="current_word_buttons">
+    <a id="edit-word-button">{% trans "Edit current word" %}</a>
+    <a id="edit-prev-word-button" class="nonlink">{% trans "Edit previous word" %}</a>
+  </div>
+  {% if ewuser.practice_arrangement == 'normal' %}
+<div id="buttons">
+  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="yes-button">{% trans "YES" %}</span>
+  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</span>
+  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</span>
+</div>
+<div id="question" style="font-size:{{ ewuser.question_size }}"></div>
+<div id="answer" style="font-size:{{ ewuser.answer_size }}"></div>
+<div id="explanation" style="font-size:{{ ewuser.explanation_size }}"></div>
+  {% endif %}
+</div>
 
-    <!-- Translations -->
-    <span style="display:none" id="translation_no_more_words">
-    {% trans "No more words for today. Good job! (If you hit Refresh, you will iterate only on the words that you did not know.)" %}
-    </span>
+<!-- Translations -->
+<span style="display:none" id="translation_no_more_words">
+  {% trans "No more words for today. Good job! (If you hit Refresh, you will iterate only on the words that you did not know.)" %}
+</span>
 
 {% endblock %}
 {% block javascript %}

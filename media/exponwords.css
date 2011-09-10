@@ -19,7 +19,6 @@
 
 .button
 {
-    font-size: 40;
     background-color: #fff;
     border: 3px solid #080;
     padding: 2px 10px 2px 10px;
@@ -51,12 +50,10 @@
 
 #question
 {
-    font-size: 20;
 }
 
 #answer
 {
-    font-size: 20;
     color: blue;
 }
 
@@ -72,7 +69,6 @@
 
 #explanation
 {
-    font-size: 20;
     color: #777;
 }
 
