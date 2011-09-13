@@ -17,9 +17,7 @@
 {% if not user.is_authenticated %}
 
 {% if message %}
-{{ message }}
-{% else %}
-{% trans "You are not logged in." %}
+<p class="message">{{ message }}</p>
 {% endif %}
 
 <ul>
@@ -34,6 +32,10 @@
 {% else %}
 
 {% trans "Welcome" %}, {{ username }}!
+
+{% if message %}
+{{ message }}
+{% endif %}
 
 <ul>
 
@@ -72,6 +74,10 @@
   </ul>
   <li><a href="{% url help LANGUAGE_CODE %}">{% trans "Help" %}</a></li>
 </ul>
-{% endif %}
+{% endif %} <!-- interface for logged in users -->
+
+<p>{{ elevator_speech|safe }}</p>
+
+<p>{{ footnote|safe }}</p>
 
 {% endblock %}

@@ -55,6 +55,33 @@ msgstr "Szöveg"
 msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
 msgstr "Biztos, hogy törölni akarod a következő szótárat: \"%(wdict)s\"?"
 
+#, python-format
+msgid ""
+"ExponWords is a web application for <strong>learning words</strong>. It "
+"helps learn the word pairs fed by the user using the principle that "
+"<strong>the more we have already practiced a word, the less we need to "
+"practice it in the future</strong>. You can read more <a href="
+"\"%(help_basics_url)s#basics\">here</a>."
+msgstr ""
+"Az ExponWords egy szótanító webalkalmazás, ami a felhasználó által bevitt "
+"<strong>szópárokat segít megtanulni</strong> azt az elvet felhasználva, hogy "
+"<strong>minél többször elevenítettünk már fel egy szót, annál ritkábban kell "
+"újra feleleveníteteni</strong>. Több információ <a href="
+"\"%(help_basics_url)s#basics\">itt</a> található."
+
+#, python-format
+msgid ""
+"exponwords.zapto.org is a free service. ExponWords is open source software "
+"distributed under the %(gpl_pre)sGNU Generic Public Licence version "
+"3%(gpl_post)s. The source code repository can be found %(ewrepo_pre)shere"
+"%(ewrepo_post)s."
+msgstr ""
+"Az exponwords.zapto.org ingyenes szolgáltatás. Az ExponWords nyílt "
+"forráskódú szoftver, ami a %(gpl_pre)sGNU Generic Public Licence version "
+"3%(gpl_post)s licenc alatt lett publikálva (a licenc nem hivatalos magyar "
+"fordítása megtalálható <a href=\"http://www.gnu.hu/gplv3.html\">itt</a>). A "
+"forráskódot tartalmazó tároló %(ewrepo_pre)sitt%(ewrepo_post)s található. "
+
 msgid "Some fields are invalid."
 msgstr "Néhány mező érvénytelen."
 
@@ -252,9 +279,6 @@ msgstr "Főoldal"
 
 msgid "Help for this page"
 msgstr "Súgó ehhez az oldalhoz"
-
-msgid "You are not logged in."
-msgstr "Nem vagy bejelentkezve."
 
 msgid "Log in"
 msgstr "Bejelentkezés"

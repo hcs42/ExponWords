@@ -204,6 +204,29 @@ def set_lang(f):
 
 ##### Index view #####
 
+def get_elevator_speech(request):
+    help_basics_url = reverse('ew.views.help', args=[request.LANGUAGE_CODE])
+    text = (_('ExponWords is a web application for <strong>learning '
+              'words</strong>. It helps learn the word pairs fed by the user '
+              'using the principle that <strong>the more we have already '
+              'practiced a word, the less we need to practice it '
+              'in the future</strong>. '
+              'You can read more '
+              '<a href="%(help_basics_url)s#basics">here</a>.') %
+            {'help_basics_url': help_basics_url})
+    return text
+
+def get_footnote(request):
+    text = (_('exponwords.zapto.org is a free service. ExponWords is open '
+              'source software distributed under the %(gpl_pre)sGNU '
+              'Generic Public Licence version 3%(gpl_post)s. The source '
+              'code repository can be found '
+              '%(ewrepo_pre)shere%(ewrepo_post)s.') %
+            {'gpl_pre': '<a href="http://www.gnu.org/licenses/gpl-3.0.html">',
+             'gpl_post': '</a>',
+             'ewrepo_pre': '<a href="https://github.com/hcs42/ExponWords">',
+             'ewrepo_post': '</a>'})
+    return text
 
 def index(request):
 
@@ -216,6 +239,9 @@ def index(request):
         username = None
         wdicts = None
 
+    elevator_speech = get_elevator_speech(request)
+    footnote = get_footnote(request)
+
     models.log(request, 'index')
     message = request.GET.get('message')
     return render(
@@ -223,7 +249,9 @@ def index(request):
                'ew/index.html',
                {'wdicts': wdicts,
                 'username': username,
-                'message': message})
+                'message': message,
+                'elevator_speech': elevator_speech,
+                'footnote': footnote})
 
 
 ##### Views when logged out #####
