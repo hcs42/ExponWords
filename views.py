@@ -766,7 +766,7 @@ def update_word(request):
         raise exc_info[0], exc_info[1], exc_info[2]
 
 
-##### Search and actions #####
+##### Search and operations #####
 
 
 def parse_query_label(query_label_raw):
@@ -978,29 +978,29 @@ def get_word_pairs_to_use(request):
 
 
 @login_required
-def action_on_word_pairs(request):
+def operation_on_word_pairs(request):
 
-    models.log(request, 'action_on_word_pairs')
+    models.log(request, 'operation_on_word_pairs')
 
-    # Select the word pairs to use (i.e. to do the action with)
+    # Select the word pairs to use (i.e. to do the operation with)
     word_pairs_to_use = get_word_pairs_to_use(request)
 
-    # Perform the action
+    # Perform the operation
 
     message = None
-    action = request.POST.get('action')
-    do_action = False
-    if action == 'delete':
-        do_action = True
-    elif action == 'move':
+    operation = request.POST.get('operation')
+    do_operation = False
+    if operation == 'delete':
+        do_operation = True
+    elif operation == 'move':
         target_wdict_id = int(request.POST.get('move_word_pairs_wdict'))
         target_wdict = get_object_or_404(WDict, pk=target_wdict_id,
                                          user=request.user)
-        do_action = True
-    elif action in ('add_labels', 'remove_labels', 'set_labels'):
-        labels = request.POST.get(action + '-labels')
-        do_action = True
-    elif action == 'set_dates_strengths':
+        do_operation = True
+    elif operation in ('add_labels', 'remove_labels', 'set_labels'):
+        labels = request.POST.get(operation + '-labels')
+        do_operation = True
+    elif operation == 'set_dates_strengths':
         try:
             values = {}
             fields = ('date1', 'date2', 'strength1', 'strength2')
@@ -1015,48 +1015,48 @@ def action_on_word_pairs(request):
                 else:
                     assert(False)
                 values[field] = value
-            do_action = True
+            do_operation = True
         except ValueError:
             message = _('Please specify the fields correctly!')
-    elif action == 'shift_days':
+    elif operation == 'shift_days':
         try:
             days = datetime.timedelta(days=int(request.POST.get('days')))
-            do_action = True
+            do_operation = True
         except ValueError:
             message = _('Please specify the number of days!')
-    elif action == 'practice':
-        # We don't do an action to the words themselves
+    elif operation == 'practice':
+        # We don't do an operation to the words themselves
         practice_scope = request.POST.get('practice_scope')
-        do_action = False
+        do_operation = False
     else:
-        message = _('Action not recognized') + ': ' + str(action)
+        message = _('Operation not recognized') + ': ' + str(operation)
 
-    if do_action:
+    if do_operation:
         for wp in word_pairs_to_use:
-            if action == 'delete':
+            if operation == 'delete':
                 wp.deleted = True
-            elif action == 'move':
+            elif operation == 'move':
                 wp.wdict = target_wdict
-            elif action == 'add_labels':
+            elif operation == 'add_labels':
                 wp.add_labels(labels)
-            elif action == 'remove_labels':
+            elif operation == 'remove_labels':
                 wp.remove_labels(labels)
-            elif action == 'set_labels':
+            elif operation == 'set_labels':
                 wp.set_labels(labels)
-            elif action == 'set_dates_strengths':
+            elif operation == 'set_dates_strengths':
                 for field in fields:
                     if values[field] is not None:
                         setattr(wp, field, values[field])
-            elif action == 'shift_days':
+            elif operation == 'shift_days':
                 wp.date1 += days
                 wp.date2 += days
             wp.save()
 
-    # Redirect the user to the search page where which he issue the action
+    # Redirect the user to the search page where which he issue the operation
 
     source_url = request.POST.get('source_url')
 
-    if action == 'practice':
+    if operation == 'practice':
         today = models.get_today(request.user)
         words_to_practice = []
         user_time = models.get_user_time(request.user)

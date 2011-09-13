@@ -2,7 +2,7 @@
 {% load i18n %}
 
 {% block title %}
-{% trans "Search" %}
+{% trans "Search and operations" %}
 {% endblock %}
 
 {% block content %}
@@ -14,7 +14,7 @@
 <span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 {% endif %}
-<span class="current_menu">{% trans "Search" %}</span>
+<span class="current_menu">{% trans "Search and operations" %}</span>
 <a class="help" href="{% url help LANGUAGE_CODE %}#search">({% trans "Help for this page" %})</a>
 </p>
 
@@ -33,7 +33,7 @@
 
 {% if result_exists %}
 
-<form action="{% url action_on_word_pairs %}" method="post">
+<form action="{% url operation_on_word_pairs %}" method="post">
   
 <!-- hidden fields -->
 
@@ -54,7 +54,7 @@
     {% if wdict == None %}
     <td class="tbl_header">{% trans "Dictionary" %}</td>
     {% endif %}
-    <td class="tbl_header">{% trans "Action" %}</td>
+    <td class="tbl_header">{% trans "Operation" %}</td>
     <td class="tbl_header">{% trans "Selection" %}</td>
   </tr>
   {% for wp, explanation in word_pairs_and_exps %}
@@ -85,11 +85,11 @@
 
 {% endif %} <!-- show_hits -->
 
-<!-- action --> 
+<!-- operation --> 
 
 <p>
-  <select name="action" id="action-selection"> 
-    <option value="none">{% trans 'Please select an action'%}</option> 
+  <select name="action" id="operation-selection"> 
+    <option value="none">{% trans 'Please select an operation'%}</option> 
     <option value="delete">{% trans 'Delete word pairs'%}</option> 
     <option value="move">{% trans 'Move word pairs'%}</option> 
     <option value="set_dates_strengths">{% trans 'Set dates and strengths'%}</option> 
@@ -99,7 +99,7 @@
     <option value="shift_days">{% trans 'Shift dates'%}</option> 
     <option value="practice">{% trans 'Practice'%}</option> 
   </select>
-  <a class="help" href="{% url help LANGUAGE_CODE %}#actions">({% trans "Help for actions" %})</a>
+  <a class="help" href="{% url help LANGUAGE_CODE %}#operations">({% trans "Help for operations" %})</a>
   <br/>
 
   <span style="display:none" id="span-delete">
@@ -150,7 +150,7 @@
   </span>
 
   <span style="display:none" id="span-set_labels">
-    {% trans 'Warning: this action will remove all other labels from the selected words.' %}<br/>
+    {% trans 'Warning: this operation will remove all other labels from the selected words.' %}<br/>
     {% trans 'Labels' %}: <input type="text" name="set_labels-labels" value=""><br/>
     <input type="submit" value="{% trans 'Set the labels of the selected word pairs!' %}">
   </span>

@@ -73,7 +73,7 @@ urlpatterns = patterns('ew.views',
         view='practice',
         name='practice'),
 
-    # Search and actions
+    # Search and operations
     url(r'^search/$',
         view='search',
         name='search'),
@@ -83,9 +83,9 @@ urlpatterns = patterns('ew.views',
     url(r'^dict/update-word/$',
         view='update_word',
         name='update_word'),
-    url(r'^action-on-word-pairs/$',
-        view='action_on_word_pairs',
-        name='action_on_word_pairs'),
+    url(r'^operation-on-word-pairs/$',
+        view='operation_on_word_pairs',
+        name='operation_on_word_pairs'),
 )
 
 urlpatterns += patterns('django.contrib.auth.views',

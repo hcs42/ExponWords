@@ -95,7 +95,8 @@ The main page has the following menu items for logged in users:
 <ul>
   <li>Dictionaries: List of dictionaries the user has.</li>
   <li>Create new dictionary: Creates a new dictionary for the user.</li>
-  <li>Search: A search page that find words any dictionary. See
+  <li>Search and operations: A search page that finds word pairs in any
+  dictionary and allows operations on several word pairs. See
   <a href="#search">here</a> in more detail.</li>
   <li>List all words: A page that lists the words in all dictionaries.</li>
   <li>Show my future: A page that shows the number of words that will be asked
@@ -116,7 +117,8 @@ dictionary. It has the following menu items:
 <ul>
   <li>Practice: Practices today's words with the user. See
   <a href="#practice">here</a> in more detail.</li>
-  <li>Search: A search page that find words in the current dictionary. See
+  <li>Search and operations: A search page that finds word pairs in the current
+  dictionary and allows operations on several word pairs. See
   <a href="#search">here</a> in more detail.</li>
   <li>List all words: A page that lists all words in the current
   dictionary.</li>
@@ -179,11 +181,11 @@ dictionary. It has the following menu items:
 </ul>
 
 <h3 id="search">Search</h3>
-<p>The "Search" page can be used to search in dictionaries. The dictionary and
-the label in which the search shall be performed can be selected. The text
-typed into the textbox will be split into words (words shall be separated by
-spaces). Only the word pairs containing all search words will be shown. If the
-search box is empty, all word pairs will be printed.</p>
+<p>The "Search and operations" page can be used to search in dictionaries. The
+dictionary and the label in which the search shall be performed can be
+selected. The text typed into the textbox will be split into words (words shall
+be separated by spaces). Only the word pairs containing all search words will
+be shown. If the search box is empty, all word pairs will be printed.</p>
 <p>The searchbox is case insensitive and accent insensitive, so for example a
 search for "haz" will found the word pairs containing the text "Ház".</p>
 <p>The "label:" prefix can also be used to search for a specific label, e.g.
@@ -193,15 +195,15 @@ even in part (so e.g.the words with "veryoldword" label will be found as
 well).</p>
 <p>The program shows the search hits in a table. Showing this table can be
 turned off by unchecking the "Show hits" checkbox. In this case, the program
-will still perform the search and display the number of hits. The usual actions
-can be performed as well; but they will be performed on all found word pairs,
-there is no possibility of manually selecting a subset of them.</p>
+will still perform the search and display the number of hits. The usual
+operations can be performed as well; but they will be performed on all found
+word pairs, there is no possibility of manually selecting a subset of them.</p>
 
-<h3 id="actions">Actions</h3>
-<p>The "Search" page can also be used to perform certain actions on word pairs
-that have been selected. Word pairs can be selected with a single click on
-them. The selected word pairs are indicated by their gray background and the
-state of their checkboxes in the "Selected" column.</p>
+<h3 id="operations">Operations</h3>
+<p>The "Search and operations" page can also be used to perform certain
+operations on word pairs that have been selected. Word pairs can be selected
+with a single click on them. The selected word pairs are indicated by their
+gray background and the state of their checkboxes in the "Selected" column.</p>
 <ul>
   <li>Delete word pairs: deletes the selected word pairs.</li>
   <li>Move word pairs: moves the selected word pairs to the selected

@@ -204,8 +204,8 @@ msgstr "Add meg a mezőket helyesen!"
 msgid "Please specify the number of days!"
 msgstr "Add meg a napok számát!"
 
-msgid "Action not recognized"
-msgstr "Ismeretlen akció"
+msgid "Operation not recognized"
+msgstr "Ismeretlen művelet"
 
 msgid "No word pair modified."
 msgstr "Egy szópár sem lett módosítva."
@@ -277,8 +277,8 @@ msgstr "Az én szótáraim"
 msgid "You have no dictionaries."
 msgstr "Még nincs szótárad."
 
-msgid "Search"
-msgstr "Keresés"
+msgid "Search and operations"
+msgstr "Keresés és műveletek"
 
 msgid "List all words"
 msgstr "Minden szó kilistázása"
@@ -333,6 +333,9 @@ msgstr ""
 msgid "3+3="
 msgstr "3+3="
 
+msgid "Search"
+msgstr "Keresés"
+
 msgid "Number of word pairs found"
 msgstr "Talált szópárok száma"
 
@@ -345,8 +348,8 @@ msgstr "Dátumok"
 msgid "Strengths"
 msgstr "Erősség"
 
-msgid "Action"
-msgstr "Akció"
+msgid "Operation"
+msgstr "Művelet"
 
 msgid "Selection"
 msgstr "Kijelölés"
@@ -357,8 +360,8 @@ msgstr "Szerkesztés"
 msgid "Select all"
 msgstr "Mindegyik kijelölése"
 
-msgid "Please select an action"
-msgstr "Válassz ki egy akciót"
+msgid "Please select an operation"
+msgstr "Válassz ki egy műveletet"
 
 msgid "Delete word pairs"
 msgstr "Szópárok törlése"
@@ -381,8 +384,8 @@ msgstr "Címkék módosítása"
 msgid "Shift dates"
 msgstr "Dátumok eltolása"
 
-msgid "Help for actions"
-msgstr "Súgó az akciókhoz"
+msgid "Help for operations"
+msgstr "Súgó a műveletekhez"
 
 msgid "Delete the selected word pairs!"
 msgstr "Töröld a kijelölt szópárokat!"
@@ -406,9 +409,9 @@ msgid "Remove the labels from the selected word pairs!"
 msgstr "Töröld a címkéket a kiválasztott szópárokról!"
 
 msgid ""
-"Warning: this action will remove all other labels from the selected words."
+"Warning: this operation will remove all other labels from the selected words."
 msgstr ""
-"Vigyázat: ez az akció minden más címkét töröl a kiválasztott szópárokról."
+"Vigyázat: ez a művelet minden más címkét töröl a kiválasztott szópárokról."
 
 msgid "Set the labels of the selected word pairs!"
 msgstr "Módosítsd a kiválasztott szópárok címkéit!"

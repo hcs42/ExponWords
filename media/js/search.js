@@ -35,8 +35,8 @@ function select_all() {
     }
 }
 
-function action_selection_changed() {
-    var value = $('#action-selection').val();
+function operation_selection_changed() {
+    var value = $('#operation-selection').val();
     var spans = $('span[id^="span-"]');
     $.each(spans, function() {
         if ($(this).attr('id') == 'span-' + value) {
@@ -51,7 +51,7 @@ $(document).ready(function() {
 
     // Event handlers
     $('#select-all-button').click(select_all);
-    $('#action-selection').change(action_selection_changed);
+    $('#operation-selection').change(operation_selection_changed);
 
     select_all_text = $("#select-all-button").text();
     select_none_text = $("#translation-select-none").text();
