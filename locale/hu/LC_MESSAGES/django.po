@@ -286,6 +286,9 @@ msgstr "Bejelentkezés"
 msgid "Register"
 msgstr "Regisztráció"
 
+msgid "I forgot my password"
+msgstr "Elfelejtettem a jelszavam"
+
 msgid "Help"
 msgstr "Súgó"
 
