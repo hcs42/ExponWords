@@ -34,11 +34,10 @@ No action required.
 Upgrading to 0.9.0
 ------------------
 
+Set up the name of your site and set up an SMTP server: see README.markdown.
+
 Create the ew_ewuser table:
 
     $ python manage syncdb
-
-Make sure you have an SMTP server running and configure it in settings.py
-according to README.markdown.
 
 Add the email-addresses of the users.
