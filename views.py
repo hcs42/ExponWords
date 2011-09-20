@@ -217,7 +217,8 @@ def get_elevator_speech(request):
     return text
 
 def get_footnote(request):
-    text = (_('exponwords.zapto.org is a free service. ExponWords is open '
+    website = 'exponwords.com'
+    text = (_('%(site)s is a free service. ExponWords is open '
               'source software distributed under the %(gpl_pre)sGNU '
               'Generic Public Licence version 3%(gpl_post)s. The source '
               'code repository can be found '
@@ -225,7 +226,8 @@ def get_footnote(request):
             {'gpl_pre': '<a href="http://www.gnu.org/licenses/gpl-3.0.html">',
              'gpl_post': '</a>',
              'ewrepo_pre': '<a href="https://github.com/hcs42/ExponWords">',
-             'ewrepo_post': '</a>'})
+             'ewrepo_post': '</a>',
+             'site': website})
     return text
 
 def index(request):
