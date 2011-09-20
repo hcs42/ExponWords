@@ -1,6 +1,6 @@
 This web application helps practicing word pairs.
 
-It is used at http://exponwords.zapto.org/, which is yet a private beta. If you want to use it or try it out, please send me an email.
+It is used at http://exponwords.com (which is a free service).
 
 Installation
 ============
@@ -156,4 +156,4 @@ There is a file in this directory called UPDATE.txt which describes what actions
 Usage
 =====
 
-You can read the user documentation at http://exponwords.zapto.org/help/en/.
+You can read the user documentation at http://exponwords.com/help/en/.
