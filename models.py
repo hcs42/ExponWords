@@ -128,7 +128,16 @@ class EWUser(models.Model):
         sign, hours, minutes = r.group(1), int(r.group(2)), int(r.group(3))
         self.turning_point = ((-1 if sign == '-' else 1) *
                               (hours * 60 + minutes))
-            
+
+    @staticmethod
+    def get_email_receiver_emails():
+        return [user.email
+                for user in
+                   (User.objects.filter(ewuser__release_emails=True).
+                                 exclude(email='') |
+                    User.objects.filter(ewuser=None).
+                                 exclude(email=''))]
+
 
 def get_ewuser(user):
     try:
