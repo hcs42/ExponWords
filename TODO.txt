@@ -1,16 +1,19 @@
-Top priority (before releasing as a public web service)
--------------------------------------------------------
+Top priority
+------------
 
-- framework for sending emails about new versions
 
 Important
 ---------
 
-- screenshots
-- better design (CSS)
-- using the session for messages instead of having them in the GET request
+- don't bound the forms
+- bigger textbox in add word page
+- using the message framework for messages instead of having them in the GET
+  request
 - HTTPS
+- better design (CSS)
+- screenshots
 - using only relative links (HttpResponseRedirect)
+- fix "Previous" link on the Practice page
 
 Would be nice
 -------------
@@ -23,7 +26,6 @@ Would be nice
 - word queue for words to be learnt
     - "Activate words" page {0:30}
     - document that 9999-01-01 is special
-- using the "message" framework for logging
 
 Wishlist
 --------

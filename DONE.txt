@@ -77,3 +77,7 @@ v0.9:
 - Action > Operation, Options > Settings, Search > Search & operations
 - fix ip address in logs
 - Google Analytics
+
+v0.10:
+- framework for sending emails about new versions
+- utext lazy
