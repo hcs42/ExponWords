@@ -36,7 +36,7 @@ from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template import RequestContext
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 import django.db
 import django.utils.translation
 
@@ -47,17 +47,11 @@ import ExponWords.ew.models as models
 ##### General helper functions #####
 
 
-def set_message(request, message, translate=True):
+def set_message(request, message):
     request.session['ew_message'] = message
-    request.session['ew_message_translate'] = translate
 
 def pop_message(request):
-    message = request.session.pop('ew_message', '')
-    message_translate = request.session.get('ew_message_translate', False)
-    if message and message_translate:
-        return _(message)
-    else:
-        return message
+    return request.session.pop('ew_message', '')
 
 
 def set_lang_fun(request):
@@ -417,11 +411,11 @@ def add_word_pair(request, wdict):
                 'wdict': wdict})
 
 
-def import_word_pairs(request, wdict, import_fun, page_title, help_text):
+def import_word_pairs(request, wdict, import_fun, page_title, help_text, source):
 
     ImportForm = CreateImportWordPairsForm(wdict)
     if request.method == 'POST':
-        models.log(request, 'import_word_pairs', page_title)
+        models.log(request, 'import_word_pairs', source)
         form = ImportForm(request.POST)
         if form.is_valid():
             try:
@@ -460,7 +454,7 @@ def import_word_pairs_from_text(request, wdict):
     page_title = _('Import word pairs from text')
     help_text = ""
     return import_word_pairs(request, wdict, models.import_textfile,
-                             page_title, help_text)
+                             page_title, help_text, 'fromtext')
 
 
 @wdict_access_required
@@ -489,7 +483,7 @@ def import_word_pairs_from_tsv(request, wdict):
                 "and it contains these three columns, which are copied and "
                 "pasted here, then it will have exactly this format.")
     return import_word_pairs(request, wdict, models.import_tsv,
-                             page_title, help_text)
+                             page_title, help_text, 'fromtsv')
 
 
 @wdict_access_required
@@ -658,9 +652,7 @@ def ew_settings(request):
                 ewuser.save()
                 set_lang_fun(request)
                 settings_url = reverse('ew.views.ew_settings', args=[])
-                if False: # trick to make the i18n fw find the expr.
-                    _('Settings saved.')
-                set_message(request, 'Settings saved.', translate=True)
+                set_message(request, _('Settings saved.'))
                 return HttpResponseRedirect(settings_url)
             else:
                 message = _('Invalid language code') + ': ' + lang_code
