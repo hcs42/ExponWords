@@ -130,7 +130,10 @@ class WordPairForm(forms.ModelForm):
     class Meta:
         model = WordPair
         fields = models.WordPair.get_fields_to_be_edited()
-
+        widgets = {
+            'word_in_lang1': forms.Textarea(attrs={'rows': 3}),
+            'word_in_lang2': forms.Textarea(attrs={'rows': 3})
+        }
 
 def CreateImportWordPairsForm(wdict):
 

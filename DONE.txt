@@ -81,3 +81,4 @@ v0.9:
 v0.10:
 - framework for sending emails about new versions
 - utext lazy
+- bigger textbox in add word page
