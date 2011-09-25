@@ -15,6 +15,8 @@
 <span class="current_menu">{% trans "Add new word" %}</span>
 </p>
 
+{% include "ew/message.html" %}
+
 <p>{{ message|safe }}</p>
 
 <form action="{% url add_word_pair wdict.id %}" method="post">{% csrf_token %}

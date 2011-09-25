@@ -17,7 +17,7 @@
 
 <p>{{ help_text }}</p>
 
-<p>{{ message }}</p>
+{% include "ew/message.html" %}
 
 <form action="./" method="post">{% csrf_token %}
   <table>

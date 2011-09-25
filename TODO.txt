@@ -6,8 +6,6 @@ Important
 ---------
 
 - don't bound the forms
-- using the message framework for messages instead of having them in the GET
-  request
 - HTTPS
 - add new word: move the submit button to the right
 - better design (CSS)

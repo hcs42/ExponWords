@@ -15,6 +15,8 @@
 <a class="help" href="{% url help LANGUAGE_CODE %}#dict-page">({% trans "Help for this page" %})</a>
 </p>
 
+{% include "ew/message.html" %}
+
 <ul>
   <li><a href="{% url practice_wdict wdict.id %}">{% trans "Practice" %}</a></li>
   <li><a href="{% url search %}?dict={{ wdict.id }}">{% trans "Search and operations" %}</a></li>

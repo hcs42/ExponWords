@@ -12,13 +12,11 @@
 <a class="help" href="{% url help LANGUAGE_CODE %}#main-page">({% trans "Help for this page" %})</a>
 </p>
 
+{% include "ew/message.html" %}
+
 <!-- Interface for not logged in users -->
 
 {% if not user.is_authenticated %}
-
-{% if message %}
-<p class="message">{{ message }}</p>
-{% endif %}
 
 <ul>
   <li><a href="{% url login %}" >{% trans "Log in" %}</a></li>

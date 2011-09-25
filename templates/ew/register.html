@@ -13,9 +13,7 @@
 <span class="current_menu">{% trans "Register" %}</span>
 </p>
 
-<p>
-{{ message }}
-</p>
+{% include "ew/message.html" %}
 
 <form action="." method="post">{% csrf_token %}
  <!-- {% trans "Username" %}:<input name="username" type="text" />

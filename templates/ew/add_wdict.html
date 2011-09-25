@@ -13,7 +13,7 @@
 <span class="current_menu">{% trans "Create new dictionary" %}</span>
 </p>
 
-<p>{{ message }}</p>
+{% include "ew/message.html" %}
 
 <form action="{% url add_wdict %}" method="post">{% csrf_token %}
   <table>

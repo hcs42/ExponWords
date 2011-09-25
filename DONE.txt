@@ -82,3 +82,5 @@ v0.10:
 - framework for sending emails about new versions
 - utext lazy
 - bigger textbox in add word page
+- using the message framework for messages instead of having them in the GET
+  request

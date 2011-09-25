@@ -13,6 +13,8 @@
 <span class="current_menu">{% trans "Language" %}</span>
 </p>
 
+{% include "ew/message.html" %}
+
 <form action="/i18n/setlang/" method="post">
   {% csrf_token %}
   {% trans "Language" %}:<input name="next" type="hidden" value="/" />

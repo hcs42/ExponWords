@@ -34,7 +34,7 @@
 <a class="help" href="{% url help LANGUAGE_CODE %}#practice">({% trans "Help for this page" %})</a>
 </p>
 
-<p>{{ message }}</p>
+{% include "ew/message.html" %}
 
 <div>
   <span class="transfer-related">
