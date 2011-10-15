@@ -9,10 +9,13 @@ Important
 - using the message framework for messages instead of having them in the GET
   request
 - HTTPS
+- add new word: move the submit button to the right
 - better design (CSS)
 - screenshots
 - using only relative links (HttpResponseRedirect)
 - fix "Previous" link on the Practice page
+- exporting words should be actions
+- show source language on the practice page
 
 Would be nice
 -------------
@@ -33,5 +36,6 @@ Wishlist
 - authentication using openid
 - logging
     - number of hits and misses in stats
-- similar pages: memorize.com, szokincsfejleszto.hu
+- similar pages: memorize.com, szokincsfejleszto.hu,
+  http://www.szokincs.hu/?action=showpage&page=newbie
 - more efficient representation of words to practice within the practice page
