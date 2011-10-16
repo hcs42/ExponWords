@@ -21,8 +21,10 @@
   {% trans "3+3=" %}:<input name="six" type="text" /> -->
   <table>
     {{ form.as_table }}
+    <tr><td></td>
+      <td><input type="submit" value="{% trans 'Register' %}" /></td>
+    </tr>
   </table>
-  <input type="submit" value="{% trans 'Register' %}" />
 </form>
 
 {% endblock %}
