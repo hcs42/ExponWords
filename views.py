@@ -228,9 +228,11 @@ def index(request):
         set_lang_fun(request)
         username = user.username
         wdicts = WDict.objects.filter(user=user, deleted=False)
+        wdicts_augm = [(wdict, len(wdict.get_words_to_practice_today()))
+                       for wdict in wdicts]
     else:
         username = None
-        wdicts = None
+        wdicts_augm = None
 
     elevator_speech = get_elevator_speech(request)
     footnote = get_footnote(request)
@@ -239,7 +241,7 @@ def index(request):
     return render(
                request,
                'ew/index.html',
-               {'wdicts': wdicts,
+               {'wdicts_augm': wdicts_augm,
                 'username': username,
                 'elevator_speech': elevator_speech,
                 'footnote': footnote})
@@ -341,9 +343,13 @@ def help(request, lang):
 @wdict_access_required
 @set_lang
 def wdict(request, wdict):
+    words_count = len(wdict.wordpair_set.filter(deleted=False))
+    todays_words_count = len(wdict.get_words_to_practice_today())
     return render(request,
                   'ew/wdict.html',
-                  {'wdict': wdict})
+                  {'wdict': wdict,
+                   'words_count': words_count,
+                   'todays_words_count': todays_words_count})
 
 
 @wdict_access_required

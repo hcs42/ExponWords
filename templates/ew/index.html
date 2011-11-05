@@ -44,12 +44,17 @@
     <!-- Listing dictionaries -->
 
     <li>
-    {% if wdicts %}
+    {% if wdicts_augm %}
     {% trans "My dictionaries" %}:
     <ul>
-      {% for d in wdicts %}
+      {% for wdict, todays_words_count in wdicts_augm %}
       <li>
-      <a href="{% url wdict d.id %}">"{{ d.name }}"</a>
+      <a href="{% url wdict wdict.id %}">"{{ wdict.name }}"</a>
+      {% if todays_words_count %}
+      <a href="{% url practice_wdict wdict.id %}">({{ todays_words_count }})</a>
+      {% else %}
+      (0)
+      {% endif %}
       </li>
       {% endfor %}
     </ul>

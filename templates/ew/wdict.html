@@ -18,9 +18,9 @@
 {% include "ew/message.html" %}
 
 <ul>
-  <li><a href="{% url practice_wdict wdict.id %}">{% trans "Practice" %}</a></li>
+  <li><a href="{% url practice_wdict wdict.id %}">{% trans "Practice" %} ({{ todays_words_count }})</a></li>
   <li><a href="{% url search %}?dict={{ wdict.id }}">{% trans "Search and operations" %}</a></li>
-  <li><a href="{% url search %}?q=&amp;dict={{ wdict.id }}&amp;show_hits=on">{% trans "List all words" %}</a></li>
+  <li><a href="{% url search %}?q=&amp;dict={{ wdict.id }}&amp;show_hits=on">{% trans "List all words" %} ({{ words_count }})</a></li>
   <li><a href="{% url add_word_pair wdict.id %}">{% trans "Add new word pair" %}</a></li>
   <li><a href="{% url import_word_pairs_from_text wdict.id %}">{% trans "Import word pairs from text" %}</a></li>
   <li><a href="{% url export_word_pairs_to_text wdict.id %}">{% trans "Export word pairs to text" %}</a></li>
