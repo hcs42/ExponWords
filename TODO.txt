@@ -5,23 +5,20 @@ Top priority
 Important
 ---------
 
-- don't bound the forms
 - HTTPS
-- add new word: move the submit button to the right
 - better design (CSS)
-- screenshots
-- using only relative links (HttpResponseRedirect)
-- fix "Previous" link on the Practice page
-- exporting words should be actions
-- show source language on the practice page
+    - add new word: move the submit button to the right
+- help: add screenshots
+- help: mention similar pages: memorize.com, szokincsfejleszto.hu,
+  http://www.szokincs.hu/?action=showpage&page=newbie
+- exporting words should be an action
 
 Would be nice
 -------------
 
-- random should not be totally random: it could be deterministic within a day,
-  but it should also have a pointer about which word is next so that if you say
-  NO to a word, it will not come back if you reload the page only after
-  answering the words not yet asked
+- using JQuery delegates
+- mechanism for sharing dictionaries
+- importing/exporting CSV/JSON files
 - showing "(n)" when having multiple occurrences of the same word
 - word queue for words to be learnt
     - "Activate words" page {0:30}
@@ -30,10 +27,8 @@ Would be nice
 Wishlist
 --------
 
-- importing/exporting CSV/JSON files
-- authentication using openid
-- logging
-    - number of hits and misses in stats
-- similar pages: memorize.com, szokincsfejleszto.hu,
-  http://www.szokincs.hu/?action=showpage&page=newbie
-- more efficient representation of words to practice within the practice page
+- stats:
+    - number of hits and misses
+    - number of active users
+- using only relative links (HttpResponseRedirect)
+- don't bind the forms

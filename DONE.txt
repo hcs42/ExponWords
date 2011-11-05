@@ -84,3 +84,8 @@ v0.10:
 - bigger textbox in add word page
 - using the message framework for messages instead of having them in the GET
   request
+- practice number and links on the front page
+- fix "Previous" link on the Practice page
+- show source language on the practice page
+- sort the list of dictionaries alphabetically
+- modifying dictionary properties
