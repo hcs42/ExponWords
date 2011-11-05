@@ -49,6 +49,7 @@
   <div id="current_word_buttons">
     <a id="edit-word-button">{% trans "Edit current word" %}</a>
     <a id="edit-prev-word-button" class="nonlink">{% trans "Edit previous word" %}</a>
+    &nbsp; <!-- This nbsp fixes word wrapping on Android... -->
   </div>
   {% if ewuser.practice_arrangement == 'normal' %}
 <div id="buttons">
