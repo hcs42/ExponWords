@@ -103,7 +103,15 @@ function ask_word() {
         prev_word_index = word_index;
         word_index = word[3];
         explanation = word[4];
-        $('#question').text(question_word);
+
+        question = $('#question');
+        question.text(question_word);
+        if (direction == 1) {
+            question.append(" &rarr;");
+        } else {
+            question.prepend("&larr; ");
+        }
+
         $('#answer').text('');
         $('#explanation').text('');
         update_edit_words();
