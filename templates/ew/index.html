@@ -47,7 +47,7 @@
     {% if wdicts_augm %}
     {% trans "My dictionaries" %}:
     <ul>
-      {% for wdict, todays_words_count in wdicts_augm %}
+      {% for _, wdict, todays_words_count in wdicts_augm %}
       <li>
       <a href="{% url wdict wdict.id %}">"{{ wdict.name }}"</a>
       {% if todays_words_count %}

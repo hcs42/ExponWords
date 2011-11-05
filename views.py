@@ -228,8 +228,10 @@ def index(request):
         set_lang_fun(request)
         username = user.username
         wdicts = WDict.objects.filter(user=user, deleted=False)
-        wdicts_augm = [(wdict, len(wdict.get_words_to_practice_today()))
-                       for wdict in wdicts]
+        wdicts_augm = sorted([(normalize_string(wdict.name),
+                              wdict,
+                              len(wdict.get_words_to_practice_today()))
+                              for wdict in wdicts])
     else:
         username = None
         wdicts_augm = None
