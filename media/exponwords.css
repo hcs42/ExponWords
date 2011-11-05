@@ -126,3 +126,9 @@
 {
     color: red;
 }
+
+th
+{
+    text-align: left;
+    max-width: 300px;
+}
