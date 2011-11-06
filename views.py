@@ -120,6 +120,15 @@ class LenientChoiceField(forms.ChoiceField):
             self.is_really_valid = True
 
 
+class WDictForm(forms.Form):
+    name = forms.CharField(max_length=255,
+                           label=_("Name of the dictionary") + ':')
+    lang1 = forms.CharField(max_length=255,
+                            label=_("Language 1") + ':')
+    lang2 = forms.CharField(max_length=255,
+                            label=_("Language 2") + ':')
+
+
 class WordPairForm(forms.ModelForm):
     class Meta:
         model = WordPair
@@ -490,6 +499,38 @@ def import_word_pairs_from_tsv(request, wdict):
 
 @wdict_access_required
 @set_lang
+def modify_wdict(request, wdict):
+
+    if request.method == 'POST':
+        models.log(request, 'modify_wdict')
+        form = WDictForm(request.POST)
+        if form.is_valid():
+            for field in ('name', 'lang1', 'lang2'):
+                setattr(wdict, field, form.cleaned_data[field])
+            wdict.save()
+            messages.success(request, _('Dictionary modified.'))
+            wdict_url = reverse('ew.views.wdict', args=[wdict.id])
+            return HttpResponseRedirect(wdict_url)
+        else:
+            messages.error(request, _('Some fields are invalid.'))
+
+    elif request.method == 'GET':
+        form = WDictForm({'name': wdict.name,
+                          'lang1': wdict.lang1,
+                          'lang2': wdict.lang2})
+
+    else:
+        assert(False)
+
+    return render(
+               request,
+               'ew/modify_wdict.html',
+               {'form': form,
+                'wdict': wdict})
+
+
+@wdict_access_required
+@set_lang
 def delete_wdict(request, wdict):
 
     DeleteWDictForm = CreateDeleteWDictForm(wdict)
@@ -528,17 +569,9 @@ def delete_wdict(request, wdict):
 @set_lang
 def add_wdict(request):
 
-    class AddWDictForm(forms.Form):
-        name = forms.CharField(max_length=255,
-                               label=_("Name of the dictionary") + ':')
-        lang1 = forms.CharField(max_length=255,
-                                label=_("Language 1") + ':')
-        lang2 = forms.CharField(max_length=255,
-                                label=_("Language 2") + ':')
-
     if request.method == 'POST':
         models.log(request, 'add_wdict')
-        form = AddWDictForm(request.POST)
+        form = WDictForm(request.POST)
         if form.is_valid():
             wdict = WDict()
             wdict.user = request.user
@@ -553,7 +586,7 @@ def add_wdict(request):
             messages.error(request, _('Some fields are invalid.'))
 
     elif request.method == 'GET':
-        form = AddWDictForm()
+        form = WDictForm()
 
     else:
         assert(False)

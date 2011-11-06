@@ -25,6 +25,7 @@
   <li><a href="{% url import_word_pairs_from_text wdict.id %}">{% trans "Import word pairs from text" %}</a></li>
   <li><a href="{% url export_word_pairs_to_text wdict.id %}">{% trans "Export word pairs to text" %}</a></li>
   <li><a href="{% url import_word_pairs_from_tsv wdict.id %}">{% trans "Import word pairs from tab separated values" %}</a></li>
+  <li><a href="{% url modify_wdict wdict.id %}">{% trans "Modify" %}</a></li>
   <li><a href="{% url delete_wdict wdict.id %}">{% trans "Delete" %}</a></li>
 </ul>
 {% endblock %}

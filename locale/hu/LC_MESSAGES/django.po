@@ -48,6 +48,15 @@ msgstr "A következő, \"%(lang)s\" nyelv felőli gyakorlás dátuma"
 msgid "Strengh of word from \"%(lang)s\""
 msgstr "A szó \"%(lang)s\" nyelv felőli ereje"
 
+msgid "Name of the dictionary"
+msgstr "Szótár neve"
+
+msgid "Language 1"
+msgstr "Első nyelv"
+
+msgid "Language 2"
+msgstr "Második nyelv"
+
 msgid "Text"
 msgstr "Szöveg"
 
@@ -142,6 +151,9 @@ msgstr ""
 "Microsoft Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza, és "
 "azt ide bemásolod, akkor az épp ilyen formátumban lesz."
 
+msgid "Dictionary modified."
+msgstr "Szótár módosíŧva."
+
 msgid "Dictionary deleted."
 msgstr "Szótár törölve."
 
@@ -151,15 +163,6 @@ msgid ""
 msgstr ""
 "Jelöld be a \"Biztos vagy benne?\" jelölőnégyzetet, ha tényleg törölni "
 "akarod a szótárat!"
-
-msgid "Name of the dictionary"
-msgstr "Szótár neve"
-
-msgid "Language 1"
-msgstr "Első nyelv"
-
-msgid "Language 2"
-msgstr "Második nyelv"
 
 msgid "Dictionary created."
 msgstr "Szótár létrehozva."
@@ -331,6 +334,9 @@ msgstr "Kijelentkezés"
 msgid "Dictionary \"%(wdictname)s\""
 msgstr "\"%(wdictname)s\" szótár"
 
+msgid "Modify dictionary"
+msgstr "Szótár módosítása"
+
 msgid "Practice"
 msgstr "Gyakorlás"
 
@@ -480,3 +486,6 @@ msgstr "Szópárok exportálása szövegbe"
 
 msgid "Import word pairs from tab separated values"
 msgstr "Szópárok importálása tabbal elválasztott értékekből"
+
+msgid "Modify"
+msgstr "Módosítás"
