@@ -41,3 +41,8 @@ Create the ew_ewuser table:
     $ python manage syncdb
 
 Add the email-addresses of the users.
+
+Upgrading to 0.10.0
+-------------------
+
+No action required.
