@@ -161,6 +161,9 @@ msgstr "Első nyelv"
 msgid "Language 2"
 msgstr "Második nyelv"
 
+msgid "Dictionary created."
+msgstr "Szótár létrehozva."
+
 msgid "Sum"
 msgstr "Összesen"
 
@@ -200,11 +203,11 @@ msgstr "Magyarázat mérete"
 msgid "Send me emails when ExponWords has new features"
 msgstr "Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe"
 
-msgid "Settings saved."
-msgstr "Beállítások elmentve."
-
 msgid "Invalid language code"
 msgstr "Érvénytelen nyelvkód"
+
+msgid "Settings saved."
+msgstr "Beállítások elmentve."
 
 msgid "All"
 msgstr "Mind"
