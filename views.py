@@ -391,8 +391,9 @@ def add_word_pair(request, wdict):
         wpid = request.GET.get('wp')
         if wpid is not None:
             wdict_url = reverse('ew.views.edit_word_pair', args=[wpid])
-            message = (_('Word pair added') +
-                       ': <a href="' + wdict_url + '">' + _('edit') + '</a>')
+            message = (unicode(_('Word pair added')) +
+                       ': <a href="' + wdict_url + '">' +
+                       unicode(_('edit')) + '</a>')
         else:
             message = ''
 
