@@ -105,15 +105,15 @@ function ask_word() {
         explanation = word[4];
 
         question = $('#question');
-        question.text(question_word);
+        question.html(question_word);
         if (direction == 1) {
             question.append(" &rarr;");
         } else {
             question.prepend("&larr; ");
         }
 
-        $('#answer').text('');
-        $('#explanation').text('');
+        $('#answer').html('');
+        $('#explanation').html('');
         update_edit_words();
 
         todays_wordlist.shift();
@@ -135,7 +135,7 @@ function show_yesno_buttons() {
 
 function answer_button() {
     state = 'intermediate';
-    $('#answer').text(solution_word);
+    $('#answer').html(solution_word);
     $('#explanation').html(explanation);
     show_yesno_buttons();
     state = 'yesno';

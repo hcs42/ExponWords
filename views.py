@@ -736,8 +736,9 @@ def ew_settings(request):
 ##### Practice #####
 
 
-def explanation_to_html(explanation):
-    """Escapes the given explanation so that it can be printed as HTML.
+def escape_for_html(explanation, indent=False):
+    """Escapes the given string so that it can be printed as HTML. Optionally
+    it indents each line with 4 non-breakable spaces.
 
     **Argument:**
 
@@ -746,28 +747,33 @@ def explanation_to_html(explanation):
     **Returns:** str
     """
 
+    # Remove the trailing newline
+    if (len(explanation) > 1) and (explanation[-1] == '\n'):
+        explanation = explanation[:-1]
+
+    # Indentation
     def insert_nbps(matchobject):
         """Returns the same number of "&nbsp;":s as the number of matched
         characters."""
         spaces = matchobject.group(1)
-        return '&nbsp;' * (4 + len(spaces))
-
+        space_count = len(spaces)
+        if indent:
+            space_count += 4
+        return '&nbsp;' * space_count
     regexp = re.compile(r'^( *)', re.MULTILINE)
-    if (len(explanation) > 1) and (explanation[-1] == '\n'):
-        explanation = explanation[:-1]
-    exp2 = re.sub(regexp, insert_nbps, explanation)
-    exp3 = '<br/>'.join(exp2.splitlines())
-    return exp3
+    explanation = re.sub(regexp, insert_nbps, explanation)
+
+    return '<br/>'.join(explanation.splitlines())
 
 
 def words_to_practice_to_json(words_to_practice):
     result = []
     for wp, direction in words_to_practice:
-        result.append([wp.word_in_lang1,
-                       wp.word_in_lang2,
+        result.append([escape_for_html(wp.word_in_lang1),
+                       escape_for_html(wp.word_in_lang2),
                        direction,
                        wp.id,
-                       explanation_to_html(wp.explanation)])
+                       escape_for_html(wp.explanation, indent=True)])
     return json.dumps(result)
 
 
@@ -951,8 +957,12 @@ def search(request):
         result_exists = True
         hits_count = len(word_pairs)
         if show_hits:
-            word_pairs_and_exps = [(wp, explanation_to_html(wp.explanation))
-                                   for wp in word_pairs]
+            word_pairs_and_exps = \
+                [(wp,
+                  escape_for_html(wp.word_in_lang1),
+                  escape_for_html(wp.word_in_lang2),
+                  escape_for_html(wp.explanation, indent=True))
+                 for wp in word_pairs]
         else:
             word_pairs_and_exps = []
 
