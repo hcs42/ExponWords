@@ -104,7 +104,7 @@ class EWUser(models.Model):
     practice_arrangement = models.CharField(default='normal', max_length=20)
 
     # Font sizes on the practice page
-    button_size = models.IntegerField(default=40)
+    button_size = models.IntegerField(default=35)
     question_size = models.IntegerField(default=20)
     answer_size = models.IntegerField(default=20)
     explanation_size = models.IntegerField(default=20)
