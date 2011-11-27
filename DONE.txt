@@ -89,3 +89,7 @@ v0.10:
 - show source language on the practice page
 - sort the list of dictionaries alphabetically
 - modifying dictionary properties
+
+v0.10.2:
+- Showing newlines in words
+- smaller default size (35) for the answer button

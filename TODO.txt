@@ -5,6 +5,8 @@ Top priority
 Important
 ---------
 
+- several pages in the search page
+- think about CR and LF newlines
 - HTTPS
 - better design (CSS)
     - add new word: move the submit button to the right
