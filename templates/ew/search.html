@@ -161,7 +161,8 @@
   </span>
 
   <span style="display:none" id="span-practice">
-    {% trans 'Words to practice' %}:
+    {% trans 'Words to practice' %}
+    ({% trans 'only the word that are due today will be strengthened!' %}):
     <select name="practice_scope"> 
       <option value="all">{% trans 'All selected words' %}</option> 
       <option value="due">{% trans 'Only those selected words that are due today' %}</option> 

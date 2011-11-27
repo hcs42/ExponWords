@@ -460,6 +460,9 @@ msgstr "Told el a kiválasztott szópárok dátumát!"
 msgid "Words to practice"
 msgstr "Gyakorlandó szavak"
 
+msgid "only the word that are due today will be strengthened!"
+msgstr "csak azok a szavak lesznek megerősítve, amiket már kérdezni kellene!"
+
 msgid "All selected words"
 msgstr "Minden kijelölt szópár"
 
