@@ -407,7 +407,7 @@ def add_word_pair(request, wdict):
         for field, value in saved_field.items():
             data[field] = value
 
-        form = WordPairForm(data)
+        form = WordPairForm(initial=data)
     else:
         assert(False)
 
