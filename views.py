@@ -367,6 +367,7 @@ def wdict(request, wdict):
 @set_lang
 def add_word_pair(request, wdict):
 
+    message = ''
     if request.method == 'POST':
         models.log(request, 'add_word_pair')
         form = WordPairForm(request.POST)
@@ -394,8 +395,6 @@ def add_word_pair(request, wdict):
             message = (unicode(_('Word pair added')) +
                        ': <a href="' + wdict_url + '">' +
                        unicode(_('edit')) + '</a>')
-        else:
-            message = ''
 
         data = {'date_added': models.get_today(request.user),
                 'date1': models.get_today(request.user),
