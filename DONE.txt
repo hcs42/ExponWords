@@ -93,3 +93,6 @@ v0.10:
 v0.10.2:
 - Showing newlines in words
 - smaller default size (35) for the answer button
+
+v0.11:
+- email autofill when registering

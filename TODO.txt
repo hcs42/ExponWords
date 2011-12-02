@@ -1,23 +1,35 @@
 Top priority
 ------------
 
+- add new word: move the submit button to the right
+- warning after finishing the practice: data is being sent...
 
 Important
 ---------
 
-- several pages in the search page
-- think about CR and LF newlines
-- HTTPS
-- better design (CSS)
-    - add new word: move the submit button to the right
+- add new wp: warning when adding a word pair: date in the future
+- add new wp: delete stored dates after a day
+- search&op: several pages in the search page
+- search&op: exporting words should be an action
+- practice page: show the tags when showing the answer
+- practice page: links should be opened in a new tab
+- modify UI language handling
+    - store the language of registration and stick with that
+    - show flags for UI languages
 - help: add screenshots
 - help: mention similar pages: memorize.com, szokincsfejleszto.hu,
-  http://www.szokincs.hu/?action=showpage&page=newbie
-- exporting words should be an action
+  http://www.szokincs.hu/?action=showpage&page=newbie,
+  supermemo.net, quizlet.com
+- email: send a "thanks for registering" email
+- email: daily email: these are the words to be practiced today
+- email: monthly reminder
+- create a revision history
 
 Would be nice
 -------------
 
+- think about CR and LF newlines
+- HTTPS
 - using JQuery delegates
 - mechanism for sharing dictionaries
 - importing/exporting CSV/JSON files
@@ -25,6 +37,7 @@ Would be nice
 - word queue for words to be learnt
     - "Activate words" page {0:30}
     - document that 9999-01-01 is special
+- redesign the design
 
 Wishlist
 --------
