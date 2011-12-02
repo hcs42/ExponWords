@@ -48,6 +48,21 @@
     margin-bottom: 20px;
 }
 
+
+#please_wait
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: green;
+    font-weight: bold;
+}
+
+#no_more_words
+{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 #question
 {
 }

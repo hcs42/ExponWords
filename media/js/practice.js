@@ -16,25 +16,37 @@
 // Copyright (C) 2011 Csaba Hoch
 
 
-// Constants
+///// Constants /////
+
 var RETRIES_COUNT = 24;
 var INITIAL_TIMEOUT = 3 * 1000; // 3 seconds
 var TIMEOUT_INTERVAL = 3 * 1000; // 3 second
 var MAX_TIMEOUT = 20 * 1000; // 20 seconds
 
-// Global state
+// The minimum time for the "Please wait" text to be displayed.
+var MIN_PLEASE_WAIT_DISPLAY = 1000; // 1 second.
+
+
+///// Global state /////
+
 var todays_wordlist;
 var transferred = 0;
-var transfer_in_progress = 0;
+var first_transfer_in_progress = 0;
+var retry_transfer_in_progress = 0;
 var answered = 0;
 var answered_incorrectly = 0;
 
 // State of the UI. Possible states:
 // - init
-// - intermediate: when the UI is doing some work
-// - answer: when we are waiting for the "answer" button to be pushed
-// - yesno: when we are waiting for the "yes" or "no" button to be pushed
-// - finished: when there are no more words to ask
+// - intermediate: the UI is doing some work
+// - answer: we are waiting for the "answer" button to be pushed
+// - yesno: we are waiting for the "yes" or "no" button to be pushed
+// - please_wait_hard: there are no more words to ask and we have been
+//   displaying "Please wait" for less then MIN_PLEASE_WAIT_DISPLAY seconds ago
+// - please_wait_soft: we have been displaying "Please wait" for more then
+//   MIN_PLEASE_WAIT_DISPLAY seconds ago, but we are still trying to send some
+//   updates
+// - finished: there are no more updates to send
 var state = 'init';
 
 // Details of the current word
@@ -46,6 +58,9 @@ var solution_word;
 var explanation;
 
 var prev_word_index = false;
+
+
+///// Functions /////
 
 function ask_first_word(result) {
     todays_wordlist = WORDS_TO_PRACTICE_TODAY;
@@ -82,16 +97,27 @@ function ask_word() {
 
     if (todays_wordlist.length == 0) {
 
+        state = 'please_wait_hard';
         prev_word_index = word_index;
         word_index = false;
 
-        $('#buttons').text($('#translation_no_more_words').text());
+        $('#buttons').hide();
         $('#question').hide();
         $('#answer').hide();
         $('#explanation').hide();
 
+        update_transfer_in_progress();
         update_edit_words();
-        state = 'finished';
+
+        // We display "Please wait" for at least MIN_PLEASE_WAIT_DISPLAY
+        // seconds so that the user has the time to read it. Then we move to
+        // 'please_wait_soft' state and remove the "Please wait" text when the
+        // acknowledgement about the last word arrives from the server.
+        setTimeout(
+            function() {
+                state = 'please_wait_soft';
+                update_transfer_in_progress();
+            }, MIN_PLEASE_WAIT_DISPLAY);
 
     } else {
 
@@ -150,11 +176,35 @@ function next_timeout(timeout) {
     }
 }
 
+function update_transfer_in_progress() {
+
+    // Display the number of words whose transfer is in progress
+    $('#transfer-in-progress').text(retry_transfer_in_progress);
+
+    // If "Please wait" has been displayed for MIN_PLEASE_WAIT_DISPLAY seconds
+    // and all words has been transferred, we move to 'finished' state
+    if (state == 'please_wait_soft' &&
+        first_transfer_in_progress + retry_transfer_in_progress == 0) {
+        state = 'finished';
+    }
+
+    // Maybe display the "Please wait" text
+    if (state == 'please_wait_hard' || state == 'please_wait_soft')
+        $('#please_wait').show();
+    else if (state == 'finished') {
+        $('#please_wait').hide();
+        $('#no_more_words').show();
+    }
+
+}
+
 function update_error(data, result, retries, timeout)
 {
     if (retries == RETRIES_COUNT) {
-        transfer_in_progress++;
-        $('#transfer-in-progress').text(transfer_in_progress);
+        // This is the first transfer error regarding this word
+        first_transfer_in_progress--;
+        retry_transfer_in_progress++;
+        update_transfer_in_progress();
     };
     setTimeout(
         function() {
@@ -164,6 +214,9 @@ function update_error(data, result, retries, timeout)
 
 function update_word(data, retries, timeout)
 {
+    // first_transfer_in_progress should be incremented by the caller of this
+    // function.
+
     if (retries != 0) {
         $.ajax({
             url: UPDATE_WORD_URL,
@@ -173,23 +226,29 @@ function update_word(data, retries, timeout)
             timeout: timeout,
             success: function(result) {
                 if (result == 'ok') {
+                    // The server updated the word
                     transferred++;
                     $('#transferred').text(transferred);
-                    if (retries != RETRIES_COUNT) {
-                        transfer_in_progress--;
-                        $('#transfer-in-progress').text(transfer_in_progress);
+                    if (retries == RETRIES_COUNT) {
+                        first_transfer_in_progress--;
+                    } else {
+                        retry_transfer_in_progress--;
                     }
+                    update_transfer_in_progress();
                 } else {
+                    // We got an error from the server
                     update_error(data, result, retries, timeout);
                 }
             },
             error: function(result) {
+                // We got an error; we may not have reached the server
                 update_error(data, result, retries, timeout);
             }
         });
     } else {
-        transfer_in_progress--;
-        $('#transfer-in-progress').text(transfer_in_progress);
+        // We give up the transfer
+        retry_transfer_in_progress--;
+        update_transfer_in_progress();
     }
 }
 
@@ -198,6 +257,7 @@ function yesno_button(answer) {
     var old_word_index = word_index;
     var old_direction = direction;
     var old_answer = answer;
+    first_transfer_in_progress++;
     ask_word();
     answered++;
     if (!answer) {

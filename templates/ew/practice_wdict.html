@@ -64,9 +64,13 @@
 </div>
 
 <!-- Translations -->
-<span style="display:none" id="translation_no_more_words">
+<div style="display:none" id="please_wait">
+  {% trans "Please wait..." %}
+</div>
+
+<div style="display:none" id="no_more_words">
   {% trans "No more words for today. Good job! (If you hit Refresh, you will iterate only on the words that you did not know.)" %}
-</span>
+</div>
 
 {% endblock %}
 {% block javascript %}
