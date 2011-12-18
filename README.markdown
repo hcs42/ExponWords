@@ -1,6 +1,6 @@
-This web application helps practicing word pairs.
+ExponWords is a web application for learning words. It helps learn the word pairs fed by the user using the principle that the more we have already practiced a word, the less we need to practice it in the future. You can read more at http://exponwords.com/help/en/.
 
-It is used at http://exponwords.com (which is a free service).
+ExponWords is used at http://exponwords.com (which is a free service).
 
 Installation
 ============
