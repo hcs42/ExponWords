@@ -295,7 +295,7 @@ def register(request):
         password2 = forms.CharField(max_length=255,
                                     widget=forms.PasswordInput,
                                     label=_('Password again'))
-        email_address = forms.CharField(max_length=255,
+        email = forms.CharField(max_length=255,
                                         label=_('Email address'))
         c = forms.CharField(max_length=255,
                             label='3 + 3 =')
@@ -307,7 +307,7 @@ def register(request):
             username = form.cleaned_data['username']
             password1 = form.cleaned_data['password1']
             password2 = form.cleaned_data['password2']
-            email_address = form.cleaned_data['email_address']
+            email_address = form.cleaned_data['email']
             captcha = form.cleaned_data['c']
             try:
                 return create_user(request, username, password1, password2,
