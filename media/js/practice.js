@@ -18,9 +18,19 @@
 
 ///// Constants /////
 
+// We try to transfer each word RETRIES_COUNT times.
 var RETRIES_COUNT = 24;
+
+// The timeout of the AJAX request when we try to transfer a word the first
+// time.
 var INITIAL_TIMEOUT = 3 * 1000; // 3 seconds
+
+// The timeoout of the AJAX request will be increased by TIMEOUT_INTERVAL ms
+// for each retry.
 var TIMEOUT_INTERVAL = 3 * 1000; // 3 second
+
+// The maximum value of the timeout of the AJAX request when a word is
+// transferred.
 var MAX_TIMEOUT = 20 * 1000; // 20 seconds
 
 // The minimum time for the "Please wait" text to be displayed.
@@ -36,17 +46,25 @@ var retry_transfer_in_progress = 0;
 var answered = 0;
 var answered_incorrectly = 0;
 
-// State of the UI. Possible states:
+// The state of the UI. Possible states:
 // - init
 // - intermediate: the UI is doing some work
 // - answer: we are waiting for the "answer" button to be pushed
 // - yesno: we are waiting for the "yes" or "no" button to be pushed
 // - please_wait_hard: there are no more words to ask and we have been
-//   displaying "Please wait" for less then MIN_PLEASE_WAIT_DISPLAY seconds ago
+//   displaying "Please wait" for less then MIN_PLEASE_WAIT_DISPLAY ms ago
 // - please_wait_soft: we have been displaying "Please wait" for more then
-//   MIN_PLEASE_WAIT_DISPLAY seconds ago, but we are still trying to send some
+//   MIN_PLEASE_WAIT_DISPLAY ms ago, but we are still trying to send some
 //   updates
 // - finished: there are no more updates to send
+//
+// State transitions:
+//
+//     init -> answer -> intermediate -> yesno -> please_wait_hard 
+//                ^                        |              V
+//                +------ intermediate <---+      please_wait_soft
+//                                                        V
+//                                                    finished
 var state = 'init';
 
 // Details of the current word
@@ -57,6 +75,7 @@ var question_word;
 var solution_word;
 var explanation;
 
+// The word index of the previous word
 var prev_word_index = false;
 
 
@@ -110,7 +129,7 @@ function ask_word() {
         update_edit_words();
 
         // We display "Please wait" for at least MIN_PLEASE_WAIT_DISPLAY
-        // seconds so that the user has the time to read it. Then we move to
+        // ms so that the user has the time to read it. Then we move to
         // 'please_wait_soft' state and remove the "Please wait" text when the
         // acknowledgement about the last word arrives from the server.
         setTimeout(
