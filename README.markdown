@@ -148,6 +148,11 @@ In Debian or Ubuntu, ExponWords can be set to start up automatically by performi
 
         # update-rc.d exponwords defaults
 
+Set up Google Analytics
+-----------------------
+
+If you want to use Google Analytics to track the usage statistics of your site, create a file `ew/templates/ew/custom_head.html` and place the tracking code given by Google in it (with the scripts tags).
+
 Upgrading ExponWords
 --------------------
 
