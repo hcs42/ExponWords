@@ -53,7 +53,7 @@ MEDIA_ROOT = os.path.join(PROJECT_DIR, 'ew/media/')
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://myexponwordsite.org/site_media/'
+MEDIA_URL = 'http://myexponwordssite.org/site_media/'
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.

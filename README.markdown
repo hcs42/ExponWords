@@ -5,7 +5,7 @@ ExponWords is used at http://exponwords.com (which is a free service).
 Installation
 ============
 
-This section describe how to set up an ExponWords server on Debian or Ubuntu Linux using the nginx web server and the sqlite database engine. These steps apply only if you want to run no other web service. If you do want that, then you can adjust these steps accordingly.
+This section describes how to set up an ExponWords server on Debian or Ubuntu Linux using the nginx web server and the sqlite database engine. These steps apply only if you want to run no other web service. If you do want that, then you can adjust these steps accordingly.
 
 Install the prerequisites
 -------------------------
@@ -31,7 +31,7 @@ Set up ExponWords and run it in debug mode
 
 1. Create a Django project (this will create a directory called `ExponWords` with some Python files):
 
-        $ django-admin startproject ExponWords
+        $ django-admin.py startproject ExponWords
 
 2. Clone the ExponWords repository as a Django application called `ew`:
 
@@ -44,12 +44,12 @@ Set up ExponWords and run it in debug mode
    * `ADMIN_ROOT`: change it to `'/admin/media/'`
    * `LOGIN_REDIRECT_URL`: set it to `'..'`
    * `MIDDLEWARE_CLASSES`: insert `'django.middleware.locale.LocaleMiddleware'` after `SessionMiddleware`
-   * `INSTALLED_APPS`: append `'ew'`
+   * `INSTALLED_APPS`: append `'django.contrib.admin'` and `'ew'`
    * `LANGUAGES`: copy it from the example
    * Anything else you want to customize (e.g. timezone)
    * Move the `DEBUG` and `TEMPLATE_DEBUG` variables into `debug_settings.py` (see the next step)
 
-4. Edit `debug_settings.py` (you will find an example in `ew/setup/debug_settings.py`):
+4. Create `debug_settings.py` (you will find an example in `ew/setup/debug_settings.py`):
 
    * `DATABASES`: fill it in
    * Move the `DEBUG` and `TEMPLATE_DEBUG` variables here from `settings.py` (see the previous step)
