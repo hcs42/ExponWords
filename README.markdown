@@ -67,10 +67,10 @@ Set up ExponWords and run it in debug mode
 
         $ cd ew; django-admin compilemessages; cd ..
 
-8. Copy the startup scripts and change the ports in them if you need to:
+8. Copy the startup script and change the ports in it if you need to:
 
-        $ cp ew/setup/start_production.sh ew/setup/start_debug.sh .
-        $ vim ew/setup/start_production.sh ew/setup/start_debug.sh
+        $ cp ew/setup/start_debug.sh ew/setup/start_debug.sh .
+        $ vim ew/setup/start_debug.sh ew/setup/start_debug.sh
 
 9. Start the server in debug mode:
 
@@ -87,7 +87,12 @@ Set up ExponWords and run it in debug mode
 Set up the nginx web server and run ExponWords in production mode
 -----------------------------------------------------------------
 
-1. Perform the following steps as root:
+1. Copy the startup script and change the ports in it if you need to:
+
+        $ cp ew/setup/start_production.sh ew/setup/start_production.sh .
+        $ vim ew/setup/start_production.sh ew/setup/start_production.sh
+
+2. Perform the following steps as root:
 
    Rename the original nginx configuration file:
 
@@ -102,7 +107,7 @@ Set up the nginx web server and run ExponWords in production mode
 
         # /etc/init.d/nginx restart
 
-2. Start the production server, try it and kill it:
+3. Start the production server, try it and kill it:
 
         $ ./start_production
         $ google-chrome http://localhost/
