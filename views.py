@@ -120,13 +120,15 @@ class LenientChoiceField(forms.ChoiceField):
             self.is_really_valid = True
 
 
-class WDictForm(forms.Form):
-    name = forms.CharField(max_length=255,
-                           label=_("Name of the dictionary") + ':')
-    lang1 = forms.CharField(max_length=255,
-                            label=_("Language 1") + ':')
-    lang2 = forms.CharField(max_length=255,
-                            label=_("Language 2") + ':')
+def create_WDictForm():
+    class WDictForm(forms.Form):
+        name = forms.CharField(max_length=255,
+                               label=_("Name of the dictionary") + ':')
+        lang1 = forms.CharField(max_length=255,
+                                label=_("Language 1") + ':')
+        lang2 = forms.CharField(max_length=255,
+                                label=_("Language 2") + ':')
+    return WDictForm
 
 
 class WordPairForm(forms.ModelForm):
@@ -501,6 +503,7 @@ def import_word_pairs_from_tsv(request, wdict):
 @set_lang
 def modify_wdict(request, wdict):
 
+    WDictForm = create_WDictForm()
     if request.method == 'POST':
         models.log(request, 'modify_wdict')
         form = WDictForm(request.POST)
@@ -569,6 +572,7 @@ def delete_wdict(request, wdict):
 @set_lang
 def add_wdict(request):
 
+    WDictForm = create_WDictForm()
     if request.method == 'POST':
         models.log(request, 'add_wdict')
         form = WDictForm(request.POST)
