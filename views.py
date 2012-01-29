@@ -45,6 +45,11 @@ from ExponWords.ew.models import WordPair, WDict
 import ExponWords.ew.models as models
 
 
+##### Constants #####
+
+ADD_WORD_PAIR_DATE_REMEMBER_SECONDS = 3600 # 1 hour
+
+
 ##### General helper functions #####
 
 
@@ -382,7 +387,8 @@ def add_word_pair(request, wdict):
             wdict.save()
 
             # saving some fields to the session
-            request.session['ew_add_wp_fields'] = wp.get_saved_fields()
+            request.session['ew_add_wp_fields'] = \
+                (wp.get_saved_fields(), datetime.datetime.now())
 
             # redirection
             wdict_url = reverse('ew.views.add_word_pair', args=[wdict.id])
@@ -404,9 +410,14 @@ def add_word_pair(request, wdict):
                 'strength1': 0,
                 'strength2': 0}
 
-        saved_field = request.session.get('ew_add_wp_fields', {})
-        for field, value in saved_field.items():
-            data[field] = value
+        # Load the saved fields if they were saved not longer than 6 hours ago
+        ew_add_wp_fields = request.session.get('ew_add_wp_fields')
+        if ew_add_wp_fields is not None:
+            saved_field, save_time = ew_add_wp_fields
+            if (datetime.datetime.now() - save_time <
+                datetime.timedelta(seconds=ADD_WORD_PAIR_DATE_REMEMBER_SECONDS)):
+                for field, value in saved_field.items():
+                    data[field] = value
 
         form = WordPairForm(initial=data)
     else:
