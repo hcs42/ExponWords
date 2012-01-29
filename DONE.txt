@@ -100,3 +100,4 @@ v0.11:
 - practice page: "Please wait" 
 - Submit buttons moved to the right column
 - Google Analytics code removed from the repository
+- add new wp: delete stored dates after a day

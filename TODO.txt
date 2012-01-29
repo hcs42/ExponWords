@@ -5,7 +5,6 @@ Top priority
 Important
 ---------
 
-- add new wp: delete stored dates after a day
 - search&op: several pages in the search page
 - search&op: exporting words should be an action
 - practice page: show the tags when showing the answer
@@ -20,7 +19,7 @@ Important
   supermemo.net, quizlet.com
 - email: send a "thanks for registering" email
 - email: daily email: these are the words to be practiced today
-- email: monthly reminder
+- email: monthly reminder (is it necessary...?)
 - create a revision history
 - nginx caching
 
@@ -30,6 +29,7 @@ Would be nice
 - practice page: remembers which words shall be practiced when all the words
   are over
 - practice page: when ready, give a link for loading the practice page of the next dictionary
+- practice page: "Other options" -> Prev. word, next word, star
 - think about CR and LF newlines
 - XHTML validation
 - HTTPS
