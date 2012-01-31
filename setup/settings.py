@@ -15,6 +15,11 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(PROJECT_DIR, 'production.db'),
+        'OPTIONS': {
+             # Helps avoiding "DatabaseError: database is locked" errors;
+             # see https://docs.djangoproject.com/en/dev/ref/databases/#database-is-locked-errors
+            'timeout': 20
+        },
     }
 }
 
