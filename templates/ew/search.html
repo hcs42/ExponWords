@@ -46,6 +46,22 @@
 
 {% if show_hits %}
 
+<p class="pagination">
+  <span class="step-links">
+    {% if pagination_info.has_previous %}
+    <a href="{{ pagination_url }}&page=1">&laquo; {% trans "First page" %}</a>
+    <a href="{{ pagination_url }}&page={{ pagination_info.previous_page_number }}">&lsaquo; {% trans "Previous page" %}</a>
+    {% endif %}
+  </span>
+  <span class="current">{{ current_page_index }}</span>
+  <span class="step-links">
+    {% if pagination_info.has_next %}
+    <a href="{{ pagination_url }}&page={{ pagination_info.next_page_number }}">{% trans "Next page" %} &rsaquo;</a>
+    <a href="{{ pagination_url }}&page={{ pagination_info.paginator.num_pages }}">{% trans "Last page" %} &raquo;</a>
+    {% endif %}
+  </span>
+</p>
+
 <table border="1" id="hits">
   <tr class="center_cell">
     <td class="tbl_header" colspan="2">{% trans "Words" %}</td>

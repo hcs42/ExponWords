@@ -224,8 +224,15 @@ msgstr "Szótár"
 msgid "Label"
 msgstr "Címke"
 
+msgid "Hits per page"
+msgstr "Találat oldalanként"
+
 msgid "Show hits"
 msgstr "Találatok mutatása"
+
+#, python-format
+msgid "Page %(current_page_index)s of %(page_count)s"
+msgstr "%(current_page_index)s. oldal (összesen %(page_count)s)"
 
 msgid "Word pair modified."
 msgstr "Szópár módosítva."
@@ -358,6 +365,9 @@ msgstr "Aktuális szó szerkesztése"
 msgid "Edit previous word"
 msgstr "Előző szó szerkesztése"
 
+msgid "Please wait..."
+msgstr "Várj..."
+
 msgid ""
 "No more words for today. Good job! (If you hit Refresh, you will iterate "
 "only on the words that you did not know.)"
@@ -373,6 +383,18 @@ msgstr "Keresés"
 
 msgid "Number of word pairs found"
 msgstr "Talált szópárok száma"
+
+msgid "First page"
+msgstr "Első oldal"
+
+msgid "Previous page"
+msgstr "Előző oldal"
+
+msgid "Next page"
+msgstr "Következő oldal"
+
+msgid "Last page"
+msgstr "Utolsó oldal"
 
 msgid "Words"
 msgstr "Szavak"

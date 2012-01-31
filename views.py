@@ -33,6 +33,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -923,6 +924,8 @@ def search(request):
     label_choices_full = ([('all', _('All'))] +
                           [(label, label) for label in labels])
 
+    hits_per_page_choices = [(str(i), str(i)) for i in (10, 20, 50, 100, 1000)]
+
     class SearchForm(forms.Form):
         q = forms.CharField(max_length=255,
                             label=_('Search expression') + ':',
@@ -933,6 +936,9 @@ def search(request):
         label = LenientChoiceField(choices=label_choices_full,
                                    label=_('Label') + ':',
                                    required=False)
+        hits_per_page = LenientChoiceField(choices=hits_per_page_choices,
+                                           label=_('Hits per page') + ':',
+                                           required=False)
         show_hits = forms.BooleanField(label=_('Show hits') + ':',
                                        required=False)
 
@@ -947,7 +953,16 @@ def search(request):
     query_text = form.cleaned_data['q']
     query_wdict = form.cleaned_data['dict']
     query_label = parse_query_label(form.cleaned_data['label'])
+    hits_per_page_raw = form.cleaned_data['hits_per_page']
     show_hits = form.cleaned_data['show_hits']
+
+    if not hits_per_page_raw:
+        hits_per_page = 10
+    else:
+        hits_per_page = int(hits_per_page_raw)
+
+    source_url = request.get_full_path()
+    pagination_url = remove_query_param(request.get_full_path(), 'page')
 
     # If we don't have a 'q' parameter, we will show the basic search page. If
     # we do have one, we will perform the search, even if it is empty.
@@ -959,40 +974,60 @@ def search(request):
             wdict = get_object_or_404(WDict, pk=int(query_wdict),
                                       user=request.user)
             form = SearchForm({'dict': query_wdict, 'show_hits': True})
-        word_pairs_and_exps = None
-        result_exists = False
-        hits_count = 0
-        show_hits = False
+
+        return render(request,
+                      'ew/search.html',
+                      {'form': form,
+                       'wdict': wdict,
+                       'source_url': source_url,
+                       'result_exists': False,
+                       'show_hits': False,
+                       'wdict_choices': wdict_choices})
 
     else:
         word_pairs = \
             search_in_db(request.user, query_wdict, query_label, query_text)
 
-        result_exists = True
-        hits_count = len(word_pairs)
+        paginator = Paginator(word_pairs, hits_per_page)
+        page = request.GET.get('page', 1)
+
+        try:
+            pagination_info = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            pagination_info = paginator.page(1)
+        except EmptyPage:
+            # If page is out of range (e.g. 9999), deliver last page of results.
+            pagination_info = paginator.page(paginator.num_pages)
+
+        current_page_index = \
+            (_('Page %(current_page_index)s of %(page_count)s') %
+             {'current_page_index': pagination_info.number,
+              'page_count': pagination_info.paginator.num_pages})
+
         if show_hits:
             word_pairs_and_exps = \
                 [(wp,
                   escape_for_html(wp.word_in_lang1),
                   escape_for_html(wp.word_in_lang2),
                   escape_for_html(wp.explanation, indent=True))
-                 for wp in word_pairs]
+                 for wp in pagination_info.object_list]
         else:
             word_pairs_and_exps = []
 
-    source_url = request.get_full_path()
-
-    return render(
-               request,
-               'ew/search.html',
-               {'form': form,
-                'wdict': wdict,
-                'word_pairs_and_exps': word_pairs_and_exps,
-                'source_url': source_url,
-                'result_exists': result_exists,
-                'show_hits': show_hits,
-                'hits_count': hits_count,
-                'wdict_choices': wdict_choices})
+        return render(request,
+                      'ew/search.html',
+                      {'form': form,
+                       'wdict': wdict,
+                       'source_url': source_url,
+                       'wdict_choices': wdict_choices,
+                       'show_hits': show_hits,
+                       'hits_count': len(word_pairs),
+                       'result_exists': True,
+                       'pagination_url': pagination_url,
+                       'pagination_info': pagination_info,
+                       'current_page_index': current_page_index,
+                       'word_pairs_and_exps': word_pairs_and_exps})
 
 
 @word_pair_access_required
