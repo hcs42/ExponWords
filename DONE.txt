@@ -96,8 +96,17 @@ v0.10.2:
 
 v0.11:
 - email autofill when registering
-- add new word: move the submit button to the right
 - practice page: "Please wait" 
 - Submit buttons moved to the right column
 - Google Analytics code removed from the repository
 - add new wp: delete stored dates after a day
+- search&op: several pages in the search page
+- search&op: exporting words should be an action
+- practice page: show the tags when showing the answer
+- practice page: opening links in a new tab
+- practice page: hide operations by default
+- modify UI language handling: store the language of registration and stick with that
+- help: mention similar pages
+- create a revision history
+- rename explanation to notes
+- release announcement framework

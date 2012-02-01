@@ -5,22 +5,10 @@ Top priority
 Important
 ---------
 
-- search&op: several pages in the search page
-- search&op: exporting words should be an action
-- practice page: show the tags when showing the answer
-- practice page: links should be opened in a new tab
-- practice page: another page order?
-- modify UI language handling
-    - store the language of registration and stick with that
-    - show flags for UI languages
 - help: add screenshots
-- help: mention similar pages: memorize.com, szokincsfejleszto.hu,
-  http://www.szokincs.hu/?action=showpage&page=newbie,
-  supermemo.net, quizlet.com
 - email: send a "thanks for registering" email
 - email: daily email: these are the words to be practiced today
 - email: monthly reminder (is it necessary...?)
-- create a revision history
 - nginx caching
 
 Would be nice
