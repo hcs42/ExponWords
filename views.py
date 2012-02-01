@@ -1150,6 +1150,12 @@ def operation_on_word_pairs(request):
         # We don't do an operation to the words themselves
         practice_scope = request.POST.get('practice_scope')
         do_operation = False
+    elif operation == 'export':
+        text = models.export_textfile(word_pairs=word_pairs_to_use)
+        return render(
+                   request,
+                   'ew/export_word_pairs_as_text.html',
+                   {'text': text})
     else:
         error_msg = _('Operation not recognized') + ': ' + str(operation)
 

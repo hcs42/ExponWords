@@ -280,8 +280,11 @@ msgstr "Szópár szerkesztése"
 msgid "Save"
 msgstr "Mentés"
 
-msgid "Export dictionary as text"
+msgid "Export dictionary to text"
 msgstr "Szótár exportálása szövegként"
+
+msgid "Export word pairs to text"
+msgstr "Szópárok exportálása szövegbe"
 
 msgid "Import word pairs"
 msgstr "Szópárok importálása"
@@ -441,6 +444,9 @@ msgstr "Címkék módosítása"
 msgid "Shift dates"
 msgstr "Dátumok eltolása"
 
+msgid "Export word pairs"
+msgstr "Szópárok exportálása"
+
 msgid "Help for operations"
 msgstr "Súgó a műveletekhez"
 
@@ -494,6 +500,12 @@ msgstr "Csak azok, amiket már kérdezni kellene"
 msgid "Go to the practice page!"
 msgstr "Menj a gyakorló oldalra!"
 
+msgid "Export format"
+msgstr "Export formátum"
+
+msgid "Export the selected word pairs!"
+msgstr "Exportáld a kijelölt szópárokat!"
+
 msgid "Select none"
 msgstr "Egyik kijelölése sem"
 
@@ -505,9 +517,6 @@ msgstr "Adott napon kérdezendő szópárok száma"
 
 msgid "Add new word pair"
 msgstr "Új szópár hozzáadása"
-
-msgid "Export word pairs to text"
-msgstr "Szópárok exportálása szövegbe"
 
 msgid "Import word pairs from tab separated values"
 msgstr "Szópárok importálása tabbal elválasztott értékekből"

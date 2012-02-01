@@ -418,7 +418,7 @@ def import_tsv(s, wdict):
     return word_pairs
 
 
-def export_textfile(wdict):
+def export_textfile(wdict=None, word_pairs=None):
     """Prints a dictionary in the old text format.
 
     Arguments:
@@ -427,8 +427,14 @@ def export_textfile(wdict):
     Returns: str
     """
 
+    if wdict is None and word_pairs is None:
+        raise EWException('export_textfile: Either the wdict or the word_pairs '
+                          'parameter has to be not None')
+    elif wdict is not None:
+        word_pairs = wdict.wordpair_set.filter(deleted=False)
+
     result = []
-    for wp in wdict.wordpair_set.filter(deleted=False):
+    for wp in word_pairs:
         result.append(
             '%s -- %s <%s %s><%s %s>\n' %
             (wp.word_in_lang1.replace('\n', ' ').replace('\r', ' '),

@@ -116,6 +116,7 @@
     <option value="set_labels">{% trans 'Set labels'%}</option> 
     <option value="shift_days">{% trans 'Shift dates'%}</option> 
     <option value="practice">{% trans 'Practice'%}</option> 
+    <option value="export">{% trans 'Export word pairs'%}</option> 
   </select>
   <a class="help" href="{% url help LANGUAGE_CODE %}#operations">({% trans "Help for operations" %})</a>
   <br/>
@@ -186,6 +187,14 @@
       <option value="due">{% trans 'Only those selected words that are due today' %}</option> 
     </select><br/>
     <input type="submit" value="{% trans 'Go to the practice page!' %}">
+  </span>
+
+  <span style="display:none" id="span-export">
+    {% trans 'Export format' %}:
+    <select name="export_format"> 
+      <option value="text">{% trans 'Text' %}</option> 
+    </select><br/>
+    <input type="submit" value="{% trans 'Export the selected word pairs!' %}">
   </span>
 
 </p>
