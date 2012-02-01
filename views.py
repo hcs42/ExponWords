@@ -784,11 +784,21 @@ def escape_for_html(explanation, indent=False):
 def words_to_practice_to_json(words_to_practice):
     result = []
     for wp, direction in words_to_practice:
+
+        if wp.explanation:
+            expl_labels = wp.explanation
+            if wp.labels:
+                expl_labels += '\n\n'
+        else:
+            expl_labels = ''
+        if wp.labels:
+            expl_labels += '[%s]' % wp.labels
+
         result.append([escape_for_html(wp.word_in_lang1),
                        escape_for_html(wp.word_in_lang2),
                        direction,
                        wp.id,
-                       escape_for_html(wp.explanation, indent=True)])
+                       escape_for_html(expl_labels, indent=True)])
     return json.dumps(result)
 
 
