@@ -89,13 +89,13 @@ ROOT_URLCONF = 'ExponWords.urls'
 TEMPLATE_DIRS = ()
 
 INSTALLED_APPS = (
+    'ew',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
-    'ew',
 )
 
 LOGIN_URL = '/login/'

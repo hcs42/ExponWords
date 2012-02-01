@@ -209,12 +209,6 @@ msgstr "Érvénytelen nyelvkód"
 msgid "Settings saved."
 msgstr "Beállítások elmentve."
 
-msgid "Announcement emails sent."
-msgstr "Értesítő levelek elküldve."
-
-msgid "Announcement texts saved."
-msgstr "Értesítő szöveg elmentve."
-
 msgid "All"
 msgstr "Mind"
 
@@ -259,6 +253,12 @@ msgstr "1 szópár módosítva."
 msgid "%(count)s word pairs modified."
 msgstr "%(count)s szópár módosítva."
 
+msgid "Announcement emails sent."
+msgstr "Értesítő levelek elküldve."
+
+msgid "Announcement texts saved."
+msgstr "Értesítő szöveg elmentve."
+
 msgid "Create new dictionary"
 msgstr "Új szótár készítése"
 
@@ -280,8 +280,7 @@ msgstr "Értesítő szöveg"
 msgid ""
 "The first line of the text will be the subject of the email; the rest will "
 "be the body."
-msgstr ""
-"A szöveg első sora lesz az e-mail tárgya, a többi a törzse."
+msgstr "A szöveg első sora lesz az e-mail tárgya, a többi a törzse."
 
 msgid "Save"
 msgstr "Mentés"
@@ -556,3 +555,76 @@ msgstr "Szópárok importálása tabbal elválasztott értékekből"
 
 msgid "Modify"
 msgstr "Módosítás"
+
+msgid "Password change successful"
+msgstr "A jelszó megváltoztatása sikeres"
+
+msgid "Password change"
+msgstr "Jelszó megváltoztatása"
+
+msgid "Change my password"
+msgstr "Változtasd meg a jelszavam"
+
+msgid "Password reset complete"
+msgstr "Jelszó törlése kész"
+
+msgid "Password reset"
+msgstr "Jelszó törlése"
+
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "Az új jelszó be lett állítva. Jelentkezz be az alábbi linken."
+
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr "Írd be az új jelszavad kétszer."
+
+msgid "Password reset unsuccessful"
+msgstr "Jelszó beállítása sikertelen"
+
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"A jelszót beállító link érvénytelen, valószínűleg azért, mert már "
+"felhasználták. Igényeljen új jelszó beállítást."
+
+msgid "Password reset successful"
+msgstr "Jelszó beállítása sikeres"
+
+msgid ""
+"We've e-mailed you instructions for setting your password to the e-mail "
+"address you submitted. You should be receiving it shortly."
+msgstr ""
+"Az információkat elküldtük e-mailben a megadott címre. Hamarosan meg kell "
+"érkeznie."
+
+#, python-format
+msgid ""
+"You are receiving this e-mail because you requested a password reset for "
+"your user account at %(site_name)s."
+msgstr ""
+"Azért kapod ezt az e-mailt, mert jelszó visszaállítását kérted ezen a "
+"weboldalon: %(site_name)s."
+
+msgid "Please go to the following page and choose a new password:"
+msgstr "Látogasd meg a következő oldalt, és válassz egy új jelszót:"
+
+msgid "Your username, in case you've forgotten:"
+msgstr "A felhasználóneved, ha elfelejtetted volna:"
+
+msgid "Thanks for using our site!"
+msgstr "Köszönjük, hogy használod az oldalunkat!"
+
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll e-mail "
+"instructions for setting a new one."
+msgstr ""
+"Elfelejtetted a jelszavad? Írd be az e-mail címed, és küldünk egy levelet a "
+"teendőkről."
+
+msgid "E-mail address:"
+msgstr "Email cím:"
+
+msgid "Reset my password"
+msgstr "Töröld a jelszavam"
