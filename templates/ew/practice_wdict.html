@@ -44,18 +44,23 @@
   <span id="answered"></span>
   (<span id="answered-incorrectly"></span>) /
   <span id="all"></span>
+  <button id="show-operations-button" class="nice-button">{% trans 'More' %}</button>
+  <div id="operations" class="practice-operations" style="display:none;">
+    <p>{% trans "Operations" %}:
+    <span id="hide-operations-button" class="nice-button">{% trans 'Hide' %}</span>
+    <ul>
+      <li><a id="edit-word-button" target="_blank">{% trans "Edit current word" %}</a></li>
+      <li><a id="edit-prev-word-button" class="nonlink" target="_blank">{% trans "Edit previous word" %}</a></li>
+    </ul>
+    </p>
+  </div>
 </div>
 <div id="main">
-  <div id="current_word_buttons">
-    <a id="edit-word-button" target="_blank">{% trans "Edit current word" %}</a>
-    <a id="edit-prev-word-button" class="nonlink" target="_blank">{% trans "Edit previous word" %}</a>
-    &nbsp; <!-- This nbsp fixes word wrapping on Android... -->
-  </div>
   {% if ewuser.practice_arrangement == 'normal' %}
 <div id="buttons">
-  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="yes-button">{% trans "YES" %}</span>
-  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</span>
-  <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</span>
+  <button class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="yes-button">{% trans "YES" %}</button>
+  <button class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</button>
+  <button class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</button>
 </div>
 <div id="question" style="font-size:{{ ewuser.question_size }}"></div>
 <div id="answer" style="font-size:{{ ewuser.answer_size }}"></div>

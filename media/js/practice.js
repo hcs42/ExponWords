@@ -314,6 +314,15 @@ $(document).ready(function() {
     $('#ok-button').click(answer_button);
     $('body').keypress(ew_keypress);
 
+    $('#show-operations-button').click(function() {
+        $('#show-operations-button').hide();
+        $('#operations').show();
+    });
+    $('#hide-operations-button').click(function() {
+        $('#show-operations-button').show();
+        $('#operations').hide();
+    });
+
     // The first word
     ask_first_word();
 });

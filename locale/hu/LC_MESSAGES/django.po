@@ -362,6 +362,15 @@ msgstr "NEM"
 msgid "ANSWER"
 msgstr "VÁLASZ"
 
+msgid "More"
+msgstr "Több"
+
+msgid "Operations"
+msgstr "Műveletek"
+
+msgid "Hide"
+msgstr "Elrejt"
+
 msgid "Edit current word"
 msgstr "Aktuális szó szerkesztése"
 
