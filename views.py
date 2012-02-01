@@ -56,11 +56,8 @@ ADD_WORD_PAIR_DATE_REMEMBER_SECONDS = 3600 # 1 hour
 
 def set_lang_fun(request):
     lang = models.get_ewuser(request.user).lang
-    if lang == 'default':
-        request.session.pop('django_language', None)
-    else:
-        request.session['django_language'] = lang
-        django.utils.translation.activate(lang)
+    request.session['django_language'] = lang
+    django.utils.translation.activate(lang)
 
 
 def set_word_pair_form_labels(wdict, form):
@@ -239,7 +236,6 @@ def get_footnote(request):
     return text
 
 def index(request):
-
     user = request.user
     if user.is_authenticated():
         set_lang_fun(request)
@@ -270,7 +266,7 @@ def index(request):
 
 
 def create_user(request, username, password1, password2, email_address,
-                captcha):
+                captcha, lang):
 
     if captcha.strip() != '6':
         raise models.EWException(_('Some fields are invalid.'))
@@ -287,6 +283,9 @@ def create_user(request, username, password1, password2, email_address,
             raise models.EWException(_('This username is already used.'))
 
         user.save()
+        ewuser = models.get_ewuser(user)
+        ewuser.lang = lang
+        ewuser.save()
         messages.success(request, _('Successful registration. Please log in!'))
         index_url = reverse('ew.views.index', args=[])
         return HttpResponseRedirect(index_url)
@@ -317,9 +316,10 @@ def register(request):
             password2 = form.cleaned_data['password2']
             email_address = form.cleaned_data['email']
             captcha = form.cleaned_data['c']
+            lang = django.utils.translation.get_language()
             try:
                 return create_user(request, username, password1, password2,
-                                   email_address, captcha)
+                                   email_address, captcha, lang)
             except models.EWException, e:
                 messages.error(request, _(e.value))
         else:
@@ -650,8 +650,7 @@ def ew_settings(request):
         [('normal', _('Normal')),
          ('less_scrolling', _('Less scrolling'))]
 
-    langs = ([('default', _('Language set in the web browser'))] +
-             [(langcode, langname)
+    langs = ([(langcode, langname)
               for langcode, langname in settings.LANGUAGES])
 
     timezones = [(str(tz_index),
@@ -687,8 +686,7 @@ def ew_settings(request):
             c = form.cleaned_data
             lang_code = c['lang']
             if (lang_code and
-                (lang_code == 'default' or
-                 django.utils.translation.check_for_language(lang_code))):
+                (django.utils.translation.check_for_language(lang_code))):
                 ewuser = models.get_ewuser(request.user)
                 ewuser.lang = lang_code
                 ewuser.timezone = c['timezone']

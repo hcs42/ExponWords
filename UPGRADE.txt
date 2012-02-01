@@ -46,3 +46,18 @@ Upgrading to 0.10.0
 -------------------
 
 No action required.
+
+Upgrading to 0.11.0
+-------------------
+
+Modify the UI language of all users who have not chosen a language. You can do
+that either on the admin interface, or from the Django shell. For example this
+sets the UI language of all such users to English:
+
+    $ cd .../ExponWords
+    $ python manage.py shell
+    >>> import ew.models as models
+    >>> for user in models.EWUser.objects.filter(lang='default'):
+    ...     user.lang='en'
+    ...     user.save()
+

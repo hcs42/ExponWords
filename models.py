@@ -91,7 +91,7 @@ class EWUser(models.Model):
     user = models.OneToOneField(User, primary_key=True)
 
     # The language of the user interface
-    lang = models.CharField(max_length=10, default='default')
+    lang = models.CharField(max_length=10, default='en')
 
     # Time difference with UTC in hours (positive value means east from GMT)
     timezone = models.IntegerField(default=0)

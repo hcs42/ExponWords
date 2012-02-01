@@ -176,9 +176,6 @@ msgstr "Normál"
 msgid "Less scrolling"
 msgstr "Kevesebb görgetés"
 
-msgid "Language set in the web browser"
-msgstr "A böngészőben beállított nyelv"
-
 msgid "Language"
 msgstr "Nyelv"
 
