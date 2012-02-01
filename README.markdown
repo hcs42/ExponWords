@@ -42,10 +42,13 @@ Set up ExponWords and run it in debug mode
 
    * `DATABASES`: fill it in according to the database you want to use. I used sqlite.
    * `ADMIN_ROOT`: change it to `'/admin/media/'`
-   * `LOGIN_REDIRECT_URL`: set it to `'..'`
+   * `MEDIA_URL`: set it to your site (see the example)
    * `MIDDLEWARE_CLASSES`: insert `'django.middleware.locale.LocaleMiddleware'` after `SessionMiddleware`
    * `INSTALLED_APPS`: append `'django.contrib.admin'` and `'ew'`
    * `LANGUAGES`: copy it from the example
+   * `LOGIN_URL`: set it to `'/login/'`
+   * `LOGIN_REDIRECT_URL`: set it to `'/'`
+   * `DEFAULT_FROM_EMAIL`: set it to your email address
    * Anything else you want to customize (e.g. timezone)
    * Move the `DEBUG` and `TEMPLATE_DEBUG` variables into `debug_settings.py` (see the next step)
 

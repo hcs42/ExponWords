@@ -100,3 +100,4 @@ INSTALLED_APPS = (
 
 LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
+DEFAULT_FROM_EMAIL = 'myexponwordssite.com admin <admin@myexponwordssite.com>'
