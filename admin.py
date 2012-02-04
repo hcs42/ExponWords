@@ -27,3 +27,5 @@ class WordListAdmin(admin.ModelAdmin):
 
 admin.site.register(ew.models.WDict, WordListAdmin)
 admin.site.register(ew.models.EWUser)
+admin.site.register(ew.models.EWLogEntry)
+admin.site.register(ew.models.Announcement)

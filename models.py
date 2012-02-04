@@ -463,6 +463,11 @@ class EWLogEntry(models.Model):
     text = models.TextField(blank=True)
     ipaddress = models.TextField(blank=True)
 
+    def __unicode__(self):
+        return ('%s <%s> %s | %s' %
+                (self.datetime.strftime('%Y-%m-%d %H-%M-%S'), self.username,
+                 self.action, self.text))
+
 
 def log(request, action, text=''):
 
@@ -488,6 +493,9 @@ class Announcement(models.Model):
 
     lang = models.CharField(max_length=10, primary_key=True)
     text = models.TextField()
+
+    def __unicode__(self):
+        return self.lang + ' | ' + self.text.splitlines()[0]
 
 
 ##### Show the future #####
