@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-version = '0.10.4'
+version = '0.11.0'
 
 ##### Date handling #####
 
