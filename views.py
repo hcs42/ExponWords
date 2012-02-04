@@ -362,7 +362,8 @@ def help(request, lang):
 def docs(request, lang, page):
     models.log(request, page)
     filename = '%s-%s.html' % (page, lang)
-    filepath = os.path.join('ew', 'templates', 'ew', 'help', filename)
+    filepath = os.path.join(settings.PROJECT_DIR, 'ew', 'templates', 'ew',
+                            'help', filename)
     if os.path.exists(filepath):
         return render(
                    request,
