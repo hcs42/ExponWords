@@ -1,0 +1,184 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+Release notes
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+&raquo;
+<span class="current_menu"><a href="{% url help 'en' %}">Help</a></span>
+&raquo;
+<span class="current_menu">Release notes</span>
+</p>
+
+<h2 id="0-10">Version 0.10 (2011-11-06)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li><strong>New web address</strong>:
+  <a href="http://exponwords.com/">exponwords.com</a>.</li>
+  <li>The names and languages of dictionaries <strong>can be
+    modified</strong>.</li>
+  <li><strong>Links</strong> on the front page to the <strong>"Practice"
+    pages</strong>. The link text is the number of words due today.</li>
+  <li>The <strong>"Practice" page</strong> shows the <strong>direction</strong>
+  of the current question by printing an <strong>arrow</strong>.</li>
+  <li>The front page shows the list of dictionaries in an <strong>alphabetical
+    order</strong>.</li>
+</ul>
+
+<h2 id="0-9">Version 0.9 (2011-09-15)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li>Some things were <strong>renamed</strong>: "Action" &rarr; "operation",
+  "Search" page &rarr; "Search and operations" page, "Options" &rarr;
+  "Settings".</li>
+  <li>The <strong>word pairs</strong> on the "Search and operations" page can
+  be <strong>selected</strong> not only using the checkboxes, but by
+  <strong>clicking anywhere</strong> on the <strong>word pair's row</strong>.
+  The selected lines become gray.</li>
+  <li>After <strong>adding a word pair</strong>, the next page will contain a
+  <strong>link</strong> to the previously added word pair.</li>
+  <li>You can <strong>register</strong> an account, change your password and
+  reset it in case you have forgotten it.</li>
+  <li>On the "Settings" page, the <strong>time zone</strong> and the
+  <strong>turning point</strong> can be set besides the language. (The turning
+  point is the time of the day when ExponWords will start asking the words of
+  that day.)</li>
+  <li>You can set your <strong>email address</strong> and <strong>whether you
+    would like to receive emails</strong> about new features.</li>
+  <li>You can choose between <strong>two arrangements</strong> for the
+  <strong>"Practice" page</strong> and you can <strong>set the size</strong> of
+  the buttons and text too.</li>
+</ul>
+
+<h2 id="0-8">Version 0.8 (2011-08-28)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li>The <strong>"Practice" page</strong> can be used with <strong>keyboard
+    shortcuts</strong>:</li>
+  <ul>
+    <li>pressing any key is equivalent to clicking on the "ANSWER" button;</li>
+    <li>pressing the "Y" or "I" key is equivalent to clicking on the "YES"
+    button;</li>
+    <li>pressing the "N" key is equivalent to clicking on the "NO" button.</li>
+  </ul>
+  <li><strong>Listing the hits</strong> can be <strong>turned off</strong> on
+  the <strong>"Search" page</strong>. This is useful if you want to do the same
+  operation on hundreds of word pairs (e.g. shift their dates), but the web
+  browser would be too slow because of the large page or you want to spare your
+  network usage.</li>
+  <li><strong>Labels</strong> can be specified when <strong>importing word
+    pairs</strong>; these labels will be added to the words.</li>
+  <li>The <strong>"Show my future"</strong> page (available from the front
+  page) was created that draws a <strong>graph</strong> displaying a prediction
+  about the number of words that will be asked each day in the next two
+  months.</li>
+</ul>
+
+<h2 id="0-7">Version 0.7 (2011-08-10)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li>The <strong>word pairs selected</strong> in the "Search" page <strong>can
+    be practiced</strong>. You can choose either practicing all the selected
+  words, or only those that are due.</li>
+</ul>
+
+<h2 id="0-6">Version 0.6 (2011-07-30)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li>On the <strong>"Search" page</strong>, the dates and strength of the
+  selected word pairs can be <strong>modified at once</strong>, and also labels
+  can be added, removed and modified at once.</li>
+  <li>When a new word pair is added, ExponWords <strong>remembers</strong> the
+  <strong>initial dates, strengths and labels</strong>. This way if several
+  word pairs are to be added e.g. with the same label, the label has to be
+  typed only for the first word pair; it will already be present in the form
+  for the rest of the word pairs.</li>
+</ul>
+
+<h2 id="0-5">Version 0.5 (2011-07-11)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li><strong>Moving word pairs</strong> (available from "Search page"):
+  Multiple word pairs can be moved to another dictionary.</li>
+  <li><strong>Shift dates</strong> (available from "Search page"): The dates of
+  the word pairs (based on which the program decides when to ask the word pair)
+  can be shifted with the number of given days. For example if 3 days is typed,
+  then a word which would otherwise be asked on 1st January will be asked only
+  on 4th January. Negative numbers can also be specified: in this case the
+  dates will be changed to earlier ones. This can be useful if you did not have
+  time to practice for a week, but do not want all the words due to be asked on
+  the first day. Using this feature, ExponWords can act as if that one week did
+  not exists.</li>
+</ul>
+
+<h2 id="0-4">Version 0.4 (2011-06-27)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li><strong>Labels</strong> can be assigned to word pairs when editing them
+  (a word pair may have several labels). They can be used to organize the
+  dictionaries.</li>
+  <li>The new <strong>"Search" page</strong> (which can be opened either from
+  the main page or the pages of the dictionaries) allows us to search among the
+  word pairs. The dictionary and the label to be searched can be selected.</li>
+  <li><strong>Negative strengths</strong> can be used. For example if -2 is
+  set, then the word will be asked today, tomorrow, the day after tomorrow, and
+  only then will the frequency decrease.</li>
+</ul>
+
+<h2 id="0-3">Version 0.3 (2011-03-20)</h2>
+<p>New in this release:</p>
+<ul>
+  <li>Code released under GPLv3 (as <strong>open source</strong>
+  software).</li>
+  <li><strong>"(Help)" links</strong> on more pages.</li>
+  <li><strong>"Select all" button</strong> added to the "View" page.</li>
+  <li>Better user experience during practice sessions with bad <strong>network
+    connections</strong> (the timeouts in the client were increased).</li>
+  <li><strong>FAQ</strong> translated to English help pages. (It was already
+  present on the Hungarian help page.)</li>
+</ul>
+
+<h2 id="0-2">Version 0.2 (2011-03-13)</h2>
+
+<p>New in this release:</p>
+<ul>
+  <li>ExponWords <strong>rewritten</strong> using the Django web
+  framework.</li>
+  <li>Users can log in using <strong>usernames and passwords</strong>.</li>
+  <li>You can create <strong>multiple dictionaries</strong>.</li>
+  <li>All details of a word pair (dates of next practices, strengths, etc.)
+  <strong>can be changed</strong>.</li>
+  <li>Word pairs can be <strong>deleted</strong>.</li>
+  <li>The <strong>date of addition</strong> is stored for each word pair.</li>
+  <li>The "Practice" page displays a <strong>link to the previous word</strong>
+  (it can be useful if you realize that you did not actually know a word just
+  after pressing "YES"; this way you can easy edit the word's strength).</li>
+  <li>Better user interface, e.g. <strong>menus</strong>.</li>
+</ul>
+
+<h2 id="0-1">Version 0.1 (2011-02-13)</h2>
+
+<p>The first release of ExponWords had the following features:</p>
+<ul>
+  <li><strong>Word pairs</strong> can be added and edited.</li>
+  <li><strong>"Practice" page</strong> with link to editing the words.</li>
+  <li>Word pairs can be copy-pasted from a spreadsheet application and
+  <strong>added at once.</strong></li>
+  <li><strong>English and Hungarian</strong> user interface and help
+  pages.</li>
+  <li><strong>No support yet</strong> for multiple dictionaries and multiple
+  users.</li>
+</ul>
+
+{% endblock %}

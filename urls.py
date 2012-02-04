@@ -32,9 +32,12 @@ urlpatterns = patterns('ew.views',
     url(r'^lang/$',
         view='language',
         name='language'),
-    url(r'^help/(?P<lang>[a-zA-Z-]+)/.*',
+    url(r'^help/(?P<lang>[a-zA-Z-]+)/$',
         view='help',
         name='help'),
+    url(r'^help/(?P<lang>[a-zA-Z-]+)/(?P<page>[a-zA-Z0-9_-]+)/$',
+        view='docs',
+        name='docs'),
 
     # Views when logged in
     url(r'^dict/(?P<wdict_id>\d+)/$',

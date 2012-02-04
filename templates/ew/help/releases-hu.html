@@ -1,0 +1,184 @@
+{% extends "ew/base.html" %}
+
+{% block title %}
+Verzióinformációk
+{% endblock %}
+
+{% block content %}
+
+<p>
+<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+&raquo;
+<span class="current_menu"><a href="{% url help 'hu' %}">Súgó</a></span>
+&raquo;
+<span class="current_menu">Verzióinformációk</span>
+</p>
+
+<h2 id="0-10">0.10. verzió (2011-11-06)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li><strong>Új webcím</strong>:
+  <a href="http://exponwords.com/">exponwords.com</a>.</li>
+  <li>A szótárak nevét és nyelveit <strong>lehet módosítani</strong>.</li>
+  <li><strong>Hivatkozások</strong> a főoldalon a <strong>"Gyakorlás"
+  oldalakra</strong>. A hivatkozás szövege a ma gyakorlandó szavak számát
+  mutatja.</li>
+  <li>A <strong>"Gyakorlás"</strong> oldal egy <strong>nyíllal</strong> mutatja
+  az aktuális kérdés <strong>irányát</strong>.</li>
+  <li>A főoldal <strong>betűrendben</strong> mutatja a szótárakat.</li>
+</ul>
+
+<h2 id="0-9">0.9. verzió (2011-09-15)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li>Néhány dolog <strong>át lett nevezve</strong>: "akció" &rarr; "művelet",
+  "Keresés" oldal &rarr; "Keresés és műveletek" oldal.</li>
+  <li>A "Keresés és műveletek" oldalon a szavakat nem csak a jelölődobozra való
+  kattintással lehet kijelölni; egy <strong>szópár sorában bárhova kattintva
+  kijelölődik</strong> a szópár. A kijelölést szürke háttér jelzi.</li>
+  <li>Egy <strong>szópár hozzáadása</strong> után a következő oldalon
+  megjelenik egy <strong>link</strong>, ami az új szópárra mutat.</li>
+  <li>Lehet <strong>regisztrálni</strong>, jelszót változtatni és új jelszót
+  kérni, ha elfelejtődne.</li>
+  <li>A "Beállítások" oldalon be lehet állítani a nyelv mellett az
+  <strong>időzónát</strong>, a napok közti <strong>fordulópontot</strong> (azaz
+  hány órától legyenek kérdezve az új nap szavai).</li>
+  <li>Be tudod állítani az <strong>e-mail címed</strong> és hogy
+  <strong>kérsz-e leveleket</strong> az új funkciókról.</li>
+  <li>Be lehet állítani a <strong>"Gyakorlás"</strong> oldal
+  <strong>elrendezését</strong> (kettő közül lehet választani) és a Gyakorlás
+  oldal gombjainak és szövegeinek <strong>méretét</strong>.</li>
+</ul>
+
+<h2 id="0-8">0.8. verzió (2011-08-28)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li><strong>A "Gyakorlás" oldalt billentyűkkel</strong> is lehet
+  vezérelni:</li>
+  <ul>
+    <li>bármelyik billentyű lenyomása egyenértékű a VÁLASZ gomb
+    megnyomásával;</li>
+    <li>az I vagy Y billentyű lenyomása egyenértékű az IGEN gomb
+    megnyomásával;</li>
+    <li>az N billentyű lenyomása egyenértékű a NEM gomb megnyomásával.</li>
+  </ul>
+  <li><strong> A "Keresés" oldalon ki lehet kapcsolni a találatok
+  listázását</strong>. Ez akkor hasznos, ha az ember több száz szópárral akarja
+  ugyanazt csinálni (például eltolni a dátumát), de a webböngésző lassú lenne a
+  sok szótól, vagy az ember takarékoskodik a hálózati forgalmával.</li>
+  <li><strong>Szópárok importálásakor</strong> meg lehet adni
+  <strong>címkéket</strong>, amik automatikusan rákerülnek a beimportált
+  szavakra.</li>
+  <li>A főoldalról elérhető <strong>"Mutasd a jövőm"</strong> oldal egy
+  <strong>grafikonon</strong> ábrázolja, hogy a következő két hónapban a
+  program előreláthatólag melyik nap hány szót fog kérdezni.</li>
+</ul>
+
+<h2 id="0-7">0.7. verzió (2011-08-10)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li>A "Keresés" oldalon <strong>kiválasztott szópárokat lehet
+  gyakorolni</strong>. Lehet kérni minden kijelölt szó kérdezését is, de csak
+  azokat is, amiket már kérdezni kellene a dátumuk alapján.</li>
+</ul>
+
+<h2 id="0-6">0.6. verzió (2011-07-30)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li>A <strong>"Keresés" oldalon</strong> lehet a kijelölt szópárok dátumait
+  és erősségeit <strong>egyszerre módosítani</strong>, továbbá a kijelölt
+  szavak hoz címkéket egyszerre hozzáadni, törölni, módosítani.</li>
+  <li>Amikor felviszünk egy új szópárt, a <strong>kezdeti dátumokat,
+  erősségeket és címkéket</strong> az ExponWords <strong>megjegyzi</strong>.
+  Így ha több szópárat akarunk egymás után felvinni pl. ugyanazzal a címkével,
+  akkor ezt csak az első szónál kell beírni, a többi esetben már benne lesz az
+  űrlapban.</li>
+</ul>
+
+<h2 id="0-5">0.5. verzió (2011-07-11)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li><strong>Szópárok mozgatása</strong> (a "Keresés" oldalról elérhető): A
+  kijelölt szópárokat a kijelölt szótárba mozgatja.</li>
+  <li><strong>Dátumok eltolása</strong> (a "Keresés" oldalról elérhető): A
+  kijelölt szópárok dátumjait (amik alapján a program eldönti, hogy mikor
+  kérdezi a szavakat legközelebb) eltolja a megadott nappal. Például ha 3 napot
+  adunk meg, akkor az a szó, ami egyébként január elsején lett volna kérdezve,
+  január negyedikén lesz kérdezve. Negatív számot is meg lehet adni, ekkor a
+  dátumok előre lesznek hozva. Ez hasznos lehet, ha az embernek mondjuk egy
+  hétig nem volt ideje gyakorolni, és nem akarja, hogy rázúduljon a sok szó,
+  amit már ideje lenne kérdezni. A dátum eltolásának segítségével úgy lehet
+  tenni, mintha az az egy hét nem is létezett volna a program
+  szempontjából.</li>
+</ul>
+
+<h2 id="0-4">0.4. verzió (2011-06-27)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li>A szópárokhoz rendelhetünk <strong>címkéket</strong> a szavak
+  szerkesztésekor (egy szópárhoz többet is). Ezek alapján lehet rendszerezni az
+  egy szótárban lévő szavakat.</li>
+  <li>Az új <strong>"Keresés" oldalon</strong> (ami elérhető a főoldalból és a
+  szótárak oldalaiból is) a szópárok között lehet keresni. Ki lehet választani,
+  hogy milyen szótárban és milyen címkéjű szavak között keressen.</li>
+  <li>Lehet használni <strong>negatív erősségeket</strong>. Például ha az ember
+  "-2"-t állít be erősségként, akkor a program kérdezi a megfelelő szót ma,
+  holnap, holnapután, és csak ezután kezdi el egyre ritkábban kérdezni.</li>
+</ul>
+
+<h2 id="0-3">0.3. verzió (2011-03-20)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li>A forráskód licencelve lett GPLv3 alatt (mint <strong>nyílt forráskódú
+  szoftver</strong>).</li>
+  <li>Több oldalon <strong>"(Súgó)" link</strong>.</li>
+  <li><strong>"Mindegyik kiválasztása" gomb</strong> a "Szótár megtekintése"
+  oldalra.</li>
+  <li>Jobb felhasználó élmény gyakorlás alatt, amikor rossz a <strong>hálózati
+  kapcsolat</strong> (a kliens tovább vár a szerver válaszára).</li>
+  <li>"Gyakran ismételt kérdések" lefordítása angolra.</li>
+</ul>
+
+<h2 id="0-2">0.2. verzió (2011-03-13)</h2>
+
+<p>Újdonságok:</p>
+<ul>
+  <li>Az ExponWords <strong>újra lett írva</strong>, hogy a Django webes
+  keretrendszert használja.</li>
+  <li><strong>Felhasználónév/jelszó</strong> párossal lehet belépni.</li>
+  <li>Egy felhasználó <strong>több szótárat</strong> is létrehozhat.</li>
+  <li>A szópárok minden adatát (pl. mikor kérdezze legközelebb, mennyire
+  erős) <strong>meg lehet változtatni</strong>.</li>
+  <li>Lehet szópárokat <strong>törölni</strong>.</li>
+  <li>Minden szópárhoz eltároljuk, hogy <strong>mikor lett hozzáadva</strong> a
+  szótárhoz.</li>
+  <li>A "Gyakorlás" oldalon van egy <strong>link az előző szóra</strong> (ha az
+  IGEN-re való rábökés utáni pillanatban jössz rá, hogy mégsem tudtad a szót,
+  akkor itt könnyen átírhatod).</li>
+  <li>Jobb felhasználói felület, pl. <strong>menürendszer</strong>.</li>
+</ul>
+
+<h2 id="0-1">0.1. verzió (2011-02-13)</h2>
+
+<p>Az ExponWords első verziójának funkciói:</p>
+<ul>
+  <li><strong>Szópárokat</strong> lehet hozzáadni és szerkeszteni.</li>
+  <li><strong>"Gyakorlás" oldal</strong>, amin egy link mutat az aktuális szó
+  szerkesztésére.</li>
+  <li>Szópárokat lehet másolni táblázatkezelőből és <strong>egyszerre
+  hozzáadni</strong> a szótárhoz.</li>
+  <li><strong>Angol és magyar</strong> felhasználói felület és
+  <strong>súgó</strong>.</li>
+  <li>Még <strong>nincs támogatva</strong> a több szótár és több
+  felhasználó.</li>
+</ul>
+
+{% endblock %}

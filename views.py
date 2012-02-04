@@ -18,6 +18,7 @@
 import datetime
 import functools
 import json
+import os
 import random
 import re
 import sys
@@ -350,7 +351,20 @@ def help(request, lang):
     if lang in langs:
         return render(
                    request,
-                   'ew/help/%s.html' % lang,
+                   'ew/help/help-%s.html' % lang,
+                   {'version': models.version})
+    else:
+        raise Http404
+
+
+def docs(request, lang, page):
+    models.log(request, page)
+    filename = '%s-%s.html' % (page, lang)
+    filepath = os.path.join('ew', 'templates', 'ew', 'help', filename)
+    if os.path.exists(filepath):
+        return render(
+                   request,
+                   'ew/help/' + filename,
                    {'version': models.version})
     else:
         raise Http404
