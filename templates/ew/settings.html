@@ -11,6 +11,7 @@
 <span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">{% trans "Settings" %}</span>
+<a class="help" href="{% url help LANGUAGE_CODE %}#settings">({% trans "Help for this page" %})</a>
 </p>
 
 {% include "ew/message.html" %}
