@@ -209,6 +209,12 @@ msgstr "Érvénytelen nyelvkód"
 msgid "Settings saved."
 msgstr "Beállítások elmentve."
 
+msgid "Announcement emails sent."
+msgstr "Értesítő levelek elküldve."
+
+msgid "Announcement texts saved."
+msgstr "Értesítő szöveg elmentve."
+
 msgid "All"
 msgstr "Mind"
 
@@ -265,6 +271,24 @@ msgstr "Új szó hozzáadása"
 msgid "Add word pair"
 msgstr "Szópár hozzáadása"
 
+msgid "Announce new release"
+msgstr "Értesítés új verzióról"
+
+msgid "Announcement text"
+msgstr "Értesítő szöveg"
+
+msgid ""
+"The first line of the text will be the subject of the email; the rest will "
+"be the body."
+msgstr ""
+"A szöveg első sora lesz az e-mail tárgya, a többi a törzse."
+
+msgid "Save"
+msgstr "Mentés"
+
+msgid "Recipients"
+msgstr "Címzettek"
+
 msgid "Delete dictionary"
 msgstr "Szótár törlése"
 
@@ -273,9 +297,6 @@ msgstr "Törlés"
 
 msgid "Edit word pair"
 msgstr "Szópár szerkesztése"
-
-msgid "Save"
-msgstr "Mentés"
 
 msgid "Export dictionary to text"
 msgstr "Szótár exportálása szövegként"
@@ -336,6 +357,12 @@ msgstr "Jelszó megváltoztatása"
 
 msgid "Log out"
 msgstr "Kijelentkezés"
+
+msgid "Administration"
+msgstr "Adminisztráció"
+
+msgid "Announce release"
+msgstr "Új verzió bejelentése"
 
 #, python-format
 msgid "Dictionary \"%(wdictname)s\""

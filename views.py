@@ -30,11 +30,13 @@ import urlparse
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -1242,3 +1244,126 @@ def operation_on_word_pairs(request):
         redirect_url = reverse('ew.views.index', args=[])
 
     return HttpResponseRedirect(redirect_url)
+
+
+##### Staff views #####
+
+
+def get_announcement_receivers():
+    """Returns the users (with their email addresses) who should receive
+    notifications about new releases.
+
+    Returns: {lang: [(username, email)]}
+    """
+
+    lang_users = {}
+    for user in models.EWUser.get_email_receiver_users():
+        lang = models.get_ewuser(user).lang
+        lang_users.setdefault(lang, []).append((user.username, user.email))
+    return lang_users
+
+
+def send_announcement(request):
+    """Sends release announcements in email."""
+
+    for lang, users in get_announcement_receivers().items():
+
+        # The first line of the stored announcement text will be the subject;
+        # the rest will be the body.
+        ann = models.Announcement.objects.get(lang=lang)
+        lines = ann.text.splitlines()
+        subject = lines[0]
+        body = '\n'.join(lines[1:])
+
+        for username, email in users:
+            models.log(request,
+                       'announcement_sending',
+                       'to %s in language %s' % (email, lang))
+            send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
+                      [email], fail_silently=False)
+            models.log(request,
+                       'announcement_sent',
+                       'to %s in language %s' % (email, lang))
+
+    messages.success(request, _('Announcement emails sent.'))
+
+
+@staff_member_required
+@set_lang
+def announce_release(request):
+
+    # Creating a form based on the supported languages.
+    #
+    # If it were a normally created class, it would look like this:
+    #
+    # class AnnounceReleaseForm(forms.Form):
+    #     text_en = forms.CharField(widget=forms.Textarea, label="en (English)")
+    #     text_hu = forms.CharField(widget=forms.Textarea, label="hu (Magyar)")
+    #     ...maybe other languages in the future
+    fields = \
+        dict([('text_' + langcode,
+                forms.CharField(widget=forms.Textarea,
+                                label=('%s (%s)' % (langcode, langname))))
+              for langcode, langname in settings.LANGUAGES])
+    AnnounceReleaseForm = \
+        type('AnnounceReleaseForm', (forms.Form,), fields)
+
+    message = ''
+    if request.method == 'POST':
+        models.log(request, 'announce_release')
+
+        action = None
+        if request.POST.get('save-button'):
+            action = 'save'
+        elif request.POST.get('announce-button'):
+            action = 'announce'
+        assert(action is not None)
+
+        form = AnnounceReleaseForm(request.POST)
+        if form.is_valid():
+
+            # Saving the text of the announcements
+            Ann = models.Announcement
+            for langcode, langname in settings.LANGUAGES:
+                try:
+                    ann = Ann.objects.get(lang=langcode)
+                except models.Announcement.DoesNotExist:
+                    ann = Ann.objects.create(lang=langcode)
+                ann.text = form.cleaned_data['text_' + langcode]
+                ann.save()
+
+            messages.success(request, _('Announcement texts saved.'))
+
+            # Sending the announcement emails if needed
+            if action == 'announce':
+                send_announcement(request)
+
+            url = reverse('ew.views.announce_release', args=[])
+            return HttpResponseRedirect(url)
+        else:
+            messages.error(request, _('Some fields are invalid.'))
+
+    elif request.method == 'GET':
+
+        data = {}
+
+        # Read the saved announcements from the database and put them into
+        # `data`
+        for langcode, langname in settings.LANGUAGES:
+            try:
+                announcement = models.Announcement.objects.get(lang=langcode)
+                data['text_' + langcode] = announcement.text
+            except models.Announcement.DoesNotExist:
+                pass
+
+        form = AnnounceReleaseForm(initial=data)
+
+    else:
+        assert(False)
+
+    return render(
+               request,
+               'ew/announce_release.html',
+               {'form':  form,
+                'message': message,
+                'lang_users': get_announcement_receivers()})

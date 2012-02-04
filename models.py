@@ -130,8 +130,8 @@ class EWUser(models.Model):
                               (hours * 60 + minutes))
 
     @staticmethod
-    def get_email_receiver_emails():
-        return [user.email
+    def get_email_receiver_users():
+        return [user
                 for user in
                    (User.objects.filter(ewuser__release_emails=True).
                                  exclude(email='') |
@@ -480,6 +480,14 @@ def log(request, action, text=''):
     except Exception, e:
         logentry.action = 'Logging failed'
     logentry.save()
+
+
+##### Announcing releases #####
+
+class Announcement(models.Model):
+
+    lang = models.CharField(max_length=10, primary_key=True)
+    text = models.TextField()
 
 
 ##### Show the future #####

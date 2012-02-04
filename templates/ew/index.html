@@ -76,7 +76,16 @@
     <li><a href="{% url password_change %}">{% trans "Change password" %}</a></li>
     <li><a href="{% url logout %}">{% trans "Log out" %}</a></li>
   </ul>
+
+  {% if user.is_staff %}
+  <li>{% trans "Administration" %}
+  <ul>
+    <li><a href="{% url announce_release %}">{% trans "Announce release" %}</a></li>
+  </ul></li>
+  {% endif %}
+
   <li><a href="{% url help LANGUAGE_CODE %}">{% trans "Help" %}</a></li>
+
 </ul>
 {% endif %} <!-- interface for logged in users -->
 

@@ -92,6 +92,11 @@ urlpatterns = patterns('ew.views',
     url(r'^operation-on-word-pairs/$',
         view='operation_on_word_pairs',
         name='operation_on_word_pairs'),
+
+    # Staff views
+    url(r'^announce_release/$',
+        view='announce_release',
+        name='announce_release'),
 )
 
 urlpatterns += patterns('django.contrib.auth.views',

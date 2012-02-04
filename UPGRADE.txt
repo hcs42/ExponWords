@@ -61,3 +61,6 @@ sets the UI language of all such users to English:
     ...     user.lang='en'
     ...     user.save()
 
+Create the ew_announcement table:
+
+    $ python manage syncdb
