@@ -38,7 +38,7 @@ Set up the name of your site and set up an SMTP server: see README.markdown.
 
 Create the ew_ewuser table:
 
-    $ python manage syncdb
+    $ python manage.py syncdb
 
 Add the email-addresses of the users.
 
@@ -50,6 +50,10 @@ No action required.
 Upgrading to 0.11.0
 -------------------
 
+Create the ew_announcement table:
+
+    $ python manage.py syncdb
+
 Modify the UI language of all users who have not chosen a language. You can do
 that either on the admin interface, or from the Django shell. For example this
 sets the UI language of all such users to English:
@@ -60,7 +64,3 @@ sets the UI language of all such users to English:
     >>> for user in models.EWUser.objects.filter(lang='default'):
     ...     user.lang='en'
     ...     user.save()
-
-Create the ew_announcement table:
-
-    $ python manage syncdb
