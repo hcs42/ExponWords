@@ -70,7 +70,7 @@ def set_word_pair_form_labels(wdict, form):
     f['date_added'].label = \
         _('Date of addition') + ':'
     f['explanation'].label = \
-        _('Explanation') + ':'
+        _('Notes') + ':'
     f['labels'].label = \
         _('Labels') + ':'
     f['date1'].label = \
@@ -514,7 +514,7 @@ def import_word_pairs_from_tsv(request, wdict):
     page_title = _('Import word pairs from tab-separated values')
     help_text = _("Write one word per line. Each word should contain two or "
                 "three fields: word in the first language; word in the "
-                "second language; explanation. The last one is optional. "
+                "second language; notes. The last one is optional. "
                 "The fields should be separated by a TAB character. If a "
                 "spreadsheet is opened in as spreadsheet editor application "
                 "(such as LibreOffice, OpenOffice.org or Microsoft Excel), "
@@ -685,7 +685,7 @@ def ew_settings(request):
         button_size = forms.IntegerField(label=_('Button size'))
         question_size = forms.IntegerField(label=_('Question size'))
         answer_size = forms.IntegerField(label=_('Answer size'))
-        explanation_size = forms.IntegerField(label=_('Explanation size'))
+        explanation_size = forms.IntegerField(label=_('Notes size'))
         email_address = forms.CharField(max_length=255,
                                         label=_('Email address'))
         release_emails = \
