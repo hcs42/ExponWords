@@ -428,7 +428,7 @@ def add_word_pair(request, wdict):
                 'strength1': 0,
                 'strength2': 0}
 
-        # Load the saved fields if they were saved not longer than 6 hours ago
+        # Load the saved fields if they were saved not longer than 1 hour ago
         ew_add_wp_fields = request.session.get('ew_add_wp_fields')
         if ew_add_wp_fields is not None:
             saved_field, save_time = ew_add_wp_fields
