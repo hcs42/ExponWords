@@ -6,8 +6,8 @@
 {% endblock %}
 
 {% block css %}
-<link rel=stylesheet href="/site_media/css/visualize.css" type="text/css">
-<link rel=stylesheet href="/site_media/css/visualize-light.css" type="text/css">
+<link rel=stylesheet href="/site_media/css/visualize.css?{% ew_version %}" type="text/css">
+<link rel=stylesheet href="/site_media/css/visualize-light.css?{% ew_version %}" type="text/css">
 {% endblock %}
 
 {% block content %}
@@ -45,8 +45,8 @@
 {% endblock %}
 
 {% block javascript %}
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/visualize.jQuery.js"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/visualize.jQuery.js?{% ew_version %}"></script>
   <script>
     $('#word_pairs_table').visualize({'type': 'bar'});
   </script>

@@ -4,7 +4,10 @@ import settings
 
 from django import template
 
+import ExponWords.ew.models as models
+
 register = template.Library()
+
 
 class CustomHead(template.Node):
 
@@ -17,6 +20,7 @@ class CustomHead(template.Node):
                 return f.read()
         else:
             return ''
+
 
 @register.tag(name='include_if_exists')
 def include_if_exists(parser, token):
@@ -34,3 +38,16 @@ def include_if_exists(parser, token):
     
     filepath = os.path.join(settings.PROJECT_DIR, 'ew', 'templates', filename)
     return CustomHead(filepath)
+
+
+class EwVersionNode(template.Node):
+
+    def render(self, context):
+        return 'v=' + models.version
+
+
+@register.tag(name='ew_version')
+def ew_version(parser, token):
+
+    tag_name, = token.split_contents()
+    return EwVersionNode()
