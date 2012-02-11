@@ -5,11 +5,17 @@ Top priority
 Important
 ---------
 
-- help: add screenshots
-- email: send a "thanks for registering" email
+- minor tweaks
+    - "help" link in new tab
+    - autofocus
+    - faq: why is it called ExponWords
+- registration: send a "thanks for registering" email
+- registration: have a "would like to receive emails" box
 - email: daily email: these are the words to be practiced today
-- email: monthly reminder (is it necessary...?)
 - nginx caching
+- help: add screenshots
+- announcement: %USER, link to unsubscribe
+- folding on the "Add word" page
 
 Would be nice
 -------------
@@ -39,3 +45,4 @@ Wishlist
     - number of active users
 - using only relative links (HttpResponseRedirect)
 - don't bind the forms
+- Google Translate link

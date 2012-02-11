@@ -110,3 +110,7 @@ v0.11:
 - create a revision history
 - rename explanation to notes
 - release announcement framework
+
+v0.12:
+- integrating password related pages
+- ?v={{version}}
