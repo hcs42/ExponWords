@@ -791,6 +791,9 @@ def escape_for_html(explanation, indent=False):
             space_count += 4
         return '&nbsp;' * space_count
     regexp = re.compile(r'^( *)', re.MULTILINE)
+    explanation = re.sub('&', '&amp;', explanation)
+    explanation = re.sub('<', '&lt;', explanation)
+    explanation = re.sub('>', '&gt;', explanation)
     explanation = re.sub(regexp, insert_nbps, explanation)
 
     return '<br/>'.join(explanation.splitlines())
