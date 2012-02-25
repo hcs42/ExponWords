@@ -19,7 +19,7 @@
 ///// Constants /////
 
 // We try to transfer each word RETRIES_COUNT times.
-var RETRIES_COUNT = 24;
+var RETRIES_COUNT = 100;
 
 // The timeout of the AJAX request when we try to transfer a word the first
 // time.
