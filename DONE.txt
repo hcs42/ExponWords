@@ -114,3 +114,14 @@ v0.11:
 v0.12:
 - integrating password related pages
 - ?v={{version}}
+- minor tweaks
+    - "help" link in new tab
+    - autofocus
+    - faq: why is it called ExponWords
+- registration: send a "thanks for registering" email
+- fix error message when saving incorrect data in Search&Op page
+- registration: have a "would like to receive emails" box
+- Add word page: basic and advanced views, reset buttons, table for dates and
+  strengths
+- practice page: load the words only in JS (undo an old commit)
+- practice page: option to take the dimmer words first

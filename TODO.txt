@@ -1,29 +1,24 @@
 Top priority
 ------------
 
-
 Important
 ---------
 
-- minor tweaks
-    - "help" link in new tab
-    - autofocus
-    - faq: why is it called ExponWords
-- registration: send a "thanks for registering" email
-- registration: have a "would like to receive emails" box
-- email: daily email: these are the words to be practiced today
+- Search&Operations page: show dimness optionally
+- help pages: "user" -> you
+- practice page: remembers which words shall be practiced when all the words
+- practice page: when ready, give a link for loading the practice page of the
+  next dictionary or load new words of the current dictionary if there are such
+  words
+- practice page: "Other options" -> Prev. word, next word, star
+- delete a word from the "Edit word" page
 - nginx caching
 - help: add screenshots
 - announcement: %USER, link to unsubscribe
-- folding on the "Add word" page
 
 Would be nice
 -------------
 
-- practice page: remembers which words shall be practiced when all the words
-  are over
-- practice page: when ready, give a link for loading the practice page of the next dictionary
-- practice page: "Other options" -> Prev. word, next word, star
 - think about CR and LF newlines
 - XHTML validation
 - HTTPS
@@ -36,6 +31,8 @@ Would be nice
     - document that 9999-01-01 is special
 - redesign the design
 - option for asking a word only in one direction
+- option for setting the basic font size
+- search: "due-before", "due-after" tags
 
 Wishlist
 --------
