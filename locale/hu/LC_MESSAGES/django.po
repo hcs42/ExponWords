@@ -90,6 +90,10 @@ msgstr ""
 "megtalálható <a href=\"http://www.gnu.hu/gplv3.html\">itt</a>). A "
 "forráskódot tartalmazó tároló %(ewrepo_pre)sitt%(ewrepo_post)s található. "
 
+#, python-format
+msgid "Welcome to %(site_name)s"
+msgstr "%(site_name)s regisztráció"
+
 msgid "Some fields are invalid."
 msgstr "Néhány mező érvénytelen."
 
@@ -363,6 +367,9 @@ msgstr "Adminisztráció"
 msgid "Announce release"
 msgstr "Új verzió bejelentése"
 
+msgid "Login"
+msgstr "Bejelentkezés"
+
 #, python-format
 msgid "Dictionary \"%(wdictname)s\""
 msgstr "\"%(wdictname)s\" szótár"
@@ -628,3 +635,19 @@ msgstr "Email cím:"
 
 msgid "Reset my password"
 msgstr "Töröld a jelszavam"
+
+#, python-format
+msgid "Hi %(username)s,"
+msgstr "Szia %(username)s!"
+
+#, python-format
+msgid "thank you for registering at %(site_name)s."
+msgstr "Köszönjük, hogy regisztráltál az %(site_name)s oldalra."
+
+#, python-format
+msgid ""
+"If you ever forgot your username or password, please go to http://"
+"%(site_domain)s and click on \"I forgot my password\"."
+msgstr ""
+"Ha bármikor elfelejtenéd a felhasználóneved vagy jelszavad, a http://"
+"%(site_domain)s oldalon és kattints az \"Elfelejtettem a jelszavam\" linkre."

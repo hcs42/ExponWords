@@ -34,12 +34,15 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
+from django.contrib.sites.models import get_current_site
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.template import Context, loader
 from django.template import RequestContext
 from django.utils.translation import ugettext_lazy as _
 import django.db
@@ -268,6 +271,28 @@ def index(request):
 ##### Views when logged out #####
 
 
+def send_registration_email(request, username, email_address, lang):
+
+    site = get_current_site(request)
+    subject = (_('Welcome to %(site_name)s') %
+               {'site_name': site.name})
+
+    template = loader.get_template('ew/registration/registration_email.html')
+    context = {'username': username,
+               'site_name': site.name,
+               'site_domain': site.domain}
+    body = template.render(Context(context))
+
+    models.log(request,
+               'registration_email_sending',
+               'to %s in language %s' % (email_address, lang))
+    send_mail(subject, body, settings.DEFAULT_FROM_EMAIL,
+              [email_address], fail_silently=False)
+    models.log(request,
+               'registration_email_sent',
+               'to %s in language %s' % (email_address, lang))
+
+
 def create_user(request, username, password1, password2, email_address,
                 captcha, lang):
 
@@ -289,6 +314,7 @@ def create_user(request, username, password1, password2, email_address,
         ewuser = models.get_ewuser(user)
         ewuser.lang = lang
         ewuser.save()
+        send_registration_email(request, username, email_address, lang)
         messages.success(request, _('Successful registration. Please log in!'))
         index_url = reverse('ew.views.index', args=[])
         return HttpResponseRedirect(index_url)

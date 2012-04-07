@@ -1,0 +1,9 @@
+{% load i18n %}{% load url from future %}{% autoescape off %}
+
+{% blocktrans %}Hi {{username}},{% endblocktrans %}
+
+{% blocktrans %}thank you for registering at {{ site_name }}.{% endblocktrans %}
+
+{% blocktrans %}If you ever forgot your username or password, please go to http://{{ site_domain }} and click on "I forgot my password".{% endblocktrans %}
+
+{% endautoescape %}
