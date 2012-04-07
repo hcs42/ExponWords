@@ -16,7 +16,7 @@
 &raquo;
 {% endif %}
 <span class="current_menu">{% trans "Search and operations" %}</span>
-<a class="help" href="{% url help LANGUAGE_CODE %}#search">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url help LANGUAGE_CODE %}#search" target="_blank">({% trans "Help for this page" %})</a>
 </p>
 
 <form action="{% url search %}" method="get">
@@ -119,7 +119,7 @@
     <option value="practice">{% trans 'Practice'%}</option> 
     <option value="export">{% trans 'Export word pairs'%}</option> 
   </select>
-  <a class="help" href="{% url help LANGUAGE_CODE %}#operations">({% trans "Help for operations" %})</a>
+  <a class="help" href="{% url help LANGUAGE_CODE %}#operations" target="_blank">({% trans "Help for operations" %})</a>
   <br/>
 
   <span style="display:none" id="span-delete">

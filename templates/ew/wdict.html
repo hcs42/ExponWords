@@ -12,7 +12,7 @@
 <span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">{% include "ew/menuitem_dict.html" %}</span>
-<a class="help" href="{% url help LANGUAGE_CODE %}#dict-page">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url help LANGUAGE_CODE %}#dict-page" target="_blank">({% trans "Help for this page" %})</a>
 </p>
 
 {% include "ew/message.html" %}
