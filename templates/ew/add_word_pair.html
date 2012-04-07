@@ -1,5 +1,6 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
+{% load ew_templatetags %}
 
 {% block title %}
 {% trans "Add new word" %}: "{{ wdict.name }}"
@@ -29,4 +30,9 @@
     </tr>
   </table>
 </form>
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
+  <script>$(document).ready(function(){ $("#id_word_in_lang1").focus(); });</script>
 {% endblock %}

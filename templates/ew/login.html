@@ -1,5 +1,6 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
+{% load ew_templatetags %}
 
 {% block title %}
 {% trans "Login" %}
@@ -26,4 +27,9 @@
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
+{% endblock %}
+
+{% block javascript %}
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
+  <script>$(document).ready(function(){ $("#id_username").focus(); });</script>
 {% endblock %}
