@@ -228,7 +228,7 @@ def get_elevator_speech(request):
     return text
 
 def get_footnote(request):
-    website = 'exponwords.com'
+    site = get_current_site(request).domain
     text = (_('%(site)s is a free service. ExponWords is open '
               'source software distributed under the %(gpl_pre)sGNU '
               'Generic Public Licence version 3%(gpl_post)s. The source '
