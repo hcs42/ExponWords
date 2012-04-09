@@ -130,6 +130,8 @@ class LenientChoiceField(forms.ChoiceField):
 
 
 def create_WDictForm():
+    # This class needs to be dynamically generated because of the lazy
+    # translation (see commit 44900082b9).
     class WDictForm(forms.Form):
         name = forms.CharField(max_length=255,
                                label=_("Name of the dictionary") + ':')
