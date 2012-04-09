@@ -1,0 +1,73 @@
+{% load i18n %}
+{% load ew_templatetags %}
+
+  {{ form.display_mode }}
+  <table>
+    <tr>
+      <th>{{ form.word_in_lang1.label_tag }}:</th>
+      <td>{{ form.word_in_lang1 }}</td>
+    </tr>
+    <tr>
+      <th>{{ form.word_in_lang2.label_tag }}:</th>
+      <td>{{ form.word_in_lang2 }}</td>
+    </tr>
+    <tr>
+      <th>{{ form.explanation.label_tag }}:</th>
+      <td>{{ form.explanation }}</td>
+    </tr>
+    <tr class="advanced" style="{{ advanced_style }}" >
+      <th>{{ form.labels.label_tag }}:</th>
+      <td>{{ form.labels }}</td>
+    </tr>
+    <tr class="advanced" style="{{ advanced_style }}" >
+      <th>{{ form.date_added.label_tag }}:</th>
+      <td>{{ form.date_added }}</td>
+    </tr>
+    <tr class="advanced" style="{{ advanced_style }}" >
+      <th>{% trans 'Dates and strengths' %}:</th>
+      <td> 
+        <div style="background: #cfc;">
+        <table>
+          <tr>
+            <td></td>
+            <td>{% trans 'Dates' %}:</td>
+            <td>{% trans 'Strengths' %}:</td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>{{ lang1 }} &rarr; {{ lang2 }}</td>
+            <td>{{ form.date1 }}</td>
+            <td>{{ form.strength1 }}</td>
+            <td>
+              <span id="reset1_button" class="nice-button">
+                {% trans 'Reset' %}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ lang2 }} &rarr; {{ lang1 }}</td>
+            <td>{{ form.date2 }}</td>
+            <td>{{ form.strength2 }}</td>
+            <td>
+              <span id="reset2_button" class="nice-button">
+                {% trans 'Reset' %}
+              </span>
+            </td>
+          </tr>
+        </table>
+        </div>
+      </td>
+    </tr>
+    <tr><td></td>
+      <td>
+        <input type="submit" value="{% trans submit_text %}" />
+        <span id="advanced_button" class="nice-button" style="{{ simple_style }}">
+          {% trans 'Advanced view' %}
+        </span>
+        <span id="simple_button" class="nice-button" style="{{ advanced_style }}">
+          {% trans 'Simple view' %}
+        </span>
+      </td>
+    </tr>
+  </table>
+

@@ -66,28 +66,6 @@ def set_lang_fun(request):
     django.utils.translation.activate(lang)
 
 
-def set_word_pair_form_labels(wdict, form):
-    f = form.fields
-    f['word_in_lang1'].label = \
-        (_('Word in "%(lang)s"') % {'lang': wdict.lang1}) + ':'
-    f['word_in_lang2'].label = \
-        (_('Word in "%(lang)s"') % {'lang': wdict.lang2}) + ':'
-    f['date_added'].label = \
-        _('Date of addition') + ':'
-    f['explanation'].label = \
-        _('Notes') + ':'
-    f['labels'].label = \
-        _('Labels') + ':'
-    f['date1'].label = \
-        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang1} + ':'
-    f['date2'].label = \
-        _('Date of next practice from "%(lang)s"') % {'lang': wdict.lang2} + ':'
-    f['strength1'].label = \
-        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang1} + ':'
-    f['strength2'].label = \
-        _('Strengh of word from "%(lang)s"') % {'lang': wdict.lang2} + ':'
-
-
 #### Helper functions > URLs and queries #####
 
 
@@ -141,15 +119,33 @@ def create_WDictForm():
                                 label=_("Language 2") + ':')
     return WDictForm
 
+def create_WordPairForm(wdict):
 
-class WordPairForm(forms.ModelForm):
-    class Meta:
-        model = WordPair
-        fields = models.WordPair.get_fields_to_be_edited()
-        widgets = {
-            'word_in_lang1': forms.Textarea(attrs={'rows': 3}),
-            'word_in_lang2': forms.Textarea(attrs={'rows': 3})
-        }
+    CF = forms.CharField
+    DF = forms.DateField
+    IF = forms.IntegerField
+
+    class WordPairForm(forms.Form):
+        word_in_lang1 = CF(label=(_('Word in "%(lang)s"') %
+                                  {'lang': wdict.lang1}),
+                           widget=forms.Textarea(attrs={'rows': 3}))
+        word_in_lang2 = CF(label=(_('Word in "%(lang)s"') %
+                                  {'lang': wdict.lang2}),
+                           widget=forms.Textarea(attrs={'rows': 3}))
+        explanation = CF(label=_('Notes'),
+                         widget=forms.Textarea,
+                         required=False)
+        labels = CF(label=_('Labels'),
+                    required=False)
+        date_added = DF(label=_('Date of addition'))
+        date1 = DF(widget=forms.TextInput(attrs={'size': 12}))
+        date2 = DF(widget=forms.TextInput(attrs={'size': 12}))
+        strength1 = IF(widget=forms.TextInput(attrs={'size': 5}))
+        strength2 = IF(widget=forms.TextInput(attrs={'size': 5}))
+        display_mode = CF(widget=forms.HiddenInput())
+
+    return WordPairForm
+        
 
 def CreateImportWordPairsForm(wdict):
 
@@ -240,7 +236,7 @@ def get_footnote(request):
              'gpl_post': '</a>',
              'ewrepo_pre': '<a href="https://github.com/hcs42/ExponWords">',
              'ewrepo_post': '</a>',
-             'site': website})
+             'site': site})
     return text
 
 def index(request):
@@ -426,18 +422,54 @@ def wdict(request, wdict):
                    'todays_words_count': todays_words_count})
 
 
+def get_default_wp_data(user):
+    return {'date_added': models.get_today(user),
+            'date1': models.get_today(user),
+            'date2': models.get_today(user),
+            'strength1': 0,
+            'strength2': 0}
+
+
+def copy_cleaned_fields(form, wp, fields):
+    for key in fields:
+        setattr(wp, key, form.cleaned_data[key])
+
+def set_word_pair_from_form(wp, form, user, display_mode):
+
+    copy_cleaned_fields(form, wp, WordPair.get_simple_fields())
+
+    if display_mode == 'advanced':
+        copy_cleaned_fields(form, wp, WordPair.get_advanced_fields())
+    else:
+        for key, value in get_default_wp_data(user).items():
+            setattr(wp, key, value)
+
+def get_styles(display_mode):
+    if display_mode == 'simple':
+        return '', 'display: none;'
+    elif display_mode == 'advanced':
+        return 'display: none;', ''
+
 @wdict_access_required
 @set_lang
 def add_word_pair(request, wdict):
 
+    WordPairForm = create_WordPairForm(wdict)
     message = ''
     if request.method == 'POST':
+
+        # saving the display mode to the session
+        display_mode = request.POST.get('display_mode', 'simple')
+        request.session['ew_wp_display_mode'] = display_mode
+
         models.log(request, 'add_word_pair')
+
         form = WordPairForm(request.POST)
         if form.is_valid():
 
             # creating the new word pair
-            wp = form.save(commit=False)
+            wp = WordPair()
+            set_word_pair_from_form(wp, form, request.user, display_mode)
             wdict.wordpair_set.add(wp)
             wp.save()
             wdict.save()
@@ -460,11 +492,7 @@ def add_word_pair(request, wdict):
                        ': <a href="' + wdict_url + '">' +
                        unicode(_('edit')) + '</a>')
 
-        data = {'date_added': models.get_today(request.user),
-                'date1': models.get_today(request.user),
-                'date2': models.get_today(request.user),
-                'strength1': 0,
-                'strength2': 0}
+        data = get_default_wp_data(request.user)
 
         # Load the saved fields if they were saved not longer than 1 hour ago
         ew_add_wp_fields = request.session.get('ew_add_wp_fields')
@@ -475,17 +503,25 @@ def add_word_pair(request, wdict):
                 for field, value in saved_field.items():
                     data[field] = value
 
+        display_mode = request.session.get('ew_wp_display_mode', 'simple')
+        data['display_mode'] = display_mode
+
         form = WordPairForm(initial=data)
     else:
         assert(False)
 
-    set_word_pair_form_labels(wdict, form)
+    simple_style, advanced_style = get_styles(display_mode)
+
     return render(
                request,
                'ew/add_word_pair.html',
                {'form':  form,
                 'message': message,
-                'wdict': wdict})
+                'wdict': wdict,
+                'lang1': wdict.lang1,
+                'lang2': wdict.lang2,
+                'simple_style': simple_style,
+                'advanced_style': advanced_style})
 
 
 def import_word_pairs(request, wdict, import_fun, page_title, help_text, source):
@@ -1100,12 +1136,24 @@ def search(request):
 @set_lang
 def edit_word_pair(request, wp, wdict):
 
+    WordPairForm = create_WordPairForm(wdict)
     if request.method == 'POST':
+
+        # saving the display mode to the session
+        display_mode = request.POST.get('display_mode', 'simple')
+        request.session['ew_wp_display_mode'] = display_mode
+
         models.log(request, 'edit_word_pair')
+
         form = WordPairForm(request.POST)
         if form.is_valid():
-            for field in models.WordPair.get_fields_to_be_edited():
-                setattr(wp, field, form.cleaned_data[field])
+
+            if display_mode == 'simple':
+                fields_to_copy = WordPair.get_simple_fields()
+            else:
+                fields_to_copy = WordPair.get_fields_to_be_edited()
+
+            copy_cleaned_fields(form, wp, fields_to_copy)
             wp.save()
             messages.success(request, _('Word pair modified.'))
             wdict_url = reverse('ew.views.edit_word_pair', args=[wp.id])
@@ -1114,18 +1162,30 @@ def edit_word_pair(request, wp, wdict):
             messages.error(request, _('Some fields are invalid.'))
 
     elif request.method == 'GET':
-        form = WordPairForm(instance=wp)
+        data = {}
+        for field in WordPair.get_fields_to_be_edited():
+            data[field] = getattr(wp, field)
+
+        display_mode = request.session.get('ew_wp_display_mode', 'simple')
+        data['display_mode'] = display_mode
+
+        form = WordPairForm(data=data)
 
     else:
         assert(False)
 
-    set_word_pair_form_labels(wdict, form)
+    simple_style, advanced_style = get_styles(display_mode)
+
     return render(
                request,
                'ew/edit_word_pair.html',
                {'form': form,
                 'word_pair': wp,
-                'wdict': wdict})
+                'wdict': wdict,
+                'lang1': wdict.lang1,
+                'lang2': wdict.lang2,
+                'simple_style': simple_style,
+                'advanced_style': advanced_style})
 
 
 def get_word_pairs_to_use(request):

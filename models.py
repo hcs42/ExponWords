@@ -274,6 +274,22 @@ class WordPair(models.Model):
         self.set_label_set(self.get_label_set_from_str(labels))
 
     @staticmethod
+    def get_simple_fields():
+        return ('word_in_lang1',
+                'word_in_lang2',
+                'explanation')
+
+    @staticmethod
+    def get_advanced_fields():
+        return ('labels',
+                'date_added',
+                'date1',
+                'date2',
+                'strength1',
+                'strength2')
+
+    @staticmethod
+    # fields_to_be_edited = simple_fields + advanced_fields
     def get_fields_to_be_edited():
         return ('word_in_lang1',
                 'word_in_lang2',
@@ -286,6 +302,8 @@ class WordPair(models.Model):
                 'strength2')
 
     @staticmethod
+    # Get the list of fields whose value should be saved when adding a word
+    # pair, and reused when another word pair is added
     def get_fields_to_be_saved():
         return ('labels',
                 'date1',

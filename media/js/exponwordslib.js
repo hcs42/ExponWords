@@ -47,3 +47,14 @@ function get_translation(callback) {
         }
     });
 }
+
+// Returns the current date in yyyy-mm-dd format
+function get_now_date() {
+    var now = new Date();
+    y = now.getFullYear();
+    m = now.getMonth() + 1;
+    d = now.getDate();
+    if (d < 10) { d = '0' + d; }
+    if (m < 10) { m = '0' + m; }
+    return y + '-' + m + '-' + d;
+}
