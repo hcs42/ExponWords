@@ -238,8 +238,14 @@ msgstr "%(current_page_index)s. oldal (összesen %(page_count)s)"
 msgid "Word pair modified."
 msgstr "Szópár módosítva."
 
-msgid "Please specify the fields correctly!"
-msgstr "Add meg a mezőket helyesen!"
+#, python-format
+msgid "Incorrect date: %(date)s. Please use the following format: YYYY-MM-DD."
+msgstr ""
+"Helytelen dátum: %(date)s. Használd a következő formátumot: ÉÉÉÉ-HH-NN."
+
+#, python-format
+msgid "Incorrect strength: %(strength)s. Please specify it as an integer."
+msgstr "Helytelen erősség: %(strength)s. Add meg egész számként!"
 
 msgid "Please specify the number of days!"
 msgstr "Add meg a napok számát!"

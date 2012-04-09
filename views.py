@@ -1177,23 +1177,33 @@ def operation_on_word_pairs(request):
         labels = request.POST.get(operation + '-labels')
         do_operation = True
     elif operation == 'set_dates_strengths':
-        try:
-            values = {}
-            fields = ('date1', 'date2', 'strength1', 'strength2')
-            for field in fields:
-                raw_value = request.POST.get(field, '').strip()
-                if raw_value == '':
-                    value = None
-                elif field.startswith('date'):
+        values = {}
+        fields = ('date1', 'date2', 'strength1', 'strength2')
+        for field in fields:
+            raw_value = request.POST.get(field, '').strip()
+            if raw_value == '':
+                value = None
+            elif field.startswith('date'):
+                try:
                     value = models.parse_date(raw_value)
-                elif field.startswith('strength'):
+                except ValueError:
+                    error_msg = (_('Incorrect date: %(date)s. Please use the '
+                                   'following format: YYYY-MM-DD.') %
+                                 {'date': raw_value})
+                    break
+            elif field.startswith('strength'):
+                try:
                     value = int(raw_value)
-                else:
-                    assert(False)
-                values[field] = value
+                except ValueError:
+                    error_msg = (_('Incorrect strength: %(strength)s. Please '
+                                   'specify it as an integer.') %
+                                 {'strength': raw_value})
+                    break
+            else:
+                assert(False)
+            values[field] = value
+        if not error_msg:
             do_operation = True
-        except ValueError:
-            error_msg = _('Please specify the fields correctly!')
     elif operation == 'shift_days':
         try:
             days = datetime.timedelta(days=int(request.POST.get('days')))
