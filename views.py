@@ -294,7 +294,7 @@ def send_registration_email(request, username, email_address, lang):
 
 
 def create_user(request, username, password1, password2, email_address,
-                captcha, lang):
+                captcha, lang, release_emails):
 
     if captcha.strip() != '6':
         raise models.EWException(_('Some fields are invalid.'))
@@ -313,6 +313,7 @@ def create_user(request, username, password1, password2, email_address,
         user.save()
         ewuser = models.get_ewuser(user)
         ewuser.lang = lang
+        ewuser.release_emails = release_emails
         ewuser.save()
         send_registration_email(request, username, email_address, lang)
         messages.success(request, _('Successful registration. Please log in!'))
@@ -321,6 +322,11 @@ def create_user(request, username, password1, password2, email_address,
 
 
 def register(request):
+
+    release_emails_label = \
+        unicode(_('Send me emails when ExponWords has new features')) + ' ' + \
+        unicode(_('(about once a month; can be turned off at any time from '
+                  'Settings)'))
 
     class RegisterForm(forms.Form):
         username = forms.CharField(max_length=255,
@@ -335,6 +341,9 @@ def register(request):
                                         label=_('Email address'))
         c = forms.CharField(max_length=255,
                             label='3 + 3 =')
+        release_emails = forms.BooleanField(label=release_emails_label,
+                                            required=False)
+
 
     if request.method == 'POST':
         models.log(request, 'register')
@@ -345,17 +354,18 @@ def register(request):
             password2 = form.cleaned_data['password2']
             email_address = form.cleaned_data['email']
             captcha = form.cleaned_data['c']
+            release_emails = form.cleaned_data['release_emails']
             lang = django.utils.translation.get_language()
             try:
                 return create_user(request, username, password1, password2,
-                                   email_address, captcha, lang)
+                                   email_address, captcha, lang, release_emails)
             except models.EWException, e:
                 messages.error(request, _(e.value))
         else:
             messages.error(request, _('Some fields are invalid.'))
 
     elif request.method == 'GET':
-        form = RegisterForm()
+        form = RegisterForm(initial={'release_emails': True})
 
     else:
         assert(False)

@@ -109,6 +109,13 @@ msgstr "Ez a felhasználónév már foglalt."
 msgid "Successful registration. Please log in!"
 msgstr "Sikeres regisztráció. Jelentkezz be!"
 
+msgid "Send me emails when ExponWords has new features"
+msgstr "Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe"
+
+msgid "(about once a month; can be turned off at any time from Settings)"
+msgstr ""
+"(körülbelül havonta egyszer; a Beállításokban bármikor ki lehet kapcsolni)"
+
 msgid "Username"
 msgstr "Felhasználónév"
 
@@ -203,9 +210,6 @@ msgstr "Válasz mérete"
 
 msgid "Notes size"
 msgstr "Jegyzetek mérete"
-
-msgid "Send me emails when ExponWords has new features"
-msgstr "Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe"
 
 msgid "Invalid language code"
 msgstr "Érvénytelen nyelvkód"
