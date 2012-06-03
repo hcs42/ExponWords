@@ -110,6 +110,13 @@ class LenientChoiceField(forms.ChoiceField):
 def create_WDictForm():
     # This class needs to be dynamically generated because of the lazy
     # translation (see commit 44900082b9).
+
+    practice_word_order_choices = \
+        [('default', _('Default (use the word order in the Settings page)')),
+         ('random', _('Totally random')),
+         ('dimmer_first', _('Dimmer first')),
+         ('dimmer_last', _('Dimmer last'))]
+
     class WDictForm(forms.Form):
         name = forms.CharField(max_length=255,
                                label=_("Name of the dictionary") + ':')
@@ -117,6 +124,11 @@ def create_WDictForm():
                                 label=_("Language 1") + ':')
         lang2 = forms.CharField(max_length=255,
                                 label=_("Language 2") + ':')
+        practice_word_order = \
+            forms.ChoiceField(
+                choices=practice_word_order_choices,
+                label=_('Practice page word order'))
+
     return WDictForm
 
 def create_WordPairForm(wdict):
@@ -611,7 +623,7 @@ def modify_wdict(request, wdict):
         models.log(request, 'modify_wdict')
         form = WDictForm(request.POST)
         if form.is_valid():
-            for field in ('name', 'lang1', 'lang2'):
+            for field in ('name', 'lang1', 'lang2', 'practice_word_order'):
                 setattr(wdict, field, form.cleaned_data[field])
             wdict.save()
             messages.success(request, _('Dictionary modified.'))
@@ -623,7 +635,8 @@ def modify_wdict(request, wdict):
     elif request.method == 'GET':
         form = WDictForm({'name': wdict.name,
                           'lang1': wdict.lang1,
-                          'lang2': wdict.lang2})
+                          'lang2': wdict.lang2,
+                          'practice_word_order': wdict.practice_word_order})
 
     else:
         assert(False)
@@ -741,6 +754,11 @@ def ew_settings(request):
         [('normal', _('Normal')),
          ('less_scrolling', _('Less scrolling'))]
 
+    practice_word_order_choices = \
+        [('random', _('Totally random')),
+         ('dimmer_first', _('Dimmer first')),
+         ('dimmer_last', _('Dimmer last'))]
+
     langs = ([(langcode, langname)
               for langcode, langname in settings.LANGUAGES])
 
@@ -755,6 +773,10 @@ def ew_settings(request):
                                      label=_('Time zone'))
         turning_point = forms.CharField(max_length=10,
                                         label=_('Turning point'))
+        practice_word_order = \
+            forms.ChoiceField(
+                choices=practice_word_order_choices,
+                label=_('Practice page word order'))
         practice_arrangement = \
             forms.ChoiceField(
                 choices=practice_arrangements_choices,
@@ -782,6 +804,7 @@ def ew_settings(request):
                 ewuser.lang = lang_code
                 ewuser.timezone = c['timezone']
                 ewuser.set_turning_point_str(c['turning_point'])
+                ewuser.practice_word_order = c['practice_word_order']
                 ewuser.practice_arrangement = c['practice_arrangement']
                 ewuser.button_size = c['button_size']
                 ewuser.question_size = c['question_size']
@@ -818,6 +841,7 @@ def ew_settings(request):
                    'timezone': ewuser.timezone,
                    'turning_point': ewuser.get_turning_point_str(),
                    'practice_arrangement': ewuser.practice_arrangement,
+                   'practice_word_order': ewuser.practice_word_order,
                    'button_size': ewuser.button_size,
                    'question_size': ewuser.question_size,
                    'answer_size': ewuser.answer_size,
@@ -926,6 +950,7 @@ def get_words_to_practice_today(request, wdict):
 
     try:
         words_to_practice = wdict.get_words_to_practice_today()
+        wdict.sort_words(words_to_practice)
         json_str = words_to_practice_to_json(words_to_practice)
         return HttpResponse(json_str,
                             mimetype='application/json')

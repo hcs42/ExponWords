@@ -64,3 +64,14 @@ sets the UI language of all such users to English:
     >>> for user in models.EWUser.objects.filter(lang='default'):
     ...     user.lang='en'
     ...     user.save()
+
+Upgrading to 0.12.0
+-------------------
+
+Add the "practice_word_order" column to the ew_wdict and ew_ewuser tables:
+
+    $ sqlite3 production.db
+    sqlite> alter table ew_wdict add column practice_word_order string;
+    sqlite> update ew_wdict set practice_word_order='default';
+    sqlite> alter table ew_ewuser add column practice_word_order string;
+    sqlite> update ew_ewuser set practice_word_order='random';

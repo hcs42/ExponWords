@@ -18,6 +18,7 @@
 import datetime
 import random
 import re
+import sys
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
@@ -100,6 +101,9 @@ class EWUser(models.Model):
     # (may be negative)
     turning_point = models.IntegerField(default=0)
 
+    # Word order on practice page
+    practice_word_order = models.CharField(default='random', max_length=20)
+
     # Practice page arrangement
     practice_arrangement = models.CharField(default='normal', max_length=20)
 
@@ -158,6 +162,7 @@ class WDict(models.Model):
     lang1 = models.CharField(max_length=255)
     lang2 = models.CharField(max_length=255)
     deleted = models.BooleanField(default=False)
+    practice_word_order = models.CharField(default='default', max_length=20)
 
     def __unicode__(self):
         return self.name
@@ -170,8 +175,39 @@ class WDict(models.Model):
                 result.append((wp, 1))
             if is_word_due(wp.date2, user_time):
                 result.append((wp, 2))
-        random.shuffle(result)
         return result
+
+    def sort_words(self, words, order=None):
+
+        if order is None:
+            order = self.get_practice_word_order()
+
+        random.shuffle(words)
+        if order == 'random':
+            pass
+        elif order == 'dimmer_first' or order == 'dimmer_last':
+
+            weak_words = []
+            strong_words = []
+            for (wp, direction) in words:
+                if wp.get_strength(direction) > 0:
+                    strong_words.append((wp, direction))
+                else:
+                    weak_words.append((wp, direction))
+
+            reverse = (order == 'dimmer_first')
+            def key_fun((wp, direction)):
+                return wp.get_dimness(direction)
+            strong_words.sort(key=key_fun, reverse=reverse)
+            words[:] = weak_words + strong_words
+        else:
+            assert(False)
+
+    def get_practice_word_order(self):
+        if self.practice_word_order == 'default':
+            return get_ewuser(self.user).practice_word_order
+        else:
+            return self.practice_word_order
 
 
 class WordPair(models.Model):
@@ -248,6 +284,27 @@ class WordPair(models.Model):
         self.set_date(direction, get_today(self.wdict.user))
         new_strength = min(self.get_strength(direction), 0)
         self.set_strength(direction, new_strength)
+
+    def get_dimness(self, direction):
+
+        # -----o------------------o---------
+        #
+        #      ^                  ^
+        # last_query_date      due_date
+        # (if today is here,   (if today is here,
+        #  dimness is 0)        dimness is 1)
+        #
+        #      <-- due_interval -->
+
+        strength = self.get_strength(direction)
+        assert(strength > 0)
+
+        due_date = self.get_date(direction)
+        due_interval = 2 ** (strength - 1)
+
+        last_query_date = (due_date - datetime.timedelta(days=due_interval))
+        today = get_today(self.wdict.user)
+        return float((today - last_query_date).days) / due_interval
 
     @staticmethod
     def get_label_set_from_str(s):
