@@ -90,5 +90,10 @@
     var EDIT_WORD_PAIR_URL = "{% url edit_word_pair '999' %}";
     var UPDATE_WORD_URL = "{% url update_word %}";
     var WORDS_TO_PRACTICE_TODAY = {{ words_to_practice|safe }};
+
+    {% if wdict != None %}
+        var GET_WORDS_TO_PRACTICE_TODAY_URL =
+                "{% url get_words_to_practice_today wdict.id %}";
+    {% endif %}
   </script>
 {% endblock %}

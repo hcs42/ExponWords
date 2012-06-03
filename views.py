@@ -899,13 +899,11 @@ def words_to_practice_to_json(words_to_practice):
 def practice_wdict(request, wdict):
     text = 'dict: "%s"' % wdict.name
     models.log(request, 'practice_wdict', text)
-    words_to_practice = wdict.get_words_to_practice_today()
-    json_str = words_to_practice_to_json(words_to_practice)
     ewuser = models.get_ewuser(request.user)
     return render(request,
                   'ew/practice_wdict.html',
                   {'wdict': wdict,
-                   'words_to_practice': json_str,
+                   'words_to_practice': 'undefined',
                    'ewuser': ewuser})
 
 
@@ -921,6 +919,21 @@ def practice(request):
                   {'wdict': None,
                    'words_to_practice': json_str,
                    'ewuser': ewuser})
+
+
+@wdict_access_required
+def get_words_to_practice_today(request, wdict):
+
+    try:
+        words_to_practice = wdict.get_words_to_practice_today()
+        json_str = words_to_practice_to_json(words_to_practice)
+        return HttpResponse(json_str,
+                            mimetype='application/json')
+    except Exception, e:
+        traceback.print_stack()
+        exc_info = sys.exc_info()
+        traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
+        raise exc_info[0], exc_info[1], exc_info[2]
 
 
 @login_required

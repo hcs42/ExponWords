@@ -78,6 +78,9 @@ urlpatterns = patterns('ew.views',
     url(r'^practice/$',
         view='practice',
         name='practice'),
+    url(r'^dict/(?P<wdict_id>\d+)/words-to-practice-today/$',
+        view='get_words_to_practice_today',
+        name='get_words_to_practice_today'),
 
     # Search and operations
     url(r'^search/$',

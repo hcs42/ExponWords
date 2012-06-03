@@ -81,8 +81,10 @@ var prev_word_index = false;
 
 ///// Functions /////
 
-function ask_first_word(result) {
-    todays_wordlist = WORDS_TO_PRACTICE_TODAY;
+function ask_first_word(todays_wordlist_param) {
+    // Set the given word list as the word list for today and ask the first
+    // word.
+    todays_wordlist = todays_wordlist_param;
     $('#all').text(todays_wordlist.length);
     $('#transferred').text('0');
     $('#transfer-in-progress').text('0');
@@ -91,6 +93,27 @@ function ask_first_word(result) {
     ask_word();
 }
 
+function get_todays_wordlist(success_fun) {
+    // Get the list of today's word from the server and ask the first one.
+    $.ajax({
+        url: GET_WORDS_TO_PRACTICE_TODAY_URL,
+        dataType: 'json',
+        data: {},
+        type: 'get',
+        success: success_fun
+    });
+}
+
+function start_practice() {
+    // Start the practice. If WORDS_TO_PRACTICE_TODAY is undefined, get the
+    // words from the server.
+    if (WORDS_TO_PRACTICE_TODAY == undefined) {
+        get_todays_wordlist(ask_first_word);
+    } else {
+        ask_first_word(WORDS_TO_PRACTICE_TODAY);
+    }
+}
+    
 function update_edit_word(button, curr_word_index) {
     // Sets the given "Edit ... word" link. If there is no word, it will remove
     // the "href" part and make the class of the link "nonlink", which will
@@ -324,5 +347,5 @@ $(document).ready(function() {
     });
 
     // The first word
-    ask_first_word();
+    start_practice();
 });
