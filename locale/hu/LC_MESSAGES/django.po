@@ -27,17 +27,20 @@ msgstr "A következő sorban nincs elég oszlop: %(linenumber)s. sor: %(line)s"
 msgid "Too many fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
 
-msgid "Default (use the word order in the Settings page)"
-msgstr "Alapértelmezett (a Beállítások oldalon beállított rendezést használja)"
-
 msgid "Totally random"
 msgstr "Teljesen véletlenszerű"
 
-msgid "Dimmer first"
-msgstr "A halvány szavakat először"
+msgid "Zero strength first, otherwise random"
+msgstr "A nulla erősségű szavakat először, egyébként véletlenszerű"
 
-msgid "Dimmer last"
-msgstr "A halvány szavakat a végén"
+msgid "Zero strength first, then dimmer first"
+msgstr "A nulla erősségű szavakat először, aztán a halvány szavakat először"
+
+msgid "Zero strength first, then dimmer last"
+msgstr "A nulla erősségű szavakat először, aztán a nem halvány szavakat először"
+
+msgid "Default (use the word order in the Settings page)"
+msgstr "Alapértelmezett (a Beállítások oldalon beállított rendezést használja)"
 
 msgid "Name of the dictionary"
 msgstr "Szótár neve"

@@ -55,6 +55,11 @@ import ExponWords.ew.models as models
 ##### Constants #####
 
 ADD_WORD_PAIR_DATE_REMEMBER_SECONDS = 3600 # 1 hour
+PRACTICE_WORD_ORDER_CHOICES = \
+    [('random', _('Totally random')),
+     ('zero_first', _('Zero strength first, otherwise random')),
+     ('dimmer_first', _('Zero strength first, then dimmer first')),
+     ('dimmer_last', _('Zero strength first, then dimmer last'))]
 
 
 ##### General helper functions #####
@@ -112,10 +117,9 @@ def create_WDictForm():
     # translation (see commit 44900082b9).
 
     practice_word_order_choices = \
-        [('default', _('Default (use the word order in the Settings page)')),
-         ('random', _('Totally random')),
-         ('dimmer_first', _('Dimmer first')),
-         ('dimmer_last', _('Dimmer last'))]
+        [('default',
+         _('Default (use the word order in the Settings page)'))] + \
+         PRACTICE_WORD_ORDER_CHOICES
 
     class WDictForm(forms.Form):
         name = forms.CharField(max_length=255,
@@ -754,10 +758,7 @@ def ew_settings(request):
         [('normal', _('Normal')),
          ('less_scrolling', _('Less scrolling'))]
 
-    practice_word_order_choices = \
-        [('random', _('Totally random')),
-         ('dimmer_first', _('Dimmer first')),
-         ('dimmer_last', _('Dimmer last'))]
+    practice_word_order_choices = PRACTICE_WORD_ORDER_CHOICES
 
     langs = ([(langcode, langname)
               for langcode, langname in settings.LANGUAGES])

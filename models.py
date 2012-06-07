@@ -185,20 +185,21 @@ class WDict(models.Model):
         random.shuffle(words)
         if order == 'random':
             pass
-        elif order == 'dimmer_first' or order == 'dimmer_last':
+        elif order in ('zero_first', 'dimmer_first', 'dimmer_last'):
 
-            weak_words = []
-            strong_words = []
+            weak_words = [] # words with zero or negative strength
+            strong_words = [] # words with positive strength
             for (wp, direction) in words:
                 if wp.get_strength(direction) > 0:
                     strong_words.append((wp, direction))
                 else:
                     weak_words.append((wp, direction))
 
-            reverse = (order == 'dimmer_first')
-            def key_fun((wp, direction)):
-                return wp.get_dimness(direction)
-            strong_words.sort(key=key_fun, reverse=reverse)
+            if order != 'zero_first':
+                reverse = (order == 'dimmer_first')
+                def key_fun((wp, direction)):
+                    return wp.get_dimness(direction)
+                strong_words.sort(key=key_fun, reverse=reverse)
             words[:] = weak_words + strong_words
         else:
             assert(False)
