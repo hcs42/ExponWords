@@ -37,7 +37,7 @@ function select_all() {
 
 function operation_selection_changed() {
     var value = $('#operation-selection').val();
-    var spans = $('span[id^="span-"]');
+    var spans = $('div[id^="span-"]');
     $.each(spans, function() {
         if ($(this).attr('id') == 'span-' + value) {
             $(this).show();

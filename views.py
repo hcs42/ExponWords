@@ -1090,7 +1090,6 @@ def search(request):
     if not form.is_valid():
         raise Http404
 
-    wdict = None
     query_text = form.cleaned_data['q']
     query_wdict = form.cleaned_data['dict']
     query_label = parse_query_label(form.cleaned_data['label'])
@@ -1108,12 +1107,16 @@ def search(request):
     # If we don't have a 'q' parameter, we will show the basic search page. If
     # we do have one, we will perform the search, even if it is empty.
 
+    if query_wdict in ('', 'all'):
+        wdict = None
+    else:
+        wdict = get_object_or_404(WDict, pk=int(query_wdict),
+                                  user=request.user)
+
     if 'q' not in request.GET:
-        if query_wdict in ('', 'all'):
+        if wdict is None:
             form = SearchForm({'show_hits': True})
         else:
-            wdict = get_object_or_404(WDict, pk=int(query_wdict),
-                                      user=request.user)
             form = SearchForm({'dict': query_wdict, 'show_hits': True})
 
         return render(request,
@@ -1156,19 +1159,23 @@ def search(request):
         else:
             word_pairs_and_exps = []
 
-        return render(request,
-                      'ew/search.html',
-                      {'form': form,
-                       'wdict': wdict,
-                       'source_url': source_url,
-                       'wdict_choices': wdict_choices,
-                       'show_hits': show_hits,
-                       'hits_count': len(word_pairs),
-                       'result_exists': True,
-                       'pagination_url': pagination_url,
-                       'pagination_info': pagination_info,
-                       'current_page_index': current_page_index,
-                       'word_pairs_and_exps': word_pairs_and_exps})
+        context = {'form': form,
+                   'wdict': wdict,
+                   'source_url': source_url,
+                   'wdict_choices': wdict_choices,
+                   'show_hits': show_hits,
+                   'hits_count': len(word_pairs),
+                   'result_exists': True,
+                   'pagination_url': pagination_url,
+                   'pagination_info': pagination_info,
+                   'current_page_index': current_page_index,
+                   'word_pairs_and_exps': word_pairs_and_exps}
+
+        if wdict is not None:
+            context.update({'lang1': wdict.lang1,
+                            'lang2': wdict.lang2})
+
+        return render(request, 'ew/search.html', context)
 
 
 @word_pair_access_required

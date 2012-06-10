@@ -122,65 +122,83 @@
   <a class="help" href="{% url help LANGUAGE_CODE %}#operations" target="_blank">({% trans "Help for operations" %})</a>
   <br/>
 
-  <span style="display:none" id="span-delete">
+  <div style="display:none" id="span-delete">
     <input type="submit" value="{% trans 'Delete the selected word pairs!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-move">
+  <div style="display:none" id="span-move">
     <select name="move_word_pairs_wdict"> 
       {% for wdict_id, wdict_name in wdict_choices %}
       <option value="{{ wdict_id }}">{{ wdict_name }}</option> 
       {% endfor %}
     </select><br/>
     <input type="submit" value="{% trans 'Move the selected word pairs!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-set_dates_strengths">
-    <table>
-      <tr>
-        <td>
-          {% trans 'Dates of next practices' %}:
-        </td>
-        <td>
-          <input type="text" name="date1" value="">
-          <input type="text" name="date2" value="">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          {% trans 'Strenghs of words' %}:
-        </td>
-        <td>
-          <input type="text" name="strength1" value="">
-          <input type="text" name="strength2" value="">
-        </td>
-      </tr>
-    </table>
+  <div style="display:none" id="span-set_dates_strengths">
+    <div style="background: #cfc;">
+      <table>
+        <tr>
+          <td></td>
+          <td>{% trans 'Dates' %}:</td>
+          <td>{% trans 'Strengths' %}:</td>
+          <td></td>
+        </tr>
+        <tr>
+          {% if wdict != None %}
+            <td>{{ lang1 }} &rarr; {{ lang2 }}</td>
+          {% else %}
+            <td>&rarr;</td>
+          {% endif %}
+          <td><input type="text" name="date1" id="id_date1" value=""></td>
+          <td><input type="text" name="strength1" id="id_strength1" value=""></td>
+          <td>
+            <span id="reset1_button" class="nice-button">
+              {% trans 'Reset' %}
+            </span>
+          </td>
+        </tr>
+        <tr>
+          {% if wdict != None %}
+            <td>{{ lang2 }} &rarr; {{ lang1 }}</td>
+          {% else %}
+            <td>&larr;</td>
+          {% endif %}
+          <td><input type="text" name="date2" id="id_date2" value=""></td>
+          <td><input type="text" name="strength2" id="id_strength2" value=""></td>
+          <td>
+            <span id="reset2_button" class="nice-button">
+              {% trans 'Reset' %}
+            </span>
+          </td>
+        </tr>
+      </table>
+    </div>
     <input type="submit" value="{% trans 'Set the dates and strengths of the selected word pairs!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-add_labels">
+  <div style="display:none" id="span-add_labels">
     {% trans 'Labels' %}: <input type="text" name="add_labels-labels" value=""><br/>
     <input type="submit" value="{% trans 'Add the labels to the selected word pairs!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-remove_labels">
+  <div style="display:none" id="span-remove_labels">
     {% trans 'Labels' %}: <input type="text" name="remove_labels-labels" value=""><br/>
     <input type="submit" value="{% trans 'Remove the labels from the selected word pairs!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-set_labels">
+  <div style="display:none" id="span-set_labels">
     {% trans 'Warning: this operation will remove all other labels from the selected words.' %}<br/>
     {% trans 'Labels' %}: <input type="text" name="set_labels-labels" value=""><br/>
     <input type="submit" value="{% trans 'Set the labels of the selected word pairs!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-shift_days">
+  <div style="display:none" id="span-shift_days">
     {% trans 'Days' %}: <input type="text" name="days" value=""><br/>
     <input type="submit" value="{% trans 'Shift the dates of the selected word pairs!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-practice">
+  <div style="display:none" id="span-practice">
     {% trans 'Words to practice' %}
     ({% trans 'only the word that are due today will be strengthened!' %}):
     <select name="practice_scope"> 
@@ -188,15 +206,15 @@
       <option value="due">{% trans 'Only those selected words that are due today' %}</option> 
     </select><br/>
     <input type="submit" value="{% trans 'Go to the practice page!' %}">
-  </span>
+  </div>
 
-  <span style="display:none" id="span-export">
+  <div style="display:none" id="span-export">
     {% trans 'Export format' %}:
     <select name="export_format"> 
       <option value="text">{% trans 'Text' %}</option> 
     </select><br/>
     <input type="submit" value="{% trans 'Export the selected word pairs!' %}">
-  </span>
+  </div>
 
 </p>
 </form>
@@ -211,6 +229,7 @@
   <script type="text/javascript" language="JavaScript" src="/site_media/js/json2.js?{% ew_version %}"></script>
   <script type="text/javascript" language="JavaScript" src="/site_media/js/exponwordslib.js?{% ew_version %}"></script>
   <script type="text/javascript" language="JavaScript" src="/site_media/js/search.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="/site_media/js/add_word_pair.js?{% ew_version %}"></script>
   <script>var csrf_token = "{{ csrf_token }}";</script>
   <script>$(document).ready(function(){ $("#id_q").focus(); });</script>
 {% endblock %}
