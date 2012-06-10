@@ -57,9 +57,9 @@ import ExponWords.ew.models as models
 ADD_WORD_PAIR_DATE_REMEMBER_SECONDS = 3600 # 1 hour
 PRACTICE_WORD_ORDER_CHOICES = \
     [('random', _('Totally random')),
-     ('zero_first', _('Zero strength first, otherwise random')),
-     ('dimmer_first', _('Zero strength first, then dimmer first')),
-     ('dimmer_last', _('Zero strength first, then dimmer last'))]
+     ('zero_first', _('New and forgotten words first')),
+     ('dimmer_first', _('I am a little behind')),
+     ('dimmer_last', _('Relearn old words'))]
 
 
 ##### General helper functions #####

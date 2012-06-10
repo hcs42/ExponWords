@@ -30,14 +30,14 @@ msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
 msgid "Totally random"
 msgstr "Teljesen véletlenszerű"
 
-msgid "Zero strength first, otherwise random"
-msgstr "A nulla erősségű szavakat először, egyébként véletlenszerű"
+msgid "New and forgotten words first"
+msgstr "Új és elfelejtett szavak"
 
-msgid "Zero strength first, then dimmer first"
-msgstr "A nulla erősségű szavakat először, aztán a halvány szavakat először"
+msgid "I am a little behind"
+msgstr "Kicsit le vagyok maradva"
 
-msgid "Zero strength first, then dimmer last"
-msgstr "A nulla erősségű szavakat először, aztán a nem halvány szavakat először"
+msgid "Relearn old words"
+msgstr "Régi szavak újratanulása"
 
 msgid "Default (use the word order in the Settings page)"
 msgstr "Alapértelmezett (a Beállítások oldalon beállított rendezést használja)"
