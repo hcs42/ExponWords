@@ -1,4 +1,5 @@
 {% extends "ew/base.html" %}
+{% load ew_templatetags %}
 
 {% block title %}
 Súgó
@@ -184,6 +185,90 @@ A következő menüpontjai vannak:
   </li>
 </ul>
 
+<h4 id="practice-word-order">A szavak sorrendje a Gyakorlás oldalon</h4>
+
+<p>A Gyakorlás oldalon a szavakat többféle sorrendben is lehet kérdeztetni. (Ezek a sorrendek csak az egyszerre kérdezendő szavak sorrendjére vonatkoznak, nem befolyásolják, hogy melyik szó melyik nap kerül kikérdezésre.)</p>
+<ul>
+  <li><em>Véletlenszerű</em>: a szavak sorrendje teljesen véletlenszerű.</li>
+  <li><em>Új és elfelejtett szavak</em>:
+  <ol>
+    <li>Először a nulla erősségű szavakat kérdezi a program: ezek a szavak vagy
+    újak, vagy a felhasználó a legutóbbi gyakorlásukkor a "NEM" gombot nyomta
+    meg.</li>
+    <li>Ezután a pozitív erősségű szavakat kérdezi: ezen szavak esetében az
+    "IGEN" gomb lett utoljára megnyomva gyakorláskor.</li>
+  </ol></li>
+  <li id="little-behind"><em>Kicsit le vagyok maradva</em>: Ez a sorrend akkor
+  hasznos, ha a felhasználónak nem biztos, hogy lesz ideje ma mindent
+  gyakorolni, és az elmúlt alkalmakkor sem lett a gyakorlás végigcsinálva.
+  <ol>
+    <li>Először a nulla erősségű szavakat kérdezi a program.</li>
+    <li>Ezután a többi szót kérdezi, mégpedig a <a
+      href="#dimness">halványságuk</a> szerinti csökkenő sorrendben. Ez azt
+    jelenti, hogy azokat a szavakat kérdezi hamarabb, amiket sürgősebb
+    gyakorolni, mert már többször kellett volna kérdezni. </li>
+  </ol></li>
+  <li id="relearn-old-words"><em>Régi szavak újratanulása</em>: Ez a sorrend
+  akkor hasznos, amikor a felhasználónak régi, a gyakorlás hiánya miatt
+  elfelejtett szavai vannak.
+  <ol>
+    <li>Először a nulla erősségű szavakat kérdezi a program.</li>
+    <li>Ezután a többi szót kérdezi, mégpedig a <a
+      href="#dimness">halványságuk</a> szerinti növekvő sorrendben. Ez azt
+    jelenti, hogy azokat a szavakat kérdezi hamarabb, amiket már szilárdabban
+    tud a felhasználó, és a valószínűleg teljesen elfelejtett (nagy
+    halványságú) szavak a lista végére kerülnek.</li>
+  </ol>
+  Ezt a sorrendet felhasználva, ha a felhasználó gyakorol néhány elfelejtett
+  szót minden nap (nem mindet), akkor az elfelejtett szavakat fokozatosan
+  megtanulja anélkül, hogy ez akadályozná a korábban megtanult szavak
+  gyakorlását (ahogy ez a többi szósorrend esetében történne).</li>
+</ul>
+
+<p>Megjegyzés: az ugyanabba a kategóriába eső szavak (például az azonos
+halványságúak) egymáshoz viszonyított sorrendje minden esetben teljesen
+véletlenszerű.</p>
+
+<h4 id="dimness">A halványság fogalma</h4>
+
+<p>Egy szó halványsága azt mutatja, hogy hányszor kellett volna már az adott
+szót kérdezni. Például tegyük fel, hogy gyakoroltunk egy szót, az "IGEN" gombot
+nyomtuk meg, és 4 nap múlva lesz a következő gyakorlás ideje. A gyakorlás után
+a szó halványsága 0, hiszen egyáltalán nem kell gyakorolni. Ezután a halványság
+minden nap egynegyeddel nő:  0.25, 0.5, 0.75, 1, 1.25 stb. Azon a napon, amikor
+a gyakorlás ideje eljön, a halványság 1 (definíció szerint). Normális esetben
+a szót ezen a napon kérdezi a program, és az "IGEN" gomb megnyomása után a
+halványság visszaesik nullára; ha viszont a felhasználó nem gyakorolja ezt a
+szót, akkor a halványság minden nappal tovább növekedik. A gyenge szavak
+halványsága gyorsan nő, míg az erős szavaké lassan. </p>
+
+<p>Amikor egy szó halványsága nagyobb mint 1, de kisebb mint 2 vagy 3, az azt
+jelenti, hogy a szót gyakorolni kellene: minél nagyobb a halványság, annál
+inkább. Másrészről viszont, ha a halványság nagyon nagy (mondjuk 10), akkor a
+szó már olyan régóta nem lett gyakorolva, hogy a felhasználó valószínűleg már
+nem emlékszik rá, így gyakorlatilag újra kell tanulnia. Ha a felhasználónak
+jónéhány szava 1 és 2 közti halványsággal rendelkezik, akkor a <a
+  href="#little-behind">"kicsit le vagyok maradva"</a> szósorrend a javasolt,
+míg ha sok szó nagyon halvány, akkor a <a href="#relearn-old-words">"régi
+  szavak újratanulása"</a> hasznosabb.</p>
+
+<p>Az érdeklődők számára álljon itt a képlet, amivel a pozitív erősségű szavak
+halványságát kiszámoljuk (nempozitív erősségű szavaknak nincs halványsága):</p>
+
+<!--
+    The formula was converted to an image by the following website:
+    http://rogercortesi.com/eqn/index.php
+
+    halvanysag =
+    { {(``ma - kovetkezo\_kerdezes\_datuma"\ napokban\ kifejezve) + 2 ^ {szo\_erossege - 1} }
+    \over 
+    {2 ^ {szo\_erossege - 1} } }
+-->
+
+<img src="/site_media/images/dimness-hu.png?{% ew_version %}"
+     height="35"
+     alt="halványság = ((&quot;ma - következő_kérdezés_dátuma&quot; napokban kifejezve) + 2 ^ (szó_erőssége - 1)) / (2 ^ (szó_erőssége - 1))"/>
+
 <h3 id="search">Keresés és műveletek</h3>
 <p>A "Keresés és műveletek" oldalon a szópáraink között kereshetünk.
 Kiválaszthatjuk, hogy milyen szótárban és milyen címkéjű szavak között
@@ -248,6 +333,8 @@ jelölődoboz állapotával jelzi.</p>
   beállítva, akkor egy napon kérdezendő szavakat csak aznap 3:00-tól kezdi
   kérdezni. Negatív számot is be lehet állítani: -1:30 esetén egy nap szavait
   már előző este 22:30-tól kérdezi.</li>
+  <li>Szavak sorrendje a Gyakorlás oldalon: Lásd <a
+    href="#practice-word-order">itt</a>.
   <li>Gyakorlás oldal elrendezése: A Gyakorlás oldalt kétféleképp lehet
   elrendezni: "Normál" vagy "Kevesebb görgetés" módszerrel. Az előbbi jobban
   illeszkedik a felhasználói felület többi részéhez, de az utóbbi jobb lehet

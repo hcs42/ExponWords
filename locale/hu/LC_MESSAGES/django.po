@@ -52,7 +52,7 @@ msgid "Language 2"
 msgstr "Második nyelv"
 
 msgid "Practice page word order"
-msgstr "Szavak rendezése a gyakorlás oldalon"
+msgstr "Szavak sorrendje a Gyakorlás oldalon"
 
 #, python-format
 msgid "Word in \"%(lang)s\""
