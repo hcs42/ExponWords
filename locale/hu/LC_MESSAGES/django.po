@@ -397,6 +397,9 @@ msgstr "\"%(wdictname)s\" szótár"
 msgid "Modify dictionary"
 msgstr "Szótár módosítása"
 
+msgid "Help about word orders"
+msgstr "Súgó a szavak sorrendjéről"
+
 msgid "Practice"
 msgstr "Gyakorlás"
 
