@@ -96,7 +96,7 @@ function ask_first_word(todays_wordlist_param) {
 function get_todays_wordlist(success_fun) {
     // Get the list of today's word from the server and ask the first one.
     $.ajax({
-        url: GET_WORDS_TO_PRACTICE_TODAY_URL,
+        url: GET_WORDS_TO_PRACTICE_TODAY_URL + '?' + Math.random(),
         dataType: 'json',
         data: {},
         type: 'get',
