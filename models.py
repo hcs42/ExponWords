@@ -197,9 +197,12 @@ class WDict(models.Model):
 
             if order != 'zero_first':
                 reverse = (order == 'dimmer_first')
-                def key_fun((wp, direction)):
+                def strength_key_fun((wp, direction)):
+                    return wp.get_strength(direction)
+                def dimness_key_fun((wp, direction)):
                     return wp.get_dimness(direction)
-                strong_words.sort(key=key_fun, reverse=reverse)
+                strong_words.sort(key=strength_key_fun)
+                strong_words.sort(key=dimness_key_fun, reverse=reverse)
             words[:] = weak_words + strong_words
         else:
             assert(False)
