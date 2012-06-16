@@ -173,7 +173,7 @@ msgstr ""
 "bemásolod, akkor az épp ilyen formátumban lesz."
 
 msgid "Dictionary modified."
-msgstr "Szótár módosíŧva."
+msgstr "Szótár módosítva."
 
 msgid "Dictionary deleted."
 msgstr "Szótár törölve."
