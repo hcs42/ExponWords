@@ -196,13 +196,22 @@ class WDict(models.Model):
                     weak_words.append((wp, direction))
 
             if order != 'zero_first':
-                reverse = (order == 'dimmer_first')
+
+                # First sort by strength
                 def strength_key_fun((wp, direction)):
                     return wp.get_strength(direction)
-                def dimness_key_fun((wp, direction)):
-                    return wp.get_dimness(direction)
                 strong_words.sort(key=strength_key_fun)
+
+                # Then sort by dimness
+                dimness_day = get_today(self.user)
+                if self.user.username in ('hcs',):
+                    dimness_day += datetime.timedelta(days=1)
+
+                def dimness_key_fun((wp, direction)):
+                    return wp.get_dimness(direction, dimness_day)
+                reverse = (order == 'dimmer_first')
                 strong_words.sort(key=dimness_key_fun, reverse=reverse)
+
             words[:] = weak_words + strong_words
         else:
             assert(False)
@@ -289,7 +298,7 @@ class WordPair(models.Model):
         new_strength = min(self.get_strength(direction), 0)
         self.set_strength(direction, new_strength)
 
-    def get_dimness(self, direction):
+    def get_dimness(self, direction, day, silent=False):
 
         # -----o------------------o---------
         #
@@ -301,14 +310,15 @@ class WordPair(models.Model):
         #      <-- due_interval -->
 
         strength = self.get_strength(direction)
+        if silent and strength == 0:
+            return None
         assert(strength > 0)
 
         due_date = self.get_date(direction)
         due_interval = 2 ** (strength - 1)
 
         last_query_date = (due_date - datetime.timedelta(days=due_interval))
-        today = get_today(self.wdict.user)
-        return float((today - last_query_date).days) / due_interval
+        return float((day - last_query_date).days) / due_interval
 
     @staticmethod
     def get_label_set_from_str(s):

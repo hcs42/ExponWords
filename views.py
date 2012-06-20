@@ -911,6 +911,13 @@ def words_to_practice_to_json(words_to_practice):
         if wp.labels:
             expl_labels += '[%s]' % wp.labels
 
+        wdict = wp.wdict
+        user = wdict.user
+        if user.username in ('hcs',):
+            dimness_day = models.get_today(user) + datetime.timedelta(days=1)
+            dimness = wp.get_dimness(direction, dimness_day, silent=True)
+            expl_labels += '\nDimness: ' + str(dimness)
+
         result.append([escape_for_html(wp.word_in_lang1),
                        escape_for_html(wp.word_in_lang2),
                        direction,
