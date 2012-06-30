@@ -204,7 +204,7 @@ class WDict(models.Model):
 
                 # Then sort by dimness
                 dimness_day = get_today(self.user)
-                if self.user.username in ('hcs',):
+                if self.user.username in ('hcs', 'bandris'):
                     dimness_day += datetime.timedelta(days=1)
 
                 def dimness_key_fun((wp, direction)):

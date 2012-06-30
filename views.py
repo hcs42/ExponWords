@@ -913,7 +913,7 @@ def words_to_practice_to_json(words_to_practice):
 
         wdict = wp.wdict
         user = wdict.user
-        if user.username in ('hcs',):
+        if user.username in ('hcs', 'bandris'):
             dimness_day = models.get_today(user) + datetime.timedelta(days=1)
             dimness = wp.get_dimness(direction, dimness_day, silent=True)
             expl_labels += '\nDimness: ' + str(dimness)
