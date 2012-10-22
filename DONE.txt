@@ -125,3 +125,12 @@ v0.12:
   strengths
 - practice page: load the words only in JS (undo an old commit)
 - practice page: option to take the dimmer words first
+
+v0.13:
+- Practice page: use tomorrow's dimness instead of today's
+- Practice page: quick labels
+- Practice page: decrease waiting in "Please wait"
+- Practice page: word batches: don't load all words at once
+- Practice page: automatically reload when needed
+- Edit word pair page: word pairs can be deleted
+- Add word pair page: finding duplicate word pairs

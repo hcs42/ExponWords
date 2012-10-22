@@ -4,17 +4,27 @@ Top priority
 Important
 ---------
 
+- bugfix: handle error when "wp.date2 += days" would be an overflow in
+  views.operation_on_word_pairs
+- Investigate the Opera problem further
+- Add outlog and errlog to cgi start
+- Do something when a duplicate word is to be added
 - Search&Operations page: show dimness optionally
-- help pages: "user" -> you
+- help pages: "user" -> you - ask others' opinions
 - practice page: remembers which words shall be practiced when all the words
 - practice page: when ready, give a link for loading the practice page of the
   next dictionary or load new words of the current dictionary if there are such
   words
-- practice page: "Other options" -> Prev. word, next word, star
+- practice page: option whether to show tomorrow's dimness, label, etc.
 - delete a word from the "Edit word" page
 - nginx caching
 - help: add screenshots
 - announcement: %USER, link to unsubscribe
+- Think about it
+    - save words with ctrl-s
+    - pronounce words with Forvo or Google Translate
+- FAQ: word order
+- settings page: group the settings (e.g. a "Practice page" group would be good)
 
 Would be nice
 -------------
