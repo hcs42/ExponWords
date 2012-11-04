@@ -48,6 +48,10 @@ function get_translation(callback) {
     });
 }
 
+function ew_strip(str) {
+    return str.replace(/^\s+/, '').replace(/\s+$/, '');
+}
+
 // Returns the current date in yyyy-mm-dd format
 function get_now_date() {
     var now = new Date();

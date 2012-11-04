@@ -75,3 +75,12 @@ Add the "practice_word_order" column to the ew_wdict and ew_ewuser tables:
     sqlite> update ew_wdict set practice_word_order='default';
     sqlite> alter table ew_ewuser add column practice_word_order string;
     sqlite> update ew_ewuser set practice_word_order='random';
+
+Upgrading to 0.13.0
+-------------------
+
+Add the "quick_labels" column to the ew_ewuser tables:
+
+    $ sqlite3 production.db
+    sqlite> alter table ew_ewuser add column quick_labels string;
+    sqlite> update ew_ewuser set quick_labels='quick';

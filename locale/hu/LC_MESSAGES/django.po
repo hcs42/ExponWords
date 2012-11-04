@@ -221,6 +221,9 @@ msgstr "Válasz mérete"
 msgid "Notes size"
 msgstr "Jegyzetek mérete"
 
+msgid "Quick labels"
+msgstr "Gyors címkék"
+
 msgid "Invalid language code"
 msgstr "Érvénytelen nyelvkód"
 
@@ -430,6 +433,9 @@ msgstr "Aktuális szó szerkesztése"
 msgid "Edit previous word"
 msgstr "Előző szó szerkesztése"
 
+msgid "Add label"
+msgstr "Címke hozzáadása"
+
 msgid "Please wait..."
 msgstr "Várj..."
 
@@ -439,6 +445,18 @@ msgid ""
 msgstr ""
 "Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz "
 "még egyszer azokon a szavakon, amiket nem tudtál.)"
+
+msgid "Adding label started"
+msgstr "Címke hozzáadása elkezdődött"
+
+msgid "Adding label successful"
+msgstr "Címke hozzáadása sikeres"
+
+msgid "Adding label (still trying)"
+msgstr "Címke hozzáadása (próbálkozás)"
+
+msgid "Gave up adding label"
+msgstr "Címke hozzáadása feladva"
 
 msgid "3+3="
 msgstr "3+3="

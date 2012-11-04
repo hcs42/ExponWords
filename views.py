@@ -786,6 +786,7 @@ def ew_settings(request):
         question_size = forms.IntegerField(label=_('Question size'))
         answer_size = forms.IntegerField(label=_('Answer size'))
         explanation_size = forms.IntegerField(label=_('Notes size'))
+        quick_labels = forms.CharField(label=_('Quick labels'), required=False)
         email_address = forms.CharField(max_length=255,
                                         label=_('Email address'))
         release_emails = \
@@ -809,6 +810,7 @@ def ew_settings(request):
                 ewuser.practice_arrangement = c['practice_arrangement']
                 ewuser.button_size = c['button_size']
                 ewuser.question_size = c['question_size']
+                ewuser.quick_labels = c['quick_labels']
                 ewuser.answer_size = c['answer_size']
                 ewuser.explanation_size = c['explanation_size']
                 request.user.email = c['email_address']
@@ -847,6 +849,7 @@ def ew_settings(request):
                    'question_size': ewuser.question_size,
                    'answer_size': ewuser.answer_size,
                    'explanation_size': ewuser.explanation_size,
+                   'quick_labels': ewuser.quick_labels,
                    'email_address': request.user.email,
                    'release_emails': ewuser.release_emails})
 
@@ -936,7 +939,8 @@ def practice_wdict(request, wdict):
                   'ew/practice_wdict.html',
                   {'wdict': wdict,
                    'words_to_practice': 'undefined',
-                   'ewuser': ewuser})
+                   'ewuser': ewuser,
+                   'quick_labels': ewuser.get_quick_labels()})
 
 
 @login_required
@@ -950,7 +954,8 @@ def practice(request):
                   'ew/practice_wdict.html',
                   {'wdict': None,
                    'words_to_practice': json_str,
-                   'ewuser': ewuser})
+                   'ewuser': ewuser,
+                   'quick_labels': ewuser.get_quick_labels()})
 
 
 @wdict_access_required
@@ -993,6 +998,29 @@ def update_word(request):
         else:
             # The user did not know the answer
             wp.weaken(direction)
+        wp.save()
+
+        return HttpResponse(json.dumps('ok'),
+                             mimetype='application/json')
+    except Exception, e:
+        traceback.print_stack()
+        exc_info = sys.exc_info()
+        traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
+        raise exc_info[0], exc_info[1], exc_info[2]
+
+
+@login_required
+def add_label(request):
+    try:
+
+        word_pair_id = json.loads(request.POST['word_index'])
+        label = json.loads(request.POST['label'])
+
+        wp = get_object_or_404(WordPair,
+                               pk=word_pair_id,
+                               wdict__user=request.user)
+
+        wp.add_labels(label)
         wp.save()
 
         return HttpResponse(json.dumps('ok'),

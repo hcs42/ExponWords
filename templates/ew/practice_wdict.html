@@ -49,9 +49,14 @@
   <div id="operations" class="practice-operations" style="display:none;">
     <p>{% trans "Operations" %}:
     <span id="hide-operations-button" class="nice-button">{% trans 'Hide' %}</span>
-    <ul>
+    <ul id="operations-list">
       <li><a id="edit-word-button" target="_blank">{% trans "Edit current word" %}</a></li>
       <li><a id="edit-prev-word-button" class="nonlink" target="_blank">{% trans "Edit previous word" %}</a></li>
+      <li id="quick-labels">{% trans "Add label" %}:
+      {% for label in quick_labels %}
+      <a id="quick-label-{{ label }}" class="small-button">{{ label }}</a>
+      {% endfor %}
+      </li>
     </ul>
     </p>
   </div>
@@ -78,6 +83,22 @@
   {% trans "No more words for today. Good job! (If you hit Refresh, you will iterate only on the words that you did not know.)" %}
 </div>
 
+<div style="display:none" id="translate_add_label_start">
+  {% trans "Adding label started" %}
+</div>
+
+<div style="display:none" id="translate_add_label_success">
+  {% trans "Adding label successful" %}
+</div>
+
+<div style="display:none" id="translate_add_label_trying">
+  {% trans "Adding label (still trying)" %}
+</div>
+
+<div style="display:none" id="translate_add_label_gave_up">
+  {% trans "Gave up adding label" %}
+</div>
+
 {% endblock %}
 {% block javascript %}
   <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
@@ -89,6 +110,7 @@
     var csrf_token = "{{ csrf_token }}";
     var EDIT_WORD_PAIR_URL = "{% url edit_word_pair '999' %}";
     var UPDATE_WORD_URL = "{% url update_word %}";
+    var ADD_LABEL_URL = "{% url add_label %}";
     var WORDS_TO_PRACTICE_TODAY = {{ words_to_practice|safe }};
 
     {% if wdict != None %}

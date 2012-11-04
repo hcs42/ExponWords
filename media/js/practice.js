@@ -36,6 +36,10 @@ var MAX_TIMEOUT = 20 * 1000; // 20 seconds
 // The minimum time for the "Please wait" text to be displayed.
 var MIN_PLEASE_WAIT_DISPLAY = 300; // 1 second.
 
+// The maximum number of characters used to represent the question word when
+// printing information about how adding a label to the word progresses
+var QUESTION_WORD_PREFIX = 40;
+
 
 ///// Global state /////
 
@@ -78,8 +82,30 @@ var explanation;
 // The word index of the previous word
 var prev_word_index = false;
 
+// Translation dictionary
+var translations = {}
+
 
 ///// Functions /////
+
+function ew_prefix(s, maxlength) {
+    // "short" -> "short"
+    // "text longer than maxlength characters" -> "text longer th..."
+    if (s.length <= maxlength) {
+        return s;
+    } else {
+        return s.substring(0, maxlength - 3) + '...';
+    }
+}
+
+
+function init_translations() {
+    $('[id^=translate_]').each(function(index) {
+        var key = $(this).attr('id').replace(/^translate_/, '');
+        var value = ew_strip($(this).text());
+        translations[key] = value;
+    });
+}
 
 function ask_first_word(todays_wordlist_param) {
     // Set the given word list as the word list for today and ask the first
@@ -210,6 +236,7 @@ function answer_button() {
 }
 
 function next_timeout(timeout) {
+    // Calculates the value of the next timeout based on the last timeout
     var maybe_next_timeout = timeout + TIMEOUT_INTERVAL;
     if (maybe_next_timeout > MAX_TIMEOUT) {
         return timeout;
@@ -219,6 +246,8 @@ function next_timeout(timeout) {
 }
 
 function update_transfer_in_progress() {
+    // - Update the value of the "transfer is progress" field
+    // - Change the state and show the "please wait" text if needed
 
     // Display the number of words whose transfer is in progress
     $('#transfer-in-progress').text(retry_transfer_in_progress);
@@ -240,58 +269,143 @@ function update_transfer_in_progress() {
 
 }
 
-function update_error(data, result, retries, timeout)
-{
-    if (retries == RETRIES_COUNT) {
-        // This is the first transfer error regarding this word
-        first_transfer_in_progress--;
-        retry_transfer_in_progress++;
-        update_transfer_in_progress();
-    };
+function ew_ajax_error(url, data, result, retries, timeout, success_fun,
+                       error_fun, give_up_fun) {
+
+    error_fun(retries);
     setTimeout(
         function() {
-            update_word(data, retries - 1, next_timeout(timeout));
+            ew_ajax_send(url, data, retries - 1, next_timeout(timeout),
+                         success_fun, error_fun, give_up_fun);
         }, timeout);
 }
 
-function update_word(data, retries, timeout)
-{
-    // first_transfer_in_progress should be incremented by the caller of this
-    // function.
-
+function ew_ajax_send(url, data, retries, timeout, success_fun, error_fun,
+                      give_up_fun) {
     if (retries != 0) {
         $.ajax({
-            url: UPDATE_WORD_URL,
+            url: url,
             dataType: 'json',
             data: data,
             type: 'post',
             timeout: timeout,
             success: function(result) {
                 if (result == 'ok') {
-                    // The server updated the word
-                    transferred++;
-                    $('#transferred').text(transferred);
-                    if (retries == RETRIES_COUNT) {
-                        first_transfer_in_progress--;
-                    } else {
-                        retry_transfer_in_progress--;
-                    }
-                    update_transfer_in_progress();
+                    // The update was successful
+                    success_fun(retries);
                 } else {
                     // We got an error from the server
-                    update_error(data, result, retries, timeout);
+                    ew_ajax_error(url, data, result, retries, timeout,
+                                  success_fun, error_fun, give_up_fun);
                 }
             },
             error: function(result) {
                 // We got an error; we may not have reached the server
-                update_error(data, result, retries, timeout);
+                ew_ajax_error(url, data, result, retries, timeout,
+                              success_fun, error_fun, give_up_fun);
             }
         });
     } else {
         // We give up the transfer
-        retry_transfer_in_progress--;
-        update_transfer_in_progress();
+        give_up_fun();
     }
+}
+
+function ajax_update_word_success(retries) {
+    // The server updated the word successfully
+    transferred++;
+    $('#transferred').text(transferred);
+    if (retries == RETRIES_COUNT) {
+        first_transfer_in_progress--;
+    } else {
+        retry_transfer_in_progress--;
+    }
+    update_transfer_in_progress();
+}
+
+function ajax_update_word_error(retries) {
+    if (retries == RETRIES_COUNT) {
+        // This is the first transfer error regarding this word
+        first_transfer_in_progress--;
+        retry_transfer_in_progress++;
+        update_transfer_in_progress();
+    };
+}
+
+function ajax_update_word_give_up() {
+    retry_transfer_in_progress--;
+    update_transfer_in_progress();
+}
+
+function ajax_update_word(answer, word_index, direction) {
+    // Sends an "update word" request to the server.
+
+    // first_transfer_in_progress should be incremented by the caller of this
+    // function.
+
+    var data = {'answer': JSON.stringify(answer),
+                'word_index': JSON.stringify(word_index),
+                'direction': JSON.stringify(direction),
+                'csrfmiddlewaretoken': csrf_token};
+    ew_ajax_send(UPDATE_WORD_URL, data, RETRIES_COUNT, INITIAL_TIMEOUT,
+                 ajax_update_word_success,
+                 ajax_update_word_error,
+                 ajax_update_word_give_up);
+}
+
+function find_li_with_label(word_index, direction, label) {
+    return $.grep($('#operations-list li'),
+                  function(node, index) {
+                      return $(node).attr('id') ==
+                             'ql-' + word_index + '-' + direction + '-' + label;
+                  }, false);
+}
+
+function ajax_add_label_to_current_word(label) {
+    // Sends an "add label" request to the server.
+
+    // If we already have an update with the same input, we ignore the new
+    // request
+    if (find_li_with_label(word_index, direction, label) > 0) {
+        return;
+    }
+
+    // Read the translated texts from the HTML file
+    var tr_keys = ['start', 'success', 'trying', 'gave_up'];
+    var tr_dict = {};
+    for (var i=0; i<tr_keys.length; i++) {
+        // Example:
+        // tr_dict['start'] = "Adding label started: mylabel, 23"
+        var trans_label = tr_keys[i];
+        tr_dict[trans_label] = 
+            translations['add_label_' + trans_label] + ': ' +
+            label + ', ' + ew_prefix(question_word, QUESTION_WORD_PREFIX);
+    }
+
+    var change_text_gen = function(text) {
+        // Generates a function which places the given text in the 'li' item
+        // which belongs to this word_index+direction+label
+        return function() {
+            var li = find_li_with_label(word_index, direction, label);
+            $(li).text(text);
+        }
+    }
+
+    var data = {'word_index': JSON.stringify(word_index),
+                'label': JSON.stringify(label),
+                'csrfmiddlewaretoken': csrf_token};
+
+    // Show the user that the operation has started
+    $('#operations-list').append('<li></li>');
+    $('#operations-list li').last().
+                             attr('id', 'ql-' + word_index + '-' + direction +
+                                        '-' + label).
+                             text(tr_dict['start']);
+
+    ew_ajax_send(ADD_LABEL_URL, data, RETRIES_COUNT, INITIAL_TIMEOUT,
+                 change_text_gen(tr_dict['success']),
+                 change_text_gen(tr_dict['error']),
+                 change_text_gen(tr_dict['give_up']));
 }
 
 function yesno_button(answer) {
@@ -307,11 +421,7 @@ function yesno_button(answer) {
         $('#answered-incorrectly').text(answered_incorrectly);
     }
     $('#answered').text(answered);
-    var data = {'answer': JSON.stringify(old_answer),
-                'word_index': JSON.stringify(old_word_index),
-                'direction': JSON.stringify(old_direction),
-                'csrfmiddlewaretoken': csrf_token};
-    update_word(data, RETRIES_COUNT, INITIAL_TIMEOUT);
+    ajax_update_word(old_answer, old_word_index, old_direction);
 }
 
 function ew_keypress(e) {
@@ -331,7 +441,7 @@ function ew_keypress(e) {
 
 $(document).ready(function() {
 
-    // Event handlers
+    // Initializing event handlers
     $('#yes-button').click(function() { yesno_button(true); });
     $('#no-button').click(function() { yesno_button(false); });
     $('#ok-button').click(answer_button);
@@ -346,6 +456,14 @@ $(document).ready(function() {
         $('#operations').hide();
     });
 
-    // The first word
+    $('#quick-labels [id^=quick-label-]').click(function() {
+        var label = $(this).attr('id').replace(/^quick-label-/, '');
+        ajax_add_label_to_current_word(label);
+    });
+
+    //Initializing the translation dictionary
+    init_translations();
+
+    // Ask the first word
     start_practice();
 });

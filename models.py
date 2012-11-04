@@ -106,6 +106,7 @@ class EWUser(models.Model):
 
     # Practice page arrangement
     practice_arrangement = models.CharField(default='normal', max_length=20)
+    quick_labels = models.CharField(default='quick', max_length=255, blank=True)
 
     # Font sizes on the practice page
     button_size = models.IntegerField(default=35)
@@ -132,6 +133,10 @@ class EWUser(models.Model):
         sign, hours, minutes = r.group(1), int(r.group(2)), int(r.group(3))
         self.turning_point = ((-1 if sign == '-' else 1) *
                               (hours * 60 + minutes))
+
+    def get_quick_labels(self):
+        print unicode(self.quick_labels).split()
+        return unicode(self.quick_labels).split()
 
     @staticmethod
     def get_email_receiver_users():
