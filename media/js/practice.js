@@ -34,7 +34,7 @@ var TIMEOUT_INTERVAL = 3 * 1000; // 3 second
 var MAX_TIMEOUT = 20 * 1000; // 20 seconds
 
 // The minimum time for the "Please wait" text to be displayed.
-var MIN_PLEASE_WAIT_DISPLAY = 1000; // 1 second.
+var MIN_PLEASE_WAIT_DISPLAY = 300; // 1 second.
 
 
 ///// Global state /////
