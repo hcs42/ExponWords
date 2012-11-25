@@ -207,11 +207,8 @@ class WDict(models.Model):
                     return wp.get_strength(direction)
                 strong_words.sort(key=strength_key_fun)
 
-                # Then sort by dimness
-                dimness_day = get_today(self.user)
-                if self.user.username in ('hcs', 'bandris'):
-                    dimness_day += datetime.timedelta(days=1)
-
+                # Then sort by dimness tomorrow
+                dimness_day = get_today(self.user) + datetime.timedelta(days=1)
                 def dimness_key_fun((wp, direction)):
                     return wp.get_dimness(direction, dimness_day)
                 reverse = (order == 'dimmer_first')
