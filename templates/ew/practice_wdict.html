@@ -44,7 +44,8 @@
   </span>/
   <span id="answered"></span>
   (<span id="answered-incorrectly"></span>) /
-  <span id="all"></span>
+  <span id="all-now"></span>
+  <span id="all-today"></span>
   <button id="show-operations-button" class="nice-button">{% trans 'More' %}</button>
   <div id="operations" class="practice-operations" style="display:none;">
     <p>{% trans "Operations" %}:
@@ -74,32 +75,44 @@
   {% endif %}
 </div>
 
+<div id="final_sentence"></div>
+
 <!-- Translations -->
-<div style="display:none" id="please_wait">
-  {% trans "Please wait..." %}
-</div>
 
-<div style="display:none" id="no_more_words">
-  {% trans "No more words for today. Good job! (If you hit Refresh, you will iterate only on the words that you did not know.)" %}
-</div>
+<div style="display:none">
+  <div id="translate_please_wait">
+    {% trans "Please wait..." %}
+  </div>
 
-<div style="display:none" id="translate_add_label_start">
-  {% trans "Adding label started" %}
-</div>
+  <div id="translate_finished">
+    {% trans "You have completed all words for today. Good job!" %}
+  </div>
 
-<div style="display:none" id="translate_add_label_success">
-  {% trans "Adding label successful" %}
-</div>
+  <div id="translate_all_words_to_practice">
+    {% trans "All words to practice" %}
+  </div>
 
-<div style="display:none" id="translate_add_label_trying">
-  {% trans "Adding label (still trying)" %}
-</div>
+  <div id="translate_add_label_start">
+    {% trans "Adding label started" %}
+  </div>
 
-<div style="display:none" id="translate_add_label_gave_up">
-  {% trans "Gave up adding label" %}
+  <div id="translate_add_label_success">
+    {% trans "Adding label successful" %}
+  </div>
+
+  <div id="translate_add_label_trying">
+    {% trans "Adding label (still trying)" %}
+  </div>
+
+  <div id="translate_add_label_gave_up">
+    {% trans "Gave up adding label" %}
+  </div>
 </div>
 
 {% endblock %}
+
+<!-- Javascript -->
+
 {% block javascript %}
   <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
   <script type="text/javascript" language="JavaScript" src="/site_media/js/json2.js?{% ew_version %}"></script>

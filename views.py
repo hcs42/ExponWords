@@ -60,6 +60,7 @@ PRACTICE_WORD_ORDER_CHOICES = \
      ('zero_first', _('New and forgotten words first')),
      ('dimmer_first', _('I am a little behind')),
      ('dimmer_last', _('Relearn old words'))]
+PRACTICE_WORD_COUNT_LIMIT = 200
 
 
 ##### General helper functions #####
@@ -901,9 +902,15 @@ def escape_for_html(explanation, indent=False):
     return '<br/>'.join(explanation.splitlines())
 
 
-def words_to_practice_to_json(words_to_practice):
-    result = []
-    for wp, direction in words_to_practice:
+def words_to_practice_to_json(words_to_practice, limit):
+    word_list = []
+    
+    if limit:
+        words_to_practice_now = words_to_practice[:PRACTICE_WORD_COUNT_LIMIT]
+    else:
+        words_to_practice_now = words_to_practice
+
+    for wp, direction in words_to_practice_now:
 
         if wp.explanation:
             expl_labels = wp.explanation
@@ -921,12 +928,14 @@ def words_to_practice_to_json(words_to_practice):
             dimness = wp.get_dimness(direction, dimness_day, silent=True)
             expl_labels += '\nDimness: ' + str(dimness)
 
-        result.append([escape_for_html(wp.word_in_lang1),
-                       escape_for_html(wp.word_in_lang2),
-                       direction,
-                       wp.id,
-                       escape_for_html(expl_labels, indent=True)])
-    return json.dumps(result)
+        word_list.append([escape_for_html(wp.word_in_lang1),
+                          escape_for_html(wp.word_in_lang2),
+                          direction,
+                          wp.id,
+                          escape_for_html(expl_labels, indent=True)])
+
+    return json.dumps({'all_words_to_practice': len(words_to_practice),
+                       'word_list': word_list})
 
 
 @wdict_access_required
@@ -948,7 +957,7 @@ def practice_wdict(request, wdict):
 def practice(request):
     models.log(request, 'practice')
     words_to_practice = request.session['ew_words_to_practice']
-    json_str = words_to_practice_to_json(words_to_practice)
+    json_str = words_to_practice_to_json(words_to_practice, limit=False)
     ewuser = models.get_ewuser(request.user)
     return render(request,
                   'ew/practice_wdict.html',
@@ -964,7 +973,7 @@ def get_words_to_practice_today(request, wdict):
     try:
         words_to_practice = wdict.get_words_to_practice_today()
         wdict.sort_words(words_to_practice)
-        json_str = words_to_practice_to_json(words_to_practice)
+        json_str = words_to_practice_to_json(words_to_practice, limit=True)
         return HttpResponse(json_str,
                             mimetype='application/json')
     except Exception, e:

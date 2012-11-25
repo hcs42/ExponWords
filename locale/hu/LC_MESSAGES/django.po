@@ -439,12 +439,11 @@ msgstr "Címke hozzáadása"
 msgid "Please wait..."
 msgstr "Várj..."
 
-msgid ""
-"No more words for today. Good job! (If you hit Refresh, you will iterate "
-"only on the words that you did not know.)"
-msgstr ""
-"Mára nincs több feladat. Ügyes voltál! (Ha frissíted az oldalt, végigmehetsz "
-"még egyszer azokon a szavakon, amiket nem tudtál.)"
+msgid "You have completed all words for today. Good job!"
+msgstr "Mára minden szó kész van. Ügyes voltál!"
+
+msgid "All words to practice"
+msgstr "Gyakorlandó szavak összesen"
 
 msgid "Adding label started"
 msgstr "Címke hozzáadása elkezdődött"

@@ -44,6 +44,7 @@ var QUESTION_WORD_PREFIX = 40;
 ///// Global state /////
 
 var todays_wordlist;
+var all_words_to_practice;
 var transferred = 0;
 var first_transfer_in_progress = 0;
 var retry_transfer_in_progress = 0;
@@ -110,8 +111,15 @@ function init_translations() {
 function ask_first_word(todays_wordlist_param) {
     // Set the given word list as the word list for today and ask the first
     // word.
-    todays_wordlist = todays_wordlist_param;
-    $('#all').text(todays_wordlist.length);
+    todays_wordlist = todays_wordlist_param['word_list'];
+    all_words_to_practice = todays_wordlist_param['all_words_to_practice'];
+
+    $('#all-now').text(todays_wordlist.length);
+    if (todays_wordlist.length < all_words_to_practice) {
+        $('#all-today').text('[' + translations['all_words_to_practice'] +
+                             ': ' + all_words_to_practice + ']');
+    }
+
     $('#transferred').text('0');
     $('#transfer-in-progress').text('0');
     $('#answered').text('0');
@@ -261,12 +269,17 @@ function update_transfer_in_progress() {
 
     // Maybe display the "Please wait" text
     if (state == 'please_wait_hard' || state == 'please_wait_soft')
-        $('#please_wait').show();
+        $('#final_sentence').text(translations['please_wait']);
     else if (state == 'finished') {
-        $('#please_wait').hide();
-        $('#no_more_words').show();
+        // The page should be reloaded if there are still words today or there
+        // were incorrect answers
+        if (todays_wordlist.length < all_words_to_practice ||
+            answered_incorrectly > 0) {
+            location.reload();
+        } else {
+            $('#final_sentence').text(translations['finished']);
+        }
     }
-
 }
 
 function ew_ajax_error(url, data, result, retries, timeout, success_fun,
