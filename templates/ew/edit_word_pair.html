@@ -19,8 +19,10 @@
 {% include "ew/message.html" %}
 
 <form action="{% url edit_word_pair word_pair.id %}" method="post">{% csrf_token %}
+  {% with 'edit' as edit_type %}
   {% with 'Save' as submit_text %}
     {% include "ew/word_pair.html" %}
+  {% endwith %}
   {% endwith %}
 </form>
 

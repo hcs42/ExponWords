@@ -15,7 +15,12 @@
 
 // Copyright (C) 2011-2012 Csaba Hoch
 
-display_mode = 'simple'; // simple or advanced
+// 'simple' or 'advanced'
+display_mode = 'simple';
+
+// 'basic' when the page is loaded; 'confirmation_needed' when the user pressed
+// the "Delete word pair" button
+delete_state = 'basic';
 
 function advanced_button_click() {
     $('.advanced').show();
@@ -44,11 +49,46 @@ function reset_button_click() {
     }
 }
 
+function delete_button_1_click() {
+    delete_state = 'delete_button_1_clicked';
+    $('#delete_button_1').hide();
+    $('#delete_confirm').show();
+}
+
+function delete_button_yes_click() {
+    delete_state = 'delete_button_yes_clicked';
+}
+
+function delete_button_cancel_click() {
+    delete_state = 'delete_button_cancel_clicked';
+    $('#delete_button_1').show();
+    $('#delete_confirm').hide();
+}
+
+function delete_submit() {
+    if (delete_state == 'delete_button_1_clicked') {
+        return false;
+        delete_state = 'confirmation_needed';
+    } else if (delete_state == 'delete_button_cancel_clicked') {
+        return false;
+        delete_state = 'basic';
+    } else if (delete_state == 'delete_button_yes_clicked') {
+        return true;
+    } else {// delete_state == basic or confirmation_needed
+        // The "Save" button was pressed
+        return true;
+    }
+}
+
 $(document).ready(function() {
 
     $('#advanced_button').click(advanced_button_click);
     $('#simple_button').click(simple_button_click);
     $('#reset1_button').click(reset_button_click);
     $('#reset2_button').click(reset_button_click);
+    $('#delete_button_1').click(delete_button_1_click);
+    $('#delete_button_yes').click(delete_button_yes_click);
+    $('#delete_button_cancel').click(delete_button_cancel_click);
+    $('form').submit(delete_submit);
     //$('.advanced').hide();
 });

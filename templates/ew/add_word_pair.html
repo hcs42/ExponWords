@@ -22,8 +22,10 @@
 
 <form action="{% url add_word_pair wdict.id %}" method="post">{% csrf_token %}
   <!-- {% trans 'Add word pair' %} - This is needed to get Django to include this string in the translation. -->
+  {% with 'add' as edit_type %}
   {% with 'Add word pair' as submit_text %}
     {% include "ew/word_pair.html" %}
+  {% endwith %}
   {% endwith %}
 </form>
 {% endblock %}

@@ -1235,6 +1235,13 @@ def edit_word_pair(request, wp, wdict):
 
         models.log(request, 'edit_word_pair')
 
+        if 'delete_word_pair' in request.POST:
+            wp.deleted = True
+            wp.save()
+            messages.success(request, _('Word pair deleted.'))
+            wdict_url = reverse('ew.views.index', args=[])
+            return HttpResponseRedirect(wdict_url)
+            
         form = WordPairForm(request.POST)
         if form.is_valid():
 

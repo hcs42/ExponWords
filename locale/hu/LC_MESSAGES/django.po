@@ -252,6 +252,9 @@ msgstr "Találatok mutatása"
 msgid "Page %(current_page_index)s of %(page_count)s"
 msgstr "%(current_page_index)s. oldal (összesen %(page_count)s)"
 
+msgid "Word pair deleted."
+msgstr "Szópár törölve."
+
 msgid "Word pair modified."
 msgstr "Szópár módosítva."
 
@@ -602,6 +605,18 @@ msgstr "Módosítás"
 
 msgid "Dates and strengths"
 msgstr "Dátumok és erősségek"
+
+msgid "Delete word pair"
+msgstr "Szópár törlése"
+
+msgid "Are you sure that you want to delete this word pair?"
+msgstr "Biztos, hogy törölni akarod ezt a szópárat?"
+
+msgid "Yes"
+msgstr "Igen"
+
+msgid "Cancel"
+msgstr "Mégsem"
 
 msgid "Advanced view"
 msgstr "Haladó nézet"
