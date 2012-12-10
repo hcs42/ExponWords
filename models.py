@@ -26,6 +26,12 @@ from django.utils.translation import ugettext as _
 
 version = '0.11.1'
 
+##### Constants #####
+
+# The maximum number of characters used to represent a word
+WORD_PREFIX = 40;
+
+
 ##### Date handling #####
 
 
@@ -224,6 +230,20 @@ class WDict(models.Model):
         else:
             return self.practice_word_order
 
+    def get_duplicates(self, wp):
+        f = WordPair.objects.filter
+        lang1_same = set(f(wdict=self,
+                           word_in_lang1=wp.word_in_lang1,
+                           deleted=False))
+        lang1_same.discard(wp)
+        lang2_same = set(f(wdict=self,
+                           word_in_lang2=wp.word_in_lang2,
+                           deleted=False))
+        lang2_same.discard(wp)
+        same_word_pairs = lang1_same & lang2_same
+        similar_word_pairs = (lang1_same | lang2_same) - same_word_pairs
+        return sorted(same_word_pairs), sorted(similar_word_pairs)
+        
 
 class WordPair(models.Model):
 
@@ -389,6 +409,18 @@ class WordPair(models.Model):
         for field in self.get_fields_to_be_saved():
             saved_fields[field] = getattr(self, field)
         return saved_fields
+
+    @staticmethod
+    def prefix(s, max_length):
+        if len(s) <= max_length:
+            return s
+        else:
+            return s[:max_length - 3] + '...'
+
+    def get_short_repr(self):
+        return (self.prefix(self.word_in_lang1, WORD_PREFIX) +
+                ' / ' +
+                self.prefix(self.word_in_lang2, WORD_PREFIX))
 
 
 ##### Importing and exporting word pairs #####

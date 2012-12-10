@@ -467,6 +467,27 @@ def get_styles(display_mode):
     elif display_mode == 'advanced':
         return 'display: none;', ''
 
+def create_duplicate_msg(duplicate_word_pairs, text_singular, text_plural):
+    if len(duplicate_word_pairs) == 0:
+        return ''
+
+    message = []
+    text = unicode(text_singular if len(duplicate_word_pairs) == 1
+                                 else text_plural)
+
+    message += ['<div>\n',
+                text, ':\n',
+                '<ul>\n']
+    for wp2 in duplicate_word_pairs:
+        wp2_url = reverse('ew.views.edit_word_pair', args=[wp2.id])
+        message += ['<li>\n',
+                    '<a href="', wp2_url, '">',
+                    unicode(wp2.get_short_repr()), '</a>\n',
+                    '</li>\n']
+    message += ['</ul>\n',
+                '</div>\n']
+    return ''.join(message)
+
 @wdict_access_required
 @set_lang
 def add_word_pair(request, wdict):
@@ -504,10 +525,26 @@ def add_word_pair(request, wdict):
     elif request.method == 'GET':
         wpid = request.GET.get('wp')
         if wpid is not None:
-            wdict_url = reverse('ew.views.edit_word_pair', args=[wpid])
-            message = (unicode(_('Word pair added')) +
-                       ': <a href="' + wdict_url + '">' +
-                       unicode(_('edit')) + '</a>')
+            wp_url = reverse('ew.views.edit_word_pair', args=[wpid])
+            message = [unicode(_('Word pair added')),
+                       ': <a href="' + wp_url + '">',
+                        unicode(_('edit')) + '</a>\n']
+
+            # Create text about duplicates
+            wp = get_object_or_404(WordPair,
+                                   pk=wpid,
+                                   wdict__user=request.user)
+            same_word_pairs, similar_word_pairs = wp.wdict.get_duplicates(wp)
+            message.append(create_duplicate_msg(
+                               same_word_pairs,
+                                _('The following word pair is the same'),
+                                _('The following word pairs are the same')))
+            message.append(create_duplicate_msg(
+                               similar_word_pairs,
+                                _('The following word pair is similar'),
+                                _('The following word pairs are similar')))
+
+            message = ''.join(message)
 
         data = get_default_wp_data(request.user)
 

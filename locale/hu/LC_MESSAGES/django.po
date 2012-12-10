@@ -144,6 +144,18 @@ msgstr "Szópár hozzáadva"
 msgid "edit"
 msgstr "szerkesztés"
 
+msgid "The following word pair is the same"
+msgstr "A következő szópár ugyanez"
+
+msgid "The following word pairs are the same"
+msgstr "A következő szópárok ugyanezek"
+
+msgid "The following word pair is similar"
+msgstr "A következő szópár hasonló"
+
+msgid "The following word pairs are similar"
+msgstr "A következő szópárok hasonlóak"
+
 msgid "Word pairs added."
 msgstr "Szópárok hozzáadva."
 
