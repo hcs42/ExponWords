@@ -112,10 +112,11 @@ function ask_first_word(todays_wordlist_param) {
     // Set the given word list as the word list for today and ask the first
     // word.
     todays_wordlist = todays_wordlist_param['word_list'];
+    words_to_practice_now = todays_wordlist.length;
     all_words_to_practice = todays_wordlist_param['all_words_to_practice'];
 
-    $('#all-now').text(todays_wordlist.length);
-    if (todays_wordlist.length < all_words_to_practice) {
+    $('#all-now').text(words_to_practice_now);
+    if (words_to_practice_now < all_words_to_practice) {
         $('#all-today').text('[' + translations['all_words_to_practice'] +
                              ': ' + all_words_to_practice + ']');
     }
@@ -273,7 +274,7 @@ function update_transfer_in_progress() {
     else if (state == 'finished') {
         // The page should be reloaded if there are still words today or there
         // were incorrect answers
-        if (todays_wordlist.length < all_words_to_practice ||
+        if (words_to_practice_now < all_words_to_practice ||
             answered_incorrectly > 0) {
             location.reload();
         } else {
