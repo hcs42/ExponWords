@@ -4,6 +4,7 @@ Top priority
 Important
 ---------
 
+- markup or HTML in words
 - bugfix: handle error when "wp.date2 += days" would be an overflow in
   views.operation_on_word_pairs
 - Investigate the Opera problem further
