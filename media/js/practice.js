@@ -438,19 +438,25 @@ function yesno_button(answer) {
     ajax_update_word(old_answer, old_word_index, old_direction);
 }
 
-function ew_keypress(e) {
+function ew_practice_button_pressed(button) {
     if (state == 'answer') {
         state = 'intermediate';
         answer_button();
     } else if (state == 'yesno') {
-        if (e.which == 105 || e.which == 121) { 
+        if (button == 'yes') { 
             state = 'intermediate';
             yesno_button(true);
-        } else if (e.which == 110) {
+        } else if (button == 'no') {
             state = 'intermediate';
             yesno_button(false);
         }
     }
+}
+
+function ew_keypress(e) {
+    ew_practice_button_pressed(
+        (e.which == 105 || e.which == 121) ? 'yes' :
+        (e.which == 110) ? 'no' : 'other');
 }
 
 $(document).ready(function() {

@@ -986,6 +986,7 @@ def practice_wdict(request, wdict):
                   {'wdict': wdict,
                    'words_to_practice': 'undefined',
                    'ewuser': ewuser,
+                   'user': request.user,
                    'quick_labels': ewuser.get_quick_labels()})
 
 
