@@ -50,6 +50,7 @@ var first_transfer_in_progress = 0;
 var retry_transfer_in_progress = 0;
 var answered = 0;
 var answered_incorrectly = 0;
+var operations_are_visible = false;
 
 // The state of the UI. Possible states:
 // - init
@@ -466,10 +467,29 @@ function activate_ew_pageupdown() {
     $('body').bind('keydown', ew_pageupdown);
 }
 
+function show_hide_operations(action) {
+    // action in ['show', 'hide', 'toggle']
+    if (action == 'show' ||
+        (action == 'toggle' && !operations_are_visible)) {
+            $('#show-operations-button').hide();
+            $('#operations').show();
+            operations_are_visible = true;
+    } else {
+            $('#show-operations-button').show();
+            $('#operations').hide();
+            operations_are_visible = false;
+    }
+}
+
 function ew_keypress(e) {
-    ew_practice_button_pressed(
-        (e.which == 105 || e.which == 121) ? 'yes' :
-        (e.which == 110) ? 'no' : 'other');
+    if (e.which == 109) {
+        // 'm'
+        show_hide_operations('toggle');
+    } else {
+        ew_practice_button_pressed(
+            (e.which == 105 || e.which == 121) ? 'yes' :
+            (e.which == 110) ? 'no' : 'other');
+    }
 }
 
 $(document).ready(function() {
@@ -481,12 +501,10 @@ $(document).ready(function() {
     $('body').keypress(ew_keypress);
 
     $('#show-operations-button').click(function() {
-        $('#show-operations-button').hide();
-        $('#operations').show();
+        show_hide_operations('show');
     });
     $('#hide-operations-button').click(function() {
-        $('#show-operations-button').show();
-        $('#operations').hide();
+        show_hide_operations('hide');
     });
 
     $('#quick-labels [id^=quick-label-]').click(function() {
