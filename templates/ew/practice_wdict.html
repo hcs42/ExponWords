@@ -132,17 +132,6 @@
     {% endif %}
   </script>
   {% if user.username == 'hcs' %}
-  <script>
-function ew_pageupdown(e) {
-    if (e.originalEvent.keyIdentifier == "PageUp") {
-        ew_practice_button_pressed('yes');
-    } else if (e.originalEvent.keyIdentifier == "PageDown") {
-        ew_practice_button_pressed('no');
-    }
-}
-$(document).ready(function() {
-    $('body').bind('keydown', ew_pageupdown);
-});
-  </script>
+  <script>$(document).ready(activate_ew_pageupdown);</script>
   {% endif %}
 {% endblock %}

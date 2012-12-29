@@ -453,6 +453,19 @@ function ew_practice_button_pressed(button) {
     }
 }
 
+function ew_pageupdown(e) {
+    // Not activated by default
+    if (e.originalEvent.keyIdentifier == "PageDown") {
+        ew_practice_button_pressed('yes');
+    } else if (e.originalEvent.keyIdentifier == "PageUp") {
+        ew_practice_button_pressed('no');
+    }
+}
+
+function activate_ew_pageupdown() {
+    $('body').bind('keydown', ew_pageupdown);
+}
+
 function ew_keypress(e) {
     ew_practice_button_pressed(
         (e.which == 105 || e.which == 121) ? 'yes' :
