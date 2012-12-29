@@ -1,56 +1,118 @@
-Top priority
-------------
+Priority
+--------
 
-Important
----------
+- advanced calc, early review
+- redesign
+- bugfix
 
-- markup or HTML in words
-- bugfix: handle error when "wp.date2 += days" would be an overflow in
-  views.operation_on_word_pairs
-- Investigate the Opera problem further
-- Add outlog and errlog to cgi start
-- Do something when a duplicate word is to be added
-- Search&Operations page: show dimness optionally
-- help pages: "user" -> you - ask others' opinions
-- practice page: remembers which words shall be practiced when all the words
-- practice page: when ready, give a link for loading the practice page of the
-  next dictionary or load new words of the current dictionary if there are such
-  words
-- practice page: option whether to show tomorrow's dimness, label, etc.
-- delete a word from the "Edit word" page
-- nginx caching
-- help: add screenshots
-- announcement: %USER, link to unsubscribe
-- Think about it
-    - save words with ctrl-s
-    - pronounce words with Forvo or Google Translate
-- FAQ: word order
-- settings page: group the settings (e.g. a "Practice page" group would be good)
-
-Would be nice
+User features
 -------------
 
-- think about CR and LF newlines
-- XHTML validation
-- HTTPS
-- using JQuery delegates
+- markup or HTML in words
+- pronounce words with Forvo or Google Translate
+- word queue for words to be learnt
+    - word pairs should have a direction (->, <- or <->)
+    - setting for queue labels
+    - add word pair, import word pairs
+    - setting for automatically removing N words from each queue each day
+    - "Activate words" page {0:30}: "Add [10] word pairs from queue [q1]. <button>DO</button>"
 - mechanism for sharing dictionaries
 - importing/exporting CSV/JSON files
 - showing "(n)" when having multiple occurrences of the same word
-- word queue for words to be learnt
-    - "Activate words" page {0:30}
-    - document that 9999-01-01 is special
-- redesign the design
-- option for asking a word only in one direction
-- option for setting the basic font size
-- search: "due-before", "due-after" tags
 
-Wishlist
---------
+User features: motivation
+-------------------------
 
 - stats:
     - number of hits and misses
     - number of active users
+    - future: only show important dictionaries
+- gamification, earn points, badges
+
+User features: teaching
+-----------------------
+
+- teachers can add words for students
+- teachers can access statistics of relevant dictionaries of students
+- online tests, generate offline tests
+
+Practice page
+-------------
+
+- sorting the dictionaries
+- automatically jump to the next dictionary at the end of practice
+
+Practice page 2.0
+-----------------
+
+- the server remembers everything (word list for the day)
+- the client has a buffer of 200 words
+- the client is notified when a word is added or changed
+- undo: the server and the client remember even operations
+- edit words within the page
+- question: when to ask failed words?
+
+Practice algorithm
+------------------
+
+- implement advanced "strength/next date calculation" (strength2 = strength1 +
+  dimness_today; date2 = date1 + 2^strength1 * dimness_today)
+    - practicing selected words should use this method too
+- early practice: it should ask "do you want to go on?" after finishing the
+  practice
+- add SuperMemo/Anki ideas
+    - use special labels, e.g. "!sm2" for using SM-2 on a word pair
+    - use 6 days as second interval (label "!6")
+    - use easyness factor (label "!ef")
+- stats about the effectiveness of the algorithm
+    - percentage of YES/NO answers (per word strength)
+    - retention rate (per word strength)
+
+Settings
+--------
+
+- setting for setting the basic font size
+- Search&Operations page: show dimness optionally
+- setting for whether to show tomorrow's dimness, label, etc. on the practice page
+
+Design
+------
+
+- redesign the design (http://24ways.org/2012/how-to-make-your-site-look-half-decent/)
+- settings page: group the settings (e.g. a "Practice page" group would be good)
+
+Other
+-----
+
+- bugfix: handle error when "wp.date2 += days" would be an overflow in
+  views.operation_on_word_pairs
+- announcement: %USER, link to unsubscribe
+
+Help
+----
+
+- FAQ: word order
+- document "Import text" format
+- help pages: "user" -> you - ask others' opinions
+- add more "help for this" text
+- help: add screenshots
+
+Server
+------
+
+- undelivered email
+- email backup
+- Investigate the Opera problem further
+- Add outlog and errlog to cgi start
+- nginx caching
+- XHTML validation
+- HTTPS
+
+Code style
+----------
+
+- think about CR and LF newlines
+- using JQuery delegates
 - using only relative links (HttpResponseRedirect)
 - don't bind the forms
-- Google Translate link
+- write automatic tests
