@@ -46,7 +46,7 @@
   (<span id="answered-incorrectly"></span>) /
   <span id="all-now"></span>
   <span id="all-today"></span>
-  <button id="show-operations-button" class="nice-button">{% trans 'More' %}</button>
+  <button type="button" id="show-operations-button" class="nice-button">{% trans 'More' %}</button>
   <div id="operations" class="practice-operations" style="display:none;">
     <p>{% trans "Operations" %}:
     <span id="hide-operations-button" class="nice-button">{% trans 'Hide' %}</span>
@@ -65,9 +65,9 @@
 <div id="main">
   {% if ewuser.practice_arrangement == 'normal' %}
 <div id="buttons">
-  <button class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="yes-button">{% trans "YES" %}</button>
-  <button class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</button>
-  <button class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</button>
+  <button type="button" class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="yes-button">{% trans "YES" %}</button>
+  <button type="button" class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</button>
+  <button type="button" class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</button>
 </div>
 <div id="question" style="font-size:{{ ewuser.question_size }}"></div>
 <div id="answer" style="font-size:{{ ewuser.answer_size }}"></div>
