@@ -141,7 +141,6 @@ class EWUser(models.Model):
                               (hours * 60 + minutes))
 
     def get_quick_labels(self):
-        print unicode(self.quick_labels).split()
         return unicode(self.quick_labels).split()
 
     @staticmethod
