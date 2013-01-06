@@ -851,6 +851,7 @@ def calc_future(user, days_count, start_date):
             question_count = 0
             for strength, word_count in strength_to_word_count.items():
                 question_count += word_count
+                today = get_today(user)
                 new_date = today + datetime.timedelta(2 ** max(strength, 0))
                 incr_wcd(wcd, wdict, strength + 1, new_date, word_count)
             date_to_question_count[(wdict, date)] = question_count
