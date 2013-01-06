@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-version = '0.13.2'
+version = '0.13.3'
 
 ##### Constants #####
 
