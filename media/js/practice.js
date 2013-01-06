@@ -43,7 +43,7 @@ var QUESTION_WORD_PREFIX = 40;
 
 ///// Global state /////
 
-var todays_wordlist;
+var todays_word_list;
 var all_words_to_practice;
 var transferred = 0;
 var first_transfer_in_progress = 0;
@@ -109,12 +109,12 @@ function init_translations() {
     });
 }
 
-function ask_first_word(todays_wordlist_param) {
+function ask_first_word(todays_word_list_param) {
     // Set the given word list as the word list for today and ask the first
     // word.
-    todays_wordlist = todays_wordlist_param['word_list'];
-    words_to_practice_now = todays_wordlist.length;
-    all_words_to_practice = todays_wordlist_param['all_words_to_practice'];
+    todays_word_list = todays_word_list_param['word_list'];
+    words_to_practice_now = todays_word_list.length;
+    all_words_to_practice = todays_word_list_param['all_words_to_practice'];
 
     $('#all-now').text(words_to_practice_now);
     if (words_to_practice_now < all_words_to_practice) {
@@ -129,12 +129,13 @@ function ask_first_word(todays_wordlist_param) {
     ask_word();
 }
 
-function get_todays_wordlist(success_fun) {
+function get_todays_word_list(success_fun, word_list_type) {
     // Get the list of today's word from the server and ask the first one.
+    // word_list_type = "normal" | "early"
     $.ajax({
         url: GET_WORDS_TO_PRACTICE_TODAY_URL + '?' + Math.random(),
         dataType: 'json',
-        data: {},
+        data: {'word_list_type': word_list_type},
         type: 'get',
         success: success_fun
     });
@@ -143,8 +144,10 @@ function get_todays_wordlist(success_fun) {
 function start_practice() {
     // Start the practice. If WORDS_TO_PRACTICE_TODAY is undefined, get the
     // words from the server.
-    if (WORDS_TO_PRACTICE_TODAY == undefined) {
-        get_todays_wordlist(ask_first_word);
+    if (WORDS_TO_PRACTICE_TODAY == 'normal') {
+        get_todays_word_list(ask_first_word, 'normal');
+    } else if (WORDS_TO_PRACTICE_TODAY == 'early') {
+        get_todays_word_list(ask_first_word, 'early');
     } else {
         ask_first_word(WORDS_TO_PRACTICE_TODAY);
     }
@@ -173,7 +176,7 @@ function update_edit_words(button, curr_word_index) {
 
 function ask_word() {
 
-    if (todays_wordlist.length == 0) {
+    if (todays_word_list.length == 0) {
 
         state = 'please_wait_hard';
         prev_word_index = word_index;
@@ -200,7 +203,7 @@ function ask_word() {
     } else {
 
         show_answer_button();
-        word = todays_wordlist[0];
+        word = todays_word_list[0];
         direction = word[2];
         question_word = word[direction - 1];
         solution_word = word[2 - direction];
@@ -220,7 +223,7 @@ function ask_word() {
         $('#explanation').html('');
         update_edit_words();
 
-        todays_wordlist.shift();
+        todays_word_list.shift();
         state = 'answer';
     }
 }

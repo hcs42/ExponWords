@@ -432,10 +432,12 @@ def docs(request, lang, page):
 def wdict(request, wdict):
     words_count = len(wdict.wordpair_set.filter(deleted=False))
     todays_words_count = len(wdict.get_words_to_practice_today())
+    beta_user = (request.user.username == 'hcs')
     return render(request,
                   'ew/wdict.html',
                   {'wdict': wdict,
                    'words_count': words_count,
+                   'beta_user': beta_user,
                    'todays_words_count': todays_words_count})
 
 
@@ -960,10 +962,37 @@ def words_to_practice_to_json(words_to_practice, limit):
 
         wdict = wp.wdict
         user = wdict.user
+
+        #if user.username == 'bandris':
+        #    dimness_day = models.get_today(user) + datetime.timedelta(days=1)
+        #    dimness = wp.get_dimness(direction, dimness_day, silent=True)
+        #    expl_labels += '\nDimness: ' + str(dimness)
+
         if user.username in ('hcs', 'bandris'):
-            dimness_day = models.get_today(user) + datetime.timedelta(days=1)
-            dimness = wp.get_dimness(direction, dimness_day, silent=True)
-            expl_labels += '\nDimness: ' + str(dimness)
+            today = models.get_today(user)
+            tomorrow = today + datetime.timedelta(days=1)
+            last_query_date, due_date, due_interval_len = \
+                wp.get_date_info(direction)
+            strength2, date2 = wp.strengthen_alg2(direction, dry_run=True)
+
+            expl_labels += ('\nDimness today: ' +
+                            str(wp.get_dimness(direction, today, silent=True)) +
+                            '\nDimness tomorrow: ' +
+                            str(wp.get_dimness(direction, tomorrow, silent=True)) +
+                            '\nStrength1: ' +
+                            str(wp.get_strength(direction)) +
+                            '\nLast query date (calculated): ' +
+                            str(last_query_date) +
+                            '\nDate1 (due date): ' +
+                            str(due_date) +
+                            '\nLast due interval length (calculated): ' +
+                            str(due_interval_len) +
+                            '\nStrength2: ' +
+                            str(strength2) +
+                            '\nDate2: ' +
+                            str(date2) +
+                            '\nNext due interval length: ' +
+                            str((date2 - last_query_date).days))
 
         word_list.append([escape_for_html(wp.word_in_lang1),
                           escape_for_html(wp.word_in_lang2),
@@ -984,7 +1013,22 @@ def practice_wdict(request, wdict):
     return render(request,
                   'ew/practice_wdict.html',
                   {'wdict': wdict,
-                   'words_to_practice': 'undefined',
+                   'words_to_practice': '"normal"',
+                   'ewuser': ewuser,
+                   'user': request.user,
+                   'quick_labels': ewuser.get_quick_labels()})
+
+
+@wdict_access_required
+@set_lang
+def practice_wdict_early(request, wdict):
+    text = 'dict: "%s"' % wdict.name
+    models.log(request, 'practice_wdict_early', text)
+    ewuser = models.get_ewuser(request.user)
+    return render(request,
+                  'ew/practice_wdict.html',
+                  {'wdict': wdict,
+                   'words_to_practice': '"early"',
                    'ewuser': ewuser,
                    'user': request.user,
                    'quick_labels': ewuser.get_quick_labels()})
@@ -1009,8 +1053,13 @@ def practice(request):
 def get_words_to_practice_today(request, wdict):
 
     try:
-        words_to_practice = wdict.get_words_to_practice_today()
-        wdict.sort_words(words_to_practice)
+
+        if request.method != 'GET':
+            raise Http404
+        word_list_type = request.GET['word_list_type']
+
+        words_to_practice = wdict.get_words_to_practice_today(word_list_type=word_list_type)
+        wdict.sort_words(words_to_practice, word_list_type=word_list_type)
         json_str = words_to_practice_to_json(words_to_practice, limit=True)
         return HttpResponse(json_str,
                             mimetype='application/json')
@@ -1032,11 +1081,6 @@ def update_word(request):
         wp = get_object_or_404(WordPair,
                                pk=word_pair_id,
                                wdict__user=request.user)
-
-        if wp.get_date(direction) > models.get_today(request.user):
-            # This update have already been performed
-            return HttpResponse(json.dumps('ok'),
-                                 mimetype='application/json')
 
         assert(isinstance(answer, bool))
         if answer:

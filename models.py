@@ -16,6 +16,7 @@
 # Copyright (C) 2011-2012 Csaba Hoch
 
 import datetime
+import math
 import random
 import re
 import sys
@@ -30,6 +31,29 @@ version = '0.13.2'
 
 # The maximum number of characters used to represent a word
 WORD_PREFIX = 40;
+
+# The minimum dimness required for a word to be practiced during "early
+# practice". The dimness of 0.75 means that:
+#
+#     actual_interval_len = 0.75 * due_interval
+#     due_interval2_len = 2 * actual_interval_len = 1.5 * due_interval_len
+#
+#     strength1 = 1 + log_2 due_interval_len
+#     strength2 = 1 + log_2 due_interval2_len
+#
+# From these:
+#
+#     strength2 = 1 + log_2 1.5 * due_interval_len
+#     strength2 = 1 + log_2 1.5 + log_2 due_interval_len
+#     strength2 = 1 + log_2 due_interval_len + log_2 1.5
+#     strength2 = strength1 + log_2 1.5
+#     strength2 = strength1 + 0.5850
+#
+# General equasion:
+#
+#     log_2 2 * (MIN_DIMNESS_FOR_EARLY_PRACTICE) = strength_increment; i.e.
+#     MIN_DIMNESS_FOR_EARLY_PRACTICE = (2 ^ strength_increment) / 2
+MIN_DIMNESS_FOR_EARLY_PRACTICE = 0.75;
 
 
 ##### Date handling #####
@@ -80,14 +104,6 @@ def is_word_due(word_date, user_time):
 def get_today(user=None, timezone=None, turning_point=None, now=None):
     user_time = get_user_time(user, timezone, turning_point, now)
     return datetime.date(user_time.year, user_time.month, user_time.day)
-
-
-def next_date(user, strength, today=None):
-    if today is None:
-        today = get_today(user)
-    if strength < 0:
-        strength = 0
-    return today + datetime.timedelta(2 ** strength)
 
 
 ##### Model classes #####
@@ -177,20 +193,32 @@ class WDict(models.Model):
     def __unicode__(self):
         return self.name
 
-    def get_words_to_practice_today(self):
+    def get_words_to_practice_today(self, word_list_type='normal'):
+        assert(word_list_type in ('normal', 'early'))
         user_time = get_user_time(user=self.user)
+        today = get_today(self.user)
         result = []
         for wp in self.wordpair_set.filter(deleted=False):
-            if is_word_due(wp.date1, user_time):
-                result.append((wp, 1))
-            if is_word_due(wp.date2, user_time):
-                result.append((wp, 2))
+            for direction in (1, 2):
+                is_due = is_word_due(wp.get_date(direction), user_time)
+                if word_list_type == 'normal':
+                    is_needed = is_due
+                else:
+                    is_needed = (is_due or
+                                 (wp.get_strength(direction) > 0 and
+                                  wp.get_dimness(direction, today) >=
+                                  MIN_DIMNESS_FOR_EARLY_PRACTICE))
+                if is_needed:
+                    result.append((wp, direction))
         return result
 
-    def sort_words(self, words, order=None):
+    def sort_words(self, words, order=None, word_list_type='normal'):
 
         if order is None:
-            order = self.get_practice_word_order()
+            if word_list_type == 'normal':
+                order = self.get_practice_word_order()
+            elif word_list_type == 'early':
+                order = 'dimmer_first'
 
         random.shuffle(words)
         if order == 'random':
@@ -221,7 +249,7 @@ class WDict(models.Model):
 
             words[:] = weak_words + strong_words
         else:
-            assert(False)
+            assert False, "order == " + str(order)
 
     def get_practice_word_order(self):
         if self.practice_word_order == 'default':
@@ -254,8 +282,8 @@ class WordPair(models.Model):
     word_in_lang2 = models.CharField(max_length=255)
 
     # strengths of the word
-    strength1 = models.IntegerField(default=0)
-    strength2 = models.IntegerField(default=0)
+    strength1 = models.FloatField(default=0)
+    strength2 = models.FloatField(default=0)
 
     # dates of the next practice
     date_added = models.DateField()
@@ -309,36 +337,190 @@ class WordPair(models.Model):
         else:
             self.date2 = value
 
-    def strengthen(self, direction):
+    def strengthen_alg1(self, direction):
         strength = self.get_strength(direction)
-        self.set_date(direction, next_date(self.wdict.user, strength))
-        self.set_strength(direction, self.get_strength(direction) + 1)
+        today = get_today(self.wdict.user)
+        new_due_interval_len = datetime.timedelta(2 ** max(strength, 0))
+        self.set_strength(direction, strength + 1)
+        self.set_date(direction, today + new_due_interval_len)
 
-    def weaken(self, direction):
+    def weaken_alg1(self, direction):
         self.set_date(direction, get_today(self.wdict.user))
         new_strength = min(self.get_strength(direction), 0)
         self.set_strength(direction, new_strength)
 
+    def strengthen_alg2(self, direction, day=None, dry_run=False):
+
+        #######################################################################
+        #     Number of days before the word
+        #     is asked again (i.e. length of
+        #     the next "due interval")
+        #                   ^                 x
+        #                   |                x
+        # 2 ^ strength1     + . . . . . . . X (dimness = 1 at this point)
+        #                   |              x.
+        #                   |             x .
+        #                   |            x  .
+        #                   |           x   .
+        #                   |          x    .
+        #                 0 +---------X-----+----------> Day on which the
+        #                             ^     ^            word is practiced
+        #                last_query_date  due_date
+        #
+        #                             <----->
+        #               (previous) due_interval =  "2 ^ (strength1 - 1)" days
+        #######################################################################
+
+        #######################################################################
+        # Original strength-calculating function:
+        #
+        #       New strength of the
+        #       word (strength2)
+        #                 ^
+        #                 |                                 xxxxxxxxxxxxxxxxxxx
+        #  strength1 + 2  +                 xxxxxxxxxxxxxxxx
+        #  strength1 + 1  + . . . . Xxxxxxxx
+        #      strength1  + . . Xxxx.
+        #                 |   xx.   .
+        #                 |  x  .   .
+        #               0 +-x---+---+----------------------------------------->
+        #                   ^   ^   ^                         Day on which the
+        #       last_query_date | due_date                    word is practiced
+        #       dimness = 0     | dimness = 1
+        #                       |
+        #          half-way between last_query_date and due_date
+        #          dimness = 0.5
+        #
+        #                   <------->
+        #         (previous) due_interval =  "2 ^ (strength1 - 1)" days
+        #######################################################################
+
+        #######################################################################
+        # Modified strength-calculating function (strength2 should not be
+        # smaller than strength1):
+        #
+        #       New strength of the
+        #       word (strength2)
+        #                 ^
+        #                 |                                 xxxxxxxxxxxxxxxxxxx
+        #  strength1 + 2  +                 xxxxxxxxxxxxxxxx
+        #  strength1 + 1  + . . . . Xxxxxxxx
+        #      strength1  + xxxxXxxx.
+        #                 |     .   .
+        #                 |     .   .
+        #               0 +-+---+---+----------------------------------------->
+        #                   ^       ^                         Day on which the
+        #       last_query_date   due_date                    word is practiced
+        #
+        #                   <------->
+        #         (previous) due_interval =  "2 ^ (strength1 - 1)" days
+        #######################################################################
+
+        #######################################################################
+        #
+        # Calculating due_interval2_len:
+        #
+        #     actual_interval_len = day - last_query_date
+        #     due_interval2_len = 2 * actual_interval_len
+        #
+        # Calculating strength2 (original):
+        #
+        #     due_interval2_len = 2 ^ (strength2 - 1)      // log_2 ^ ()
+        #     log_2 due_interval2_len = (strength2 - 1)    // () + 1
+        #     1 + log_2 due_interval2_len = strength2
+        #     strength2 = 1 + log_2 due_interval2_len
+        #
+        # Calculating strength2 (modified):
+        #
+        #     strength2 = max(1 + log_2 due_interval2_len, strength1)
+        #
+        #######################################################################
+
+        if day is None:
+            day = get_today(self.wdict.user)
+
+        strength1 = self.get_strength(direction)
+        if strength1 <= 0:
+            # if the word is new, ask tomorrow
+            strength2 = strength1 + 1
+            date2 = day + datetime.timedelta(days=1)
+        else:
+            last_query_date, due_date, due_interval_len = \
+                self.get_date_info(direction)
+            actual_interval_len = (day - last_query_date).days
+            if due_interval_len <= 0:
+                # if the word was already strengthened today, don't change anything
+                strength2 = strength1
+                date2 = date1
+            else:
+                # otherwise use the nice equasion
+                due_interval2_len = 2 * actual_interval_len
+                strength2 = max(1 + math.log(due_interval2_len, 2), strength1)
+                date2 = last_query_date + datetime.timedelta(days=due_interval2_len)
+
+        if not dry_run:
+            self.set_strength(direction, strength2)
+            self.set_date(direction, date2)
+
+        return strength2, date2
+
+    def weaken_alg2(self, direction, day=None):
+        if day is None:
+            day = get_today(self.wdict.user)
+        self.set_date(direction, day)
+        new_strength = min(self.get_strength(direction), 0)
+        self.set_strength(direction, new_strength)
+
+    def strengthen(self, direction):
+        if self.wdict.user == 'hcs':
+            self.strengthen_alg2(direction)
+        else:
+            self.strengthen_alg1(direction)
+
+    def weaken(self, direction):
+        if self.wdict.user == 'hcs':
+            self.weaken_alg2(direction)
+        else:
+            self.weaken_alg1(direction)
+
+    def get_date_info(self, direction):
+        due_date = self.get_date(direction)
+        due_interval = int(round(2 ** (self.get_strength(direction) - 1)))
+        last_query_date = (due_date - datetime.timedelta(days=due_interval))
+        return last_query_date, due_date, due_interval
+
     def get_dimness(self, direction, day, silent=False):
 
-        # -----o------------------o---------
+        # The dimness function does not have a value when strength = 0.
+        # (Mathematically, it would have the value of 0, but in ExponWords,
+        # strength = 0 means is a special value meaning that the word
+        # definitely needs practice, and 0 dimness would mean that it does not
+        # need a practice.)
         #
-        #      ^                  ^
-        # last_query_date      due_date
-        # (if today is here,   (if today is here,
-        #  dimness is 0)        dimness is 1)
+        # The dimness function looks like this when strength > 0:
         #
-        #      <-- due_interval -->
+        # dimness
+        #   ^                 x
+        #   |                x
+        # 1 + . . . . . . . X
+        #   |              x.
+        #   |             x .
+        #   |            x  .
+        #   |           x   .
+        #   |          x    .
+        # 0 +---------X-----+----------> day
+        #             ^     ^
+        # last_query_date  due_date
+        #
+        #             <----->
+        #          due_interval =  "2 ^ (strength - 1)" days
 
         strength = self.get_strength(direction)
         if silent and strength == 0:
             return None
         assert(strength > 0)
 
-        due_date = self.get_date(direction)
-        due_interval = 2 ** (strength - 1)
-
-        last_query_date = (due_date - datetime.timedelta(days=due_interval))
+        last_query_date, due_date, due_interval = self.get_date_info(direction)
         return float((day - last_query_date).days) / due_interval
 
     @staticmethod
@@ -669,7 +851,7 @@ def calc_future(user, days_count, start_date):
             question_count = 0
             for strength, word_count in strength_to_word_count.items():
                 question_count += word_count
-                new_date = next_date(user, strength, date)
+                new_date = today + datetime.timedelta(2 ** max(strength, 0))
                 incr_wcd(wcd, wdict, strength + 1, new_date, word_count)
             date_to_question_count[(wdict, date)] = question_count
 
