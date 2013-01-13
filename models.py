@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-version = '0.13.3'
+version = '0.13.4'
 
 ##### Constants #####
 
@@ -54,6 +54,13 @@ WORD_PREFIX = 40;
 #     log_2 2 * (MIN_DIMNESS_FOR_EARLY_PRACTICE) = strength_increment; i.e.
 #     MIN_DIMNESS_FOR_EARLY_PRACTICE = (2 ^ strength_increment) / 2
 MIN_DIMNESS_FOR_EARLY_PRACTICE = 0.75;
+
+
+##### Utility functions #####
+
+def unexpected_value(name, value):
+    msg = 'Unexpected value for variable "%s": %s' % (name, value)
+    raise EWException(msg)
 
 
 ##### Date handling #####
@@ -213,18 +220,37 @@ class WDict(models.Model):
         return result
 
     def sort_words(self, words, order=None, word_list_type='normal'):
+        # order = 'random' | 'zero_first' | ('dimness', dimness_day, dimness_direction)
+        # dimness_day = 'today' | 'tomorrow'
+        # dimness_direction = 'dimmer_first' | 'dimmer_last'
 
+        # Converting `order` to the format given above
         if order is None:
             if word_list_type == 'normal':
                 order = self.get_practice_word_order()
+                if order in ('dimmer_first', 'dimmer_last'):
+                    order = ('dimness', 'tomorrow', order)
             elif word_list_type == 'early':
-                order = 'dimmer_first'
+                order = ('dimness', 'today', 'dimmer_first')
+            else:
+                unexpected_value('word_list_type', word_list_type)
+
+        # Converting `order` to a string and possibly setting up other
+        # variables
+        if order in ('random', 'zero_first'):
+            pass
+        elif order[0] == 'dimness':
+            order, dimness_day, dimness_direction = order
+        else:
+            unexpected_value('order', order)
 
         random.shuffle(words)
         if order == 'random':
             pass
-        elif order in ('zero_first', 'dimmer_first', 'dimmer_last'):
+        elif order in ('zero_first', 'dimness'):
 
+            # Separating weak words (which should come first) and strong words
+            # (which should come last)
             weak_words = [] # words with zero or negative strength
             strong_words = [] # words with positive strength
             for (wp, direction) in words:
@@ -233,23 +259,30 @@ class WDict(models.Model):
                 else:
                     weak_words.append((wp, direction))
 
-            if order != 'zero_first':
+            # Ordering the strong words by dimness
+            if order == 'dimness':
 
                 # First sort by strength
                 def strength_key_fun((wp, direction)):
                     return wp.get_strength(direction)
                 strong_words.sort(key=strength_key_fun)
 
-                # Then sort by dimness tomorrow
-                dimness_day = get_today(self.user) + datetime.timedelta(days=1)
+                # Then sort by dimness
+                if dimness_day == 'today':
+                    dimness_day = get_today(self.user)
+                elif dimness_day == 'tomorrow':
+                    dimness_day = get_today(self.user) + datetime.timedelta(days=1)
+                else:
+                    unexpected_value('dimness_day', dimness_day)
+
                 def dimness_key_fun((wp, direction)):
                     return wp.get_dimness(direction, dimness_day)
-                reverse = (order == 'dimmer_first')
+                reverse = (dimness_direction == 'dimmer_first')
                 strong_words.sort(key=dimness_key_fun, reverse=reverse)
 
             words[:] = weak_words + strong_words
         else:
-            assert False, "order == " + str(order)
+            unexpected_value('order', order)
 
     def get_practice_word_order(self):
         if self.practice_word_order == 'default':
@@ -270,7 +303,7 @@ class WDict(models.Model):
         same_word_pairs = lang1_same & lang2_same
         similar_word_pairs = (lang1_same | lang2_same) - same_word_pairs
         return sorted(same_word_pairs), sorted(similar_word_pairs)
-        
+
 
 class WordPair(models.Model):
 
@@ -822,7 +855,7 @@ def get_initial_word_counts_dict(user, start_date):
         if (start_date is not None) and (date < start_date):
             date = start_date
         incr_wcd(wcd, wdict, strength, date, 1)
-        
+
     wcd = {}
     wdicts = WDict.objects.filter(user=user, deleted=False)
     word_pairs = WordPair.objects.filter(wdict__user=user,
@@ -888,6 +921,9 @@ class EWException(Exception):
             return unicode(value)
         else:
             return repr(value)
+
+    def __str__(self):
+        return self.__unicode__()
 
 
 def get_labels(user):
