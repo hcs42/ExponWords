@@ -4,6 +4,7 @@ Priority
 - advanced calc, early review
 - redesign
 - bugfix
+- bugfix2: "Save" does not work on "edit word pair" after cancelling Delete word pair
 
 User features
 -------------
@@ -87,6 +88,8 @@ Other
 - bugfix: handle error when "wp.date2 += days" would be an overflow in
   views.operation_on_word_pairs
 - announcement: %USER, link to unsubscribe
+- when selecting a dictionary on "Search&operation" page, show only the labels
+  present in this dictionary
 
 Help
 ----
