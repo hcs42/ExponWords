@@ -25,7 +25,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-version = '0.13.4'
+version = '0.13.5'
 
 ##### Constants #####
 
@@ -489,7 +489,7 @@ class WordPair(models.Model):
                 # otherwise use the nice equasion
                 due_interval2_len = 2 * actual_interval_len
                 strength2 = max(1 + math.log(due_interval2_len, 2), strength1)
-                date2 = last_query_date + datetime.timedelta(days=due_interval2_len)
+                date2 = day + datetime.timedelta(days=due_interval2_len)
 
         if not dry_run:
             self.set_strength(direction, strength2)
