@@ -79,6 +79,8 @@ var word_index = false;
 var direction;
 var question_word;
 var solution_word;
+var word_current_date;
+var word_current_strength;
 var explanation;
 
 // The word index of the previous word
@@ -209,7 +211,9 @@ function ask_word() {
         solution_word = word[2 - direction];
         prev_word_index = word_index;
         word_index = word[3];
-        explanation = word[4];
+        word_current_date = word[4];
+        word_current_strength = word[5];
+        explanation = word[6];
 
         question = $('#question');
         question.html(question_word);
@@ -355,17 +359,14 @@ function ajax_update_word_give_up() {
     update_transfer_in_progress();
 }
 
-function ajax_update_word(answer, word_index, direction) {
+function ajax_update_word(update_data) {
     // Sends an "update word" request to the server.
 
     // first_transfer_in_progress should be incremented by the caller of this
     // function.
 
-    var data = {'answer': JSON.stringify(answer),
-                'word_index': JSON.stringify(word_index),
-                'direction': JSON.stringify(direction),
-                'csrfmiddlewaretoken': csrf_token};
-    ew_ajax_send(UPDATE_WORD_URL, data, RETRIES_COUNT, INITIAL_TIMEOUT,
+    update_data['csrfmiddlewaretoken'] = csrf_token;
+    ew_ajax_send(UPDATE_WORD_URL, update_data, RETRIES_COUNT, INITIAL_TIMEOUT,
                  ajax_update_word_success,
                  ajax_update_word_error,
                  ajax_update_word_give_up);
@@ -428,9 +429,11 @@ function ajax_add_label_to_current_word(label) {
 
 function yesno_button(answer) {
     state = 'intermediate';
-    var old_word_index = word_index;
-    var old_direction = direction;
-    var old_answer = answer;
+    var update_data = {'answer': JSON.stringify(answer),
+                       'word_index': JSON.stringify(word_index),
+                       'direction': JSON.stringify(direction),
+                       'old_date': JSON.stringify(word_current_date),
+                       'old_strength': JSON.stringify(word_current_strength)};
     first_transfer_in_progress++;
     ask_word();
     answered++;
@@ -439,7 +442,7 @@ function yesno_button(answer) {
         $('#answered-incorrectly').text(answered_incorrectly);
     }
     $('#answered').text(answered);
-    ajax_update_word(old_answer, old_word_index, old_direction);
+    ajax_update_word(update_data);
 }
 
 function ew_practice_button_pressed(button) {

@@ -998,6 +998,8 @@ def words_to_practice_to_json(words_to_practice, limit):
                           escape_for_html(wp.word_in_lang2),
                           direction,
                           wp.id,
+                          wp.get_date(direction).isoformat(),
+                          wp.get_strength(direction),
                           escape_for_html(expl_labels, indent=True)])
 
     return json.dumps({'all_words_to_practice': len(words_to_practice),
@@ -1077,11 +1079,22 @@ def update_word(request):
         answer = json.loads(request.POST['answer'])
         word_pair_id = json.loads(request.POST['word_index'])
         direction = json.loads(request.POST['direction'])
+        old_date = json.loads(request.POST['old_date'])
+        old_strength = json.loads(request.POST['old_strength'])
 
         wp = get_object_or_404(WordPair,
                                pk=word_pair_id,
                                wdict__user=request.user)
 
+        if (old_date != wp.get_date(direction).isoformat() or
+            old_strength != wp.get_strength(direction)):
+
+            # This update have already been performed or another process
+            # modified the word's date and/or strength; in either case,
+            # we don't want to modify the word.
+            return HttpResponse(json.dumps('ok'),
+                                mimetype='application/json')
+        
         assert(isinstance(answer, bool))
         if answer:
             # The user knew the answer
