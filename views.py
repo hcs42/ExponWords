@@ -1504,8 +1504,10 @@ def operation_on_word_pairs(request):
                     if values[field] is not None:
                         setattr(wp, field, values[field])
             elif operation == 'shift_days':
-                wp.date1 += days
-                wp.date2 += days
+                if datetime.date.max - wp.date1 > days:
+                    wp.date1 += days
+                if datetime.date.max - wp.date2 > days:
+                    wp.date2 += days
             wp.save()
 
     # Redirect the user to the search page where which he issue the operation
