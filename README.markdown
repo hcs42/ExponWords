@@ -10,27 +10,28 @@ This section describes how to set up an ExponWords server on Debian or Ubuntu Li
 Install the prerequisites
 -------------------------
 
-        $ sudo apt-get install gettext
-        $ sudo apt-get install nginx python-flup
-        $ sudo apt-get install python-sqlite sqlite3
-
-Get Django: https://docs.djangoproject.com/en/1.3/topics/install/#installing-an-official-release
+        $ sudo apt-get install python gettext nginx sqlite3 python-pip
+        $ sudo pip install virtualenv
+        $ virtualenv $HOME/virtualenv/django13
+        $ $HOME/virtualenv/django13/bin/pip install django==1.3 flup
 
 I used the following versions of these programs:
 
 * Python: 2.7
-* Django: 1.3
+* gettext: 0.18
 * nginx: 0.8
 * sqlite3: 3.7
-* gettext: 0.18
-
-All of these are the default on the latest Ubuntu except for Django.
+* virtualenv: 1.9.1
+* Django: 1.3
+* flup: 1.0.3.dev-20110405
 
 Set up ExponWords and run it in debug mode
 ------------------------------------------
 
-1. Create a Django project (this will create a directory called `ExponWords` with some Python files):
+1. Create a Django project (this will create a directory called `ExponWords` with some Python files; the `ExponWords` directory will contain all ExponWords-related stuff):
 
+        $ source $HOME/virtualenv/django13/bin/activate
+        $ cd $HOME
         $ django-admin.py startproject ExponWords
 
 2. Clone the ExponWords repository as a Django application called `ew`:
@@ -68,12 +69,12 @@ Set up ExponWords and run it in debug mode
 
 7. Compile the translation files:
 
-        $ cd ew; django-admin compilemessages; cd ..
+        $ cd ew; django-admin.py compilemessages; cd ..
 
 8. Copy the startup script and change the ports in it if you need to:
 
-        $ cp ew/setup/start_debug.sh ew/setup/start_debug.sh .
-        $ vim ew/setup/start_debug.sh ew/setup/start_debug.sh
+        $ cp ew/setup/start_production.sh ew/setup/start_debug.sh .
+        $ vim start*
 
 9. Start the server in debug mode:
 
@@ -86,6 +87,9 @@ Set up ExponWords and run it in debug mode
    Finally close it:
 
         Kill `start_debug.sh` with CTRL-C
+
+   Don't forget to source the `activate` script each time before starting the
+   server.
 
 Set up the nginx web server and run ExponWords in production mode
 -----------------------------------------------------------------
