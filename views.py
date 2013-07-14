@@ -1,19 +1,16 @@
-# This file is part of ExponWords.
-#
-# ExponWords is free software: you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the Free
-# Software Foundation, either version 3 of the License, or (at your option) any
-# later version.
-#
-# ExponWords is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-# FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-# more details.
-#
-# You should have received a copy of the GNU General Public License along with
-# ExponWords.  If not, see <http://www.gnu.org/licenses/>.
-
-# Copyright (C) 2011-2012 Csaba Hoch
+# Copyright (C) 2011-2013 Csaba Hoch
+# 
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# 
+#     http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 import datetime
 import functools
@@ -245,12 +242,12 @@ def get_elevator_speech(request):
 def get_footnote(request):
     site = get_current_site(request).domain
     text = (_('%(site)s is a free service. ExponWords is open '
-              'source software distributed under the %(gpl_pre)sGNU '
-              'Generic Public Licence version 3%(gpl_post)s. The source '
-              'code repository can be found '
-              '%(ewrepo_pre)shere%(ewrepo_post)s.') %
-            {'gpl_pre': '<a href="http://www.gnu.org/licenses/gpl-3.0.html">',
-             'gpl_post': '</a>',
+              'source software distributed under the %(lic_pre)sApache '
+              'License version 2%(lic_post)s. The source code repository '
+              'can be found %(ewrepo_pre)shere%(ewrepo_post)s.') %
+            {'lic_pre':
+                '<a href="http://www.apache.org/licenses/LICENSE-2.0.txt">',
+             'lic_post': '</a>',
              'ewrepo_pre': '<a href="https://github.com/hcs42/ExponWords">',
              'ewrepo_post': '</a>',
              'site': site})
