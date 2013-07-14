@@ -1,15 +1,16 @@
 Priority
 --------
 
-- advanced calc, early review
-- redesign
-- bugfix
-- bugfix2: "Save" does not work on "edit word pair" after cancelling Delete word pair
+- write documentation and translation
+- bugfix: "Save" does not work on "edit word pair" after cancelling Delete
+  word pair
+- basic HTML: <b>, <i>, <u>, <span style>, <div style>, <img src>, <ul>, <ol>,
+  <li>
+- use virtualenv on the server and update README
 
 User features
 -------------
 
-- markup or HTML in words
 - pronounce words with Forvo or Google Translate
 - word queue for words to be learnt
     - word pairs should have a direction (->, <- or <->)
@@ -20,15 +21,18 @@ User features
 - mechanism for sharing dictionaries
 - importing/exporting CSV/JSON files
 - showing "(n)" when having multiple occurrences of the same word
+- import word pairs should display the number of word pairs added
 
 User features: motivation
 -------------------------
 
+- Log events into Riak
 - stats:
     - number of hits and misses
     - number of active users
     - future: only show important dictionaries
 - gamification, earn points, badges
+- show my future: consider new words and negative answers
 
 User features: teaching
 -----------------------
@@ -42,6 +46,8 @@ Practice page
 
 - sorting the dictionaries
 - automatically jump to the next dictionary at the end of practice
+- full screen/compact controls
+- more keyboard shortcuts
 
 Practice page 2.0
 -----------------
@@ -52,6 +58,7 @@ Practice page 2.0
 - undo: the server and the client remember even operations
 - edit words within the page
 - question: when to ask failed words?
+- Practice page: different button size settings for mobile/desktop?
 
 Practice algorithm
 ------------------
@@ -80,16 +87,17 @@ Design
 ------
 
 - redesign the design (http://24ways.org/2012/how-to-make-your-site-look-half-decent/)
+- bootstrap -- design, http://www.statsmix.com/ http://www.gameanalytics.com/ - nice design
+- http://engineering.appfolio.com/2012/11/16/css-architecture/
 - settings page: group the settings (e.g. a "Practice page" group would be good)
 
 Other
 -----
 
-- bugfix: handle error when "wp.date2 += days" would be an overflow in
-  views.operation_on_word_pairs
 - announcement: %USER, link to unsubscribe
 - when selecting a dictionary on "Search&operation" page, show only the labels
   present in this dictionary
+- bug: reset buttons does not work well after midnight
 
 Help
 ----
@@ -99,6 +107,7 @@ Help
 - help pages: "user" -> you - ask others' opinions
 - add more "help for this" text
 - help: add screenshots
+- link to Brainscape
 
 Server
 ------
@@ -110,6 +119,7 @@ Server
 - nginx caching
 - XHTML validation
 - HTTPS
+- use postgresql
 
 Code style
 ----------
