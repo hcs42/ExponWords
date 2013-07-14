@@ -217,7 +217,8 @@ class WDict(models.Model):
         return result
 
     def sort_words(self, words, order=None, word_list_type='normal'):
-        # order = 'random' | 'zero_first' | ('dimness', dimness_day, dimness_direction)
+        # order = 'random' | 'zero_first' |
+        #         ('dimness', dimness_day, dimness_direction)
         # dimness_day = 'today' | 'tomorrow'
         # dimness_direction = 'dimmer_first' | 'dimmer_last'
 
@@ -268,7 +269,8 @@ class WDict(models.Model):
                 if dimness_day == 'today':
                     dimness_day = get_today(self.user)
                 elif dimness_day == 'tomorrow':
-                    dimness_day = get_today(self.user) + datetime.timedelta(days=1)
+                    dimness_day = get_today(self.user) + \
+                                      datetime.timedelta(days=1)
                 else:
                     unexpected_value('dimness_day', dimness_day)
 
@@ -479,7 +481,8 @@ class WordPair(models.Model):
                 self.get_date_info(direction)
             actual_interval_len = (day - last_query_date).days
             if due_interval_len <= 0:
-                # if the word was already strengthened today, don't change anything
+                # if the word was already strengthened today, don't change
+                # anything
                 strength2 = strength1
                 date2 = date1
             else:

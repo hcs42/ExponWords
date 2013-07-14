@@ -36,7 +36,8 @@ from django.contrib.sites.models import get_current_site
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseServerError, HttpResponseBadRequest
+from django.http import Http404, HttpResponseServerError, \
+                        HttpResponseBadRequest
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.template import Context, loader
@@ -173,8 +174,9 @@ def CreateImportWordPairsForm(wdict):
 
 
 def CreateDeleteWDictForm(wdict):
-    label = (_('Are you sure that you want to delete dictionary "%(wdict)s"?') %
-             {'wdict': wdict.name})
+    label = \
+        (_('Are you sure that you want to delete dictionary "%(wdict)s"?') %
+         {'wdict': wdict.name})
     class DeleteWDictForm(forms.Form):
          sure = forms.BooleanField(label=label, required=False)
     return DeleteWDictForm
@@ -370,7 +372,8 @@ def register(request):
             lang = django.utils.translation.get_language()
             try:
                 return create_user(request, username, password1, password2,
-                                   email_address, captcha, lang, release_emails)
+                                   email_address, captcha, lang,
+                                   release_emails)
             except models.EWException, e:
                 messages.error(request, _(e.value))
         else:
@@ -552,7 +555,8 @@ def add_word_pair(request, wdict):
         if ew_add_wp_fields is not None:
             saved_field, save_time = ew_add_wp_fields
             if (datetime.datetime.now() - save_time <
-                datetime.timedelta(seconds=ADD_WORD_PAIR_DATE_REMEMBER_SECONDS)):
+                datetime.timedelta(seconds=
+                                   ADD_WORD_PAIR_DATE_REMEMBER_SECONDS)):
                 for field, value in saved_field.items():
                     data[field] = value
 
@@ -577,7 +581,8 @@ def add_word_pair(request, wdict):
                 'advanced_style': advanced_style})
 
 
-def import_word_pairs(request, wdict, import_fun, page_title, help_text, source):
+def import_word_pairs(request, wdict, import_fun, page_title, help_text,
+                      source):
 
     ImportForm = CreateImportWordPairsForm(wdict)
     if request.method == 'POST':
@@ -973,9 +978,11 @@ def words_to_practice_to_json(words_to_practice, limit):
             strength2, date2 = wp.strengthen_alg2(direction, dry_run=True)
 
             expl_labels += ('\nDimness today: ' +
-                            str(wp.get_dimness(direction, today, silent=True)) +
+                            str(wp.get_dimness(direction, today,
+                                               silent=True)) +
                             '\nDimness tomorrow: ' +
-                            str(wp.get_dimness(direction, tomorrow, silent=True)) +
+                            str(wp.get_dimness(direction, tomorrow,
+                                               silent=True)) +
                             '\nStrength1: ' +
                             str(wp.get_strength(direction)) +
                             '\nLast query date (calculated): ' +
@@ -1057,7 +1064,8 @@ def get_words_to_practice_today(request, wdict):
             raise Http404
         word_list_type = request.GET['word_list_type']
 
-        words_to_practice = wdict.get_words_to_practice_today(word_list_type=word_list_type)
+        words_to_practice = \
+            wdict.get_words_to_practice_today(word_list_type=word_list_type)
         wdict.sort_words(words_to_practice, word_list_type=word_list_type)
         json_str = words_to_practice_to_json(words_to_practice, limit=True)
         return HttpResponse(json_str,
@@ -1277,7 +1285,8 @@ def search(request):
             # If page is not an integer, deliver first page.
             pagination_info = paginator.page(1)
         except EmptyPage:
-            # If page is out of range (e.g. 9999), deliver last page of results.
+            # If page is out of range (e.g. 9999), deliver last page of
+            # results.
             pagination_info = paginator.page(paginator.num_pages)
 
         current_page_index = \
@@ -1600,8 +1609,10 @@ def announce_release(request):
     # If it were a normally created class, it would look like this:
     #
     # class AnnounceReleaseForm(forms.Form):
-    #     text_en = forms.CharField(widget=forms.Textarea, label="en (English)")
-    #     text_hu = forms.CharField(widget=forms.Textarea, label="hu (Magyar)")
+    #     text_en = forms.CharField(widget=forms.Textarea,
+    #                               label="en (English)")
+    #     text_hu = forms.CharField(widget=forms.Textarea,
+    #                               label="hu (Magyar)")
     #     ...maybe other languages in the future
     fields = \
         dict([('text_' + langcode,
