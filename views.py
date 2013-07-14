@@ -1,11 +1,11 @@
 # Copyright (C) 2011-2013 Csaba Hoch
-# 
+#
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-# 
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
-# 
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -160,7 +160,7 @@ def create_WordPairForm(wdict):
         display_mode = CF(widget=forms.HiddenInput())
 
     return WordPairForm
-        
+
 
 def CreateImportWordPairsForm(wdict):
 
@@ -945,7 +945,7 @@ def escape_for_html(explanation, indent=False):
 
 def words_to_practice_to_json(words_to_practice, limit):
     word_list = []
-    
+
     if limit:
         words_to_practice_now = words_to_practice[:PRACTICE_WORD_COUNT_LIMIT]
     else:
@@ -1099,7 +1099,7 @@ def update_word(request):
             # we don't want to modify the word.
             return HttpResponse(json.dumps('ok'),
                                 mimetype='application/json')
-        
+
         assert(isinstance(answer, bool))
         if answer:
             # The user knew the answer
@@ -1342,7 +1342,7 @@ def edit_word_pair(request, wp, wdict):
             messages.success(request, _('Word pair deleted.'))
             wdict_url = reverse('ew.views.index', args=[])
             return HttpResponseRedirect(wdict_url)
-            
+
         form = WordPairForm(request.POST)
         if form.is_valid():
 
