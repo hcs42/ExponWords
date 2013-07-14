@@ -129,6 +129,8 @@ class EWUser(models.Model):
 
     # Word order on practice page
     practice_word_order = models.CharField(default='random', max_length=20)
+    strengthener_method = models.CharField(default='proportional',
+                                           max_length=20)
 
     # Practice page arrangement
     practice_arrangement = models.CharField(default='normal', max_length=20)
@@ -193,6 +195,7 @@ class WDict(models.Model):
     lang2 = models.CharField(max_length=255)
     deleted = models.BooleanField(default=False)
     practice_word_order = models.CharField(default='default', max_length=20)
+    strengthener_method = models.CharField(default='default', max_length=20)
 
     def __unicode__(self):
         return self.name
@@ -289,6 +292,12 @@ class WDict(models.Model):
         else:
             return self.practice_word_order
 
+    def get_strengthener_method(self):
+        if self.strengthener_method == 'default':
+            return get_ewuser(self.user).strengthener_method
+        else:
+            return self.strengthener_method
+
     def get_duplicates(self, wp):
         f = WordPair.objects.filter
         lang1_same = set(f(wdict=self,
@@ -369,19 +378,22 @@ class WordPair(models.Model):
         else:
             self.date2 = value
 
-    def strengthen_alg1(self, direction):
+    def strengthen_double(self, direction, day=None, dry_run=False):
+        if day is None:
+            day = get_today(self.wdict.user)
+
         strength = self.get_strength(direction)
-        today = get_today(self.wdict.user)
         new_due_interval_len = datetime.timedelta(2 ** max(strength, 0))
-        self.set_strength(direction, strength + 1)
-        self.set_date(direction, today + new_due_interval_len)
+        strength2 = strength + 1
+        date2 = day + new_due_interval_len
 
-    def weaken_alg1(self, direction):
-        self.set_date(direction, get_today(self.wdict.user))
-        new_strength = min(self.get_strength(direction), 0)
-        self.set_strength(direction, new_strength)
+        if not dry_run:
+            self.set_strength(direction, strength2)
+            self.set_date(direction, date2)
 
-    def strengthen_alg2(self, direction, day=None, dry_run=False):
+        return strength2, date2
+
+    def strengthen_proportional(self, direction, day=None, dry_run=False):
 
         #######################################################################
         #     Number of days before the word
@@ -497,24 +509,18 @@ class WordPair(models.Model):
 
         return strength2, date2
 
-    def weaken_alg2(self, direction, day=None):
+    def strengthen(self, direction, dry_run=False):
+        if self.wdict.get_strengthener_method() == 'double':
+            return self.strengthen_double(direction, dry_run=dry_run)
+        else:
+            return self.strengthen_proportional(direction, dry_run=dry_run)
+
+    def weaken(self, direction, day=None):
         if day is None:
             day = get_today(self.wdict.user)
         self.set_date(direction, day)
         new_strength = min(self.get_strength(direction), 0)
         self.set_strength(direction, new_strength)
-
-    def strengthen(self, direction):
-        if self.wdict.user == 'hcs':
-            self.strengthen_alg2(direction)
-        else:
-            self.strengthen_alg1(direction)
-
-    def weaken(self, direction):
-        if self.wdict.user == 'hcs':
-            self.weaken_alg2(direction)
-        else:
-            self.weaken_alg1(direction)
 
     def get_date_info(self, direction):
         due_date = self.get_date(direction)

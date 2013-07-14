@@ -58,6 +58,9 @@ PRACTICE_WORD_ORDER_CHOICES = \
      ('zero_first', _('New and forgotten words first')),
      ('dimmer_first', _('I am a little behind')),
      ('dimmer_last', _('Relearn old words'))]
+STRENGTHENER_METHOD_CHOICES = \
+    [('double', _('Double')),
+     ('proportional', _('Proportional'))]
 PRACTICE_WORD_COUNT_LIMIT = 200
 
 
@@ -120,6 +123,11 @@ def create_WDictForm():
          _('Default (use the word order in the Settings page)'))] + \
          PRACTICE_WORD_ORDER_CHOICES
 
+    strengthener_method_choices = \
+        [('default',
+         _('Default (use the strengthener method in the Settings page)'))] + \
+         STRENGTHENER_METHOD_CHOICES
+
     class WDictForm(forms.Form):
         name = forms.CharField(max_length=255,
                                label=_("Name of the dictionary") + ':')
@@ -131,6 +139,11 @@ def create_WDictForm():
             forms.ChoiceField(
                 choices=practice_word_order_choices,
                 label=_('Practice page word order'))
+
+        strengthener_method = \
+            forms.ChoiceField(
+                choices=strengthener_method_choices,
+                label=_('Method of strengthening a word after pressing YES'))
 
     return WDictForm
 
@@ -669,7 +682,8 @@ def modify_wdict(request, wdict):
         models.log(request, 'modify_wdict')
         form = WDictForm(request.POST)
         if form.is_valid():
-            for field in ('name', 'lang1', 'lang2', 'practice_word_order'):
+            for field in ('name', 'lang1', 'lang2', 'practice_word_order',
+                          'strengthener_method'):
                 setattr(wdict, field, form.cleaned_data[field])
             wdict.save()
             messages.success(request, _('Dictionary modified.'))
@@ -682,7 +696,8 @@ def modify_wdict(request, wdict):
         form = WDictForm({'name': wdict.name,
                           'lang1': wdict.lang1,
                           'lang2': wdict.lang2,
-                          'practice_word_order': wdict.practice_word_order})
+                          'practice_word_order': wdict.practice_word_order,
+                          'strengthener_method': wdict.strengthener_method})
 
     else:
         assert(False)
@@ -744,6 +759,10 @@ def add_wdict(request):
             wdict.name = form.cleaned_data['name']
             wdict.lang1 = form.cleaned_data['lang1']
             wdict.lang2 = form.cleaned_data['lang2']
+            wdict.practice_word_order = \
+                form.cleaned_data['practice_word_order']
+            wdict.strengthener_method = \
+                form.cleaned_data['strengthener_method']
             wdict.save()
             messages.success(request, _('Dictionary created.'))
             wdict_url = reverse('ew.views.wdict', args=[wdict.id])
@@ -801,6 +820,7 @@ def ew_settings(request):
          ('less_scrolling', _('Less scrolling'))]
 
     practice_word_order_choices = PRACTICE_WORD_ORDER_CHOICES
+    strengthener_method_choices = STRENGTHENER_METHOD_CHOICES
 
     langs = ([(langcode, langname)
               for langcode, langname in settings.LANGUAGES])
@@ -820,6 +840,10 @@ def ew_settings(request):
             forms.ChoiceField(
                 choices=practice_word_order_choices,
                 label=_('Practice page word order'))
+        strengthener_method = \
+            forms.ChoiceField(
+                choices=strengthener_method_choices,
+                label=_('Method of strengthening a word after pressing YES'))
         practice_arrangement = \
             forms.ChoiceField(
                 choices=practice_arrangements_choices,
@@ -849,6 +873,7 @@ def ew_settings(request):
                 ewuser.timezone = c['timezone']
                 ewuser.set_turning_point_str(c['turning_point'])
                 ewuser.practice_word_order = c['practice_word_order']
+                ewuser.strengthener_method = c['strengthener_method']
                 ewuser.practice_arrangement = c['practice_arrangement']
                 ewuser.button_size = c['button_size']
                 ewuser.question_size = c['question_size']
@@ -887,6 +912,7 @@ def ew_settings(request):
                    'turning_point': ewuser.get_turning_point_str(),
                    'practice_arrangement': ewuser.practice_arrangement,
                    'practice_word_order': ewuser.practice_word_order,
+                   'strengthener_method': ewuser.strengthener_method,
                    'button_size': ewuser.button_size,
                    'question_size': ewuser.question_size,
                    'answer_size': ewuser.answer_size,
@@ -975,7 +1001,7 @@ def words_to_practice_to_json(words_to_practice, limit):
             tomorrow = today + datetime.timedelta(days=1)
             last_query_date, due_date, due_interval_len = \
                 wp.get_date_info(direction)
-            strength2, date2 = wp.strengthen_alg2(direction, dry_run=True)
+            strength2, date2 = wp.strengthen(direction, dry_run=True)
 
             expl_labels += ('\nDimness today: ' +
                             str(wp.get_dimness(direction, today,
