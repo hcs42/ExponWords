@@ -276,6 +276,7 @@ class EWUser(models.Model):
 
     # Practice page arrangement
     practice_arrangement = models.CharField(default='normal', max_length=20)
+    pgupdown_behavior = models.CharField(default='normal', max_length=20)
     quick_labels = models.CharField(default='quick', max_length=255, blank=True)
 
     # Font sizes on the practice page

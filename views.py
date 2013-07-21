@@ -819,6 +819,11 @@ def ew_settings(request):
         [('normal', _('Normal')),
          ('less_scrolling', _('Less scrolling'))]
 
+    pgupdown_behavior_choices = \
+        [('normal', _('Normal')),
+         ('yesno', _('PageUp = Yes, PageDown = No')),
+         ('noyes', _('PageUp = No, PageDown = Yes'))]
+
     practice_word_order_choices = PRACTICE_WORD_ORDER_CHOICES
     strengthener_method_choices = STRENGTHENER_METHOD_CHOICES
 
@@ -848,11 +853,15 @@ def ew_settings(request):
             forms.ChoiceField(
                 choices=practice_arrangements_choices,
                 label=_('Practice page arrangement'))
+        pgupdown_behavior = \
+            forms.ChoiceField(
+                choices=pgupdown_behavior_choices,
+                label=_('PageUp/PageDown behavior'))
+        quick_labels = forms.CharField(label=_('Quick labels'), required=False)
         button_size = forms.IntegerField(label=_('Button size'))
         question_size = forms.IntegerField(label=_('Question size'))
         answer_size = forms.IntegerField(label=_('Answer size'))
         explanation_size = forms.IntegerField(label=_('Notes size'))
-        quick_labels = forms.CharField(label=_('Quick labels'), required=False)
         email_address = forms.CharField(max_length=255,
                                         label=_('Email address'))
         release_emails = \
@@ -875,9 +884,10 @@ def ew_settings(request):
                 ewuser.practice_word_order = c['practice_word_order']
                 ewuser.strengthener_method = c['strengthener_method']
                 ewuser.practice_arrangement = c['practice_arrangement']
+                ewuser.pgupdown_behavior = c['pgupdown_behavior']
+                ewuser.quick_labels = c['quick_labels']
                 ewuser.button_size = c['button_size']
                 ewuser.question_size = c['question_size']
-                ewuser.quick_labels = c['quick_labels']
                 ewuser.answer_size = c['answer_size']
                 ewuser.explanation_size = c['explanation_size']
                 request.user.email = c['email_address']
@@ -911,6 +921,7 @@ def ew_settings(request):
                    'timezone': ewuser.timezone,
                    'turning_point': ewuser.get_turning_point_str(),
                    'practice_arrangement': ewuser.practice_arrangement,
+                   'pgupdown_behavior': ewuser.pgupdown_behavior,
                    'practice_word_order': ewuser.practice_word_order,
                    'strengthener_method': ewuser.strengthener_method,
                    'button_size': ewuser.button_size,

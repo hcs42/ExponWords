@@ -125,13 +125,11 @@
     var UPDATE_WORD_URL = "{% url update_word %}";
     var ADD_LABEL_URL = "{% url add_label %}";
     var WORDS_TO_PRACTICE_TODAY = {{ words_to_practice|safe }};
+    var PGUPDOWN_BEHAVIOR = "{{ ewuser.pgupdown_behavior }}";
 
     {% if wdict != None %}
         var GET_WORDS_TO_PRACTICE_TODAY_URL =
                 "{% url get_words_to_practice_today wdict.id %}";
     {% endif %}
   </script>
-  {% if user.username == 'hcs' %}
-  <script>$(document).ready(activate_ew_pageupdown);</script>
-  {% endif %}
 {% endblock %}

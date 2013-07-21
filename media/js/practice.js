@@ -457,16 +457,25 @@ function ew_practice_button_pressed(button) {
 }
 
 function ew_pageupdown(e) {
-    // Not activated by default
-    if (e.originalEvent.keyIdentifier == "PageDown") {
+    // Activated only if the user changes the value of the 'pgupdown_behavior'
+    // setting
+    if (e.originalEvent.keyIdentifier == ew_yes_key) {
         ew_practice_button_pressed('yes');
-    } else if (e.originalEvent.keyIdentifier == "PageUp") {
+    } else if (e.originalEvent.keyIdentifier == ew_no_key) {
         ew_practice_button_pressed('no');
     }
 }
 
-function activate_ew_pageupdown() {
-    $('body').bind('keydown', ew_pageupdown);
+function maybe_activate_ew_pageupdown() {
+    if (PGUPDOWN_BEHAVIOR == 'yesno') {
+        ew_yes_key = 'PageUp';
+        ew_no_key = 'PageDown';
+        $('body').bind('keydown', ew_pageupdown);
+    } else if (PGUPDOWN_BEHAVIOR == 'noyes') {
+        ew_no_key = 'PageUp';
+        ew_yes_key = 'PageDown';
+        $('body').bind('keydown', ew_pageupdown);
+    }
 }
 
 function show_hide_operations(action) {
@@ -513,6 +522,8 @@ $(document).ready(function() {
         var label = $(this).attr('id').replace(/^quick-label-/, '');
         ajax_add_label_to_current_word(label);
     });
+
+    maybe_activate_ew_pageupdown();
 
     //Initializing the translation dictionary
     init_translations();
