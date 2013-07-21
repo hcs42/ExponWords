@@ -445,12 +445,10 @@ def docs(request, lang, page):
 def wdict(request, wdict):
     words_count = len(wdict.wordpair_set.filter(deleted=False))
     todays_words_count = len(wdict.get_words_to_practice_today())
-    beta_user = (request.user.username == 'hcs')
     return render(request,
                   'ew/wdict.html',
                   {'wdict': wdict,
                    'words_count': words_count,
-                   'beta_user': beta_user,
                    'todays_words_count': todays_words_count})
 
 

@@ -19,9 +19,7 @@
 
 <ul>
   <li><a href="{% url practice_wdict wdict.id %}">{% trans "Practice" %} ({{ todays_words_count }})</a></li>
-  {% if beta_user %}
   <li><a href="{% url practice_wdict_early wdict.id %}">{% trans "Practice early" %}</a></li>
-  {% endif %}
   <li><a href="{% url search %}?dict={{ wdict.id }}">{% trans "Search and operations" %}</a></li>
   <li><a href="{% url search %}?q=&amp;dict={{ wdict.id }}&amp;show_hits=on">{% trans "List all words" %} ({{ words_count }})</a></li>
   <li><a href="{% url add_word_pair wdict.id %}">{% trans "Add new word pair" %}</a></li>
