@@ -285,6 +285,9 @@ class EWUser(models.Model):
     answer_size = models.IntegerField(default=20)
     explanation_size = models.IntegerField(default=20)
 
+    # List of available extra features
+    extras = models.CharField(default='', max_length=255, blank=True)
+
     # Whether the user wants to receive emails about new ExponWords features
     release_emails = models.BooleanField(default=True)
 

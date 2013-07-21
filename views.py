@@ -860,6 +860,7 @@ def ew_settings(request):
         question_size = forms.IntegerField(label=_('Question size'))
         answer_size = forms.IntegerField(label=_('Answer size'))
         explanation_size = forms.IntegerField(label=_('Notes size'))
+        extras = forms.CharField(label=_('Extras'), required=False)
         email_address = forms.CharField(max_length=255,
                                         label=_('Email address'))
         release_emails = \
@@ -888,6 +889,7 @@ def ew_settings(request):
                 ewuser.question_size = c['question_size']
                 ewuser.answer_size = c['answer_size']
                 ewuser.explanation_size = c['explanation_size']
+                ewuser.extras = c['extras']
                 request.user.email = c['email_address']
                 ewuser.release_emails = c['release_emails']
                 request.user.save()
@@ -922,11 +924,12 @@ def ew_settings(request):
                    'pgupdown_behavior': ewuser.pgupdown_behavior,
                    'practice_word_order': ewuser.practice_word_order,
                    'strengthener_method': ewuser.strengthener_method,
+                   'quick_labels': ewuser.quick_labels,
                    'button_size': ewuser.button_size,
                    'question_size': ewuser.question_size,
                    'answer_size': ewuser.answer_size,
                    'explanation_size': ewuser.explanation_size,
-                   'quick_labels': ewuser.quick_labels,
+                   'extras': ewuser.extras,
                    'email_address': request.user.email,
                    'release_emails': ewuser.release_emails})
 
@@ -936,11 +939,22 @@ def ew_settings(request):
     if request.session.pop('ew_settings_saved', False):
         messages.success(request, _('Settings saved.'))
 
+    show_extras = ('true' if 'x' in ewuser.extras else 'false')
     return render(
                request,
                'ew/settings.html',
-               {'form':  form})
+               {'form':  form,
+                'show_extras': show_extras})
 
+
+@login_required
+@set_lang
+def ew_settings_x(request):
+    ewuser = models.get_ewuser(request.user)
+    if 'x' not in ewuser.extras:
+        ewuser.extras += 'x'
+        ewuser.save()
+    return ew_settings(request)
 
 ##### Practice #####
 

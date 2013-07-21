@@ -35,4 +35,7 @@
 {% block javascript %}
   <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
   <script type="text/javascript" language="JavaScript" src="/site_media/js/settings.js?{% ew_version %}"></script>
+  <script>
+    var show_extras = {{ show_extras }};
+  </script>
 {% endblock %}

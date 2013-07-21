@@ -16,4 +16,8 @@ $(document).ready(function() {
     var offset = - (new Date()).getTimezoneOffset() / 60;
     var offset_str = (offset < 0 ? 'UTC' + offset : 'UTC+' + offset);
     $('#timezone').text(offset_str);
+
+    if (!show_extras) {
+        $('#id_extras').parent().parent().hide();
+    }
 });

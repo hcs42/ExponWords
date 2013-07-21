@@ -98,6 +98,10 @@ Add the "strengthener_method" column to the ew_wdict and ew_ewuser tables:
     sqlite> alter table ew_ewuser add column strengthener_method string;
     sqlite> update ew_ewuser set strengthener_method='proportional';
 
+Add the "pgupdown_behavior" and "extras" columns to the ew_ewuser table:
+
     sqlite> alter table ew_ewuser add column pgupdown_behavior string;
     sqlite> update ew_ewuser set pgupdown_behavior='normal';
 
+    sqlite> alter table ew_ewuser add column extras string;
+    sqlite> update ew_ewuser set extras='';

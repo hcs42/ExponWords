@@ -67,6 +67,9 @@ urlpatterns = patterns('ew.views',
     url(r'^settings/$',
         view='ew_settings',
         name='ew_settings'),
+    url(r'^settings/x$',
+        view='ew_settings_x',
+        name='ew_settings_x'),
 
     # Practice
     url(r'^dict/(?P<wdict_id>\d+)/practice/$',
