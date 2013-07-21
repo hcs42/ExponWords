@@ -860,7 +860,8 @@ def ew_settings(request):
         question_size = forms.IntegerField(label=_('Question size'))
         answer_size = forms.IntegerField(label=_('Answer size'))
         explanation_size = forms.IntegerField(label=_('Notes size'))
-        extras = forms.CharField(label=_('Extras'), required=False)
+        extras = forms.CharField(label=_('Hidden extra features'),
+                                 required=False)
         email_address = forms.CharField(max_length=255,
                                         label=_('Email address'))
         release_emails = \
@@ -992,7 +993,7 @@ def escape_for_html(explanation, indent=False):
     return '<br/>'.join(explanation.splitlines())
 
 
-def words_to_practice_to_json(words_to_practice, limit):
+def words_to_practice_to_json(request, words_to_practice, limit):
     word_list = []
 
     if limit:
@@ -1019,14 +1020,14 @@ def words_to_practice_to_json(words_to_practice, limit):
         #    dimness = wp.get_dimness(direction, dimness_day, silent=True)
         #    expl_labels += '\nDimness: ' + str(dimness)
 
-        if user.username in ('hcs', 'bandris'):
+        if 'p' in models.get_ewuser(request.user).extras:
             today = models.get_today(user)
             tomorrow = today + datetime.timedelta(days=1)
             last_query_date, due_date, due_interval_len = \
                 wp.get_date_info(direction)
             strength2, date2 = wp.strengthen(direction, dry_run=True)
 
-            expl_labels += ('\nDimness today: ' +
+            expl_labels += ('\n\nDimness today: ' +
                             str(wp.get_dimness(direction, today,
                                                silent=True)) +
                             '\nDimness tomorrow: ' +
@@ -1094,7 +1095,8 @@ def practice_wdict_early(request, wdict):
 def practice(request):
     models.log(request, 'practice')
     words_to_practice = request.session['ew_words_to_practice']
-    json_str = words_to_practice_to_json(words_to_practice, limit=False)
+    json_str = words_to_practice_to_json(request, words_to_practice,
+                                         limit=False)
     ewuser = models.get_ewuser(request.user)
     return render(request,
                   'ew/practice_wdict.html',
@@ -1116,7 +1118,8 @@ def get_words_to_practice_today(request, wdict):
         words_to_practice = \
             wdict.get_words_to_practice_today(word_list_type=word_list_type)
         wdict.sort_words(words_to_practice, word_list_type=word_list_type)
-        json_str = words_to_practice_to_json(words_to_practice, limit=True)
+        json_str = words_to_practice_to_json(request, words_to_practice,
+                                             limit=True)
         return HttpResponse(json_str,
                             mimetype='application/json')
     except Exception, e:
