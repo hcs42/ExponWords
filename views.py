@@ -792,7 +792,7 @@ def visualize(request):
             self.question_counts = question_counts
 
     dates, wdicts, date_to_question_count = \
-        models.calc_future(request.user, 60, models.get_today(request.user))
+        models.calc_future(request.user, 30, models.get_today(request.user))
 
     sum_data = WDictData(_('Sum'), [0 for date in dates])
     wdicts_data = [sum_data]
