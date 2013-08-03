@@ -8,12 +8,24 @@
       <td>{{ form.word_in_lang1 }}</td>
     </tr>
     <tr>
+      <th></th>
+      <td>{{ word_in_lang1_html|safe }}</td>
+    </tr>
+    <tr>
       <th>{{ form.word_in_lang2.label_tag }}:</th>
       <td>{{ form.word_in_lang2 }}</td>
     </tr>
     <tr>
+      <th></th>
+      <td>{{ word_in_lang2_html|safe }}</td>
+    </tr>
+    <tr>
       <th>{{ form.explanation.label_tag }}:</th>
       <td>{{ form.explanation }}</td>
+    </tr>
+    <tr>
+      <th></th>
+      <td>{{ explanation_html|safe }}</td>
     </tr>
     <tr class="advanced" style="{{ advanced_style }}" >
       <th>{{ form.labels.label_tag }}:</th>

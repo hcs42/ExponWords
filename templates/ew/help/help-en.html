@@ -138,6 +138,161 @@ dictionary. It has the following menu items:
   only by the administrator.</li>
 </ul>
 
+<h4 id="text-formats">Text formats</h4>
+
+A dictionary uses one of the following text formats: plain text, HTML (keep
+linebreaks) and HTML (unmodified). The text format determines how words and
+notes are displayed to the user during practice sessions, or when listing words.
+With using one of the HTML text formats, you can use <b>bold text</b>,
+<i>italic text</i>, colors, images, tables, etc. in your words and notes.
+
+<ul>
+
+  <li><em>Plain text</em>: with the plain text format, the displayed text will
+  be the same as the text as it was typed into the text for.
+  <dl>
+    <dt>Example text in the input box:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    My favorite HTML tag is the &lt;b&gt; tag &amp; its pair. E.g.:<br/>
+    The sun is &lt;b&gt;not&lt;/b&gt; shining.
+    </p>
+    </dd>
+    <dt>Example text as it is displayed:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    My favorite HTML tag is the &lt;b&gt; tag &amp; its pair. E.g.:<br/>
+    The sun is &lt;b&gt;not&lt;/b&gt; shining.
+    </p>
+    </dd>
+  </dl>
+  </li>
+
+  <li><p><em>HTML (keep line breaks)</em>: with this format, the text will be
+  interpreted as HTML code. 
+  <p>HTML line breaks (i.e. "&lt;br/&gt;" tags) will be added to the end of
+  each line, so that they will be displayed as separate lines. There is a
+  similar mechanism for indented text.</p>
+  <p>The "&amp;", "&lt;" and "&gt;" characters will be interpreted as HTML, so
+  "&amp;amp;", "&amp;lt;" and "&amp;gt;" must be written instead.</p>
+  <p>Not all HTML tags and attributes are allowed, only those that are safe and
+  cannot be used to execute JavaScript code in a browser.</p>
+  <ul>
+    <li>The allowed HTML tags are the following: {{ allowed_tags }}.</li>
+    <li>The allowed HTML attributes are the following: {{ allowed_attrs }}.</li>
+  </ul>
+  
+  <dl>
+    <dt>Example text in the input box:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    My favorite HTML tag is the &amp;lt;b&amp;gt; tag &amp;amp; its pair. E.g.:<br/>
+    The sun is &lt;b&gt;not&lt;/b&gt; shining.
+    </p>
+    </dd>
+    <dt>Example text as it is displayed:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    My favorite HTML tag is the &lt;b&gt; tag &amp; its pair. E.g.:<br/>
+    The sun is <b>not</b> shining.
+    </p>
+    </dd>
+  </dl>
+  </li>
+
+  <li><em>HTML (unmodified)</em>: Similar to the <em>HTML (keep line
+    breaks)</em> format, but it does not add HTML line breaks and indentation.
+  <dl>
+    <dt>Example text in the input box:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    My favorite HTML tag is the &amp;lt;b&amp;gt; tag &amp;amp; its pair. E.g.:<br/>
+    The sun is &lt;b&gt;not&lt;/b&gt; shining.
+    </p>
+    </dd>
+    <dt>Example text as it is displayed:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    My favorite HTML tag is the &lt;b&gt; tag &amp; its pair. E.g.:
+    The sun is <b>not</b> shining.
+    </p>
+    </dd>
+  </dl>
+  </li>
+</ul>
+
+For further demonstration, let's see a more complex example using the <em>HTML
+(keep line breaks)</em> format:
+
+<ul>
+  <li>Example input boxes:
+  <table style="width:100%;">
+    <tr>
+      <th style="width:20%;">Word in German:</th>
+      <td>
+        <p style="border:1px solid;">
+        die &lt;b&gt;Kat&lt;/b&gt;ze
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Word in English:</th>
+      <td>
+        <p style="border:1px solid;">
+        cat<br/>
+        &lt;img src="http://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Kittyply_edit1.jpg/220px-Kittyply_edit1.jpg"&gt;
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Notes:</th>
+      <td>
+        <p style="border:1px solid;">
+        &lt;span style="color:darkgreen;"&gt;[ˈkaʦə]&lt;/span&gt;<br/>
+        Katzen sind süße Tiere. &lt;i&gt;(Cats are cute animals.)&lt;/i&gt;
+        </p>
+      </td>
+    </tr>
+  </table>
+  </li>
+  <li>Examples displayed:
+  <table style="width:100%;">
+    <tr>
+      <th style="width:20%;">Word in German:</th>
+      <td>
+        <p style="border:1px solid;">
+        die <b>Kat</b>ze
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Word in English:</th>
+      <td>
+        <p style="border:1px solid;">
+        cat<br/>
+        <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Kittyply_edit1.jpg/220px-Kittyply_edit1.jpg">
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Notes:</th>
+      <td>
+        <p style="border:1px solid;">
+        <span style="color:darkgreen;">[ˈkaʦə]</span><br/>
+        Katzen sind süße Tiere. <i>(Cats are cute animals.)</i>
+        </p>
+      </td>
+    </tr>
+  </table>
+  </li>
+</ul>
+
+<h4 id="custom-css">Custom CSS</h4>
+
+A custom CSS can be set for each dictionary in the "Modify dictionary" page. If
+the dictionary format is HTML, then the custom CSS will be applied on all web
+pages where words of that dictionary are shown (practice page, list words, etc.)
+
 <h3 id="practice">Practice</h3>
 <p>The practice page contains the following elements:</p>
 <ul>

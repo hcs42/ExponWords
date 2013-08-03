@@ -42,6 +42,15 @@ msgstr "Az utolsó valós időintervallum duplázása"
 msgid "Double last due time interval"
 msgstr "Az utolsó elvárt időintervallum duplázása"
 
+msgid "Plain text"
+msgstr "Egyszerű szöveg"
+
+msgid "HTML (keep line breaks)"
+msgstr "HTML (sorok végét megtartva)"
+
+msgid "HTML (unmodified)"
+msgstr "HTML (módosítás nélkül)"
+
 msgid "Default (use the word order in the Settings page)"
 msgstr "Alapértelmezett (a Beállítások oldalon beállított rendezést használja)"
 
@@ -63,6 +72,12 @@ msgstr "Szavak sorrendje a Gyakorlás oldalon"
 
 msgid "Method of strengthening a word after pressing YES"
 msgstr "A szavak megerősítésére használt módszer az IGEN gomb megnyomása után"
+
+msgid "Text format of the words and notes"
+msgstr "Szavak és jegyzetek formátuma"
+
+msgid "Custom CSS"
+msgstr "Saját CSS"
 
 #, python-format
 msgid "Word in \"%(lang)s\""
@@ -441,6 +456,12 @@ msgstr "Súgó a szavak sorrendjéről"
 
 msgid "Help about strengthener methods"
 msgstr "Súgó az erősítő módszerekről"
+
+msgid "Help about text formats"
+msgstr "Súgó a formátumokról"
+
+msgid "Help about custom CSS"
+msgstr "Súgó a saját CSS-ről"
 
 msgid "Practice"
 msgstr "Gyakorlás"

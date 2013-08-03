@@ -136,6 +136,165 @@ A következő menüpontjai vannak:
   tudja visszaállítani.</li>
 </ul>
 
+<h4 id="text-formats">Szövegformátumok</h4>
+
+Egy szótár a következő formátumok valamelyikét használja: egyszerű szöveg, HTML
+(sorok végét megtartva), HTML (módosítás nélkül). A formátum meghatározza, hogy
+gyakorlás közben és listázáskor a szavak hogyan legyenek megjelenítve. A HTML
+formátumok esetében például lehet használni <b>félkövér</b> és <i>dőlt</i>
+betűket, színeket, képeket, táblázatokat a szavakban és a jegyzetekben.
+
+<ul>
+
+  <li><em>Egyszerű szöveg</em>: ezzel a formátummal a megjelenített szöveg
+  ugyanúgy fog kinézni, mint a begépelt szöveg.
+  <dl>
+    <dt>Példa a beviteli szövegdoboz tartalmára:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    A kedvenc HTML elemeim a &lt;b&gt; elem &amp; a párja. Pl:<br/>
+    A nap &lt;b&gt;nem&lt;/b&gt; süt.
+    </p>
+    </dd>
+    <dt>A példa a következőképpen lesz megjelenítve:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    A kedvenc HTML elemeim a &lt;b&gt; elem &amp; a párja. Pl:<br/>
+    A nap &lt;b&gt;nem&lt;/b&gt; süt.
+    </p>
+    </dd>
+  </dl>
+  </li>
+
+  <li><p><em>HTML (sorok végét megtartva)</em>: ezzel a formátummal a szöveg
+  HTML szövegként lesz értelmezve.
+  <p>A szöveg sorainak a végére HTML sorvége jelek lesznek betéve (azaz
+  "&lt;br/&gt;" elemek), így az eredeti szöveg sorai valóban külön sorokként
+  fognak megjelenni. Egy hasonló mechanizmus működik a sor eleji behúzások
+  megtartására.</p>
+  <p>A "&amp;", "&lt;" és "&gt;" karakterek a HTML-nek megfelelően lesznek
+  értelmezve, ezért ezek helyett a következő karaktersorozatokat kell írni:
+  "&amp;amp;", "&amp;lt;" és "&amp;gt;".</p>
+  <p>Nem minden HTML elem és attribútum megengedett, csak azok, amelyek
+  biztonságosak, és nem használhatóak JavaScript kód futtatására a
+  böngészőben.</p>
+  <ul>
+    <li>A következőek a megengedett HTML elemek: {{ allowed_tags }}.</li>
+    <li>A következőek a megengedett HTML attribútumok: {{ allowed_attrs }}.</li>
+  </ul>
+  
+  <dl>
+    <dt>Példa a beviteli szövegdoboz tartalmára:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    A kedvenc HTML elemeim a &amp;lt;b&amp;gt; elem &amp;amp; a párja. Pl:<br/>
+    A nap &lt;b&gt;nem&lt;/b&gt; süt.
+    </p>
+    </dd>
+    <dt>A példa a következőképpen lesz megjelenítve:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    A kedvenc HTML elemeim a &lt;b&gt; elem &amp; a párja. Pl:<br/>
+    A nap <b>nem</b> süt.
+    </p>
+    </dd>
+  </dl>
+  </li>
+
+  <li><em>HTML (módosítás nélkül)</em>: hasonló a <em>HTML (sorok végét
+    megtartva)</em> formátumhoz, de nem módosítja a szöveget HTML sorvége
+  elemek és a behúzások hozzáadásával.
+  <dl>
+    <dt>Példa a beviteli szövegdoboz tartalmára:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    A kedvenc HTML elemeim a &amp;lt;b&amp;gt; elem &amp;amp; a párja. Pl:<br/>
+    A nap &lt;b&gt;nem&lt;/b&gt; süt.
+    </p>
+    </dd>
+    <dt>A példa a következőképpen lesz megjelenítve:</dt>
+    <dd>
+    <p style="border:1px solid;">
+    A kedvenc HTML elemeim a &lt;b&gt; elem &amp; a párja. Pl:
+    A nap <b>nem</b> süt.
+    </p>
+    </dd>
+  </dl>
+  </li>
+</ul>
+
+Nézzünk meg egy komplexebb példát, ami a <em>HTML (sorok végét megtartva)</em>
+formátumot használja:
+
+<ul>
+  <li>Példa beviteli mezők:
+  <table style="width:100%;">
+    <tr>
+      <th style="width:20%;">A szó németül:</th>
+      <td>
+        <p style="border:1px solid;">
+        die &lt;b&gt;Kat&lt;/b&gt;ze
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>A szó magyarul:</th>
+      <td>
+        <p style="border:1px solid;">
+        macska<br/>
+        &lt;img src="http://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Kittyply_edit1.jpg/220px-Kittyply_edit1.jpg"&gt;
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Jegyzetek:</th>
+      <td>
+        <p style="border:1px solid;">
+        &lt;span style="color:darkgreen;"&gt;[ˈkaʦə]&lt;/span&gt;<br/>
+        Katzen sind süße Tiere. &lt;i&gt;(A macskák aranyos állatok.)&lt;/i&gt;
+        </p>
+      </td>
+    </tr>
+  </table>
+  </li>
+  <li>A példák megjelenítve:
+  <table style="width:100%;">
+    <tr>
+      <th style="width:20%;">A szó németül:</th>
+      <td>
+        <p style="border:1px solid;">
+        die <b>Kat</b>ze
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>A szó magyarul:</th>
+      <td>
+        <p style="border:1px solid;">
+        macska<br/>
+        <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Kittyply_edit1.jpg/220px-Kittyply_edit1.jpg">
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Jegyzetek:</th>
+      <td>
+        <p style="border:1px solid;">
+        <span style="color:darkgreen;">[ˈkaʦə]</span><br/>
+        Katzen sind süße Tiere. <i>(A macskák aranyos állatok.)</i>
+        </p>
+      </td>
+    </tr>
+  </table>
+  </li>
+</ul>
+
+<h4 id="custom-css">Saját CSS</h4>
+
+A "Szótár módosítása" oldalon minden szótárhoz lehet saját CSS-t beállítani. Ha
+a szótár formátuma HTML, akkor a CSS alkalmazva lesz minden olyan weboldalra,
+ami megjeleníti a szótár szavait (gyakorlás, szavak listázása, stb.)
+
 <h3 id="practice">Gyakorlás</h3>
 <p>A "Gyakorlás" oldal a következő elemeket tartalmazza:</p>
 <ul>

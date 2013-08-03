@@ -19,9 +19,9 @@
   <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</span>
   <span class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</span>
 </div>
-<div id="question" style="font-size:{{ ewuser.question_size }}"></div>
-<div id="answer" style="font-size:{{ ewuser.answer_size }}"></div>
-<div id="explanation" style="font-size:{{ ewuser.explanation_size }}"></div>
+<div id="question"></div>
+<div id="answer"></div>
+<div id="explanation" class="explanation"></div>
 {% endif %}
 
 <p>
@@ -69,9 +69,9 @@
   <button type="button" class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="no-button">{% trans "NO" %}</button>
   <button type="button" class="button" style="display:none;font-size:{{ ewuser.button_size }}" id="ok-button">{% trans "ANSWER" %}</button>
 </div>
-<div id="question" style="font-size:{{ ewuser.question_size }}"></div>
-<div id="answer" style="font-size:{{ ewuser.answer_size }}"></div>
-<div id="explanation" style="font-size:{{ ewuser.explanation_size }}"></div>
+<div id="question"></div>
+<div id="answer"></div>
+<div id="explanation" class="explanation"></div>
   {% endif %}
 </div>
 
@@ -108,6 +108,28 @@
     {% trans "Gave up adding label" %}
   </div>
 </div>
+
+<style>
+#question
+{
+  font-size:{{ ewuser.question_size }};
+}
+
+#answer
+{
+  font-size:{{ ewuser.answer_size }};
+}
+
+#explanation
+{
+  font-size:{{ ewuser.explanation_size }};
+}
+</style>
+
+<!-- The user's custom CSS -->
+<style>
+{{ css|safe }}
+</style>
 
 {% endblock %}
 

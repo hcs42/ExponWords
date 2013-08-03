@@ -18,6 +18,10 @@
 
 {% include "ew/message.html" %}
 
+<style>
+{{ css|safe }}
+</style>
+
 <form action="{% url edit_word_pair word_pair.id %}" method="post">{% csrf_token %}
   {% with 'edit' as edit_type %}
   {% with 'Save' as submit_text %}

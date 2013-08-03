@@ -43,9 +43,18 @@
 {% csrf_token %}
 <input type="hidden" name="source_url" value="{{ source_url }}">
   
-<!-- table -->
-
 {% if show_hits %}
+
+<!-- Custom CSS -->
+
+{% for wdict_name, css in custom_css_list %}
+<!-- {{ wdict_name }} -->
+<style>
+{{ css|safe }}
+</style>
+{% endfor %}
+
+<!-- table -->
 
 <p class="pagination">
   <span class="step-links">

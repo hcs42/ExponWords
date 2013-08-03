@@ -61,6 +61,10 @@ STRENGTHENER_METHOD_CHOICES = \
     [('double_actual', _('Double last actual time interval')),
      ('double_due', _('Double last due time interval'))]
 PRACTICE_WORD_COUNT_LIMIT = 200
+TEXT_FORMAT_CHOICES = \
+    [('text', _('Plain text')),
+     ('html_ws', _('HTML (keep line breaks)')),
+     ('html', _('HTML (unmodified)'))]
 
 
 ##### General helper functions #####
@@ -143,6 +147,15 @@ def create_WDictForm():
             forms.ChoiceField(
                 choices=strengthener_method_choices,
                 label=_('Method of strengthening a word after pressing YES'))
+
+        text_format = \
+            forms.ChoiceField(
+                choices=TEXT_FORMAT_CHOICES,
+                label=_('Text format of the words and notes'))
+
+        css = forms.CharField(label=_("Custom CSS"),
+                              widget=forms.Textarea,
+                              required=False)
 
     return WDictForm
 
@@ -413,11 +426,15 @@ def language(request):
 def help(request, lang):
     models.log(request, 'help')
     langs = [langcode for langcode, langname in settings.LANGUAGES]
+    allowed_tags = ', '.join(models.ALLOWED_TAGS)
+    allowed_attrs = ', '.join(models.ALLOWED_ATTRIBUTES)
     if lang in langs:
         return render(
                    request,
                    'ew/help/help-%s.html' % lang,
-                   {'version': models.version})
+                   {'version': models.version,
+                    'allowed_tags': allowed_tags,
+                    'allowed_attrs': allowed_attrs})
     else:
         raise Http404
 
@@ -680,11 +697,11 @@ def modify_wdict(request, wdict):
         form = WDictForm(request.POST)
         if form.is_valid():
             for field in ('name', 'lang1', 'lang2', 'practice_word_order',
-                          'strengthener_method'):
+                          'strengthener_method', 'text_format', 'css'):
                 setattr(wdict, field, form.cleaned_data[field])
             wdict.save()
             messages.success(request, _('Dictionary modified.'))
-            wdict_url = reverse('ew.views.wdict', args=[wdict.id])
+            wdict_url = reverse('ew.views.modify_wdict', args=[wdict.id])
             return HttpResponseRedirect(wdict_url)
         else:
             messages.error(request, _('Some fields are invalid.'))
@@ -694,7 +711,9 @@ def modify_wdict(request, wdict):
                           'lang1': wdict.lang1,
                           'lang2': wdict.lang2,
                           'practice_word_order': wdict.practice_word_order,
-                          'strengthener_method': wdict.strengthener_method})
+                          'strengthener_method': wdict.strengthener_method,
+                          'text_format': wdict.text_format,
+                          'css': wdict.css})
 
     else:
         assert(False)
@@ -760,6 +779,8 @@ def add_wdict(request):
                 form.cleaned_data['practice_word_order']
             wdict.strengthener_method = \
                 form.cleaned_data['strengthener_method']
+            wdict.text_format = form.cleaned_data['text_format']
+            wdict.css = form.cleaned_data['css']
             wdict.save()
             messages.success(request, _('Dictionary created.'))
             wdict_url = reverse('ew.views.wdict', args=[wdict.id])
@@ -960,39 +981,6 @@ def ew_settings_x(request):
 ##### Practice #####
 
 
-def escape_for_html(explanation, indent=False):
-    """Escapes the given string so that it can be printed as HTML. Optionally
-    it indents each line with 4 non-breakable spaces.
-
-    **Argument:**
-
-    - `explanation` (str)
-
-    **Returns:** str
-    """
-
-    # Remove the trailing newline
-    if (len(explanation) > 1) and (explanation[-1] == '\n'):
-        explanation = explanation[:-1]
-
-    # Indentation
-    def insert_nbps(matchobject):
-        """Returns the same number of "&nbsp;":s as the number of matched
-        characters."""
-        spaces = matchobject.group(1)
-        space_count = len(spaces)
-        if indent:
-            space_count += 4
-        return '&nbsp;' * space_count
-    regexp = re.compile(r'^( *)', re.MULTILINE)
-    explanation = re.sub('&', '&amp;', explanation)
-    explanation = re.sub('<', '&lt;', explanation)
-    explanation = re.sub('>', '&gt;', explanation)
-    explanation = re.sub(regexp, insert_nbps, explanation)
-
-    return '<br/>'.join(explanation.splitlines())
-
-
 def words_to_practice_to_json(request, words_to_practice, limit):
     word_list = []
 
@@ -1003,14 +991,11 @@ def words_to_practice_to_json(request, words_to_practice, limit):
 
     for wp, direction in words_to_practice_now:
 
-        if wp.explanation:
-            expl_labels = wp.explanation
-            if wp.labels:
-                expl_labels += '\n\n'
-        else:
-            expl_labels = ''
+        extra_notes = ''
         if wp.labels:
-            expl_labels += '[%s]' % wp.labels
+            if wp.explanation:
+                extra_notes += '\n\n'
+            extra_notes += ('[%s]' % wp.labels)
 
         wdict = wp.wdict
         user = wdict.user
@@ -1022,7 +1007,7 @@ def words_to_practice_to_json(request, words_to_practice, limit):
                 wp.get_date_info(direction)
             strength2, date2 = wp.strengthen(direction, dry_run=True)
 
-            expl_labels += ('\n\nDimness today: ' +
+            extra_notes += ('\n\nDimness today: ' +
                             str(wp.get_dimness(direction, today,
                                                silent=True)) +
                             '\nDimness tomorrow: ' +
@@ -1043,13 +1028,19 @@ def words_to_practice_to_json(request, words_to_practice, limit):
                             '\nNext due interval length: ' +
                             str((date2 - last_query_date).days))
 
-        word_list.append([escape_for_html(wp.word_in_lang1),
-                          escape_for_html(wp.word_in_lang2),
+        extra_notes_html = models.escape_html(extra_notes)
+        extra_notes_html = models.indent_html(extra_notes_html,
+                                              add_space_count=4)
+        extra_notes_html = models.newline_to_br(extra_notes_html, keepend=False)
+
+        word_list.append([wp.get_html('word_in_lang1'),
+                          wp.get_html('word_in_lang2'),
                           direction,
                           wp.id,
                           wp.get_date(direction).isoformat(),
                           wp.get_strength(direction),
-                          escape_for_html(expl_labels, indent=True)])
+                          wp.get_html('explanation') +
+                              extra_notes_html])
 
     return json.dumps({'all_words_to_practice': len(words_to_practice),
                        'word_list': word_list})
@@ -1067,7 +1058,8 @@ def practice_wdict(request, wdict):
                    'words_to_practice': '"normal"',
                    'ewuser': ewuser,
                    'user': request.user,
-                   'quick_labels': ewuser.get_quick_labels()})
+                   'quick_labels': ewuser.get_quick_labels(),
+                   'css': wdict.get_css()})
 
 
 @wdict_access_required
@@ -1082,7 +1074,8 @@ def practice_wdict_early(request, wdict):
                    'words_to_practice': '"early"',
                    'ewuser': ewuser,
                    'user': request.user,
-                   'quick_labels': ewuser.get_quick_labels()})
+                   'quick_labels': ewuser.get_quick_labels(),
+                   'css': wdict.get_css()})
 
 
 @login_required
@@ -1340,14 +1333,21 @@ def search(request):
             (_('Page %(current_page_index)s of %(page_count)s') %
              {'current_page_index': pagination_info.number,
               'page_count': pagination_info.paginator.num_pages})
+        custom_css_list = []
 
         if show_hits:
             word_pairs_and_exps = \
                 [(wp,
-                  escape_for_html(wp.word_in_lang1),
-                  escape_for_html(wp.word_in_lang2),
-                  escape_for_html(wp.explanation, indent=True))
+                  wp.get_html('word_in_lang1'),
+                  wp.get_html('word_in_lang2'),
+                  wp.get_html('explanation'))
                  for wp in pagination_info.object_list]
+            custom_css_list = \
+                [(wp_wdict.name, wp_wdict.get_css())
+                 for wp_wdict in
+                 set(wp.wdict
+                     for wp
+                     in pagination_info.object_list)]
         else:
             word_pairs_and_exps = []
 
@@ -1361,7 +1361,8 @@ def search(request):
                    'pagination_url': pagination_url,
                    'pagination_info': pagination_info,
                    'current_page_index': current_page_index,
-                   'word_pairs_and_exps': word_pairs_and_exps}
+                   'word_pairs_and_exps': word_pairs_and_exps,
+                   'custom_css_list': custom_css_list}
 
         if wdict is not None:
             context.update({'lang1': wdict.lang1,
@@ -1421,16 +1422,26 @@ def edit_word_pair(request, wp, wdict):
 
     simple_style, advanced_style = get_styles(display_mode)
 
+    response_dict = \
+       {'form': form,
+        'word_pair': wp,
+        'wdict': wdict,
+        'lang1': wdict.lang1,
+        'lang2': wdict.lang2,
+        'simple_style': simple_style,
+        'advanced_style': advanced_style,
+        'css': wdict.get_css()}
+
+    if wdict.text_format != 'text':
+        response_dict.update({
+            'word_in_lang1_html': wp.get_html('word_in_lang1'),
+            'word_in_lang2_html': wp.get_html('word_in_lang2'),
+            'explanation_html': wp.get_html('explanation')})
+
     return render(
                request,
                'ew/edit_word_pair.html',
-               {'form': form,
-                'word_pair': wp,
-                'wdict': wdict,
-                'lang1': wdict.lang1,
-                'lang2': wdict.lang2,
-                'simple_style': simple_style,
-                'advanced_style': advanced_style})
+               response_dict)
 
 
 def get_word_pairs_to_use(request):

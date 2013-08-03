@@ -24,7 +24,9 @@ from django.utils.translation import ugettext as _
 
 version = '0.13.6'
 
+
 ##### Constants #####
+
 
 # The maximum number of characters used to represent a word
 WORD_PREFIX = 40;
@@ -55,9 +57,259 @@ MIN_DIMNESS_FOR_EARLY_PRACTICE = 0.75;
 
 ##### Utility functions #####
 
+
 def unexpected_value(name, value):
     msg = 'Unexpected value for variable "%s": %s' % (name, value)
     raise EWException(msg)
+
+def remove_trailing_newline(text):
+    if (len(text) > 1) and (text[-1] == '\n'):
+        text = text[:-1]
+    return text
+
+def escape_html(text):
+    text = re.sub('&', '&amp;', text)
+    text = re.sub('<', '&lt;', text)
+    text = re.sub('>', '&gt;', text)
+    return text
+
+def indent_html(text, add_space_count):
+
+    def insert_nbps(matchobject):
+        """Returns the same number of "&nbsp;":s as the number of matched
+        characters."""
+        spaces = matchobject.group(1)
+        space_count = len(spaces)
+        space_count += add_space_count
+        return '&nbsp;' * space_count
+
+    regexp = re.compile(r'^( *)', re.MULTILINE)
+    text = re.sub(regexp, insert_nbps, text)
+    return text
+
+
+def newline_to_br(text, keepend):
+    if keepend:
+        return re.sub(r'\n', '<br/>', text)
+    else:
+        return '<br/>'.join(text.splitlines())
+
+class NotFound():
+    pass
+
+class TagNotAccepted():
+    pass
+
+
+def try_match(regexp, s, i):
+    r = re.compile(regexp)
+    m = r.match(s, i)
+    if m:
+        try:
+            g = m.group(1)
+        except IndexError:
+            g = ''
+        return m.end(0), g
+    else:
+        raise NotFound()
+
+
+# List of tags from http://www.w3schools.com/tags/ref_byfunc.asp
+ALLOWED_TAGS = [
+    # Basic
+    'h1',
+    'h2',
+    'h3',
+    'h4',
+    'h5',
+    'h6',
+    'p',
+    'br',
+    'hr',
+    # Formatting
+    'abbr',
+    'b',
+    'blockquote',
+    'cite',
+    'code',
+    'em',
+    'i',
+    'pre',
+    'q',
+    'small',
+    'strong',
+    'sub',
+    'sup',
+    'u',
+    # Images
+    'img',
+    # Links
+    'a',
+    # Lists
+    'ul',
+    'ol',
+    'li',
+    'dl',
+    'dt',
+    'dd',
+    # Style/Sections
+    'style',
+    'div',
+    'span',
+    # Tables
+    'table',
+    'caption',
+    'th',
+    'tr',
+    'td',
+    'thead',
+    'tbody',
+    'tfoot',
+    'col',
+    'colgroup',
+    ]
+ALLOWED_TAGS_SET = set(ALLOWED_TAGS)
+
+
+ALLOWED_ATTRIBUTES = [
+
+    # Global attributes
+    # http://www.w3schools.com/tags/ref_standardattributes.asp
+    'class',
+    'id',
+    'lang',
+    'style',
+    'title',
+
+    # <a>
+    'href',
+    'target',
+
+    # <img>
+    'alt',
+    'height',
+    'src',
+    'width',
+
+    # <table>
+    'border',
+
+    # <td>
+    'colspan',
+    'rowspan',
+    'headers',
+    ]
+
+ALLOWED_ATTRIBUTES_SET = set(ALLOWED_ATTRIBUTES)
+
+
+def simple_html_to_html(s, add_br, add_space_count):
+    i = 0
+    html_result = []
+    s = remove_trailing_newline(s)
+    while True:
+
+        i, substr = try_match('([^<&]*)', s, i)
+        text = escape_html(substr)
+        if add_br:
+            text = indent_html(text, add_space_count)
+            text = newline_to_br(text, keepend=True)
+        html_result.append(text)
+
+        if i == len(s):
+            break
+
+        if s[i] == '&':
+            html_result.append('&')
+            i += 1
+            continue
+
+        # s[i] == '<'
+        tag_start = i
+        try:
+
+            # Read the opening '<' or '</'
+            i, _ = try_match(r'<\s*/?', s, i)
+
+            # Read the tag name
+            i, html_tag = try_match(r'\s*([^<>"\'= \t]+)\b', s, i)
+            if html_tag not in ALLOWED_TAGS_SET:
+                raise TagNotAccepted()
+
+            try:
+                while True:
+                    i, html_attr = \
+                        try_match(r'\s*([^<>"\'= \t]+)'     # src
+                                  r'\s*=\s*'                # =
+                                  r'(?:[^<>"\'= \t]+\b|'    # pic
+                                  r'"[^"]*"|'               # 'pic.jpg'
+                                  r'\'[^\']*\')',           # "pic.jpg"
+                                  s, i)
+                    if html_attr not in ALLOWED_ATTRIBUTES_SET:
+                        raise TagNotAccepted()
+            except NotFound:
+                # We didn't find any more attributes
+                pass
+
+            # Read the closing '>' or '/>'
+            i, _ = try_match(r'\s*/?>', s, i)
+
+        except NotFound:
+            # We didn't find a proper tag
+            html_result.append('&lt;')
+            i = tag_start + 1
+        except TagNotAccepted:
+            # We tag we found has a name or attribute that is not allowed
+            html_result.append('&lt;')
+            i = tag_start + 1
+        else:
+            html_result.append(s[tag_start:i])
+
+    return ''.join(html_result)
+
+
+def test_simple_html_to_html():
+
+    def test(input, expected_output):
+        actual_output = simple_html_to_html(input,
+                                            add_br=False,
+                                            add_space_count=0)
+        if actual_output != expected_output:
+            print 'Expected and actual output do not match:'
+            print 'Input:          ', input
+            print 'Expected output:', expected_output
+            print 'Actual output:  ', actual_output
+            print
+
+    # Edge cases
+    test('', '')
+    test('<', '&lt;')
+    test('>', '&gt;')
+    test('a<a', 'a&lt;a')
+    test('<br>', '<br>')
+    test('< br >', '< br >')
+    test('<br/>', '<br/>')
+    test('<unknown>', '&lt;unknown&gt;')
+
+    # Ampersand
+    test('&amp;',
+         '&amp;')
+
+    # Different attribute value formats
+    test('ab<a href=xy>b</a>',
+         'ab<a href=xy>b</a>')
+    test('ab<a href="xy \' z">b</a>',
+         'ab<a href="xy \' z">b</a>')
+    test('ab<a href=\'xy " z\'>b</a>',
+         'ab<a href=\'xy " z\'>b</a>')
+
+    # More complex examples
+    test('<img src=xy title="hello world">',
+         '<img src=xy title="hello world">')
+    test('ab<img src=xy title="hello world">b',
+         'ab<img src=xy title="hello world">b')
+    test('<img src=xy title="hello world"><img src=xy title="hello world">',
+         '<img src=xy title="hello world"><img src=xy title="hello world">')
 
 
 ##### Date handling #####
@@ -342,6 +594,8 @@ class WDict(models.Model):
     deleted = models.BooleanField(default=False)
     practice_word_order = models.CharField(default='default', max_length=20)
     strengthener_method = models.CharField(default='default', max_length=20)
+    text_format = models.CharField(default='text', max_length=20)
+    css = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name
@@ -458,15 +712,37 @@ class WDict(models.Model):
         similar_word_pairs = (lang1_same | lang2_same) - same_word_pairs
         return sorted(same_word_pairs), sorted(similar_word_pairs)
 
+    def get_css(self):
+
+        if self.css == 'text':
+            return None
+        else:
+            # Replace <, otherwise the user could run any code in the browser with
+            # the following CSS:
+            #
+            #     </style>
+            #     CODE
+            #     <style>
+            #
+            # On the other hand, > cannot be replaced, because then this would not
+            # work:
+            #     </style>
+            #     .class1 > .class2
+            #     <style>
+
+            return re.sub('<', '&lt;', self.css)
+
+
 
 class WordPair(models.Model):
 
     # each word pair belongs to a dictionary
     wdict = models.ForeignKey(WDict)
 
-    # the word in the first/second language:
-    word_in_lang1 = models.CharField(max_length=255)
-    word_in_lang2 = models.CharField(max_length=255)
+    # the word in the first/second language and notes:
+    word_in_lang1 = models.TextField()
+    word_in_lang2 = models.TextField()
+    explanation = models.TextField(blank=True)
 
     # strengths of the word
     strength1 = models.FloatField(default=0)
@@ -476,9 +752,6 @@ class WordPair(models.Model):
     date_added = models.DateField()
     date1 = models.DateField()
     date2 = models.DateField()
-
-    # explanation, examples, comments, etc.
-    explanation = models.TextField(blank=True)
 
     # labels
     labels = models.CharField(max_length=255, blank=True)
@@ -495,6 +768,28 @@ class WordPair(models.Model):
         self.word_in_lang2 = self.word_in_lang2.strip()
         self.explanation = self.explanation.rstrip()
         self.normalize_labels()
+
+    def get_html(self, field):
+
+        add_space_count = (4 if field == 'explanation' else 0)
+
+        if self.wdict.text_format == 'text':
+            text = getattr(self, field)
+            #text = remove_trailing_newline(text)
+            text = escape_html(text)
+            text = indent_html(text, add_space_count=add_space_count)
+            text = newline_to_br(text, keepend=False)
+            return text
+
+        elif self.wdict.text_format == 'html':
+            return simple_html_to_html(getattr(self, field),
+                                       add_br=False,
+                                       add_space_count=0)
+
+        elif self.wdict.text_format == 'html_ws':
+            return simple_html_to_html(getattr(self, field),
+                                       add_br=True,
+                                       add_space_count=0)
 
     def __unicode__(self):
         return ('<%s -- %s>' %

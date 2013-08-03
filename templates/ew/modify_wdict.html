@@ -46,6 +46,20 @@
       </td>
     </tr>
 
+    <tr>
+      <th>{{ form.text_format.label_tag }}:</th>
+      <td>{{ form.text_format }}
+        <a class="help" href="{% url help LANGUAGE_CODE %}#text-formats" target="_blank">({% trans "Help about text formats" %})</a>
+      </td>
+    </tr>
+
+    <tr>
+      <th>{{ form.css.label_tag }}:</th>
+      <td>{{ form.css }}
+        <a class="help" href="{% url help LANGUAGE_CODE %}#custom-css" target="_blank">({% trans "Help about custom CSS" %})</a>
+      </td>
+    </tr>
+
     <tr><td></td>
       <td><input type="submit" value="{% trans 'Save' %}" /></td>
     </tr>
