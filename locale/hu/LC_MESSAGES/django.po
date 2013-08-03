@@ -39,8 +39,18 @@ msgstr "Kicsit le vagyok maradva"
 msgid "Relearn old words"
 msgstr "Régi szavak újratanulása"
 
+msgid "Double last actual time interval"
+msgstr "Az utolsó valós időintervallum duplázása"
+
+msgid "Double last due time interval"
+msgstr "Az utolsó elvárt időintervallum duplázása"
+
 msgid "Default (use the word order in the Settings page)"
 msgstr "Alapértelmezett (a Beállítások oldalon beállított rendezést használja)"
+
+msgid "Default (use the strengthener method in the Settings page)"
+msgstr ""
+"Alapértelmezett (a Beállítások oldalon beállított erősítő módszert használja)"
 
 msgid "Name of the dictionary"
 msgstr "Szótár neve"
@@ -53,6 +63,9 @@ msgstr "Második nyelv"
 
 msgid "Practice page word order"
 msgstr "Szavak sorrendje a Gyakorlás oldalon"
+
+msgid "Method of strengthening a word after pressing YES"
+msgstr "A szavak megerősítésére használt módszer az IGEN gomb megnyomása után"
 
 #, python-format
 msgid "Word in \"%(lang)s\""
@@ -208,6 +221,12 @@ msgstr "Normál"
 msgid "Less scrolling"
 msgstr "Kevesebb görgetés"
 
+msgid "PageUp = Yes, PageDown = No"
+msgstr "PageUp = Igen, PageDown = Nem"
+
+msgid "PageUp = No, PageDown = Yes"
+msgstr "PageUp = Nem, PageDown = Igen"
+
 msgid "Language"
 msgstr "Nyelv"
 
@@ -219,6 +238,12 @@ msgstr "Fordulópont"
 
 msgid "Practice page arrangement"
 msgstr "Gyakorlás oldal elrendezése"
+
+msgid "PageUp/PageDown behavior"
+msgstr "PageUp/PageUp viselkedés"
+
+msgid "Quick labels"
+msgstr "Gyors címkék"
 
 msgid "Button size"
 msgstr "Gombok mérete"
@@ -232,8 +257,8 @@ msgstr "Válasz mérete"
 msgid "Notes size"
 msgstr "Jegyzetek mérete"
 
-msgid "Quick labels"
-msgstr "Gyors címkék"
+msgid "Hidden extra features"
+msgstr "Rejtett extra funkciók"
 
 msgid "Invalid language code"
 msgstr "Érvénytelen nyelvkód"
@@ -416,6 +441,9 @@ msgstr "Szótár módosítása"
 
 msgid "Help about word orders"
 msgstr "Súgó a szavak sorrendjéről"
+
+msgid "Help about strengthener methods"
+msgstr "Súgó az erősítő módszerekről"
 
 msgid "Practice"
 msgstr "Gyakorlás"
