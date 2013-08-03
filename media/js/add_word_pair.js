@@ -64,11 +64,11 @@ function delete_button_cancel_click() {
 
 function delete_submit() {
     if (delete_state == 'delete_button_1_clicked') {
-        return false;
         delete_state = 'confirmation_needed';
-    } else if (delete_state == 'delete_button_cancel_clicked') {
         return false;
+    } else if (delete_state == 'delete_button_cancel_clicked') {
         delete_state = 'basic';
+        return false;
     } else if (delete_state == 'delete_button_yes_clicked') {
         return true;
     } else {// delete_state == basic or confirmation_needed
@@ -87,5 +87,4 @@ $(document).ready(function() {
     $('#delete_button_yes').click(delete_button_yes_click);
     $('#delete_button_cancel').click(delete_button_cancel_click);
     $('form').submit(delete_submit);
-    //$('.advanced').hide();
 });
