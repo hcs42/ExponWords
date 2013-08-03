@@ -1,11 +1,6 @@
 Priority
 --------
 
-- write documentation and translation
-- bugfix: "Save" does not work on "edit word pair" after cancelling Delete
-  word pair
-- basic HTML: <b>, <i>, <u>, <span style>, <div style>, <img src>, <ul>, <ol>,
-  <li>
 - use virtualenv on the server and update README
 
 User features
@@ -46,7 +41,6 @@ Practice page
 
 - sorting the dictionaries
 - automatically jump to the next dictionary at the end of practice
-- full screen/compact controls
 - more keyboard shortcuts
 
 Practice page 2.0

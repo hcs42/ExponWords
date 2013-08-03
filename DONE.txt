@@ -140,5 +140,9 @@ v0.14:
     - add support for new algorithm "show my future"
 - Early practice
 - Practice page: pageup/pagedown can mean yes/no
-- Practice page: "m" shortcut toggles Operations
+- Practice page: "m" shortcut toggles Operations ("More...")
+- Practice page: full screen mode
 - Framework for hidden extra features
+- Rephrase "here" links from the help
+- Remove "relearn old words"
+- Support for words in HTML (including custom CSS)
