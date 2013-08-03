@@ -45,7 +45,7 @@ if he knows it in 2 days, it will be asked in 4 days; and so on with powers
 of 2. If the users admits on any of these occasions that he does not
 remember the word, the strength of the word as stored by ExponWords will go
 back to the initial level, and it will be asked again in 1 day, then 2
-days afterwards, then 4 days afterwards etc. </p>
+days afterwards, then 4 days afterwards etc.</p>
 <p>ExponWords stores word pairs to be learnt. These can contain not only words,
 but also expressions or anything the users wants to learn. For the sake of
 simplicity though, they will be only referred to as word pairs. Word pairs have
@@ -85,9 +85,8 @@ The main page has the following menu items if nobody is logged in:
 <ul>
   <li>Log in</li>
   <li>Register</li>
-  <li>Language: The language to be used for the user interface before logging
-  in. Will be Nyelv: en afterwards. See more information about the languages
-  <a href="#ui_language">here</a>.</li>
+  <li><a href="#ui_language">Language</a>: The language to be used for the user
+  interface before logging in.</li>
   <li>Help: This page.</li>
 </ul>
 
@@ -98,15 +97,15 @@ The main page has the following menu items for logged in users:
   there is a link to the practice page of the dictionary. The text of the link
   is the number of words to be practiced today.</li>
   <li>Create new dictionary: Creates a new dictionary for the user.</li>
-  <li>Search and operations: A search page that finds word pairs in any
-  dictionary and allows operations on several word pairs. See
-  <a href="#search">here</a> in more detail.</li>
+  <li><a href="#search">Search and operations</a>: A search page that finds
+  word pairs in any dictionary and allows operations on several word
+  pairs.</li>
   <li>List all words: A page that lists the words in all dictionaries.</li>
   <li>Show my future: A page that shows the number of words that will be asked
   in different days, supposing all word pairs in the dictionaries are known and
   that no new word pairs will be added.</li>
-  <li>Settings: The users can set their preferences here. See
-  <a href="#settings">here</a> in more detail.</li>
+  <li><a href="#settings">Settings</a>: The users can set their preferences
+  here.</li>
   <li>Change password</li>
   <li>Log out</li>
   <li>Help: This page.</li>
@@ -118,11 +117,13 @@ The dictionary page shows activities that can be done to the selected
 dictionary. It has the following menu items:
 
 <ul>
-  <li>Practice: Practices today's words with the user. See
-  <a href="#practice">here</a> in more detail.</li>
-  <li>Search and operations: A search page that finds word pairs in the current
-  dictionary and allows operations on several word pairs. See
-  <a href="#search">here</a> in more detail.</li>
+  <li><a href="#practice">Practice</a>: Practices today's words with the
+  user.</li>
+  <li><a href="#practice-early">Practice early</a>: Practices words with the
+  user, even those that are not due today.</li>
+  <li><a href="#search">Search and operations</a>: A search page that finds
+  word pairs in the current dictionary and allows operations on several word
+  pairs.</li>
   <li>List all words: A page that lists all words in the current
   dictionary.</li>
   <li>Add new word pair: Adding a new word to the database.</li>
@@ -130,6 +131,9 @@ dictionary. It has the following menu items:
   <li>Export word pairs to text: Export word pairs to a text format.</li>
   <li>Import word pairs from tab separated values: The input format of this menu
   item is optimized for words copied from a spreadsheet application.</li>
+  <li>Modify: The <a href="#practice-word-order">practice word order</a> and
+  the <a href="#strengthener-methods">method of strengthening a word</a> can be
+  set here.</li>
   <li>Delete: Deleting the dictionary. Deleted dictionaries can be recovered
   only by the administrator.</li>
 </ul>
@@ -169,7 +173,7 @@ dictionary. It has the following menu items:
     </li>
   </ol>
   </li>
-  <li>Buttons:</li>
+  <li>Buttons:
   <ol>
     <li class="small_button_li"><span class="small-button">ANSWER</span>:
     the user shall press this button when he thought through whether he
@@ -185,6 +189,12 @@ dictionary. It has the following menu items:
     so it shall be asked again that day, then again 1, 2, 4, 8, etc. days
     later.  The same effect can be achieved by pressing the "n" key.</li>
   </ol>
+  <ul>
+    <li>The buttons can be pressed with PageUp/PageDown, which allows
+    practicing with a wireless presenter device. This feature can be activated
+    on the <a href="#settings">Settings</a> page.</li>
+  </ul>
+  </li>
   <li class="small_button_li">Word: the word being asked is shown with
   black color. After the <span class="small-button">ANSWER</span> button is
   pressed, the solution will be shown with blue, and the notes will
@@ -194,11 +204,27 @@ dictionary. It has the following menu items:
   </li>
 </ul>
 
+<h4 id="practice-early">Practice early</h4>
+
+<p>The "Practice early" page is a <a href="#practice">practice page</a> where
+not only those words are asked that are due today, but those too that could
+benefit from practicing. (That means words whose <a href="#dimness">dimness</a>
+is larger than 0.75. So for example if a word is due after 100 day of its last
+practice, then it is asked in early practice sessions from day 75. From day
+100, it is asked in normal practice sessions.)</p>
+
+<p>In early practice sessions, the words are always ordered according to the <a
+  href="#little-behind">I am a little behind</a> ordering, which means that
+first those words are asked that are better suited for early practice (because
+their dimness is higher).</p>
+
 <h4 id="practice-word-order">Word orders on the practice page</h4>
 
 <p>Words can be asked in several orders on the practice page. (Note that these
 orderings specify only the order of words within the practice page, not which
-word is asked which day.)</p>
+word is asked which day.) You can set your preferred ordering globally on the
+<a href="#settings">Settings</a> page, or only for one dictionary on the <a
+  href="#dict-page">Modify dictionary</a> page.</p>
 <ul>
   <li><em>Random</em>: the order of the words is totally random.</li>
   <li><em>New and forgotten words first</em>:
@@ -280,6 +306,39 @@ dimness):</p>
      height="35"
      alt="dimness = ((&quot;today - word_date&quot; in days) + 2 ^ (word_strength - 1)) / (2 ^ (word_strength - 1))"/>
 
+<h4 id="strengthener-methods">Methods of strengthening a word</h4>
+
+<p>When the "YES" button is pressed during a practice session, the strength of
+the given word will be increased. There are two methods for strengthening the
+word. They both work on the basic principle that they double the time interval
+for the next practice: 1 day, 2 days, 4 days, 8 days, etc.</p>
+
+<p>The difference is how they handle the situation when the word is not
+practiced on the day when the word is due, but later. For example let's say
+that a word was practiced on January 1st, 2nd, 4th, 8th, but even though
+ExponWords asked the word on 16th, 17th, etc., it was only practiced on 20th.
+Let's see how the two methods calculate the next practice time of the word:</p>
+
+<ul>
+  <li><em>Double last actual time interval</em>: this method will say that the
+  last time the word was asked was 12 days ago (on January 8th), so we should
+  double this time interval, i.e. the word will be asked in 2 * 12 = 24 days
+  (February 13rd).</li>
+  <li><em>Double last due time interval</em>: this method will say that the
+  last time interval while ExponWords didn't want to ask the word was 8 days
+  (between January 8th and 16th), so we should double the length of that time
+  interval, i.e. the word should be asked in 2 * 8 = 16 days (February
+  5st).</li>
+</ul>
+
+<p>In both cases, the strengths of the words will be calculated so that they
+provide the time intervals described above.<p>
+
+<p>Generally, the first method is better (that's why that is the default),
+because it means less practice time. In some circumstances, though, the second
+one may be useful too. In case of early practice, always the first method is
+used.</p>
+
 <h3 id="search">Search</h3>
 <p>The "Search and operations" page can be used to search in dictionaries. The
 dictionary and the label in which the search shall be performed can be
@@ -329,8 +388,8 @@ gray background and the state of their checkboxes in the "Selected" column.</p>
 <h3 id="settings">Settings</h3>
 <p>The followings can be set:</p>
 <ul>
-  <li>Language: The language of the user interface. See more information about
-  the languages <a href="#ui_language">here</a>.</li>
+  <li><a href="#ui_language">Language</a>: The language of the user
+  interface.</li>
   <li>Time zone: The time zone used to calculate the words to ask. UTC+0 is
   Greenwich Mean Time; the time zone is higher and higher as we go to the east
   (UTC+1, UTC+2, etc.) and lower and lower as we go to the west (UTC-1, UTC-2,
@@ -343,17 +402,22 @@ gray background and the state of their checkboxes in the "Selected" column.</p>
   asked only after 3am that day. Negative values can also be set: -1:30 means
   that the words that are due on a day will be asked from 22:30 the previous
   day.</li>
-  <li>Practice page word order: See <a href="#practice-word-order">here</a>.
+  <li><a href="#practice-word-order">Practice page word order</a>: The order in
+  which words are asked during practice sessions.</li> 
+  <li><a href="#strengthener-methods">Method of strengthening a word after
+    pressing YES</a>.</li> 
   <li>Practice page arrangement: The arrangement of the Practice page can be
   set to "Normal" and "Less scrolling". The former fits better with the rest of
   the user interface, but the latter can be better on a device on which the
   browser automatically scrolls to the top after all clicks.</li>
-  <li>Button size, question size, answer size, notes size: The font size
-  of different elements of the Practice page.</li>
+  <li>PageUp/PageDown behavior: This settings can be used to make the YES/NO
+  buttons clicked when pressing the PageUp/PageDown buttons.</li>
   <li id="quick-labels">Quick labels: labels given in this textbox (separated
   by space characters) are the quick labels, which means that there is a button
   for each of them in the Practice Page; by clicking on these buttons, the
   labels can easily be added to the word that is being asked.</li>
+  <li>Button size, question size, answer size, notes size: The font size
+  of different elements of the Practice page.</li>
   <li>Email address: This email address can be used to reset the password and
   to receive notifications.</li>
   <li>Send me emails when new ExponWords has new features: If checked in,
@@ -366,18 +430,23 @@ gray background and the state of their checkboxes in the "Selected" column.</p>
 <p>ExponWords in not the only web application for learning words and other
 items.</p>
 
-<p>The algorithms of <a href="http://supermemo.net">Supermemo (English)</a> and
-<a href="http://www.szokincs.hu">szokincs.hu (Hungarian)</a> are similar to the
-algorithm of ExponWords in that it has you practice the same word less and less
-often. The creator of Supermemo (Dr Piotr Wozniak) also <a
-  href="http://www.supermemo.com/english/contents.htm">has articles</a> about
-this kind of learning and <a
-  href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak">there is
-  an article in Wired magazin</a> about him.
+<p>The algorithms of
+<a href="http://supermemo.net">Supermemo (English)</a> and
+<a href="http://www.szokincs.hu">szokincs.hu (Hungarian)</a>
+are similar to the algorithm of ExponWords in that it has you practice the same
+word less and less often.
+<a href="http://www.supermemo.com/english/contents.htm">The creator of
+  Supermemo (Dr Piotr Wozniak) has articles about this kind of learning</a>,
+and
+<a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak">there
+  is an article in Wired magazin about him</a>.
 
-<p>Other applications include <a href="http://memorize.com">memorize.com
-  (English)</a>, <a href="http://quizlet.com">Quizlet (English)</a>, and <a
-  href="http://szokincsfejleszto.hu">Szókincsfejlesztő (Hungarian)</a>. </p>
+<p>Other applications for learning words include
+<a href="http://memorize.com">memorize.com (English)</a>,
+<a href="http://quizlet.com">Quizlet (English)</a>,
+<a href="https://www.brainscape.com">Brainscape (English)</a> and
+<a href="http://szokincsfejleszto.hu">Szókincsfejlesztő (Hungarian)</a>.
+</p>
 
 <h2>Frequently Asked Questions (FAQ)</h2>
 <ul>
@@ -399,7 +468,8 @@ this kind of learning and <a
   </li>
 
   <li>
-  <p><em>How does the program know whether I really knew the word asked?</em></p>
+  <p><em>How does the program know whether I really knew the word
+    asked?</em></p>
   <p>It does not, you tell this to the program. Since clicking or "YES" or "NO"
   when asked whether you know a word or not has no effect other than changing
   the word's strength and date, you can even manipulate this with good will.
@@ -423,7 +493,8 @@ this kind of learning and <a
   <p><em>The program cannot do something that I would like it to do. What can I
     do?</em></p>
   <p>There are several things in my
-  <a href="https://github.com/hcs42/ExponWords/blob/master/TODO.txt">TODO list</a>.
+  <a href="https://github.com/hcs42/ExponWords/blob/master/TODO.txt">TODO
+    list</a>.
   If you need something, you can e-mail me and if I like the idea I will add it
   to my list or (if it is already on the list) try to move it to the top.</p>
   </li>
@@ -436,8 +507,8 @@ this kind of learning and <a
 
   <li>
   <p><em>In which order are the word to be practiced asked?</em></p>
-  <p>In a totally random order.</p>
-  </li>
+  <p>There are several possibilities: see the section on <a
+    href="#practice-word-order">the practice word order</a>.</p> </li>
 
   <li id="ui_language">
   <p><em>In which languages is the user interface available?</em></p>

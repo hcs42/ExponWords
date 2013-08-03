@@ -77,14 +77,14 @@ szerkeszteni, törölni, és itt tudsz új szavakat hozzáadni, gyakorolni.</p>
 
 <h3 id="main-page">Főoldal</h3>
 
-A főoldal a következő menüpontokat tartalmazza, amikor nincs bejelentkezett felhasználó:
+A főoldal a következő menüpontokat tartalmazza, amikor nincs bejelentkezett
+felhasználó:
 
 <ul>
   <li>Bejelentkezés</li>
   <li>Regisztráció</li>
-  <li>Nyelv: A felhasználói felület nyelve bejelentkezés előtt. Bejelentkezés
-  után elfelejtődik. Több információ a nyelvekről
-  <a href="#ui_language">itt</a> található.</li>
+  <li><a href="#ui_language">Nyelv</a>: A felhasználói felület nyelve
+  bejelentkezés előtt.</li>
   <li>Súgó: Ez az oldal.</li>
 </ul>
 
@@ -97,15 +97,14 @@ számára:
   oldalára. A hivatkozás szövege egy szám, ami a ma gyakorlandó szavak számát
   mutatja.</li>
   <li>Új szótár készítése</li>
-  <li>Keresés és műveletek: Bármelyik szótárban keres. A találatokon
-  műveleteket is lehet végezni. Lásd részletesebben
-  <a href="#search">itt</a>.</li>
+  <li><a href="#search">Keresés és műveletek</a>: Bármelyik szótárban keres. A
+  találatokon műveleteket is lehet végezni.</li>
   <li>Minden szó kilistázása: Kilistázza az összes szótár összes szavát.</li>
   <li>Mutas a jövőm: Megmutatja, hogy az ExponWords a különböző napokon hány
   szót kérdezne, feltéve, hogy a felhasználó minden kikérdezéskor minden szót
   tud és nem kerül új szópár a szótárakba.</li>
-  <li>Beállítások: Itt tudod változtatni a beállításaid. A részletes
-  beállításokat lásd <a href="#settings">itt</a>.</li>
+  <li><a href="#settings">Beállítások</a>: Itt tudod változtatni a
+  beállításaid.</li>
   <li>Jelszó megváltoztatása</li>
   <li>Kijelentkezés</li>
   <li>Súgó: Ez az oldal.</li>
@@ -117,11 +116,11 @@ A szótár oldal azt mutatja, hogy miket lehet a kiválasztott szótárral csin�
 A következő menüpontjai vannak:
 
 <ul>
-  <li>Gyakorlás: A mai szavak gyakorlása. Lásd részletesebben
-  <a href="#practice">itt</a>.</li>
-  <li>Keresés és műveletek: Az aktuális szótárban keres. A találatokon
-  műveleteket is lehet végezni. Lásd részletesebben
-  <a href="#search">itt</a>.</li>
+  <li><a href="#practice">Gyakorlás</a>: A mai szavak gyakorlása.</li>
+  <li><a href="#practice-early">Korai gyakorlás</a>: Szavak gyakorlása; olyan
+  szavak gyakorlása is, amiket ma még nem kérdezne az ExponWords.</li>
+  <li><a href="#search">Keresés és műveletek</a>: Az aktuális szótárban keres.
+  A találatokon műveleteket is lehet végezni.</li>
   <li>Minden szó kilistázása: Kilistázza az aktuális szótár összes szavát.</li>
   <li>Új szópár hozzáadása</li>
   <li>Szópárok importálása szövegből: Egy szöveges formátumból importál
@@ -130,6 +129,9 @@ A következő menüpontjai vannak:
   szótárban található szópárokat.</li>
   <li>Szópárok importálása tabbal elválasztott értékekből: Ez a módszer arra
   optimális, hogy táblázatkezelő programokból másoljunk be szavakat.</li>
+  <li>Módosítás: át lehet állítani a <a href="#practice-word-order">gyakorlandó
+    szavak sorrendjét</a> és a <a href="#strengthener-methods">szavak
+    megerősítésének módszerét</a>.</li>
   <li>Törlés: a szótár törlése. A kitörölt szótárakat csak az adminisztrátor
   tudja visszaállítani.</li>
 </ul>
@@ -170,13 +172,13 @@ A következő menüpontjai vannak:
     <a href="#quick-labels">gyors címkének</a> vannak beállítva.</li>
   </ol>
   </li>
-  <li>Gombok:</li>
+  <li>Gombok:
   <ol>
-    <li class="small_button_li"><span class="small-button">MUTASD A VÁLASZT</span>:
-    a felhasználó ennek a gombnak a megnyomásával jelzi, hogy végiggondolta,
-    tudja-e az adott szót. A gomb megnyomása után a ExponWords megmutatja a
-    megoldást. A billentyűzeten bármelyik billentyű leütése olyan, mint ennek a
-    gombnak a megnyomása.</li>
+    <li class="small_button_li"><span class="small-button">MUTASD A
+    VÁLASZT</span>: a felhasználó ennek a gombnak a megnyomásával jelzi, hogy
+    végiggondolta, tudja-e az adott szót. A gomb megnyomása után a ExponWords
+    megmutatja a megoldást. A billentyűzeten bármelyik billentyű leütése olyan,
+    mint ennek a gombnak a megnyomása.</li>
     <li class="small_button_li"><span class="small-button">IGEN</span>: a
     felhasználó ezzel jelzi, hogy tudta az adott szót, és legközelebb több idő
     teljen el, mire újra kérdezi. A billentyűzeten az "i" billentyű leütése
@@ -186,6 +188,13 @@ A következő menüpontjai vannak:
     kérdezzen aznap ismét, továbbá 1, 2, 4, 8, stb. nap múlva. A billentyűzeten
     az "n" billentyű leütése olyan, mint ennek a gombnak a megnyomása.</li>
   </ol>
+  <ul>
+    <li>A fenti gombokat a PageUp/PageDown gombokkal is le lehet nyomni, így
+    egy vezeték nélküli presenter eszközzel is lehet szavakat gyakorolni. Ezt a
+    funkciót a <a href="#settings">Beállítások</a> oldalon lehet
+    beállítani.</li>
+    </ul>
+  </li>
   <li class="small_button_li">Szó: a kikérdezett szó feketével jelenik meg.
   A <span class="small-button">MUTASD A VÁLASZT</span> gomb megnyomása után a
   megoldás kékkel jelenik meg, a jegyzetek kisebb betűkkel szürkével. A &rarr;
@@ -194,9 +203,27 @@ A következő menüpontjai vannak:
   </li>
 </ul>
 
+<h4 id="practice-early">Korai gyakorlás</h4>
+
+<p>A "Korai gyakorlás" egy olyan <a href="#practice">gyakorlás oldal</a>, ahol
+nem csak azok a szavakat kérdezi az ExponWords, amiknél a következő kérdezés
+dátuma a mai napon vagy korábban van, hanem olyan egyéb szavakat is, amiknél
+van értelme a gyakorlásnak. (Ez azt jelenti, hogy azokat a szavakat kérdezi,
+amiknek a <a href="#dimness">halványsága</a> nagyobb, mint 0.75. Tehát például
+ha egy szót az előző gyakorlása után 100 nappal kell kérdezni, akkor a korai
+gyakorlás már a 75. naptól kérdezni fogja. A 100. naptól pedig a sima gyakorlás
+is kérdezi.)</p>
+
+<p>Korai gyakorláskor a szavak mindig a <a href="#little-behind">Kicsit le
+  vagyok maradva</a> sorrend alapján vannak rendezve, ami azt jelenti, hogy
+azok a szavak jönnek először, amiket érdemesebb gyakorolni (mert nagyobb a
+halványságuk).</p>
+
 <h4 id="practice-word-order">A szavak sorrendje a Gyakorlás oldalon</h4>
 
-<p>A Gyakorlás oldalon a szavakat többféle sorrendben is lehet kérdeztetni. (Ezek a sorrendek csak az egyszerre kérdezendő szavak sorrendjére vonatkoznak, nem befolyásolják, hogy melyik szó melyik nap kerül kikérdezésre.)</p>
+<p>A Gyakorlás oldalon a szavakat többféle sorrendben is lehet kérdeztetni.
+(Ezek a sorrendek csak az egyszerre kérdezendő szavak sorrendjére vonatkoznak,
+nem befolyásolják, hogy melyik szó melyik nap kerül kikérdezésre.)</p>
 <ul>
   <li><em>Véletlenszerű</em>: a szavak sorrendje teljesen véletlenszerű.</li>
   <li><em>Új és elfelejtett szavak</em>:
@@ -216,7 +243,8 @@ A következő menüpontjai vannak:
       href="#dimness">halványságuk</a> szerinti csökkenő sorrendben. Ez azt
     jelenti, hogy azokat a szavakat kérdezi hamarabb, amiket sürgősebb
     gyakorolni, mert már többször kellett volna kérdezni. (Az ugyanolyan
-    holnapi halványságú szavak erősség szerint növekvő sorrendbe vannak rendezve.)</li>
+    holnapi halványságú szavak erősség szerint növekvő sorrendbe vannak
+    rendezve.)</li>
   </ol></li>
   <li id="relearn-old-words"><em>Régi szavak újratanulása</em>: Ez a sorrend
   akkor hasznos, amikor a felhasználónak régi, a gyakorlás hiánya miatt
@@ -228,7 +256,8 @@ A következő menüpontjai vannak:
     jelenti, hogy azokat a szavakat kérdezi hamarabb, amiket már szilárdabban
     tud a felhasználó, és a valószínűleg teljesen elfelejtett (nagy
     holnapi halványságú) szavak a lista végére kerülnek. (Az ugyanolyan
-    holnapi halványságú szavak erősség szerint növekvő sorrendbe vannak rendezve.)</li>
+    holnapi halványságú szavak erősség szerint növekvő sorrendbe vannak
+    rendezve.)</li>
   </ol>
   Ezt a sorrendet felhasználva, ha a felhasználó gyakorol néhány elfelejtett
   szót minden nap (nem mindet), akkor az elfelejtett szavakat fokozatosan
@@ -279,6 +308,39 @@ halványságát kiszámoljuk (nempozitív erősségű szavaknak nincs halványs�
 <img src="/site_media/images/dimness-hu.png?{% ew_version %}"
      height="35"
      alt="halványság = ((&quot;ma - következő_kérdezés_dátuma&quot; napokban kifejezve) + 2 ^ (szó_erőssége - 1)) / (2 ^ (szó_erőssége - 1))"/>
+
+<h4 id="strengthener-methods">A szavak erősítésének módszerei</h4>
+
+<p>Amikor Gyakorlás közben a felhasználó megnyomja az "IGEN" gombot, az
+aktuális szó erőssége megnő. Két módszer van az erősség növelésére. Mindkettő
+azon az alapelven működik, hogy a következő gyakorlásig lévő időt duplázza: 1
+nap, 2 nap, 4 nap, 8 nap, stb.</p>
+
+<p>A két módszer abban különbözik, hogy hogyan kezelik azt az esetet, amikor
+egy szót nem akkor gyakorol a felhasználó, amikor ideje lenne, hanem később.
+Például tegyük fel, hogy a felhasználó gyakorolt egy szót január 1-én, 2-án,
+4-én, 8-án, de az ExponWords hiába kérdezte volna 16-án és 17-én, a felhasználó
+csak 20-án gyakorolta. Nézzük meg, hogy a két módszer hogyan számolja ki a szó
+következő gyakorlásának időpontját!</p>
+
+<ul>
+  <li><em>Az utolsó valós intervallum duplázása</em>: a módszer úgy fog
+  számolni, hogy a szó utoljára 12 napja volt gyakorolva (január 8-án), tehát
+  ezt az intervallumot kell megduplázni, azaz a következő alkalommal a szó 2 *
+  12 *= 24 nap múlva lesz kérdezve (február 13-án).</li>
+  <li><em>Az utolsó elvárt intervallum duplázása</em>: ez a módszer úgy számol,
+  hogy utoljára 8 napot akart várni a gyakorlással (január 8-tól január 16-ig),
+  így ezt az időtartamot duplázza meg, azaz a következő alkalommal a szó 2 * 8
+  = 16 nap múlva lesz kérdezve (február 5-én).</li>
+</ul>
+
+<p>Mindkét esetben a szavak erőssége úgy számítódik ki, hogy a dátumok a fenti
+időtartamokat adják ki.<p>
+
+<p>Általában az első módszer jobb (ezért az az alapbeállítás), mivel
+összességében kevesebb gyakorlással töltött időt jelent. Bizonyos esetekben a
+második is hasznos. Korai gyakorlás esetén az ExponWords mindig az első
+módszert használja.</p>
 
 <h3 id="search">Keresés és műveletek</h3>
 <p>A "Keresés és műveletek" oldalon a szópáraink között kereshetünk.
@@ -331,8 +393,7 @@ jelölődoboz állapotával jelzi.</p>
 <h3 id="settings">Beállítások</h3>
 <p>A következőket lehet beállítani:</p>
 <ul>
-  <li>Nyelv: A felhasználói felület nyelve. Több információ a nyelvekről
-  <a href="#ui_language">itt</a> található.</li>
+  <li><a href="#ui_language">Nyelv</a>: A felhasználói felület nyelve.</li>
   <li>Időzóna: A kérdezendő szavak kiszámításához használt időzóna. UTC+0 a
   Greenwich-i középidő; ahogy megyünk keletre, az időzóna egyre nagyobb (UTC+1,
   UTC+2 stb.); ahogy pedig megyünk nyugatra, az időzóna egyre kisebb (UTC-1,
@@ -344,19 +405,23 @@ jelölődoboz állapotával jelzi.</p>
   beállítva, akkor egy napon kérdezendő szavakat csak aznap 3:00-tól kezdi
   kérdezni. Negatív számot is be lehet állítani: -1:30 esetén egy nap szavait
   már előző este 22:30-tól kérdezi.</li>
-  <li>Szavak sorrendje a Gyakorlás oldalon: Lásd <a
-    href="#practice-word-order">itt</a>.
+  <li><a href="#practice-word-order">Szavak sorrendje a Gyakorlás oldalon</a>.
+  </li>
+  <li><a href="#strengthener-methods"> A szavak megerősítésére használt módszer
+    az IGEN gomb megnyomása után</a>.</li> 
   <li>Gyakorlás oldal elrendezése: A Gyakorlás oldalt kétféleképp lehet
   elrendezni: "Normál" vagy "Kevesebb görgetés" módszerrel. Az előbbi jobban
   illeszkedik a felhasználói felület többi részéhez, de az utóbbi jobb lehet
   olyan eszközön, amelyiknek a böngészője minden kattintás után az oldal
   tetejét igazítja a képernyőhöz.</li>
-  <li>Gombok mérete, kérdés mérete, válasz mérete, jegyzetek mérete: A
-  Gyakorlás oldal különböző elemeinek mérete.</li>
+  <li>PageUp/PageDown viselkedés: itt lehet beállítani, hogy a PageUp/PageDown
+  gombok megnyomásakor megnyomódjanak a YES/NO gombok a Gyakorlás oldalon.</li>
   <li id="quick-labels">Gyors címkék: az ebbe a szövegdobozba (szóközökkel
   elválasztva) beírt címkék "gyors címkék" lesznek, ami azt jelenti, hogy a
   Gyakorlás oldalon mindegyiknek lesz egy külön gombja, amivel egyszerűen rá
   lehet tenni az éppen kérdezett szóra a címkét.</li>
+  <li>Gombok mérete, kérdés mérete, válasz mérete, jegyzetek mérete: A
+  Gyakorlás oldal különböző elemeinek mérete.</li>
   <li>Email-cím: Erre az email-címre van szükség elfelejtett jelszó
   beállításához és értesítések fogadásához.</li>
   <li>Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe: Ha
@@ -369,18 +434,25 @@ jelölődoboz állapotával jelzi.</p>
 <p>Az ExponWords nem az egyetlen webalkalmazás szavak vagy más dolgok
 megtanulására.</p>
 
-<p>A <a href="http://supermemo.net">Supermemo (angol)</a> és a <a
-  href="http://www.szokincs.hu">szokincs.hu (magyar)</a> algoritmusai hasonlóak
-az ExponWords algoritmusához abban, hogy ugyanazt a szót egyre ritkábban
-kérdezik. A Supermemo készítője (dr. Piotr Wozniak) cikkei az ilyen típusú
-tanulásról <a href="http://www.supermemo.com/english/contents.htm">itt
-  (angol)</a> találhatóak, a Wired magazin róla szóló cikke pedig <a
-  href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak">itt
-  (angol)</a>.
+<p>A
+<a href="http://supermemo.net">Supermemo (angol)</a>
+és a
+<a href="http://www.szokincs.hu">szokincs.hu (magyar)</a>
+algoritmusai hasonlóak az ExponWords algoritmusához abban, hogy ugyanazt a szót
+egyre ritkábban kérdezik. A
+<a href="http://www.supermemo.com/english/contents.htm">
+  Supermemo készítője (dr. Piotr Wozniak) írt cikkeket az ilyen típusú
+  tanulásról (angol)</a>, a
+<a href="http://www.wired.com/medtech/health/magazine/16-05/ff_wozniak">
+  Wired magazin pedig készített vele egy interjút (angol)
+</a>.
 
-<p>Néhány egyéb alkalmazás: <a href="http://memorize.com">memorize.com
-  (angol)</a>, <a href="http://quizlet.com">Quizlet (angol)</a>, and <a
-  href="http://szokincsfejleszto.hu">Szókincsfejlesztő (magyar)</a>. </p>
+<p>Néhány egyéb alkalmazás, amiket lehet szavak tanulására használni:
+<a href="http://memorize.com">memorize.com (angol)</a>,
+<a href="http://quizlet.com">Quizlet (angol)</a>,
+<a href="http://brainscape.com">Brainscape (angol)</a>, és
+<a href="http://szokincsfejleszto.hu">Szókincsfejlesztő (magyar)</a>.
+</p>
 
 <h2>Gyakran Ismételt Kérések (GYIK)</h2>
 <ul>
@@ -473,7 +545,8 @@ tanulásról <a href="http://www.supermemo.com/english/contents.htm">itt
 <h2>További dokumentáció</h2>
 
 <ul>
-  <li><a href="releases">Verzióinformációk</a>: mi változott a különböző ExponWords verziókban.</li>
+  <li><a href="releases">Verzióinformációk</a>: mi változott a különböző
+  ExponWords verziókban.</li>
 </ul>
 
 <h2>Névjegy</h2>
