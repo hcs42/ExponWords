@@ -954,7 +954,8 @@ def ew_settings_x(request):
     if 'x' not in ewuser.extras:
         ewuser.extras += 'x'
         ewuser.save()
-    return ew_settings(request)
+    settings_url = reverse('ew.views.ew_settings', args=[])
+    return HttpResponseRedirect(settings_url)
 
 ##### Practice #####
 
