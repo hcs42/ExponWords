@@ -121,7 +121,7 @@ def get_date_info(strength, due_date):
     return last_query_date, due_interval
 
 
-def calc_strengthen_double(strength, due_date, today):
+def calc_strengthen_double_due(strength, due_date, today):
     if strength > 16: # 2**16 = ~179 years
         strength = 16
     new_due_interval_len = datetime.timedelta(2 ** max(strength, 0))
@@ -130,7 +130,7 @@ def calc_strengthen_double(strength, due_date, today):
     return strength2, date2
 
 
-def calc_strengthen_proportional(strength, due_date, today):
+def calc_strengthen_double_actual(strength, due_date, today):
 
     #######################################################################
     #     Number of days before the word
@@ -240,10 +240,10 @@ def calc_strengthen_proportional(strength, due_date, today):
 
 
 def calc_strengthen(strength, due_date, today, strengthener_method):
-    if strengthener_method == 'double':
-        return calc_strengthen_double(strength, due_date, today)
+    if strengthener_method == 'double_due':
+        return calc_strengthen_double_due(strength, due_date, today)
     else:
-        return calc_strengthen_proportional(strength, due_date, today)
+        return calc_strengthen_double_actual(strength, due_date, today)
 
 
 def calc_weaken(strength, today):
@@ -271,7 +271,7 @@ class EWUser(models.Model):
 
     # Word order on practice page
     practice_word_order = models.CharField(default='random', max_length=20)
-    strengthener_method = models.CharField(default='proportional',
+    strengthener_method = models.CharField(default='double_actual',
                                            max_length=20)
 
     # Practice page arrangement

@@ -59,8 +59,8 @@ PRACTICE_WORD_ORDER_CHOICES = \
      ('dimmer_first', _('I am a little behind')),
      ('dimmer_last', _('Relearn old words'))]
 STRENGTHENER_METHOD_CHOICES = \
-    [('double', _('Double')),
-     ('proportional', _('Proportional'))]
+    [('double_actual', _('Double last actual time interval')),
+     ('double_due', _('Double last due time interval'))]
 PRACTICE_WORD_COUNT_LIMIT = 200
 
 
