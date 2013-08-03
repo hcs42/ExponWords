@@ -31,13 +31,10 @@ msgid "Totally random"
 msgstr "Teljesen véletlenszerű"
 
 msgid "New and forgotten words first"
-msgstr "Új és elfelejtett szavak"
+msgstr "Új és elfelejtett szavak először"
 
 msgid "I am a little behind"
 msgstr "Kicsit le vagyok maradva"
-
-msgid "Relearn old words"
-msgstr "Régi szavak újratanulása"
 
 msgid "Double last actual time interval"
 msgstr "Az utolsó valós időintervallum duplázása"

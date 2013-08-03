@@ -56,8 +56,7 @@ ADD_WORD_PAIR_DATE_REMEMBER_SECONDS = 3600 # 1 hour
 PRACTICE_WORD_ORDER_CHOICES = \
     [('random', _('Totally random')),
      ('zero_first', _('New and forgotten words first')),
-     ('dimmer_first', _('I am a little behind')),
-     ('dimmer_last', _('Relearn old words'))]
+     ('dimmer_first', _('I am a little behind'))]
 STRENGTHENER_METHOD_CHOICES = \
     [('double_actual', _('Double last actual time interval')),
      ('double_due', _('Double last due time interval'))]

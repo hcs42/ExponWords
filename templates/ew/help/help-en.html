@@ -246,22 +246,6 @@ word is asked which day.) You can set your preferred ordering globally on the
     have been asked more times. (The words with the same dimness tomorrow are
     organized in ascending order by their strength.)</li>
   </ol></li>
-  <li id="relearn-old-words"><em>Relearn old words</em>: This word order is
-  useful when the user has old words that are forgotten because they have not
-  been practiced.
-  <ol>
-    <li>First the words with zero strength are asked.</li>
-    <li>Then the rest of the words are asked, sorted by their <a
-      href="#dimness">dimness</a> tomorrow in ascending order. This means that
-    those words come first whose knowledge is more solid, and those old words
-    that have been probably totally forgotten will go to the end. (The words
-    with the same dimness tomorrow are organized in ascending order by their
-    strength.)</li>
-  </ol>
-  Using this word order, if the user practices some (not all) forgotten old
-  words after the other words each day, gradually the forgotten old words will
-  be learnt without hampering the practice of the other words (which would
-  happen with the other word orders).</li>
 </ul>
 
 <p>Note: words in the same category above (e.g. words with the same dimness
@@ -279,15 +263,11 @@ dimness goes back to 0; but if the user does not practice it, the dimness will
 just increase by each day. The dimness of weak words increases rapidly, while
 the dimness of strong words increases slowly.</p>
 
-<p>When the dimness of a word is greater than 1, but smaller than 2 or 3, it
-means that the word should be practiced: the higher the dimness, the more
-urgent the practice is. On the other hand, when the dimness is very great (e.g.
-10), the word has not been practiced so long ago that the user probably does
-not remember it at all, so it effectively has to be relearnt. If the user has
-quite a few words between dimness 1 and 2 for the practice session, then the <a
-  href="#little-behind">"I am a little behind"</a> word ordering is
-recommended, while if the user has many words with high dimness, the <a
-  href="#relearn-old-words">"Relearn old words"</a> ordering suits better.</p>
+<p>When the dimness of a word is greater than 1, it means that the word should
+be practiced: the higher the dimness, the more urgent the practice is. If the
+user has quite a few words larger than dimness 1 for the practice session, then
+the <a href="#little-behind">"I am a little behind"</a> word ordering is
+recommended.</p>
 
 <p>For those interested, here is the formula that calculates the dimness of a
 word with positive strength (words with nonpositive strength do not have

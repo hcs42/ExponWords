@@ -226,7 +226,7 @@ halványságuk).</p>
 nem befolyásolják, hogy melyik szó melyik nap kerül kikérdezésre.)</p>
 <ul>
   <li><em>Véletlenszerű</em>: a szavak sorrendje teljesen véletlenszerű.</li>
-  <li><em>Új és elfelejtett szavak</em>:
+  <li><em>Új és elfelejtett szavak először</em>:
   <ol>
     <li>Először a nulla erősségű szavakat kérdezi a program: ezek a szavak vagy
     újak, vagy a felhasználó a legutóbbi gyakorlásukkor a "NEM" gombot nyomta
@@ -246,19 +246,6 @@ nem befolyásolják, hogy melyik szó melyik nap kerül kikérdezésre.)</p>
     holnapi halványságú szavak erősség szerint növekvő sorrendbe vannak
     rendezve.)</li>
   </ol></li>
-  <li id="relearn-old-words"><em>Régi szavak újratanulása</em>: Ez a sorrend
-  akkor hasznos, amikor a felhasználónak régi, a gyakorlás hiánya miatt
-  elfelejtett szavai vannak.
-  <ol>
-    <li>Először a nulla erősségű szavakat kérdezi a program.</li>
-    <li>Ezután a többi szót kérdezi, mégpedig a holnapi <a
-      href="#dimness">halványságuk</a> szerinti növekvő sorrendben. Ez azt
-    jelenti, hogy azokat a szavakat kérdezi hamarabb, amiket már szilárdabban
-    tud a felhasználó, és a valószínűleg teljesen elfelejtett (nagy
-    holnapi halványságú) szavak a lista végére kerülnek. (Az ugyanolyan
-    holnapi halványságú szavak erősség szerint növekvő sorrendbe vannak
-    rendezve.)</li>
-  </ol>
   Ezt a sorrendet felhasználva, ha a felhasználó gyakorol néhány elfelejtett
   szót minden nap (nem mindet), akkor az elfelejtett szavakat fokozatosan
   megtanulja anélkül, hogy ez akadályozná a korábban megtanult szavak
@@ -282,15 +269,11 @@ halványság visszaesik nullára; ha viszont a felhasználó nem gyakorolja ezt 
 szót, akkor a halványság minden nappal tovább növekedik. A gyenge szavak
 halványsága gyorsan nő, míg az erős szavaké lassan. </p>
 
-<p>Amikor egy szó halványsága nagyobb mint 1, de kisebb mint 2 vagy 3, az azt
-jelenti, hogy a szót gyakorolni kellene: minél nagyobb a halványság, annál
-inkább. Másrészről viszont, ha a halványság nagyon nagy (mondjuk 10), akkor a
-szó már olyan régóta nem lett gyakorolva, hogy a felhasználó valószínűleg már
-nem emlékszik rá, így gyakorlatilag újra kell tanulnia. Ha a felhasználónak
-jónéhány szava 1 és 2 közti halványsággal rendelkezik, akkor a <a
-  href="#little-behind">"kicsit le vagyok maradva"</a> szósorrend a javasolt,
-míg ha sok szó nagyon halvány, akkor a <a href="#relearn-old-words">"régi
-  szavak újratanulása"</a> hasznosabb.</p>
+<p>Amikor egy szó halványsága nagyobb mint 1, az azt jelenti, hogy a szót
+gyakorolni kellene: minél nagyobb a halványság, annál inkább. Ha jónéhány
+gyakorlandó szó halványsága nagyobb mint 1, akkor a <a
+  href="#little-behind">"kicsit le vagyok maradva"</a> szósorrend a
+javasolt.</p>
 
 <p>Az érdeklődők számára álljon itt a képlet, amivel a pozitív erősségű szavak
 halványságát kiszámoljuk (nempozitív erősségű szavaknak nincs halványsága):</p>
