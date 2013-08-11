@@ -161,19 +161,27 @@ performing the following steps as root.
 
         # cp ew/setup/exponwords.d /etc/init.d/exponwords
 
-2. Modify the `SITE_PATH` variable in it to `<path to exponwords>/ExponWords`
+2. Modify the
+    
+        PYTHON=`which python`
+
+   to
+
+        PYTHON=`/my/path/to/python`
+
+3. Modify the `SITE_PATH` variable in it to `<path to exponwords>/ExponWords`
    and modify `RUN_AS` to your Linux username:
 
         # vim /etc/init.d/exponwords
 
-3. Try the script:
+4. Try the script:
 
         # /etc/init.d/exponwords start
         $ google-chrome http://localhost/   # web page is there
         # /etc/init.d/exponwords stop
         $ google-chrome http://localhost/   # web page is not there
 
-4. Run `update-rc.d` to create symbolic links in the `/etc/rc*.d/` directories,
+5. Run `update-rc.d` to create symbolic links in the `/etc/rc*.d/` directories,
    which will make operating system call `/etc/init.d/exponwords` automatically
    with the `start` parameter after the system has booted, and with the `stop`
    parameter before it shuts down.
