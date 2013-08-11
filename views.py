@@ -75,6 +75,8 @@ def set_lang_fun(request):
     request.session['django_language'] = lang
     django.utils.translation.activate(lang)
 
+def has_hidden_feature(user, feature):
+    return feature in models.get_ewuser(user).extras
 
 #### Helper functions > URLs and queries #####
 
@@ -978,7 +980,7 @@ def words_to_practice_to_json(request, words_to_practice, limit):
     word_list = []
 
     if limit:
-        words_to_practice_now = words_to_practice[:PRACTICE_WORD_COUNT_LIMIT]
+        words_to_practice_now = words_to_practice[:limit]
     else:
         words_to_practice_now = words_to_practice
 
@@ -993,7 +995,7 @@ def words_to_practice_to_json(request, words_to_practice, limit):
         wdict = wp.wdict
         user = wdict.user
 
-        if 'p' in models.get_ewuser(request.user).extras:
+        if has_hidden_feature(request.user, 'p'):
             today = models.get_today(user)
             tomorrow = today + datetime.timedelta(days=1)
             last_query_date, due_date, due_interval_len = \
@@ -1099,8 +1101,14 @@ def get_words_to_practice_today(request, wdict):
         words_to_practice = \
             wdict.get_words_to_practice_today(word_list_type=word_list_type)
         wdict.sort_words(words_to_practice, word_list_type=word_list_type)
+
+        if has_hidden_feature(request.user, 'l'):
+            limit = 1000
+        else:
+            limit = PRACTICE_WORD_COUNT_LIMIT
         json_str = words_to_practice_to_json(request, words_to_practice,
-                                             limit=True)
+                                             limit=limit)
+
         return HttpResponse(json_str,
                             mimetype='application/json')
     except Exception, e:
