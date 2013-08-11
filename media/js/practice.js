@@ -47,6 +47,7 @@ var retry_transfer_in_progress = 0;
 var answered = 0;
 var answered_incorrectly = 0;
 var operations_are_visible = false;
+var fullscreen_on = false;
 
 // The state of the UI. Possible states:
 // - init
@@ -492,10 +493,33 @@ function show_hide_operations(action) {
     }
 }
 
+function fullscreen(action) {
+    // action in ['on', 'off', 'toggle']
+    if (action == 'on' ||
+        (action == 'toggle' && !fullscreen_on)) {
+            $('#breadcrumb').hide();
+            $('#fullscreen-on-button').hide();
+            $('#fullscreen-off-button').show();
+            $('#all-today').hide();
+            $('body #main #buttons').hide();
+            fullscreen_on = true;
+    } else {
+            $('#breadcrumb').show();
+            $('#fullscreen-on-button').show();
+            $('#fullscreen-off-button').hide();
+            $('#all-today').show();
+            $('body #main #buttons').show();
+            fullscreen_on = false;
+    }
+}
+
 function ew_keypress(e) {
     if (e.which == 109) {
-        // 'm'
+        // 'm' (more)
         show_hide_operations('toggle');
+    } else if (e.which == 102) {
+        // 'f' (fullscreen)
+        fullscreen('toggle');
     } else {
         ew_practice_button_pressed(
             (e.which == 105 || e.which == 121) ? 'yes' :
@@ -516,6 +540,13 @@ $(document).ready(function() {
     });
     $('#hide-operations-button').click(function() {
         show_hide_operations('hide');
+    });
+
+    $('#fullscreen-on-button').click(function() {
+        fullscreen('on');
+    });
+    $('#fullscreen-off-button').click(function() {
+        fullscreen('off');
     });
 
     $('#quick-labels [id^=quick-label-]').click(function() {

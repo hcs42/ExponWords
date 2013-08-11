@@ -24,7 +24,7 @@
 <div id="explanation" class="explanation"></div>
 {% endif %}
 
-<p>
+<p id="breadcrumb">
 <span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
 {% if wdict != None %}
 &raquo;
@@ -53,6 +53,8 @@
     <ul id="operations-list">
       <li><a id="edit-word-button" target="_blank">{% trans "Edit current word" %}</a></li>
       <li><a id="edit-prev-word-button" class="nonlink" target="_blank">{% trans "Edit previous word" %}</a></li>
+      <li><a id="fullscreen-on-button" class="buttonlink">{% trans "Full screen" %}</a>
+          <a id="fullscreen-off-button" class="buttonlink" style="display:none;">{% trans "Exit full screen" %}</a></li>
       <li id="quick-labels">{% trans "Add label" %}:
       {% for label in quick_labels %}
       <a id="quick-label-{{ label }}" class="small-button">{{ label }}</a>

@@ -493,6 +493,12 @@ msgstr "Aktuális szó szerkesztése"
 msgid "Edit previous word"
 msgstr "Előző szó szerkesztése"
 
+msgid "Full screen"
+msgstr "Teljes képernyő"
+
+msgid "Exit full screen"
+msgstr "Teljes képernyő elhagyása"
+
 msgid "Add label"
 msgstr "Címke hozzáadása"
 

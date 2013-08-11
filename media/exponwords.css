@@ -167,3 +167,26 @@ th
 {
     text-align: center;
 }
+
+/* Source: http://stackoverflow.com/a/12642009 */
+.buttonlink {
+    /* Remove all decorations to look like normal text */
+    background: none;
+    border: none;
+    display: inline;
+    font: inherit;
+    margin: 0em;
+    padding: 0em;
+    outline: none;
+    outline-offset: 0em;
+    /* Additional styles to look like a link */
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Remove extra space inside buttons in Firefox */
+.buttonlink::-moz-focus-inner {
+    border: none;
+    padding: 0em;
+}
