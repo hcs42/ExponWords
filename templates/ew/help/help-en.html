@@ -293,6 +293,46 @@ A custom CSS can be set for each dictionary in the "Modify dictionary" page. If
 the dictionary format is HTML, then the custom CSS will be applied on all web
 pages where words of that dictionary are shown (practice page, list words, etc.)
 
+<h4 id="import">Importing word pairs</h4>
+
+<h5 id="import-as-text">Importing word pairs as text</h5>
+
+Word pairs can be imported as a text. The words in language 1 and language 2
+should be separated by the " -- " character sequence, and the notes should be
+indented with four spaces. For example:
+
+<pre>
+machen -- do
+essen -- eat
+die Katze -- cat
+    Plural: die Katzen.
+    Katzen sind süße Tiere. (Cats are cute animals.)
+der Hund -- dog
+    Plural: der Hund, die Hunde.
+    Manche Hunde sind auch süß. (Some dogs are also cute.)
+</pre>
+
+<h5 id="import-from-tsv">Importing word pairs as tab-separated values</h5>
+
+Word pairs can also be imported from the list of values separated by a tab
+character. Write one word per line. Each line should contain two or three
+fields: word in the first language; word in the second language; notes. The last
+one is optional. The fields should be separated by a TAB character.
+
+If a spreadsheet is opened in as spreadsheet editor application (such as
+LibreOffice, OpenOffice.org or Microsoft Excel), and it contains these three
+columns, which are copied and pasted here, then it will have exactly this
+format.
+
+An example text is the following:
+
+<pre>
+machen&lt;TAB&gt;do
+essen&lt;TAB&gt;eat
+die Katze&lt;TAB&gt;cat&lt;TAB&gt;Plural: die Katzen. Katzen sind süße Tiere. (Cats are cute animals.)
+der Hund&lt;TAB&gt;dog&lt;TAB&gt;Plural: der Hund, die Hunde. Manche Hunde sind auch süß. (Some dogs are also cute.)
+</pre>
+
 <h3 id="practice">Practice</h3>
 <p>The practice page contains the following elements:</p>
 <ul>

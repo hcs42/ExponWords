@@ -15,7 +15,11 @@
 <span class="current_menu">{{ page_title }}</span>
 </p>
 
-<p>{{ help_text }}</p>
+<p>
+<a class="help" href="{% url help LANGUAGE_CODE %}#{{ help_text }}" target="_blank">
+  ({% trans "Help about importing word pairs" %})
+</a>
+</p>
 
 {% include "ew/message.html" %}
 

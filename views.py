@@ -651,7 +651,7 @@ def import_word_pairs(request, wdict, import_fun, page_title, help_text,
 def import_word_pairs_from_text(request, wdict):
 
     page_title = _('Import word pairs from text')
-    help_text = ""
+    help_text = "import-as-text"
     return import_word_pairs(request, wdict, models.import_textfile,
                              page_title, help_text,
                              'import_word_pairs_from_text')
@@ -674,14 +674,7 @@ def export_word_pairs_to_text(request, wdict):
 def import_word_pairs_from_tsv(request, wdict):
 
     page_title = _('Import word pairs from tab-separated values')
-    help_text = _("Write one word per line. Each word should contain two or "
-                "three fields: word in the first language; word in the "
-                "second language; notes. The last one is optional. "
-                "The fields should be separated by a TAB character. If a "
-                "spreadsheet is opened in as spreadsheet editor application "
-                "(such as LibreOffice, OpenOffice.org or Microsoft Excel), "
-                "and it contains these three columns, which are copied and "
-                "pasted here, then it will have exactly this format.")
+    help_text = 'import-from-tsv'
     return import_word_pairs(request, wdict, models.import_tsv,
                              page_title, help_text,
                              'import_word_pairs_from_tsv')

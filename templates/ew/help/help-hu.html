@@ -295,6 +295,45 @@ A "Szótár módosítása" oldalon minden szótárhoz lehet saját CSS-t beáll�
 a szótár formátuma HTML, akkor a CSS alkalmazva lesz minden olyan weboldalra,
 ami megjeleníti a szótár szavait (gyakorlás, szavak listázása, stb.)
 
+<h4 id="import">Szópárok importálása</h4>
+
+<h5 id="import-as-text">Szópárok importálása szövegből</h5>
+
+Szópárokat olyan szövegből lehet beimportálni, amiben a szavak két nyelvbeli
+formája a " -- " karaktersorozattal van elválasztva, és a jegyzetek négy
+szóközzel vannak behúzva. Például:
+
+<pre>
+machen -- csinál
+essen -- eszik
+die Katze -- macska
+    Többes szám: die Katzen.
+    Katzen sind süße Tiere. (A macskák aranyos állatok.)
+der Hund -- kutya
+    Többes szám: der Hund, die Hunde.
+    Manche Hunde sind auch süß. (Néhány kutya is aranyos.)
+</pre>
+
+<h5 id="import-from-tsv">Szópárok importálása tabbal elválasztott értékekből</h5>
+
+Szópárokat tab karakterrel elválasztott értékekből is be lehet importálni. Egy
+sor egy szót tartalmazhat. Minden sornak két vagy három mezőt kell tartalmaznia:
+szó az első nyelven, szó a második nyelven, és opcionálisan jegyzetek. Ezeket a
+mezőket tab karakterrel kell elválasztani.
+
+Ha egy táblázatkezelő programban (például LibreOffice-ban, OpenOffice.org-ban
+vagy Microsoft Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza,
+és azt ide bemásolod, akkor az épp ilyen formátumban lesz.
+
+Példa szöveg:
+
+<pre>
+machen&lt;TAB&gt;csinál
+essen&lt;TAB&gt;eszik
+die Katze&lt;TAB&gt;macska&lt;TAB&gt;Többes szám: die Katzen. Katzen sind süße Tiere. (A macskák aranyos állatok.)
+der Hund&lt;TAB&gt;kutya&lt;TAB&gt;Többes szám: der Hund, die Hunde. Manche Hunde sind auch süß. (Néhány kutya is aranyos.)
+</pre>
+
 <h3 id="practice">Gyakorlás</h3>
 <p>A "Gyakorlás" oldal a következő elemeket tartalmazza:</p>
 <ul>

@@ -192,22 +192,6 @@ msgstr "Szópárok importálása szövegből"
 msgid "Import word pairs from tab-separated values"
 msgstr "Szópárok importálása tabbal elválasztott értékekből"
 
-msgid ""
-"Write one word per line. Each word should contain two or three fields: word "
-"in the first language; word in the second language; notes. The last one is "
-"optional. The fields should be separated by a TAB character. If a "
-"spreadsheet is opened in as spreadsheet editor application (such as "
-"LibreOffice, OpenOffice.org or Microsoft Excel), and it contains these three "
-"columns, which are copied and pasted here, then it will have exactly this "
-"format."
-msgstr ""
-"Minden sorba egy új szót írj, ami a következő mezőkből áll: szó az első "
-"nyelven; szó a második nyelven; magyarázat. A \"jegyzetek\" mező elhagyható. "
-"A mezőket TAB karakterrel válaszd el egymástól. Ha egy táblázatkezelő "
-"programban (például LibreOffice-ban, OpenOffice.org-ban vagy Microsoft "
-"Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza, és azt ide "
-"bemásolod, akkor az épp ilyen formátumban lesz."
-
 msgid "Dictionary modified."
 msgstr "Szótár módosítva."
 
@@ -380,6 +364,9 @@ msgstr "Szótár exportálása szövegként"
 
 msgid "Export word pairs to text"
 msgstr "Szópárok exportálása szövegbe"
+
+msgid "Help about importing word pairs"
+msgstr "Súgó a szavak importálásáról"
 
 msgid "Import word pairs"
 msgstr "Szópárok importálása"
