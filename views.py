@@ -165,7 +165,7 @@ def create_WordPairForm(wdict):
 
     CF = forms.CharField
     DF = forms.DateField
-    IF = forms.IntegerField
+    FF = forms.FloatField
 
     class WordPairForm(forms.Form):
         word_in_lang1 = CF(label=(_('Word in "%(lang)s"') %
@@ -182,8 +182,8 @@ def create_WordPairForm(wdict):
         date_added = DF(label=_('Date of addition'))
         date1 = DF(widget=forms.TextInput(attrs={'size': 12}))
         date2 = DF(widget=forms.TextInput(attrs={'size': 12}))
-        strength1 = IF(widget=forms.TextInput(attrs={'size': 5}))
-        strength2 = IF(widget=forms.TextInput(attrs={'size': 5}))
+        strength1 = FF(widget=forms.TextInput(attrs={'size': 5}))
+        strength2 = FF(widget=forms.TextInput(attrs={'size': 5}))
         display_mode = CF(widget=forms.HiddenInput())
 
     return WordPairForm
