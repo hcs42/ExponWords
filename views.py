@@ -973,6 +973,7 @@ def ew_settings_x(request):
     settings_url = reverse('ew.views.ew_settings', args=[])
     return HttpResponseRedirect(settings_url)
 
+
 ##### Practice #####
 
 
@@ -986,11 +987,16 @@ def words_to_practice_to_json(request, words_to_practice, limit):
 
     for wp, direction in words_to_practice_now:
 
-        extra_notes = ''
+        # all_notes = explanation + extra_notes
+        # extra_notes = labels + hidden_notes
+        all_notes_html_list = []
+        extra_notes_list = []
+
+        if wp.explanation:
+            all_notes_html_list.append(wp.get_html('explanation'))
+
         if wp.labels:
-            if wp.explanation:
-                extra_notes += '\n\n'
-            extra_notes += ('[%s]' % wp.labels)
+            extra_notes_list.append('[%s]' % wp.labels)
 
         wdict = wp.wdict
         user = wdict.user
@@ -1002,31 +1008,36 @@ def words_to_practice_to_json(request, words_to_practice, limit):
                 wp.get_date_info(direction)
             strength2, date2 = wp.strengthen(direction, dry_run=True)
 
-            extra_notes += ('\n\nDimness today: ' +
-                            str(wp.get_dimness(direction, today,
-                                               silent=True)) +
-                            '\nDimness tomorrow: ' +
-                            str(wp.get_dimness(direction, tomorrow,
-                                               silent=True)) +
-                            '\nStrength1: ' +
-                            str(wp.get_strength(direction)) +
-                            '\nLast query date (calculated): ' +
-                            str(last_query_date) +
-                            '\nDate1 (due date): ' +
-                            str(due_date) +
-                            '\nLast due interval length (calculated): ' +
-                            str(due_interval_len) +
-                            '\nStrength2: ' +
-                            str(strength2) +
-                            '\nDate2: ' +
-                            str(date2) +
-                            '\nNext due interval length: ' +
-                            str((date2 - last_query_date).days))
+            hidden_notes = \
+                ('Dimness today: ' +
+                 str(wp.get_dimness(direction, today, silent=True)) +
+                 '\nDimness tomorrow: ' +
+                 str(wp.get_dimness(direction, tomorrow, silent=True)) +
+                 '\nStrength1: ' +
+                 str(wp.get_strength(direction)) +
+                 '\nLast query date (calculated): ' +
+                 str(last_query_date) +
+                 '\nDate1 (due date): ' +
+                 str(due_date) +
+                 '\nLast due interval length (calculated): ' +
+                 str(due_interval_len) +
+                 '\nStrength2: ' +
+                 str(strength2) +
+                 '\nDate2: ' +
+                 str(date2) +
+                 '\nNext due interval length: ' +
+                 str((date2 - last_query_date).days))
+            extra_notes_list.append(hidden_notes)
+
+        extra_notes = '\n\n'.join(extra_notes_list)
 
         extra_notes_html = models.escape_html(extra_notes)
         extra_notes_html = models.indent_html(extra_notes_html,
                                               add_space_count=4)
         extra_notes_html = models.newline_to_br(extra_notes_html, keepend=False)
+
+        all_notes_html_list.append(extra_notes_html)
+        all_notes_html = '<br/><br/>\n'.join(all_notes_html_list)
 
         word_list.append([wp.get_html('word_in_lang1'),
                           wp.get_html('word_in_lang2'),
@@ -1034,8 +1045,7 @@ def words_to_practice_to_json(request, words_to_practice, limit):
                           wp.id,
                           wp.get_date(direction).isoformat(),
                           wp.get_strength(direction),
-                          wp.get_html('explanation') +
-                              extra_notes_html])
+                          all_notes_html])
 
     return json.dumps({'all_words_to_practice': len(words_to_practice),
                        'word_list': word_list})
