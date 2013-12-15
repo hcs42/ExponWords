@@ -73,7 +73,7 @@ def escape_html(text):
     text = re.sub('>', '&gt;', text)
     return text
 
-def indent_html(text, add_space_count):
+def indent_html(text, add_space_count, skip_first_line=False):
 
     def insert_nbps(matchobject):
         """Returns the same number of "&nbsp;":s as the number of matched
@@ -83,7 +83,12 @@ def indent_html(text, add_space_count):
         space_count += add_space_count
         return '&nbsp;' * space_count
 
-    regexp = re.compile(r'^( *)', re.MULTILINE)
+    if skip_first_line:
+        pattern = r'(?<=\n)( *)'
+    else:
+        pattern = r'^( *)'
+
+    regexp = re.compile(pattern, re.MULTILINE)
     text = re.sub(regexp, insert_nbps, text)
     return text
 
@@ -207,14 +212,16 @@ def simple_html_to_html(s, add_br, add_space_count):
     i = 0
     html_result = []
     s = remove_trailing_newline(s)
+    first = True
     while True:
 
         i, substr = try_match('([^<&]*)', s, i)
         text = escape_html(substr)
         if add_br:
-            text = indent_html(text, add_space_count)
+            text = indent_html(text, add_space_count, skip_first_line=not first)
             text = newline_to_br(text, keepend=True)
         html_result.append(text)
+        first = False
 
         if i == len(s):
             break
@@ -789,7 +796,7 @@ class WordPair(models.Model):
         elif self.wdict.text_format == 'html_ws':
             return simple_html_to_html(getattr(self, field),
                                        add_br=True,
-                                       add_space_count=0)
+                                       add_space_count=add_space_count)
 
     def __unicode__(self):
         return ('<%s -- %s>' %
