@@ -212,6 +212,10 @@ def simple_html_to_html(s, add_br, add_space_count):
     i = 0
     html_result = []
     s = remove_trailing_newline(s)
+
+    if s == '':
+        return ''
+
     first = True
     while True:
 
