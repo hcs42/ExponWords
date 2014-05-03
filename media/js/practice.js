@@ -461,8 +461,10 @@ function ew_pageupdown(e) {
     // Activated only if the user changes the value of the 'pgupdown_behavior'
     // setting
     if (e.originalEvent.keyIdentifier == ew_yes_key) {
+        e.preventDefault();
         ew_practice_button_pressed('yes');
     } else if (e.originalEvent.keyIdentifier == ew_no_key) {
+        e.preventDefault();
         ew_practice_button_pressed('no');
     }
 }
