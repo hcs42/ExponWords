@@ -1,3 +1,5 @@
 #!/bin/bash
 
-python manage.py runfcgi host=127.0.0.1 port=8001 daemonize=false
+EW_ENV=$HOME/virtualenv/ewenv
+
+"$EW_ENV/bin/gunicorn" -b localhost:8001 ExponWords.wsgi:application

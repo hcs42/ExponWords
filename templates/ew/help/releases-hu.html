@@ -7,9 +7,9 @@ Verzióinformációk
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="{% url help 'hu' %}">Súgó</a></span>
+<span class="current_menu"><a href="{% url 'help' 'hu' %}">Súgó</a></span>
 &raquo;
 <span class="current_menu">Verzióinformációk</span>
 </p>
@@ -20,7 +20,7 @@ Verzióinformációk
   <li><strong>Új, okosabb algoritmus a szavak megerősítésére</strong> gyakorlás
   közben. A régi algoritmus továbbra is használható, de minden létező és új
   szótár alapból az új algoritmust használja. A Súgóban
-  <a href="{% url help 'hu' %}#strengthener-methods">A szavak erősítésének
+  <a href="{% url 'help' 'hu' %}#strengthener-methods">A szavak erősítésének
     módszerei</a>
   fejezet leírja a régi és új algoritmus közötti különbségeket.
   </li>
@@ -33,7 +33,7 @@ Verzióinformációk
   meglévő szótár esetében a javasolt módszer a "Szótár módosítása" oldalon a
   "HTML (sorok végét megtartva)" formátum kiválasztása; ezután lehet is HTML-t
   használni a szavakban és jegyzetekben. Több információ és példák a súgóban a
-  <a href="{% url help 'en' %}#text-formats">Szövegformátumok</a> fejezetben
+  <a href="{% url 'help' 'en' %}#text-formats">Szövegformátumok</a> fejezetben
   található.</li>
   <li><strong>Prezenter</strong> eszközzel is lehet vezérelni a gyakorlás oldal
   gombjait (ehhez a PageUp/PageDown viselkedést kell a Beállításoknál

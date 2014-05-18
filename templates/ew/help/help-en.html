@@ -1,5 +1,6 @@
 {% extends "ew/base.html" %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 Help
@@ -8,7 +9,7 @@ Help
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">Help</span>
 </p>
@@ -485,7 +486,7 @@ dimness):</p>
     \over 
     {2 ^ {word\_strength - 1} } }
 -->
-<img src="/site_media/images/dimness-en.png?{% ew_version %}"
+<img src="{% static 'images/dimness-en.png' %}?{% ew_version %}"
      height="35"
      alt="dimness = ((&quot;today - word_date&quot; in days) + 2 ^ (word_strength - 1)) / (2 ^ (word_strength - 1))"/>
 

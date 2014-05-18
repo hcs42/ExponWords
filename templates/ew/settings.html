@@ -1,6 +1,7 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 {% trans "Settings" %}
@@ -9,10 +10,10 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">{% trans "Settings" %}</span>
-<a class="help" href="{% url help LANGUAGE_CODE %}#settings" target="_blank">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url 'help' LANGUAGE_CODE %}#settings" target="_blank">({% trans "Help for this page" %})</a>
 </p>
 
 {% include "ew/message.html" %}
@@ -26,7 +27,7 @@
   The hidden features and their character codes are the following:
   <ul>
     <li>x: Show the hidden features on the Settings page. This feature can also
-    be enabled by loading the <a href="{% url ew_settings %}x">settings/x/</a>
+    be enabled by loading the <a href="{% url 'ew_settings' %}x">settings/x/</a>
     URL.</li>
     <li>p: Show extra information on the Practice page about the strength,
     date, dimness, etc. of the current word.</li>
@@ -52,8 +53,8 @@
 
 {% endblock %}
 {% block javascript %}
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/settings.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/settings.js' %}?{% ew_version %}"></script>
   <script>
     var show_extras = {{ show_extras }};
   </script>

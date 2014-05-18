@@ -1,39 +1,78 @@
-# Django settings for ExponWords project.
+"""
+Django settings for ExponWords project.
 
+For more information on this file, see
+https://docs.djangoproject.com/en/1.6/topics/settings/
+
+For the full list of settings and their values, see
+https://docs.djangoproject.com/en/1.6/ref/settings/
+"""
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = os.path.normpath(os.path.abspath(BASE_DIR))
 
 
-ADMINS = (
-    # ('Your Name', 'your_email@domain.com'),
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = 'TODO UNIQUE KEY'
+
+# SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = True
+
+#TEMPLATE_DEBUG = True
+
+ALLOWED_HOSTS = ['localhost']
+
+# Application definition
+
+INSTALLED_APPS = (
+    'ew',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
 )
 
-MANAGERS = ADMINS
+MIDDLEWARE_CLASSES = (
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+)
 
-PROJECT_DIR = os.path.normpath(os.path.abspath(os.path.dirname(__file__)))
+ROOT_URLCONF = 'ExponWords.urls'
+
+WSGI_APPLICATION = 'ExponWords.wsgi.application'
+
+
+# Database
+# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(PROJECT_DIR, 'production.db'),
-        'OPTIONS': {
-             # Helps avoiding "DatabaseError: database is locked" errors;
-             # see https://docs.djangoproject.com/en/dev/ref/databases/#database-is-locked-errors
-            'timeout': 20
-        },
+        'NAME': os.path.join(BASE_DIR, 'sqlite.db'),                      # Or path to database file if using sqlite3.
+        'ATOMIC_REQUESTS': True,
+        'USER': 'XXX',                      # Not used with sqlite3.
+        'PASSWORD': 'XXX',                  # Not used with sqlite3.
+        'HOST': 'XXX',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': 'XXX',                      # Set to empty string for default. Not used with sqlite3.
+        'OPTIONS': {'timeout': 20},
     }
 }
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
-TIME_ZONE = None
+# Internationalization
+# https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
 LANGUAGES = (
@@ -41,7 +80,7 @@ LANGUAGES = (
     ('hu', 'Magyar')
 )
 
-SITE_ID = 1
+TIME_ZONE = 'UTC'
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -49,55 +88,90 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale
-USE_L10N = True
+USE_L10N = False
 
-# Absolute path to the directory that holds media.
-# Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = os.path.join(PROJECT_DIR, 'ew/media/')
+USE_TZ = False
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash if there is a path component (optional in other cases).
-# Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = 'http://myexponwordssite.org/site_media/'
-
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
-
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '...'
-
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
-MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-)
-
-ROOT_URLCONF = 'ExponWords.urls'
-
-TEMPLATE_DIRS = ()
-
-INSTALLED_APPS = (
-    'ew',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.admin',
-)
-
-LOGIN_URL = '/login/'
-LOGIN_REDIRECT_URL = '/'
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'myexponwordssite.com admin <admin@myexponwordssite.com>'
+
+# SCRIPT_NAME is the part of the URL after the domain where ExponWords is
+# served.
+SCRIPT_NAME = ''
+
+# In the example below, ExponWords is served under myexponwordssite.com/ew/:
+#SCRIPT_NAME = 'ew'
+
+LOGIN_URL = SCRIPT_NAME + '/login/'
+LOGIN_REDIRECT_URL = SCRIPT_NAME + '/'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/1.6/howto/static-files/
+if SCRIPT_NAME == '':
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = '/' + SCRIPT_NAME + '/static/'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': True,
+    'formatters': {
+        'verbose': {
+            'format': ('%(levelname)s %(asctime)s: %(module)s.py, '
+                       '%(message)s, %(process)d, %(thread)d')
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+        },
+        'null': {
+            'class': 'logging.NullHandler',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'file':{
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'formatter': 'verbose',
+            'filename': BASE_DIR + '/debug.log'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['null'],
+            'propagate': True,
+            'level': 'INFO',
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'ewlogger': {
+            'handlers': ['file'],
+            'level': 'DEBUG'
+        }
+    }
+}

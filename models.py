@@ -99,10 +99,10 @@ def newline_to_br(text, keepend):
     else:
         return '<br/>'.join(text.splitlines())
 
-class NotFound():
+class NotFound(BaseException):
     pass
 
-class TagNotAccepted():
+class TagNotAccepted(BaseException):
     pass
 
 
@@ -286,11 +286,11 @@ def test_simple_html_to_html():
                                             add_br=False,
                                             add_space_count=0)
         if actual_output != expected_output:
-            print 'Expected and actual output do not match:'
-            print 'Input:          ', input
-            print 'Expected output:', expected_output
-            print 'Actual output:  ', actual_output
-            print
+            print('Expected and actual output do not match:')
+            print('Input:          ', input)
+            print('Expected output:', expected_output)
+            print('Actual output:  ', actual_output)
+            print()
 
     # Edge cases
     test('', '')
@@ -325,6 +325,20 @@ def test_simple_html_to_html():
 
 ##### Date handling #####
 
+
+def datetime_to_ts(dt):
+    # The datetime object is assumed to be in UTC.
+    return dt.replace(tzinfo=datetime.timezone.utc).timestamp()
+
+def ts_to_datetime(ts):
+    # The datetime object will be in UTC.
+    return datetime.datetime.utcfromtimestamp(ts)
+
+def date_to_ord(d):
+    return d.toordinal()
+
+def ord_to_date(ordinal):
+    return datetime.date.fromordinal(ordinal)
 
 # General concept:
 #
@@ -557,6 +571,9 @@ class EWUser(models.Model):
     def __unicode__(self):
         return self.user.username
 
+    def __str__(self):
+        return self.__unicode__()
+
     def get_turning_point_str(self):
         sign = '-' if self.turning_point < 0 else ''
         tpa = abs(self.turning_point)
@@ -572,7 +589,7 @@ class EWUser(models.Model):
                               (hours * 60 + minutes))
 
     def get_quick_labels(self):
-        return unicode(self.quick_labels).split()
+        return self.quick_labels.split()
 
     @staticmethod
     def get_email_receiver_users():
@@ -587,7 +604,7 @@ class EWUser(models.Model):
 def get_ewuser(user):
     try:
         return EWUser.objects.get(pk=user)
-    except EWUser.DoesNotExist, e:
+    except EWUser.DoesNotExist as e:
         ewuser = EWUser(pk=user.pk)
         ewuser.save()
         return EWUser.objects.get(pk=user)
@@ -610,6 +627,9 @@ class WDict(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def __str__(self):
+        return self.__unicode__()
 
     def get_words_to_practice_today(self, word_list_type='normal'):
         assert(word_list_type in ('normal', 'early'))
@@ -675,7 +695,8 @@ class WDict(models.Model):
             if order == 'dimness':
 
                 # First sort by strength
-                def strength_key_fun((wp, direction)):
+                def strength_key_fun(item):
+                    (wp, direction) = item
                     return wp.get_strength(direction)
                 strong_words.sort(key=strength_key_fun)
 
@@ -688,7 +709,8 @@ class WDict(models.Model):
                 else:
                     unexpected_value('dimness_day', dimness_day)
 
-                def dimness_key_fun((wp, direction)):
+                def dimness_key_fun(item):
+                    (wp, direction) = item
                     return wp.get_dimness(direction, dimness_day)
                 reverse = (dimness_direction == 'dimmer_first')
                 strong_words.sort(key=dimness_key_fun, reverse=reverse)
@@ -806,6 +828,9 @@ class WordPair(models.Model):
         return ('<%s -- %s>' %
                 (repr(self.word_in_lang1), repr(self.word_in_lang2)))
 
+    def __str__(self):
+        return self.__unicode__()
+
     def get_strength(self, direction):
         if direction == 1:
             return self.strength1
@@ -899,7 +924,7 @@ class WordPair(models.Model):
 
     @staticmethod
     def get_label_set_from_str(s):
-        return set(unicode(s).split())
+        return set(s.split())
 
     def get_label_set(self):
         return self.get_label_set_from_str(self.labels)
@@ -950,20 +975,10 @@ class WordPair(models.Model):
                 'strength2')
 
     @staticmethod
-    # Get the list of fields whose value should be saved when adding a word
-    # pair, and reused when another word pair is added
-    def get_fields_to_be_saved():
-        return ('labels',
-                'date1',
-                'date2',
-                'strength1',
-                'strength2')
-
-    def get_saved_fields(self):
-        saved_fields = {}
-        for field in self.get_fields_to_be_saved():
-            saved_fields[field] = getattr(self, field)
-        return saved_fields
+    def get_fields_to_search():
+        return ('word_in_lang1',
+                'word_in_lang2',
+                'explanation')
 
     @staticmethod
     def prefix(s, max_length):
@@ -1146,6 +1161,9 @@ class EWLogEntry(models.Model):
                 (self.datetime.strftime('%Y-%m-%d %H-%M-%S'), self.username,
                  self.action, self.text))
 
+    def __str__(self):
+        return self.__unicode__()
+
 
 def log(request, action, text=''):
 
@@ -1160,7 +1178,7 @@ def log(request, action, text=''):
             logentry.username = request.user.username
 
         logentry.text = text
-    except Exception, e:
+    except Exception as e:
         logentry.action = 'Logging failed'
     logentry.save()
 
@@ -1174,6 +1192,9 @@ class Announcement(models.Model):
 
     def __unicode__(self):
         return self.lang + ' | ' + self.text.splitlines()[0]
+
+    def __str__(self):
+        return self.__unicode__()
 
 
 ##### Show the future #####
@@ -1278,7 +1299,7 @@ def get_labels(user):
                                              deleted=False)
     labels = set()
     for wp in all_word_pairs:
-        labels.update(unicode(wp.labels).split())
+        labels.update(wp.labels.split())
     return labels
 
 

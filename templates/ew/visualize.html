@@ -1,20 +1,21 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 {% trans "Show my future" %}
 {% endblock %}
 
 {% block css %}
-<link rel=stylesheet href="/site_media/css/visualize.css?{% ew_version %}" type="text/css">
-<link rel=stylesheet href="/site_media/css/visualize-light.css?{% ew_version %}" type="text/css">
+<link rel=stylesheet href="{% static 'css/visualize.css' %}?{% ew_version %}" type="text/css">
+<link rel=stylesheet href="{% static 'css/visualize-light.css' %}?{% ew_version %}" type="text/css">
 {% endblock %}
 
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">{% trans "Show my future" %}</span>
 </p>
@@ -46,8 +47,8 @@
 {% endblock %}
 
 {% block javascript %}
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/visualize.jQuery.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/visualize.jQuery.js' %}?{% ew_version %}"></script>
   <script>
     $('#word_pairs_table').visualize({'type': 'bar'});
   </script>

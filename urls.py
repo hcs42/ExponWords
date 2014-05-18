@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, include, url
 from django.conf import settings
 
 urlpatterns = patterns('ew.views',
@@ -125,16 +125,19 @@ urlpatterns += patterns('django.contrib.auth.views',
         view='password_change_done',
         name='password_change_done',
         kwargs={'template_name': 'ew/registration/password_change_done.html'}),
+
+    # This how how password reset works:
+    # password_reset_form -> POST
+    # (send) -> password_reset_email
+    # (redirect) -> password_reset_done
+    #
+    # (email link) -> password_reset_confirm -> POST
+    # (redirect) -> password_reset_complete
     url(r'^reset-password/$',
         view='password_reset',
         name='password_reset',
         kwargs={'template_name': 'ew/registration/password_reset_form.html',
                 'email_template_name': 'ew/registration/password_reset_email.html'}),
-    url(r'^reset-password/(?P<uidb36>[0-9A-Za-z]{1,13})-'
-        r'(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        view='password_reset_confirm',
-        name='password_reset_confirm',
-        kwargs={'template_name': 'ew/registration/password_reset_confirm.html'}),
     url(r'^reset-password/done/$',
         view='password_reset_done',
         name='password_reset_done',
@@ -143,6 +146,11 @@ urlpatterns += patterns('django.contrib.auth.views',
         view='password_reset_complete',
         name='password_reset_complete',
         kwargs={'template_name': 'ew/registration/password_reset_complete.html'}),
+    url(r'^reset-password/(?P<uidb64>[0-9A-Za-z]{1,13})-'
+        r'(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+        view='password_reset_confirm',
+        name='password_reset_confirm',
+        kwargs={'template_name': 'ew/registration/password_reset_confirm.html'}),
 )
 
 urlpatterns += patterns('',
@@ -150,10 +158,3 @@ urlpatterns += patterns('',
         view=include('django.conf.urls.i18n'),
         name='i18n'),
 )
-
-if settings.DEBUG:
-    urlpatterns += patterns('',
-        (r'^site_media/(?P<path>.*)$',
-         'django.views.static.serve',
-         {'document_root': settings.STATIC_DOC_ROOT}),
-    )

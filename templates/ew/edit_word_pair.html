@@ -1,6 +1,7 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 {% trans "Edit word pair" %}
@@ -9,9 +10,9 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url 'wdict' wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 <span class="current_menu">{% trans "Edit word pair" %}</span>
 </p>
@@ -22,7 +23,7 @@
 {{ css|safe }}
 </style>
 
-<form action="{% url edit_word_pair word_pair.id %}" method="post">{% csrf_token %}
+<form action="{% url 'edit_word_pair' word_pair.id %}" method="post">{% csrf_token %}
   {% with 'edit' as edit_type %}
   {% with 'Save' as submit_text %}
     {% include "ew/word_pair.html" %}
@@ -33,8 +34,8 @@
 {% endblock %}
 
 {% block javascript %}
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/exponwordslib.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/add_word_pair.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/exponwordslib.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/add_word_pair.js' %}?{% ew_version %}"></script>
   <script>$(document).ready(function(){ $("#id_word_in_lang1").focus(); });</script>
 {% endblock %}

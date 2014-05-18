@@ -1,6 +1,7 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 {% trans "Modify dictionary" %}
@@ -9,16 +10,16 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url 'wdict' wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 <span class="current_menu">{% trans "Modify dictionary" %}</span>
 </p>
 
 {% include "ew/message.html" %}
 
-<form action="{% url modify_wdict wdict.id %}" method="post">{% csrf_token %}
+<form action="{% url 'modify_wdict' wdict.id %}" method="post">{% csrf_token %}
   <table>
     <tr>
       <th>{{ form.name.label_tag }}</th>
@@ -33,30 +34,30 @@
       <td>{{ form.lang2 }}</td>
     </tr>
     <tr>
-      <th>{{ form.practice_word_order.label_tag }}:</th>
+      <th>{{ form.practice_word_order.label_tag }}</th>
       <td>{{ form.practice_word_order }}
-        <a class="help" href="{% url help LANGUAGE_CODE %}#practice-word-order" target="_blank">({% trans "Help about word orders" %})</a>
+        <a class="help" href="{% url 'help' LANGUAGE_CODE %}#practice-word-order" target="_blank">({% trans "Help about word orders" %})</a>
       </td>
     </tr>
 
     <tr>
-      <th>{{ form.strengthener_method.label_tag }}:</th>
+      <th>{{ form.strengthener_method.label_tag }}</th>
       <td>{{ form.strengthener_method }}
-        <a class="help" href="{% url help LANGUAGE_CODE %}#strengthener-methods" target="_blank">({% trans "Help about strengthener methods" %})</a>
+        <a class="help" href="{% url 'help' LANGUAGE_CODE %}#strengthener-methods" target="_blank">({% trans "Help about strengthener methods" %})</a>
       </td>
     </tr>
 
     <tr>
-      <th>{{ form.text_format.label_tag }}:</th>
+      <th>{{ form.text_format.label_tag }}</th>
       <td>{{ form.text_format }}
-        <a class="help" href="{% url help LANGUAGE_CODE %}#text-formats" target="_blank">({% trans "Help about text formats" %})</a>
+        <a class="help" href="{% url 'help' LANGUAGE_CODE %}#text-formats" target="_blank">({% trans "Help about text formats" %})</a>
       </td>
     </tr>
 
     <tr>
-      <th>{{ form.css.label_tag }}:</th>
+      <th>{{ form.css.label_tag }}</th>
       <td>{{ form.css }}
-        <a class="help" href="{% url help LANGUAGE_CODE %}#custom-css" target="_blank">({% trans "Help about custom CSS" %})</a>
+        <a class="help" href="{% url 'help' LANGUAGE_CODE %}#custom-css" target="_blank">({% trans "Help about custom CSS" %})</a>
       </td>
     </tr>
 
@@ -68,6 +69,6 @@
 {% endblock %}
 
 {% block javascript %}
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}?{% ew_version %}"></script>
   <script>$(document).ready(function(){ $("#id_name").focus(); });</script>
 {% endblock %}

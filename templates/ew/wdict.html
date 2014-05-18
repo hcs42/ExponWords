@@ -9,24 +9,24 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">{% include "ew/menuitem_dict.html" %}</span>
-<a class="help" href="{% url help LANGUAGE_CODE %}#dict-page" target="_blank">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url 'help' LANGUAGE_CODE %}#dict-page" target="_blank">({% trans "Help for this page" %})</a>
 </p>
 
 {% include "ew/message.html" %}
 
 <ul>
-  <li><a href="{% url practice_wdict wdict.id %}">{% trans "Practice" %} ({{ todays_words_count }})</a></li>
-  <li><a href="{% url practice_wdict_early wdict.id %}">{% trans "Practice early" %}</a></li>
-  <li><a href="{% url search %}?dict={{ wdict.id }}">{% trans "Search and operations" %}</a></li>
-  <li><a href="{% url search %}?q=&amp;dict={{ wdict.id }}&amp;show_hits=on">{% trans "List all words" %} ({{ words_count }})</a></li>
-  <li><a href="{% url add_word_pair wdict.id %}">{% trans "Add new word pair" %}</a></li>
-  <li><a href="{% url import_word_pairs_from_text wdict.id %}">{% trans "Import word pairs from text" %}</a></li>
-  <li><a href="{% url export_word_pairs_to_text wdict.id %}">{% trans "Export word pairs to text" %}</a></li>
-  <li><a href="{% url import_word_pairs_from_tsv wdict.id %}">{% trans "Import word pairs from tab separated values" %}</a></li>
-  <li><a href="{% url modify_wdict wdict.id %}">{% trans "Modify" %}</a></li>
-  <li><a href="{% url delete_wdict wdict.id %}">{% trans "Delete" %}</a></li>
+  <li><a href="{% url 'practice_wdict' wdict.id %}">{% trans "Practice" %} ({{ todays_words_count }})</a></li>
+  <li><a href="{% url 'practice_wdict_early' wdict.id %}">{% trans "Practice early" %}</a></li>
+  <li><a href="{% url 'search' %}?dict={{ wdict.id }}">{% trans "Search and operations" %}</a></li>
+  <li><a href="{% url 'search' %}?q=&amp;dict={{ wdict.id }}&amp;show_hits=on">{% trans "List all words" %} ({{ words_count }})</a></li>
+  <li><a href="{% url 'add_word_pair' wdict.id %}">{% trans "Add new word pair" %}</a></li>
+  <li><a href="{% url 'import_word_pairs_from_text' wdict.id %}">{% trans "Import word pairs from text" %}</a></li>
+  <li><a href="{% url 'export_word_pairs_to_text' wdict.id %}">{% trans "Export word pairs to text" %}</a></li>
+  <li><a href="{% url 'import_word_pairs_from_tsv' wdict.id %}">{% trans "Import word pairs from tab separated values" %}</a></li>
+  <li><a href="{% url 'modify_wdict' wdict.id %}">{% trans "Modify" %}</a></li>
+  <li><a href="{% url 'delete_wdict' wdict.id %}">{% trans "Delete" %}</a></li>
 </ul>
 {% endblock %}

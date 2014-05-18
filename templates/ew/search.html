@@ -1,6 +1,7 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 {% trans "Search and operations" %}
@@ -9,17 +10,17 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
 {% if wdict != None %}
-<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url 'wdict' wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 {% endif %}
 <span class="current_menu">{% trans "Search and operations" %}</span>
-<a class="help" href="{% url help LANGUAGE_CODE %}#search" target="_blank">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url 'help' LANGUAGE_CODE %}#search" target="_blank">({% trans "Help for this page" %})</a>
 </p>
 
-<form action="{% url search %}" method="get">
+<form action="{% url 'search' %}" method="get">
   <table>
     {{ form.as_table }}
     <tr><td></td>
@@ -36,7 +37,7 @@
 
 {% if result_exists %}
 
-<form action="{% url operation_on_word_pairs %}" method="post">
+<form action="{% url 'operation_on_word_pairs' %}" method="post">
   
 <!-- hidden fields -->
 
@@ -96,9 +97,9 @@
     <td>{{ wp.strength2 }}</td>
     <td>{{ wp.labels }}</td>
     {% if wdict == None %}
-    <td><a href="{% url wdict wp.wdict.id %}">{{ wp.wdict.name }}</a></td>
+    <td><a href="{% url 'wdict' wp.wdict.id %}">{{ wp.wdict.name }}</a></td>
     {% endif %}
-    <td><a href="{% url edit_word_pair wp.id %}">{% trans "Edit" %}</a></td>
+    <td><a href="{% url 'edit_word_pair' wp.id %}">{% trans "Edit" %}</a></td>
     <td class="checkbox_container">
       <input type="checkbox" name="{{ wp.id }}">
       <!-- <input type="checkbox" name="{{ wp.id }}" onclick="return false;"> -->
@@ -128,7 +129,7 @@
     <option value="practice">{% trans 'Practice'%}</option> 
     <option value="export">{% trans 'Export word pairs'%}</option> 
   </select>
-  <a class="help" href="{% url help LANGUAGE_CODE %}#operations" target="_blank">({% trans "Help for operations" %})</a>
+  <a class="help" href="{% url 'help' LANGUAGE_CODE %}#operations" target="_blank">({% trans "Help for operations" %})</a>
   <br/>
 
   <div style="display:none" id="span-delete">
@@ -234,11 +235,11 @@
   <span style="display:none" id="translation-select-none">{% trans "Select none" %}</span>
 {% endblock %}
 {% block javascript %}
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/json2.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/exponwordslib.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/search.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/add_word_pair.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/json2.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/exponwordslib.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/search.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/add_word_pair.js' %}?{% ew_version %}"></script>
   <script>var csrf_token = "{{ csrf_token }}";</script>
   <script>$(document).ready(function(){ $("#id_q").focus(); });</script>
 {% endblock %}

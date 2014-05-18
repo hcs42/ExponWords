@@ -1,5 +1,6 @@
 {% extends "ew/base.html" %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 Súgó
@@ -8,7 +9,7 @@ Súgó
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
 <span class="current_menu">Súgó</span>
 </p>
@@ -494,7 +495,7 @@ halványságát kiszámoljuk (nempozitív erősségű szavaknak nincs halványs�
     {2 ^ {szo\_erossege - 1} } }
 -->
 
-<img src="/site_media/images/dimness-hu.png?{% ew_version %}"
+<img src="{% static 'images/dimness-hu.png' %}?{% ew_version %}"
      height="35"
      alt="halványság = ((&quot;ma - következő_kérdezés_dátuma&quot; napokban kifejezve) + 2 ^ (szó_erőssége - 1)) / (2 ^ (szó_erőssége - 1))"/>
 

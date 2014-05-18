@@ -7,9 +7,9 @@ Release notes
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="{% url help 'en' %}">Help</a></span>
+<span class="current_menu"><a href="{% url 'help' 'en' %}">Help</a></span>
 &raquo;
 <span class="current_menu">Release notes</span>
 </p>
@@ -22,7 +22,7 @@ Release notes
   practice. The old algorithm can still be used, but all existing and new
   dictionaries use the new algorithm by default. The old and new algorithms and
   the difference between them is described in the
-  <a href="{% url help 'en' %}#strengthener-methods">Methods of strengthening a
+  <a href="{% url 'help' 'en' %}#strengthener-methods">Methods of strengthening a
     word</a>
   section of the help. </li>
   <li><strong>Practice early</strong>: words can be practiced even if there are
@@ -34,7 +34,7 @@ Release notes
   starting using HTML formatting on an existing dictionary is to set the format
   of the dictionary to "HTML (keep line breaks)" in the "Modify dictionary"
   page, and then just start using HTML tags in the words and notes. More
-  information and examples can be found in the <a href="{% url help 'en'
+  information and examples can be found in the <a href="{% url 'help' 'en'
     %}#text-formats">Text formats</a> section of the help. </li>
   <li>The buttons on the Practice page can be controlled with a
   <strong>presenter device</strong> (the PageUp/PageDown settings should be

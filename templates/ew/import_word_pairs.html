@@ -8,15 +8,15 @@
 {% block content %}
 
 <p>
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 &raquo;
-<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url 'wdict' wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 &raquo;
 <span class="current_menu">{{ page_title }}</span>
 </p>
 
 <p>
-<a class="help" href="{% url help LANGUAGE_CODE %}#{{ help_text }}" target="_blank">
+<a class="help" href="{% url 'help' LANGUAGE_CODE %}#{{ help_text }}" target="_blank">
   ({% trans "Help about importing word pairs" %})
 </a>
 </p>

@@ -16,20 +16,21 @@ you can adjust these steps accordingly.
 Install the prerequisites
 -------------------------
 
-        $ sudo apt-get install python gettext nginx sqlite3 python-pip
-        $ sudo pip install virtualenv
-        $ virtualenv $HOME/virtualenv/django13
-        $ $HOME/virtualenv/django13/bin/pip install django==1.3 flup
+    $ sudo apt-get install python3 python3-pip python3-dev sqlite3 gettext nginx
+    $ sudo pip install virtualenv
+    $ export EW_ENV=$HOME/virtualenv/ewenv
+    $ virtualenv "$EW_ENV"
+    $ "$EW_ENV/bin/pip" install django==1.6 gunicorn==19.9.0
 
 I used the following versions of these programs:
 
-* Python: 2.7
+* Python: 3.4
 * gettext: 0.18
 * nginx: 0.8
 * sqlite3: 3.7
 * virtualenv: 1.9.1
-* Django: 1.3
-* flup: 1.0.3.dev-20110405
+* Django: 1.6
+* gunicorn: 19.9.0
 
 Set up ExponWords and run it in debug mode
 ------------------------------------------
@@ -38,80 +39,77 @@ Set up ExponWords and run it in debug mode
    with some Python files; the `ExponWords` directory will contain all
    ExponWords-related stuff):
 
-        $ source $HOME/virtualenv/django13/bin/activate
-        $ cd $HOME
+        $ source "$EW_ENV/bin/activate"
+        $ cd "$HOME"  # The directory that should contain the ExponWords dir
         $ django-admin.py startproject ExponWords
 
 2. Clone the ExponWords repository as a Django application called `ew`:
 
         $ cd ExponWords
         $ git clone git://github.com/hcs42/ExponWords.git ew
+        $ ls
+        ew  ExponWords  manage.py
 
 3. Edit `settings.py` (you will find an example in `ew/setup/settings.py`):
 
+   * `DEBUG`,
+     `TEMPLATE_DEBUG`: comment these out
+   * `ALLOWED_HOST`: add `['localhost']`
+   * `INSTALLED_APPS`: append `'ew'`
+   * `MIDDLEWARE_CLASSES`: insert `'django.middleware.locale.LocaleMiddleware'`
+     after `CommonMiddleware`
    * `DATABASES`: fill it in according to the database you want to use. I used
      sqlite.
-   * `ADMIN_ROOT`: change it to `'/admin/media/'`
-   * `MEDIA_URL`: set it to your site (see the example)
-   * `MIDDLEWARE_CLASSES`: insert `'django.middleware.locale.LocaleMiddleware'`
-     after `SessionMiddleware`
-   * `INSTALLED_APPS`: append `'django.contrib.admin'` and `'ew'`
    * `LANGUAGES`: copy it from the example
-   * `LOGIN_URL`: set it to `'/login/'`
-   * `LOGIN_REDIRECT_URL`: set it to `'/'`
-   * `DEFAULT_FROM_EMAIL`: set it to your email address
-   * Anything else you want to customize (e.g. timezone)
-   * Move the `DEBUG` and `TEMPLATE_DEBUG` variables into `debug_settings.py`
-     (see the next step)
-
-4. Create `debug_settings.py` (you will find an example in
-   `ew/setup/debug_settings.py`):
-
-   * `DATABASES`: fill it in
-   * Move the `DEBUG` and `TEMPLATE_DEBUG` variables here from `settings.py`
-     (see the previous step)
+   * `USE_L10N`,
+     `USE_TZ`: update according to `ew/setup/settings.py`
+   * `EMAIL_BACKEND`,
+     `DEFAULT_FROM_EMAIL`,
+     `LOGIN_URL`,
+     `LOGIN_REDIRECT_URL`: add according to `ew/setup/settings.py`
+   * `STATIC_URL`: update according to `ew/setup/settings.py`
+   * `LOGGING`: add according to `ew/setup/settings.py`
 
 5. Overwrite `urls.py` with the one in the `setup` directory:
 
-        $ cp ew/setup/urls.py .
+        $ cp ../ew/setup/urls.py .
 
 6. Set up the database files. When asked about whether to create a superuser,
    create them.
 
+        $ cd ..
         $ python manage.py syncdb
-        $ python manage.py syncdb --settings=debug_settings
 
 7. Compile the translation files:
 
-        $ cd ew; django-admin.py compilemessages; cd ..
+        $ cd ew
+        $ django-admin.py compilemessages
+        $ cd ..
 
-8. Copy the startup script and change the ports in it if you need to:
+8. Copy the debug startup script and change the ports and `EW_ENV` value in it
+   if you need to:
 
-        $ cp ew/setup/start_production.sh ew/setup/start_debug.sh .
-        $ vim start*
+        $ cp ew/setup/start_debug.sh .
+        $ vim start_debug.sh
 
 9. Start the server in debug mode:
 
         $ ./start_debug.sh
 
-   Try it from the browser:
+   Try it from the browser by opening `http://localhost:8002`.
 
-        $ google-chrome http://localhost:8002
+   Try the admin page: `http://localhost:8002/admin`.
 
-   Finally close it:
-
-        Kill `start_debug.sh` with CTRL-C
-
-   Don't forget to source the `activate` script each time before starting the
-   server.
+   Finally close it: kill `start_debug.sh` with CTRL-C.
 
 Set up the nginx web server and run ExponWords in production mode
 -----------------------------------------------------------------
 
-1. Copy the startup script and change the ports in it if you need to:
+1. Copy the startup script and change the ports and `EW_ENV` value in it if you
+   need to:
 
-        $ cp ew/setup/start_production.sh ew/setup/start_production.sh .
-        $ vim ew/setup/start_production.sh ew/setup/start_production.sh
+        $ cp ew/setup/start_prod.sh .
+        $ vim start_prod.sh
 
 2. Perform the following steps as root:
 
@@ -125,15 +123,31 @@ Set up the nginx web server and run ExponWords in production mode
         # cp ew/setup/nginx.conf /etc/nginx/nginx.conf
         # vim /etc/nginx/nginx.conf
 
-   Restart nginx:
+   Reload NGINX configuration:
 
-        # /etc/init.d/nginx restart
+        # /etc/init.d/nginx reload
 
 3. Start the production server, try it and kill it:
 
-        $ ./start_production
-        $ google-chrome http://localhost/
-        Kill start_production with CTRL-C
+        $ ./start_prod.sh
+
+   Try it from the browser by opening `http://localhost`.
+
+   Try the admin page: `http://localhost/admin`.
+
+   Finally close it: kill `start_prod.sh` with CTRL-C.
+
+Running ExponWords in production
+--------------------------------
+
+1. If you want to run ExponWords in actual production, you should modify
+   `settings.py`:
+
+    * Set `DEBUG` to `False`.
+    * Set `TEMPLATE_DEBUG` to `False`.
+    * Set `ALLOWED_HOST` with the domain of your website (e.g.
+      `['myexponwordssite.com']`).
+    * Set `DEFAULT_FROM_EMAIL` to your real e-mail address.
 
 Set up email sending
 --------------------
@@ -149,7 +163,6 @@ Set up email sending
 
 2. Set up SMTP server and configure Django to use it. See more information
    here: https://docs.djangoproject.com/en/1.3/topics/email/
-
 
 Start ExponWords automatically after boot
 -----------------------------------------

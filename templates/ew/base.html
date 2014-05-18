@@ -1,12 +1,13 @@
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>ExponWords - {% block title %}{% endblock %}</title>
-    <link rel="shortcut icon" href="/site_media/favicon.ico?{% ew_version %}">
-    <link rel="apple-touch-icon-precomposed" href="/site_media/touch-icon.png?{% ew_version %}" />
-    <link rel=stylesheet href="/site_media/exponwords.css?{% ew_version %}" type="text/css">
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}?{% ew_version %}">
+    <link rel="apple-touch-icon-precomposed" href="{% static 'images/touch-icon.png' %}?{% ew_version %}" />
+    <link rel=stylesheet href="{% static 'css/exponwords.css' %}?{% ew_version %}" type="text/css">
 {% block css %}
 {% endblock %}
 {% include_if_exists "ew/custom_head.html" %}

@@ -1,6 +1,7 @@
 {% extends "ew/base.html" %}
 {% load i18n %}
 {% load ew_templatetags %}
+{% load staticfiles %}
 
 {% block title %}
 {% trans "Practice" %}:
@@ -25,14 +26,14 @@
 {% endif %}
 
 <p id="breadcrumb">
-<span class="current_menu"><a href="{% url index %}">ExponWords</a></span>
+<span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>
 {% if wdict != None %}
 &raquo;
-<span class="current_menu"><a href="{% url wdict wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
+<span class="current_menu"><a href="{% url 'wdict' wdict.id %}">{% include "ew/menuitem_dict.html" %}</a></span>
 {% endif %}
 &raquo;
 <span class="current_menu">{% trans "Practice" %}</span>
-<a class="help" href="{% url help LANGUAGE_CODE %}#practice" target="_blank">({% trans "Help for this page" %})</a>
+<a class="help" href="{% url 'help' LANGUAGE_CODE %}#practice" target="_blank">({% trans "Help for this page" %})</a>
 </p>
 
 {% include "ew/message.html" %}
@@ -138,21 +139,21 @@
 <!-- Javascript -->
 
 {% block javascript %}
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/jquery.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/json2.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/exponwordslib.js?{% ew_version %}"></script>
-  <script type="text/javascript" language="JavaScript" src="/site_media/js/practice.js?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/jquery.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/json2.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/exponwordslib.js' %}?{% ew_version %}"></script>
+  <script type="text/javascript" language="JavaScript" src="{% static 'js/practice.js' %}?{% ew_version %}"></script>
   <script>
     var csrf_token = "{{ csrf_token }}";
-    var EDIT_WORD_PAIR_URL = "{% url edit_word_pair '999' %}";
-    var UPDATE_WORD_URL = "{% url update_word %}";
-    var ADD_LABEL_URL = "{% url add_label %}";
+    var EDIT_WORD_PAIR_URL = "{% url 'edit_word_pair' '999' %}";
+    var UPDATE_WORD_URL = "{% url 'update_word' %}";
+    var ADD_LABEL_URL = "{% url 'add_label' %}";
     var WORDS_TO_PRACTICE_TODAY = {{ words_to_practice|safe }};
     var PGUPDOWN_BEHAVIOR = "{{ ewuser.pgupdown_behavior }}";
 
     {% if wdict != None %}
         var GET_WORDS_TO_PRACTICE_TODAY_URL =
-                "{% url get_words_to_practice_today wdict.id %}";
+                "{% url 'get_words_to_practice_today' wdict.id %}";
     {% endif %}
   </script>
 {% endblock %}

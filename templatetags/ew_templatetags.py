@@ -1,10 +1,10 @@
 from __future__ import with_statement
 import os
-import settings
+from django.conf import settings
 
 from django import template
 
-import ExponWords.ew.models as models
+import ew.models as models
 
 register = template.Library()
 
@@ -36,7 +36,7 @@ def include_if_exists(parser, token):
                   "include_if_exists tag's argument should be in quotes")
     filename = filename[1:-1] # Remove quotes
     
-    filepath = os.path.join(settings.PROJECT_DIR, 'ew', 'templates', filename)
+    filepath = os.path.join(settings.BASE_DIR, 'ew', 'templates', filename)
     return CustomHead(filepath)
 
 

@@ -1,9 +1,16 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 admin.autodiscover()
 
+from ExponWords import settings
+
+if settings.SCRIPT_NAME:
+    prefix = settings.SCRIPT_NAME + '/'
+else:
+    prefix = ''
+
 urlpatterns = patterns('',
-    (r'^admin/', include(admin.site.urls)),
-    (r'', include('ew.urls')),
+    url(r'^' + prefix + 'admin/', include(admin.site.urls)),
+    url(r'^' + prefix, include('ew.urls')),
 )

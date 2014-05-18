@@ -22,7 +22,7 @@ import sys
 import traceback
 import unicodedata
 import urllib
-import urlparse
+import urllib.parse as urlparse
 
 from django import forms
 from django.conf import settings
@@ -46,8 +46,8 @@ from django.utils.translation import ugettext_lazy as _
 import django.db
 import django.utils.translation
 
-from ExponWords.ew.models import WordPair, WDict
-import ExponWords.ew.models as models
+from ew.models import WordPair, WDict
+import ew.models as models
 
 
 ##### Constants #####
@@ -81,6 +81,7 @@ def has_hidden_feature(user, feature):
 #### Helper functions > URLs and queries #####
 
 
+# TODO delete this function
 def bad_unicode_to_str(u):
     """This function converts a unicode object that actually contains UTF-8
     encoded text (instead of unicode characters) to a UTF-8 encoded string."""
@@ -90,9 +91,8 @@ def bad_unicode_to_str(u):
 def remove_query_param(url, param_name):
     url_list = list(urlparse.urlparse(url))
     query_list = urlparse.parse_qsl(url_list[4], keep_blank_values=True)
-    new_query_list = [(k, bad_unicode_to_str(v))
-                      for k, v in query_list if k != param_name]
-    new_raw_query = urllib.urlencode(new_query_list)
+    new_query_list = [(k,v) for k, v in query_list if k != param_name]
+    new_raw_query = urlparse.urlencode(new_query_list)
     url_list[4] = new_raw_query
     new_url = urlparse.urlunparse(url_list)
     return new_url
@@ -100,8 +100,11 @@ def remove_query_param(url, param_name):
 
 def normalize_string(s):
     # Code copied from: http://stackoverflow.com/questions/517923/what-is-the-best-way-to-remove-accents-in-a-python-unicode-string/518232#518232
-    return ''.join((c for c in unicodedata.normalize('NFD', s.lower())
-                    if unicodedata.category(c) != 'Mn'))
+    if isinstance(s, str):
+        return ''.join((c for c in unicodedata.normalize('NFD', s.lower())
+                        if unicodedata.category(c) != 'Mn'))
+    else:
+        return s
 
 
 ##### Forms #####
@@ -365,9 +368,9 @@ def create_user(request, username, password1, password2, email_address,
 def register(request):
 
     release_emails_label = \
-        unicode(_('Send me emails when ExponWords has new features')) + ' ' + \
-        unicode(_('(about once a month; can be turned off at any time from '
-                  'Settings)'))
+        str(_('Send me emails when ExponWords has new features')) + ' ' + \
+        str(_('(about once a month; can be turned off at any time from '
+              'Settings)'))
 
     class RegisterForm(forms.Form):
         username = forms.CharField(max_length=255,
@@ -401,7 +404,7 @@ def register(request):
                 return create_user(request, username, password1, password2,
                                    email_address, captcha, lang,
                                    release_emails)
-            except models.EWException, e:
+            except models.EWException as e:
                 messages.error(request, _(e.value))
         else:
             messages.error(request, _('Some fields are invalid.'))
@@ -444,7 +447,7 @@ def help(request, lang):
 def docs(request, lang, page):
     models.log(request, page)
     filename = '%s-%s.html' % (page, lang)
-    filepath = os.path.join(settings.PROJECT_DIR, 'ew', 'templates', 'ew',
+    filepath = os.path.join(settings.BASE_DIR, 'ew', 'templates', 'ew',
                             'help', filename)
     if os.path.exists(filepath):
         return render(
@@ -503,8 +506,8 @@ def create_duplicate_msg(duplicate_word_pairs, text_singular, text_plural):
         return ''
 
     message = []
-    text = unicode(text_singular if len(duplicate_word_pairs) == 1
-                                 else text_plural)
+    text = str(text_singular if len(duplicate_word_pairs) == 1
+                             else text_plural)
 
     message += ['<div>\n',
                 text, ':\n',
@@ -513,11 +516,33 @@ def create_duplicate_msg(duplicate_word_pairs, text_singular, text_plural):
         wp2_url = reverse('ew.views.edit_word_pair', args=[wp2.id])
         message += ['<li>\n',
                     '<a href="', wp2_url, '">',
-                    unicode(wp2.get_short_repr()), '</a>\n',
+                    wp2.get_short_repr(), '</a>\n',
                     '</li>\n']
     message += ['</ul>\n',
                 '</div>\n']
     return ''.join(message)
+
+def save_wp_fields_to_json(wp):
+    """Save those fields whose value should be the default later when adding a
+    new word pair."""
+    return json.dumps({
+               'labels': wp.labels,
+               'date1': models.date_to_ord(wp.date1),
+               'date2': models.date_to_ord(wp.date2),
+               'strength1': wp.strength1,
+               'strength2': wp.strength2,
+               'saved_at': models.datetime_to_ts(datetime.datetime.now())})
+
+def saved_wp_fields_from_json(json_data):
+    """Returns: ({field_name: field_value}, saved_at)."""
+    d = json.loads(json_data)
+    return ({'labels': d['labels'],
+             'date1': models.ord_to_date(d['date1']),
+             'date2': models.ord_to_date(d['date2']),
+             'strength1': d['strength1'],
+             'strength2': d['strength2']},
+             models.ts_to_datetime(d['saved_at']))
+
 
 @wdict_access_required
 @set_lang
@@ -544,8 +569,7 @@ def add_word_pair(request, wdict):
             wdict.save()
 
             # saving some fields to the session
-            request.session['ew_add_wp_fields'] = \
-                (wp.get_saved_fields(), datetime.datetime.now())
+            request.session['ew_add_wp_fields'] = save_wp_fields_to_json(wp)
 
             # redirection
             wdict_url = reverse('ew.views.add_word_pair', args=[wdict.id])
@@ -557,9 +581,9 @@ def add_word_pair(request, wdict):
         wpid = request.GET.get('wp')
         if wpid is not None:
             wp_url = reverse('ew.views.edit_word_pair', args=[wpid])
-            message = [unicode(_('Word pair added')),
+            message = [str(_('Word pair added')),
                        ': <a href="' + wp_url + '">',
-                        unicode(_('edit')) + '</a>\n']
+                       str(_('edit')) + '</a>\n']
 
             # Create text about duplicates
             wp = get_object_or_404(WordPair,
@@ -582,11 +606,12 @@ def add_word_pair(request, wdict):
         # Load the saved fields if they were saved not longer than 1 hour ago
         ew_add_wp_fields = request.session.get('ew_add_wp_fields')
         if ew_add_wp_fields is not None:
-            saved_field, save_time = ew_add_wp_fields
+            saved_fields, save_time = \
+                saved_wp_fields_from_json(ew_add_wp_fields)
             if (datetime.datetime.now() - save_time <
                 datetime.timedelta(seconds=
                                    ADD_WORD_PAIR_DATE_REMEMBER_SECONDS)):
-                for field, value in saved_field.items():
+                for field, value in saved_fields.items():
                     data[field] = value
 
         display_mode = request.session.get('ew_wp_display_mode', 'simple')
@@ -625,8 +650,8 @@ def import_word_pairs(request, wdict, import_fun, page_title, help_text,
                     wp.add_labels(labels)
                     wp.save()
                 messages.success(request, _('Word pairs added.'))
-            except Exception, e:
-                messages.error(request, _('Error: ') + unicode(e))
+            except Exception as e:
+                messages.error(request, _('Error: ') + str(e))
             else:
                 import_url = reverse('ew.views.' + source, args=[wdict.id])
                 return HttpResponseRedirect(import_url)
@@ -996,7 +1021,7 @@ def words_to_practice_to_json(request, words_to_practice, limit):
             all_notes_html_list.append(wp.get_html('explanation'))
 
         if wp.labels:
-            extra_notes_list.append('[%s]' % wp.labels)
+            extra_notes_list.append('[%s]' % str(wp.labels))
 
         wdict = wp.wdict
         user = wdict.user
@@ -1121,11 +1146,11 @@ def get_words_to_practice_today(request, wdict):
 
         return HttpResponse(json_str,
                             mimetype='application/json')
-    except Exception, e:
+    except Exception as e:
         traceback.print_stack()
         exc_info = sys.exc_info()
         traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
-        raise exc_info[0], exc_info[1], exc_info[2]
+        raise exc_info[0].with_traceback(exc_info[1], exc_info[2])
 
 
 @login_required
@@ -1162,11 +1187,11 @@ def update_word(request):
 
         return HttpResponse(json.dumps('ok'),
                              mimetype='application/json')
-    except Exception, e:
+    except Exception as e:
         traceback.print_stack()
         exc_info = sys.exc_info()
         traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
-        raise exc_info[0], exc_info[1], exc_info[2]
+        raise exc_info[0].with_traceback(exc_info[1], exc_info[2])
 
 
 @login_required
@@ -1185,11 +1210,11 @@ def add_label(request):
 
         return HttpResponse(json.dumps('ok'),
                              mimetype='application/json')
-    except Exception, e:
+    except Exception as e:
         traceback.print_stack()
         exc_info = sys.exc_info()
         traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
-        raise exc_info[0], exc_info[1], exc_info[2]
+        raise exc_info[0].with_traceback(exc_info[1], exc_info[2])
 
 
 ##### Search and operations #####
@@ -1232,11 +1257,11 @@ def search_in_db(user, query_wdict, query_label, query_text):
         for query_item_type, query_item_value in query_items:
             query_item_matches = False
             if query_item_type == 'label':
-                labels = normalize_string(unicode(wp.labels))
+                labels = normalize_string(wp.labels)
                 query_item_matches = (labels.find(query_item_value) != -1)
             else: # query_item_type == 'text'
-                for field in models.WordPair.get_fields_to_be_edited():
-                    field_text = normalize_string(unicode(getattr(wp, field)))
+                for field in models.WordPair.get_fields_to_search():
+                    field_text = normalize_string(getattr(wp, field))
                     if (field_text.find(query_item_value) != -1):
                         query_item_matches = True
                         break
@@ -1478,7 +1503,7 @@ def get_word_pairs_to_use(request):
                                              deleted=False)
         word_pairs_to_use = []
         for wp in word_pairs:
-            if unicode(wp.id) in request.POST:
+            if str(wp.id) in request.POST:
                 word_pairs_to_use.append(wp)
         return word_pairs_to_use
 
