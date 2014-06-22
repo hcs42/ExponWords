@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import datetime
+import logging
 import math
 import random
 import re
@@ -22,7 +23,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
 
 
-version = '0.14.3'
+version = '0.15-pre'
 
 
 ##### Constants #####
@@ -1165,22 +1166,27 @@ class EWLogEntry(models.Model):
         return self.__unicode__()
 
 
+# Get an instance of a logger
+logger = logging.getLogger('ewlogger')
+
+
 def log(request, action, text=''):
 
-    logentry = EWLogEntry()
-    logentry.datetime = datetime.datetime.now()
-    try:
-        logentry.action = action
-        logentry.ipaddress = (request.META.get('REMOTE_ADDR' , '') + ', ' +
-                              request.META.get('HTTP_X_FORWARDED_FOR', ''))
-        if request.user.is_authenticated():
-            logentry.user = request.user
-            logentry.username = request.user.username
+    ipaddress = (request.META.get('REMOTE_ADDR' , '') + '/' +
+                 request.META.get('HTTP_X_FORWARDED_FOR', ''))
 
-        logentry.text = text
-    except Exception as e:
-        logentry.action = 'Logging failed'
-    logentry.save()
+    if request.user.is_authenticated():
+        user = request.user
+        username = request.user.username
+    else:
+        user = '-'
+        username = '-'
+
+
+    s = ('{action} ({user}/{username}, {ipaddress}), {text}'.
+         format(action=action, ipaddress=ipaddress,
+                user=user, username=username, text=text))
+    logger.debug(s)
 
 
 ##### Announcing releases #####
