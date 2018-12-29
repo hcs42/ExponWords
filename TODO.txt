@@ -2,6 +2,7 @@ Priority
 --------
 
 - use virtualenv on the server and update README
+- add http://cleverdeck.com/ to similar projects
 
 User features
 -------------
