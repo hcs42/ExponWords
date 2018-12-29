@@ -32,7 +32,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.contrib.sites.models import get_current_site
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
@@ -1145,7 +1145,7 @@ def get_words_to_practice_today(request, wdict):
                                              limit=limit)
 
         return HttpResponse(json_str,
-                            mimetype='application/json')
+                            content_type='application/json')
     except Exception as e:
         traceback.print_stack()
         exc_info = sys.exc_info()
@@ -1174,7 +1174,7 @@ def update_word(request):
             # modified the word's date and/or strength; in either case,
             # we don't want to modify the word.
             return HttpResponse(json.dumps('ok'),
-                                mimetype='application/json')
+                                content_type='application/json')
 
         assert(isinstance(answer, bool))
         if answer:
@@ -1186,7 +1186,7 @@ def update_word(request):
         wp.save()
 
         return HttpResponse(json.dumps('ok'),
-                             mimetype='application/json')
+                             content_type='application/json')
     except Exception as e:
         traceback.print_stack()
         exc_info = sys.exc_info()
@@ -1209,7 +1209,7 @@ def add_label(request):
         wp.save()
 
         return HttpResponse(json.dumps('ok'),
-                             mimetype='application/json')
+                             content_type='application/json')
     except Exception as e:
         traceback.print_stack()
         exc_info = sys.exc_info()
