@@ -72,7 +72,8 @@ Set up ExponWords and run it in debug mode
 
 5. Overwrite `urls.py` with the one in the `setup` directory:
 
-        $ cp ../ew/setup/urls.py .
+        $ rm urls.py .
+        $ ln -s ../ew/setup/urls.py
 
 6. Set up the database files. When asked about whether to create a superuser,
    create them.

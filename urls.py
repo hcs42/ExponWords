@@ -12,117 +12,120 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.conf import settings
+import django.contrib.auth.views
 
-urlpatterns = patterns('ew.views',
+import ew.views as views
+
+urlpatterns = [
 
     # Index view
     url(r'^$',
-        view='index',
+        view=views.index,
         name='index'),
 
     # Views when logged out
     url(r'^register/$',
-        view='register',
+        view=views.register,
         name='register'),
     url(r'^lang/$',
-        view='language',
+        view=views.language,
         name='language'),
     url(r'^help/(?P<lang>[a-zA-Z-]+)/$',
-        view='help',
+        view=views.help,
         name='help'),
     url(r'^help/(?P<lang>[a-zA-Z-]+)/(?P<page>[a-zA-Z0-9_-]+)/$',
-        view='docs',
+        view=views.docs,
         name='docs'),
 
     # Views when logged in
     url(r'^dict/(?P<wdict_id>\d+)/$',
-        view='wdict',
+        view=views.wdict,
         name='wdict'),
     url(r'^dict/(?P<wdict_id>\d+)/add-word-pair/$',
-        view='add_word_pair',
+        view=views.add_word_pair,
         name='add_word_pair'),
     url(r'^dict/(?P<wdict_id>\d+)/import-word-pairs-from-text/$',
-        view='import_word_pairs_from_text',
+        view=views.import_word_pairs_from_text,
         name='import_word_pairs_from_text'),
     url(r'^dict/(?P<wdict_id>\d+)/export-word-pairs-to-text/$',
-        view='export_word_pairs_to_text',
+        view=views.export_word_pairs_to_text,
         name='export_word_pairs_to_text'),
     url(r'^dict/(?P<wdict_id>\d+)/import-word-pairs-from-tsv/$',
-        view='import_word_pairs_from_tsv',
+        view=views.import_word_pairs_from_tsv,
         name='import_word_pairs_from_tsv'),
     url(r'^dict/(?P<wdict_id>\d+)/modify/$',
-        view='modify_wdict',
+        view=views.modify_wdict,
         name='modify_wdict'),
     url(r'^dict/(?P<wdict_id>\d+)/delete/$',
-        view='delete_wdict',
+        view=views.delete_wdict,
         name='delete_wdict'),
     url(r'^create-dict/$',
-        view='add_wdict',
+        view=views.add_wdict,
         name='add_wdict'),
     url(r'^visualize/$',
-        view='visualize',
+        view=views.visualize,
         name='visualize'),
     url(r'^settings/$',
-        view='ew_settings',
+        view=views.ew_settings,
         name='ew_settings'),
     url(r'^settings/x$',
-        view='ew_settings_x',
+        view=views.ew_settings_x,
         name='ew_settings_x'),
 
     # Practice
     url(r'^dict/(?P<wdict_id>\d+)/practice/$',
-        view='practice_wdict',
+        view=views.practice_wdict,
         name='practice_wdict'),
     url(r'^dict/(?P<wdict_id>\d+)/practice_early/$',
-        view='practice_wdict_early',
+        view=views.practice_wdict_early,
         name='practice_wdict_early'),
     url(r'^practice/$',
-        view='practice',
+        view=views.practice,
         name='practice'),
     url(r'^dict/(?P<wdict_id>\d+)/words-to-practice-today/$',
-        view='get_words_to_practice_today',
+        view=views.get_words_to_practice_today,
         name='get_words_to_practice_today'),
 
     # Search and operations
     url(r'^search/$',
-        view='search',
+        view=views.search,
         name='search'),
     url(r'^word-pair/(?P<word_pair_id>\d+)/edit/$',
-        view='edit_word_pair',
+        view=views.edit_word_pair,
         name='edit_word_pair'),
     url(r'^dict/update-word/$',
-        view='update_word',
+        view=views.update_word,
         name='update_word'),
     url(r'^dict/add-label/$',
-        view='add_label',
+        view=views.add_label,
         name='add_label'),
     url(r'^operation-on-word-pairs/$',
-        view='operation_on_word_pairs',
+        view=views.operation_on_word_pairs,
         name='operation_on_word_pairs'),
 
     # Staff views
     url(r'^announce_release/$',
-        view='announce_release',
+        view=views.announce_release,
         name='announce_release'),
-)
+]
 
-urlpatterns += patterns('django.contrib.auth.views',
+urlpatterns += [
     url(r'^login/$',
-        view='login',
+        view=django.contrib.auth.views.login,
         name='login',
         kwargs={'template_name': 'ew/login.html'}),
     url(r'^logout/$',
-        view='logout',
+        view=django.contrib.auth.views.logout,
         kwargs={'next_page': '..'},
         name='logout'),
     url(r'^change-password/$',
-        view='password_change',
+        view=django.contrib.auth.views.password_change,
         name='password_change',
         kwargs={'template_name': 'ew/registration/password_change_form.html'}),
     url(r'^change-password/done/$',
-        view='password_change_done',
+        view=django.contrib.auth.views.password_change_done,
         name='password_change_done',
         kwargs={'template_name': 'ew/registration/password_change_done.html'}),
 
@@ -134,27 +137,27 @@ urlpatterns += patterns('django.contrib.auth.views',
     # (email link) -> password_reset_confirm -> POST
     # (redirect) -> password_reset_complete
     url(r'^reset-password/$',
-        view='password_reset',
+        view=django.contrib.auth.views.password_reset,
         name='password_reset',
         kwargs={'template_name': 'ew/registration/password_reset_form.html',
                 'email_template_name': 'ew/registration/password_reset_email.html'}),
     url(r'^reset-password/done/$',
-        view='password_reset_done',
+        view=django.contrib.auth.views.password_reset_done,
         name='password_reset_done',
         kwargs={'template_name': 'ew/registration/password_reset_done.html'}),
     url(r'^reset-password/complete/$',
-        view='password_reset_complete',
+        view=django.contrib.auth.views.password_reset_complete,
         name='password_reset_complete',
         kwargs={'template_name': 'ew/registration/password_reset_complete.html'}),
     url(r'^reset-password/(?P<uidb64>[0-9A-Za-z]{1,13})-'
         r'(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        view='password_reset_confirm',
+        view=django.contrib.auth.views.password_reset_confirm,
         name='password_reset_confirm',
         kwargs={'template_name': 'ew/registration/password_reset_confirm.html'}),
-)
+]
 
-urlpatterns += patterns('',
+urlpatterns += [
     url(r'^i18n/',
         view=include('django.conf.urls.i18n'),
         name='i18n'),
-)
+]

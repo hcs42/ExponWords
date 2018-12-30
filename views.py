@@ -260,7 +260,7 @@ def set_lang(f):
 ##### Index view #####
 
 def get_elevator_speech(request):
-    help_basics_url = reverse('ew.views.help', args=[request.LANGUAGE_CODE])
+    help_basics_url = reverse(help, args=[request.LANGUAGE_CODE])
     text = (_('ExponWords is a web application for <strong>learning '
               'words</strong>. It helps learn the word pairs fed by the user '
               'using the principle that <strong>the more we have already '
@@ -325,7 +325,7 @@ def send_registration_email(request, username, email_address, lang):
     context = {'username': username,
                'site_name': site.name,
                'site_domain': site.domain}
-    body = template.render(Context(context))
+    body = template.render(context)
 
     models.log(request,
                'registration_email_sending',
@@ -361,7 +361,7 @@ def create_user(request, username, password1, password2, email_address,
         ewuser.save()
         send_registration_email(request, username, email_address, lang)
         messages.success(request, _('Successful registration. Please log in!'))
-        index_url = reverse('ew.views.index', args=[])
+        index_url = reverse(index, args=[])
         return HttpResponseRedirect(index_url)
 
 
@@ -513,7 +513,7 @@ def create_duplicate_msg(duplicate_word_pairs, text_singular, text_plural):
                 text, ':\n',
                 '<ul>\n']
     for wp2 in duplicate_word_pairs:
-        wp2_url = reverse('ew.views.edit_word_pair', args=[wp2.id])
+        wp2_url = reverse(edit_word_pair, args=[wp2.id])
         message += ['<li>\n',
                     '<a href="', wp2_url, '">',
                     wp2.get_short_repr(), '</a>\n',
@@ -572,7 +572,7 @@ def add_word_pair(request, wdict):
             request.session['ew_add_wp_fields'] = save_wp_fields_to_json(wp)
 
             # redirection
-            wdict_url = reverse('ew.views.add_word_pair', args=[wdict.id])
+            wdict_url = reverse(add_word_pair, args=[wdict.id])
             return HttpResponseRedirect(wdict_url + '?wp=' + str(wp.id))
         else:
             messages.error(request, _('Some fields are invalid.'))
@@ -580,7 +580,7 @@ def add_word_pair(request, wdict):
     elif request.method == 'GET':
         wpid = request.GET.get('wp')
         if wpid is not None:
-            wp_url = reverse('ew.views.edit_word_pair', args=[wpid])
+            wp_url = reverse(edit_word_pair, args=[wpid])
             message = [str(_('Word pair added')),
                        ': <a href="' + wp_url + '">',
                        str(_('edit')) + '</a>\n']
@@ -653,7 +653,11 @@ def import_word_pairs(request, wdict, import_fun, page_title, help_text,
             except Exception as e:
                 messages.error(request, _('Error: ') + str(e))
             else:
-                import_url = reverse('ew.views.' + source, args=[wdict.id])
+                if source == 'import_word_pairs_from_text':
+                    view_fun = import_word_pairs_from_text
+                elif source == 'import_word_pairs_from_tsv':
+                    view_fun = import_word_pairs_from_tsv
+                import_url = reverse(view_fun, args=[wdict.id])
                 return HttpResponseRedirect(import_url)
         else:
             messages.error(request, _('Some fields are invalid.'))
@@ -721,7 +725,7 @@ def modify_wdict(request, wdict):
                 setattr(wdict, field, form.cleaned_data[field])
             wdict.save()
             messages.success(request, _('Dictionary modified.'))
-            wdict_url = reverse('ew.views.modify_wdict', args=[wdict.id])
+            wdict_url = reverse(modify_wdict, args=[wdict.id])
             return HttpResponseRedirect(wdict_url)
         else:
             messages.error(request, _('Some fields are invalid.'))
@@ -758,7 +762,7 @@ def delete_wdict(request, wdict):
                 wdict.deleted = True
                 wdict.save()
                 messages.success(request, _('Dictionary deleted.'))
-                index_url = reverse('ew.views.index', args=[])
+                index_url = reverse(index, args=[])
                 return HttpResponseRedirect(index_url)
             else:
                 messages.error(
@@ -790,20 +794,20 @@ def add_wdict(request):
         models.log(request, 'add_wdict')
         form = WDictForm(request.POST)
         if form.is_valid():
-            wdict = WDict()
-            wdict.user = request.user
-            wdict.name = form.cleaned_data['name']
-            wdict.lang1 = form.cleaned_data['lang1']
-            wdict.lang2 = form.cleaned_data['lang2']
-            wdict.practice_word_order = \
+            wd = WDict()
+            wd.user = request.user
+            wd.name = form.cleaned_data['name']
+            wd.lang1 = form.cleaned_data['lang1']
+            wd.lang2 = form.cleaned_data['lang2']
+            wd.practice_word_order = \
                 form.cleaned_data['practice_word_order']
-            wdict.strengthener_method = \
+            wd.strengthener_method = \
                 form.cleaned_data['strengthener_method']
-            wdict.text_format = form.cleaned_data['text_format']
-            wdict.css = form.cleaned_data['css']
-            wdict.save()
+            wd.text_format = form.cleaned_data['text_format']
+            wd.css = form.cleaned_data['css']
+            wd.save()
             messages.success(request, _('Dictionary created.'))
-            wdict_url = reverse('ew.views.wdict', args=[wdict.id])
+            wdict_url = reverse(wdict, args=[wd.id])
             return HttpResponseRedirect(wdict_url)
         else:
             messages.error(request, _('Some fields are invalid.'))
@@ -936,7 +940,7 @@ def ew_settings(request):
                 request.user.save()
                 ewuser.save()
                 set_lang_fun(request)
-                settings_url = reverse('ew.views.ew_settings', args=[])
+                settings_url = reverse(ew_settings, args=[])
 
                 # If the new setting contains 'Use language of the browser',
                 # then the language of the browser is not set yet (dispite the
@@ -995,7 +999,7 @@ def ew_settings_x(request):
     if 'x' not in ewuser.extras:
         ewuser.extras += 'x'
         ewuser.save()
-    settings_url = reverse('ew.views.ew_settings', args=[])
+    settings_url = reverse(ew_settings, args=[])
     return HttpResponseRedirect(settings_url)
 
 
@@ -1424,7 +1428,7 @@ def edit_word_pair(request, wp, wdict):
             wp.deleted = True
             wp.save()
             messages.success(request, _('Word pair deleted.'))
-            wdict_url = reverse('ew.views.index', args=[])
+            wdict_url = reverse(index, args=[])
             return HttpResponseRedirect(wdict_url)
 
         form = WordPairForm(request.POST)
@@ -1438,7 +1442,7 @@ def edit_word_pair(request, wp, wdict):
             copy_cleaned_fields(form, wp, fields_to_copy)
             wp.save()
             messages.success(request, _('Word pair modified.'))
-            wdict_url = reverse('ew.views.edit_word_pair', args=[wp.id])
+            wdict_url = reverse(edit_word_pair, args=[wp.id])
             return HttpResponseRedirect(wdict_url)
         else:
             messages.error(request, _('Some fields are invalid.'))
@@ -1628,7 +1632,7 @@ def operation_on_word_pairs(request):
         random.shuffle(words_to_practice)
 
         request.session['ew_words_to_practice'] = words_to_practice
-        redirect_url = reverse('ew.views.practice', args=[])
+        redirect_url = reverse(practice, args=[])
 
     elif source_url:
         if error_msg is None:
@@ -1647,7 +1651,7 @@ def operation_on_word_pairs(request):
         redirect_url = source_url
 
     else:
-        redirect_url = reverse('ew.views.index', args=[])
+        redirect_url = reverse(index, args=[])
 
     return HttpResponseRedirect(redirect_url)
 
@@ -1746,7 +1750,7 @@ def announce_release(request):
             if action == 'announce':
                 send_announcement(request)
 
-            url = reverse('ew.views.announce_release', args=[])
+            url = reverse(announce_release, args=[])
             return HttpResponseRedirect(url)
         else:
             messages.error(request, _('Some fields are invalid.'))

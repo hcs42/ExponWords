@@ -88,7 +88,7 @@ Add the "quick_labels" column to the ew_ewuser tables:
 Upgrading to 0.14.0
 -------------------
 
-Add the new columns to the appriproate tables:
+Add the new columns to the appropriate tables:
 
     $ sqlite3 production.db
 
@@ -109,3 +109,8 @@ Add the new columns to the appriproate tables:
 
     sqlite> alter table ew_wdict add column css string;
     sqlite> update ew_wdict set css='';
+
+Upgrading to 0.15.0
+-------------------
+
+    $ python manage.py migrate
