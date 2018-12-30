@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block content %}
+{% get_available_languages as LANGUAGES %}
 
 <p>
 <span class="current_menu"><a href="{% url 'index' %}">ExponWords</a></span>

@@ -13,6 +13,7 @@
 {% endblock %}
 
 {% block content %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% if ewuser.practice_arrangement == 'less_scrolling' %}
 <div id="buttons">
