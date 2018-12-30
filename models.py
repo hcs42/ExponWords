@@ -535,7 +535,9 @@ def calc_weaken(strength, today):
 
 class EWUser(models.Model):
 
-    user = models.OneToOneField(User, primary_key=True)
+    user = models.OneToOneField(User,
+                                primary_key=True,
+                                on_delete=models.CASCADE)
 
     # The language of the user interface
     lang = models.CharField(max_length=10, default='en')
@@ -616,7 +618,7 @@ class WDict(models.Model):
     # WDict = word dictionary (as opposed to the dictionary data type which is
     # an "object dictionary")
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=255) # the name of the dictionary
     lang1 = models.CharField(max_length=255)
     lang2 = models.CharField(max_length=255)
@@ -771,7 +773,7 @@ class WDict(models.Model):
 class WordPair(models.Model):
 
     # each word pair belongs to a dictionary
-    wdict = models.ForeignKey(WDict)
+    wdict = models.ForeignKey(WDict, on_delete=models.CASCADE)
 
     # the word in the first/second language and notes:
     word_in_lang1 = models.TextField()
@@ -1152,7 +1154,10 @@ class EWLogEntry(models.Model):
 
     datetime = models.DateTimeField()
     action = models.TextField()
-    user = models.ForeignKey(User, blank=True, null=True)
+    user = models.ForeignKey(User,
+                             blank=True,
+                             null=True,
+                             on_delete=models.CASCADE)
     username = models.TextField(blank=True)
     text = models.TextField(blank=True)
     ipaddress = models.TextField(blank=True)

@@ -14,6 +14,7 @@
 
 from django.conf.urls import include, url
 from django.conf import settings
+import django.conf.urls.i18n
 import django.contrib.auth.views
 
 import ew.views as views
@@ -158,6 +159,6 @@ urlpatterns += [
 
 urlpatterns += [
     url(r'^i18n/',
-        view=include('django.conf.urls.i18n'),
+        view=include(django.conf.urls.i18n),
         name='i18n'),
 ]
