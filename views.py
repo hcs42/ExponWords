@@ -34,7 +34,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404, HttpResponseServerError, \
                         HttpResponseBadRequest
 from django.http import HttpResponse, HttpResponseRedirect
@@ -286,7 +286,7 @@ def get_footnote(request):
 
 def index(request):
     user = request.user
-    if user.is_authenticated():
+    if user.is_authenticated:
         set_lang_fun(request)
         username = user.username
         wdicts = WDict.objects.filter(user=user, deleted=False)
@@ -563,7 +563,7 @@ def add_word_pair(request, wdict):
             # creating the new word pair
             wp = WordPair()
             set_word_pair_from_form(wp, form, request.user, display_mode)
-            wdict.wordpair_set.add(wp)
+            wdict.wordpair_set.add(wp, bulk=False)
             wp.save()
             wdict.save()
 

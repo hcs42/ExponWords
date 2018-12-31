@@ -16,7 +16,7 @@
 
 {% include "ew/message.html" %}
 
-<form action="{% url 'django.views.i18n.set_language' %}" method="post">
+<form action="{% url 'set_language' %}" method="post">
   {% csrf_token %}
   {% trans "Language" %}:<input name="next" type="hidden" value="{% url 'index' %}" />
   <select name="language">

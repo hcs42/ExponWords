@@ -1182,7 +1182,7 @@ def log(request, action, text=''):
     ipaddress = (request.META.get('REMOTE_ADDR' , '') + '/' +
                  request.META.get('HTTP_X_FORWARDED_FOR', ''))
 
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         user = request.user
         username = request.user.username
     else:
