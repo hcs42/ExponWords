@@ -1035,7 +1035,7 @@ def import_textfile(s, wdict):
                 raise EWException(msg)
         else:
             # This line contains a word pair.
-            strength_date_regexp = '<(-?\d+) +(\d\d\d\d)-(\d\d)-(\d\d)>'
+            strength_date_regexp = r'<(-?\d+) +(\d\d\d\d)-(\d\d)-(\d\d)>'
             regexp = (r'^(\{(\d+)\})? *(.*?) -- (.*?)' +
                       '( ' + strength_date_regexp * 2 + ')?' +
                       '$')
