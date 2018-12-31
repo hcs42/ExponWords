@@ -15,7 +15,15 @@
 from django.conf.urls import include, url
 from django.conf import settings
 import django.conf.urls.i18n
-import django.contrib.auth.views
+
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.views import LogoutView
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.auth.views import PasswordChangeDoneView
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import PasswordResetDoneView
+from django.contrib.auth.views import PasswordResetCompleteView
+from django.contrib.auth.views import PasswordResetConfirmView
 
 import ew.views as views
 
@@ -114,21 +122,19 @@ urlpatterns = [
 
 urlpatterns += [
     url(r'^login/$',
-        view=django.contrib.auth.views.login,
-        name='login',
-        kwargs={'template_name': 'ew/login.html'}),
+        view=LoginView.as_view(template_name='ew/login.html'),
+        name='login'),
     url(r'^logout/$',
-        view=django.contrib.auth.views.logout,
-        kwargs={'next_page': '..'},
+        view=LogoutView.as_view(next_page='..'),
         name='logout'),
     url(r'^change-password/$',
-        view=django.contrib.auth.views.password_change,
-        name='password_change',
-        kwargs={'template_name': 'ew/registration/password_change_form.html'}),
+        view=PasswordChangeView.as_view(
+                 template_name='ew/registration/password_change_form.html'),
+        name='password_change'),
     url(r'^change-password/done/$',
-        view=django.contrib.auth.views.password_change_done,
-        name='password_change_done',
-        kwargs={'template_name': 'ew/registration/password_change_done.html'}),
+        view=PasswordChangeDoneView.as_view(
+                 template_name='ew/registration/password_change_done.html'),
+        name='password_change_done'),
 
     # This how how password reset works:
     # password_reset_form -> POST
@@ -138,23 +144,23 @@ urlpatterns += [
     # (email link) -> password_reset_confirm -> POST
     # (redirect) -> password_reset_complete
     url(r'^reset-password/$',
-        view=django.contrib.auth.views.password_reset,
-        name='password_reset',
-        kwargs={'template_name': 'ew/registration/password_reset_form.html',
-                'email_template_name': 'ew/registration/password_reset_email.html'}),
+        view=PasswordResetView.as_view(
+                 template_name='ew/registration/password_reset_form.html',
+                 email_template_name='ew/registration/password_reset_email.html'),
+        name='password_reset'),
     url(r'^reset-password/done/$',
-        view=django.contrib.auth.views.password_reset_done,
-        name='password_reset_done',
-        kwargs={'template_name': 'ew/registration/password_reset_done.html'}),
+        view=PasswordResetDoneView.as_view(
+                 template_name='ew/registration/password_reset_done.html'),
+        name='password_reset_done'),
     url(r'^reset-password/complete/$',
-        view=django.contrib.auth.views.password_reset_complete,
-        name='password_reset_complete',
-        kwargs={'template_name': 'ew/registration/password_reset_complete.html'}),
+        view=PasswordResetCompleteView.as_view(
+                 template_name='ew/registration/password_reset_complete.html'),
+        name='password_reset_complete'),
     url(r'^reset-password/(?P<uidb64>[0-9A-Za-z]{1,13})-'
         r'(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
-        view=django.contrib.auth.views.password_reset_confirm,
-        name='password_reset_confirm',
-        kwargs={'template_name': 'ew/registration/password_reset_confirm.html'}),
+        view=PasswordResetConfirmView.as_view(
+                 template_name='ew/registration/password_reset_confirm.html'),
+        name='password_reset_confirm'),
 ]
 
 urlpatterns += [
