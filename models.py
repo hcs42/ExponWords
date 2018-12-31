@@ -746,7 +746,9 @@ class WDict(models.Model):
         lang2_same.discard(wp)
         same_word_pairs = lang1_same & lang2_same
         similar_word_pairs = (lang1_same | lang2_same) - same_word_pairs
-        return sorted(same_word_pairs)[:3], sorted(similar_word_pairs)[:3]
+        sorted_same_wps = sorted(same_word_pairs, key=lambda wp: wp.id)[:3]
+        sorted_similar_wps =sorted(similar_word_pairs, key=lambda wp: wp.id)[:3]
+        return sorted_same_wps, sorted_similar_wps
 
     def get_css(self):
 
