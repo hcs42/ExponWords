@@ -2,10 +2,10 @@
 Django settings for ExponWords project.
 
 For more information on this file, see
-https://docs.djangoproject.com/en/1.6/topics/settings/
+https://docs.djangoproject.com/en/2.1/topics/settings/
 
 For the full list of settings and their values, see
-https://docs.djangoproject.com/en/1.6/ref/settings/
+https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
@@ -16,13 +16,13 @@ BASE_DIR = os.path.normpath(BASE_DIR)
 
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
+# See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'TODO UNIQUE KEY'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = ['localhost']
 
@@ -71,12 +71,12 @@ WSGI_APPLICATION = 'ExponWords.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'sqlite.db'),                      # Or path to database file if using sqlite3.
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),                      # Or path to database file if using sqlite3.
         'ATOMIC_REQUESTS': True,
         'USER': 'XXX',                      # Not used with sqlite3.
         'PASSWORD': 'XXX',                  # Not used with sqlite3.
@@ -87,7 +87,7 @@ DATABASES = {
 }
 
 # Internationalization
-# https://docs.djangoproject.com/en/1.6/topics/i18n/
+# https://docs.djangoproject.com/en/2.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -122,7 +122,7 @@ LOGIN_URL = SCRIPT_NAME + '/login/'
 LOGIN_REDIRECT_URL = SCRIPT_NAME + '/'
 
 # Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.6/howto/static-files/
+# https://docs.djangoproject.com/en/2.1/howto/static-files/
 if SCRIPT_NAME == '':
     STATIC_URL = '/static/'
 else:

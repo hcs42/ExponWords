@@ -113,4 +113,6 @@ Add the new columns to the appropriate tables:
 Upgrading to 0.15.0
 -------------------
 
-    $ python manage.py migrate
+Install Django 2.1 and migrate the database:
+
+    $ python manage.py migrate --fake-initial

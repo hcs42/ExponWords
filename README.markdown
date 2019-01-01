@@ -17,19 +17,19 @@ Install the prerequisites
 -------------------------
 
     $ sudo apt-get install python3 python3-pip python3-dev sqlite3 gettext nginx
-    $ sudo pip install virtualenv
+    $ pip3 install virtualenv
     $ export EW_ENV=$HOME/virtualenv/ewenv
     $ virtualenv "$EW_ENV"
-    $ "$EW_ENV/bin/pip" install django==1.6 gunicorn==19.9.0
+    $ "$EW_ENV/bin/pip" install django==2.1 gunicorn==19.9.0
 
 I used the following versions of these programs:
 
-* Python: 3.4
-* gettext: 0.18
+* Python: 3.6.7
+* gettext: 0.19.8.1
 * nginx: 0.8
-* sqlite3: 3.7
-* virtualenv: 1.9.1
-* Django: 1.6
+* sqlite3: 3.22.0
+* virtualenv: 16.2.0
+* Django: 2.1
 * gunicorn: 19.9.0
 
 Set up ExponWords and run it in debug mode
@@ -40,7 +40,7 @@ Set up ExponWords and run it in debug mode
    ExponWords-related stuff):
 
         $ source "$EW_ENV/bin/activate"
-        $ cd "$HOME"  # The directory that should contain the ExponWords dir
+        $ cd "$HOME"  # The directory that will contain the ExponWords dir
         $ django-admin.py startproject ExponWords
 
 2. Clone the ExponWords repository as a Django application called `ew`:
@@ -48,7 +48,7 @@ Set up ExponWords and run it in debug mode
         $ cd ExponWords
         $ git clone git://github.com/hcs42/ExponWords.git ew
         $ ls
-        ew  ExponWords  manage.py
+        ExponWords  ew  manage.py
 
 3. Edit `settings.py` (you will find an example in `ew/setup/settings.py`):
 
@@ -72,14 +72,14 @@ Set up ExponWords and run it in debug mode
 
 5. Overwrite `urls.py` with the one in the `setup` directory:
 
-        $ rm urls.py .
-        $ ln -s ../ew/setup/urls.py
+        $ rm urls.py
+        $ ln -s /path/to/ew/setup/urls.py
 
 6. Set up the database files. When asked about whether to create a superuser,
    create them.
 
         $ cd ..
-        $ python manage.py syncdb
+        $ python manage.py migrate
 
 7. Compile the translation files:
 
@@ -148,6 +148,7 @@ Running ExponWords in production
     * Set `TEMPLATE_DEBUG` to `False`.
     * Set `ALLOWED_HOST` with the domain of your website (e.g.
       `['myexponwordssite.com']`).
+    * Delete the `EMAIL_BACKEND` configuration entry.
     * Set `DEFAULT_FROM_EMAIL` to your real e-mail address.
 
 Set up email sending
