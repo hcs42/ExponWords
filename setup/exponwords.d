@@ -16,10 +16,10 @@ set -e
 
 # path to the directory for socket and pid files
 RUNFILES_PATH=/var/run/exponwords
-SITE_PATH=/home/hcs/ExponWords
-RUN_AS=hcs
+SITE_PATH=/home/myuser/ExponWords
+RUN_AS=myuser
 SITE=ExponWords
-PYTHON=`which python`
+GUNICORN=/path/to/ewenv/bin/gunicorn
 
 # http://stackoverflow.com/questions/393629/what-values-to-use-for-fastcgi-maxrequests-maxspare-minspare-maxchildren/393636#393636
 MAXREQUESTS=1000
@@ -41,11 +41,13 @@ d_start()
     else
         start-stop-daemon --start --quiet \
                    --pidfile $RUNFILES_PATH/$SITE.pid \
-                   --chuid $RUN_AS --exec $PYTHON -- \
-                   $SITE_PATH/manage.py runfcgi \
-                   method=threaded maxrequests=$MAXREQUESTS \
-                   host=127.0.0.1 port=8001 \
-                   pidfile=$RUNFILES_PATH/$SITE.pid
+                   --chuid $RUN_AS \
+                   --exec $GUNICORN \
+                   -- \
+                   --bind localhost:8001 \
+                   --chdir $SITE_PATH \
+                   --pid $RUNFILES_PATH/$SITE.pid \
+                   ExponWords.wsgi:application
         chmod 400 $RUNFILES_PATH/$SITE.pid
                  #  protocol=fcgi
                  #  socket=$RUNFILES_PATH/$SITE.socket

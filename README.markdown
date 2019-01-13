@@ -172,31 +172,29 @@ Start ExponWords automatically after boot
 In Debian or Ubuntu, ExponWords can be set to start up automatically by
 performing the following steps as root.
 
-1. Copy the provided init script to the directory of the init scripts:
+1. Copy the provided init script to the directory of the init scripts and open
+   it:
 
         # cp ew/setup/exponwords.d /etc/init.d/exponwords
-
-2. Modify the
-    
-        PYTHON=`which python`
-
-   to
-
-        PYTHON=`/my/path/to/python`
-
-3. Modify the `SITE_PATH` variable in it to `<path to exponwords>/ExponWords`
-   and modify `RUN_AS` to your Linux username:
-
         # vim /etc/init.d/exponwords
 
-4. Try the script:
+2. Update the following lines:
 
-        # /etc/init.d/exponwords start
-        $ google-chrome http://localhost/   # web page is there
-        # /etc/init.d/exponwords stop
-        $ google-chrome http://localhost/   # web page is not there
+    - `SITE_PATH`
+    - `GUNICORN`
+    - `RUN_AS`: Replace with the name of the Unix user running ExponWords.
 
-5. Run `update-rc.d` to create symbolic links in the `/etc/rc*.d/` directories,
+3. Try the script:
+
+        # Run as root:
+        $ /etc/init.d/exponwords start
+        # It doesn't return the prompt. The web site is available.
+
+        # From another console as root:
+        $ /etc/init.d/exponwords stop
+        # The web site is no longer available.
+
+4. Run `update-rc.d` to create symbolic links in the `/etc/rc*.d/` directories,
    which will make operating system call `/etc/init.d/exponwords` automatically
    with the `start` parameter after the system has booted, and with the `stop`
    parameter before it shuts down.
