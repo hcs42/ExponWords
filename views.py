@@ -650,6 +650,9 @@ def import_word_pairs(request, wdict, import_fun, page_title, help_text,
                     wp.save()
                 messages.success(request, _('Word pairs added.'))
             except Exception as e:
+                traceback.print_stack()
+                exc_info = sys.exc_info()
+                traceback.print_exception(exc_info[0], exc_info[1], exc_info[2])
                 messages.error(request, _('Error: ') + str(e))
             else:
                 if source == 'import_word_pairs_from_text':
