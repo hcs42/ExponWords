@@ -1003,7 +1003,7 @@ class WordPair(models.Model):
 
 def create_add_word_pairs(wdict, word_pairs):
     for wp in word_pairs:
-        wdict.wordpair_set.add(wp)
+        wdict.wordpair_set.add(wp, bulk=False)
         wp.save()
         wdict.save()
 
