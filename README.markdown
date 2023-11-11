@@ -16,20 +16,19 @@ you can adjust these steps accordingly.
 Install the prerequisites
 -------------------------
 
-    $ sudo apt-get install python3 python3-pip python3-dev sqlite3 gettext nginx
-    $ pip3 install virtualenv
+    $ sudo apt-get install python3 python3-pip python3-venv python3-dev \
+          sqlite3 gettext nginx
     $ export EW_ENV=$HOME/virtualenv/ewenv
-    $ virtualenv "$EW_ENV"
-    $ "$EW_ENV/bin/pip" install django==2.1 gunicorn==19.9.0
+    $ python -m venv "$EW_ENV"
+    $ "$EW_ENV/bin/pip" install django==3.0 gunicorn==19.9.0
 
 I used the following versions of these programs:
 
-* Python: 3.6.7
-* gettext: 0.19.8.1
-* nginx: 0.8
-* sqlite3: 3.22.0
-* virtualenv: 16.2.0
-* Django: 2.1
+* Python: 3.11.6
+* gettext: 0.21
+* nginx: 1.24
+* sqlite3: 3.42.0
+* Django: 3.0
 * gunicorn: 19.9.0
 
 Set up ExponWords and run it in debug mode
