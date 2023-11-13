@@ -1284,7 +1284,9 @@ def search_in_db(user, query_wdict, query_label, query_text):
 def search(request):
 
     wdicts = WDict.objects.filter(user=request.user, deleted=False)
-    wdict_choices = [(wdict.id, wdict.name) for wdict in wdicts]
+    sorted_wdicts = sorted(wdicts,
+                           key=lambda wdict: normalize_string(wdict.name))
+    wdict_choices = [(wdict.id, wdict.name) for wdict in sorted_wdicts]
     wdict_choices_full = [('all', _('All'))] + wdict_choices
 
     labels = sorted(models.get_labels(request.user))
