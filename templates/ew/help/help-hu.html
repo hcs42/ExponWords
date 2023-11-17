@@ -541,11 +541,43 @@ megtalálható. Ha a szövegdoboz üres, a keresés minden szót mutatni fog.</p
 <p>A keresőmező érzéketlen a kis-nagybetű különbségekre és az ékezetekre, tehát
 például a "haz" keresés meg fogja találni a "Ház" szót tartalmazó szópárokat
 is.</p>
-<p>A címkéket tartalmazó legördülő doboz mellett a "label:" előtag is
-használható címkék keresésére, például a "label:régi macska" keresési kifejezés
-csak azokat a szavakat fogja megtalálni, amik tartalmazzák a "macska" szót, és
-van olyan címkéjük, ami tartalmazza a "régi" szót, akár részben is (tehát
-például a "nagyonrégi" címkével rendelkező szópárokat is megtaláljuk).</p>
+<p>Kereséskor használhatjuk az alábbi előtagokat:</p>
+<ul>
+  <li>"label:" (rövid forma: "l"). Csak olyan szópárokat listázzon, amelyek
+  rendelkeznek a megadott címkével. Például, a "label:régi macska" keresési
+  kifejezés csak azokat a szópárokat fogja megtalálni, amelyek tartalmazzák a
+  "macska" szót, és van olyan címkéjük, ami tartalmazza a "régi" szót, akár
+  részben is (tehát például a "nagyonrégi" címkével rendelkező szópárokat is
+  megtaláljuk). Ha pontos egyezésre van szükség, használjuk a "label:^régi$
+  macska" keresőkifejezést (lásd lentebb).</li>
+  <li>"word1" (rövid forma: "w1"). Csak olyan szópárokat listázzon, amelyek
+  tartalmazzák a megadott szót az első nyelven. Például a "word1:hat" keresés
+  megtalálja a "hat -- birtokol" szópárt, de nem találja meg a "sechs -- hat"
+  szópárt.</li>
+  <li>"word2" (rövid forma: "w2"). Csak olyan szópárokat listázzon, amelyek
+  tartalmazzák a megadott szót a második nyelven. Például a "word2:macska"
+  keresés megtalálja a "die Katze -- macska" szópárt.</li>
+  <li>"explanation" (rövid forma: "e"). Csak olyan szópárokat listázzon,
+  amelyek tartalmazzák a megadott szót a jegyzetekben.</li>
+</ul>
+<p>Az előtagok hosszú és rövid formái egyenértékűek. Így például a "label:régi"
+és "l:régi" kifejezések ugyanazokat a szópárokat találják meg.</p>
+<p>A "label", "word1", "word2" vagy "explanation" előtagok használatakor
+használhatjuk a "^" karaktert, hogy csak olyan találataink legyenek, ahol a
+megadott szó a megadott mező elejére illeszkedik. A "$" karaktert használhatjuk
+a mező végén lévő illeszkedésre. Például:
+  <ul>
+  <li>A "word1:die" keresés illeszkedik a "die Katze" mezőre, és a "der Hund,
+  die Hunde" mezőre is.</li>
+  <li>A "word1:^die" keresés illeszkedik a "die Katze" mezőre, de nem
+  illeszkedik a "der Hund, die Hunde" mezőre.</li>
+  <li>A "word1:ze$" keresés illeszkedik a "die Katze" mezőre, de nem
+  illeszkedik a "die Katze, die Katzen" mezőre.</li>
+  <li>A "label:német$" keresés illeszkedik a "régi-német" és "új-német"
+  címkékre, de nem illeszkedik arra, hogy "németóra".</li>
+  <li>A "label:^régi$" keresés illeszkedik a  "régi" címkére, és nem
+  illeszkedik más címkékre.</li>
+  </ul>
 <p>A program a talált szópárokat egy táblázatban mutatja. A táblázat mutatását
 ki lehet kapcsolni a "Találatok mutatása" jelölődoboz pipájának
 eltávolításával. Ekkor a program továbbra is elvégzi a keresést és kiírja a

@@ -1248,10 +1248,19 @@ def search_in_db(user, query_wdict, query_label, query_text):
                    for query_word in query_text.split()]
     query_items = []
     for query_word in query_words:
-        if query_word.startswith('label:'):
-            query_items.append(('label', query_word[6:]))
+        # 'mytext' -> ['mytext'] -> ('text', 'mytext')
+        # ':my:text' -> ['', 'my:text'] -> ('text', 'my:text')
+        # 'label:mylabel' -> ['label', 'mylabel'] -> ('label', 'mylabel')
+        # 'label:my:label' -> ['label', 'my:label'] -> ('label', 'my:label')
+        query_word_parts = query_word.split(':', 1)
+        if len(query_word_parts) == 1:
+            query_item_type = 'text'
+            query_item_value = query_word
         else:
-            query_items.append(('text', query_word))
+            [query_item_type, query_item_value] = query_word_parts
+            if query_item_type == '':
+                query_item_type = 'text'
+        query_items.append((query_item_type, query_item_value))
 
     for wp in all_word_pairs:
         wp_matches_all = True
@@ -1261,16 +1270,57 @@ def search_in_db(user, query_wdict, query_label, query_text):
             continue
 
         for query_item_type, query_item_value in query_items:
+            if query_item_type == 'l':
+                query_item_type = 'label'
+            elif query_item_type == 'w1':
+                query_item_type = 'word1'
+            elif query_item_type == 'w2':
+                query_item_type = 'word2'
+            elif query_item_type == 'e':
+                query_item_type = 'explanation'
+
             query_item_matches = False
-            if query_item_type == 'label':
-                labels = normalize_string(wp.labels)
-                query_item_matches = (labels.find(query_item_value) != -1)
-            else: # query_item_type == 'text'
+            if query_item_type == 'text':
                 for field in models.WordPair.get_fields_to_search():
                     field_text = normalize_string(getattr(wp, field))
                     if (field_text.find(query_item_value) != -1):
                         query_item_matches = True
                         break
+            elif query_item_type in ('word1', 'word2', 'explanation', 'label'):
+                # Only one element in 'base_text_list' needs to match.
+                if query_item_type == 'word1':
+                    base_text_list = [normalize_string(wp.word_in_lang1)]
+                elif query_item_type == 'word2':
+                    base_text_list = [normalize_string(wp.word_in_lang2)]
+                elif query_item_type == 'explanation':
+                    base_text_list = [normalize_string(wp.explanation)]
+                elif query_item_type == 'label':
+                    base_text_list = [normalize_string(label)
+                                      for label in wp.get_label_set()]
+                base_text_list_match = False
+                for base_text in base_text_list:
+                    if (query_item_value.startswith('^') and
+                        query_item_value.endswith('$')):
+                        # label:^mylabel$
+                        if base_text == query_item_value[1:-1]:
+                            query_item_matches = True
+                            continue
+                    elif query_item_value.startswith('^'):
+                        # label:^mylabel
+                        if base_text.startswith(query_item_value[1:]):
+                            query_item_matches = True
+                            continue
+                    elif query_item_value.endswith('$'):
+                        # label:mylabel$
+                        if base_text.endswith(query_item_value[:-1]):
+                            query_item_matches = True
+                            continue
+                    else:
+                        # label:mylabel
+                        if query_item_value in base_text:
+                            query_item_matches = True
+                            continue
+
             if not query_item_matches:
                 wp_matches_all = False
                 break

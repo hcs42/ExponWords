@@ -531,11 +531,40 @@ ExponWords will list those word pairs that contain all search words. If the
 search box is empty, it lists all word pairs.</p>
 <p>The searchbox is case insensitive and accent insensitive, so for example a
 search for "haz" will find the word pairs that contain the text "Ház".</p>
-<p>You can use the "label:" prefix to search for a specific label, e.g. the
-search expression "label:oldwords cat" will show the word pairs that contain
-the word "cat", and have a label that contains the word "oldwords", even in
-part (so for example the word pairs with "veryoldword" label will be found as
-well).</p>
+<p>You can use prefixes to filter your search:</p>
+<ul>
+  <li>"label:" (short form: "l"). List only word pairs that have the specified
+  label. For example, the search expression "label:oldwords cat" will show the
+  word pairs that contain the word "cat", and have a label that contains the
+  word "oldwords", even in part (so for example the word pairs with
+  "veryoldword" label will be found as well). If you want an exact match,
+  specify "label:^oldwords$ cat" (see below).
+  </li>
+  <li>"word1" (short form: "w1"). List only word pairs that contain the
+  specified word in the first language. For example, "word1:hat" will find the
+  word "hat -- have", but it will not find the word pair "der Hut -- hat".</li>
+  <li>"word2" (short form: "w2"). List only word pairs that contain the
+  specified word in the second language. For example, "word2:cat" will find the
+  word "die Katze -- cat".</li>
+  <li>"explanation" (short form: "e"). List only word pairs that contain the
+  specified word in the explanation.</li>
+</ul>
+<p>The long and short forms of prefixes are equivalent. For example, the search
+expressions "label:oldwords" and "l:oldwords" find the same word pairs. </p>
+<p>When using the "label", "word1", "word2" or "explanation" prefix, you can
+use the "^" character to find only word pairs where the specified word matches
+to the beginning of the specified field. You can use the "$" character to find
+only matches at the end. For example:
+  <ul>
+  <li>"word1:die" matches "die Katze", and also matches "der Hund, die
+  Hunde".</li>
+  <li>"word1:^die" matches "die Katze", but does not match "der Hund, die
+  Hunde".</li>
+  <li>"word1:ze$" matches "die Katze", but does "die Katze, die Katzen".</li>
+  <li>"label:german$" matches the "old-german" and "new-german" labels, but
+  does not match the "german-class" label.</li>
+  <li>"label:^old$" matches the "old" label and nothing else.</li>
+  </ul>
 <p>The program shows the search hits in a table. Showing this table can be
 turned off by unchecking the "Show hits" checkbox. In this case, the program
 will still perform the search and display the number of hits. The usual
