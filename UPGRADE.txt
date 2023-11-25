@@ -122,6 +122,11 @@ Upgrading to 1.0.1
 
 No action required.
 
+Upgrading to 1.0.2
+------------------
+
+No action required.
+
 Upgrading to 1.1.0
 ------------------
 
