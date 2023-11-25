@@ -765,3 +765,6 @@ msgid ""
 msgstr ""
 "Ha bármikor elfelejtenéd a felhasználóneved vagy jelszavad, a http://"
 "%(site_domain)s oldalon és kattints az \"Elfelejtettem a jelszavam\" linkre."
+
+msgid "If you forgot your password, send an e-mail to "
+msgstr "Ha elfelejtetted a jelszavad, küldj egy e-mailt a következő címre:"
