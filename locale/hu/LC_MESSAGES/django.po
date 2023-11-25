@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-25 15:16+0100\n"
+"POT-Creation-Date: 2023-11-25 15:40+0100\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -481,8 +481,8 @@ msgstr "Dátumok"
 msgid "Strengths"
 msgstr "Erősség"
 
-#: templates/ew/search.html:83 templates/ew/search.html:192
-#: templates/ew/search.html:197 templates/ew/search.html:203 views.py:182
+#: templates/ew/search.html:83 templates/ew/search.html:197
+#: templates/ew/search.html:202 templates/ew/search.html:208 views.py:182
 #: views.py:199
 msgid "Labels"
 msgstr "Címkék"
@@ -524,20 +524,20 @@ msgid "Set dates and strengths"
 msgstr "Dátumok és erősségek módosítása"
 
 #: templates/ew/search.html:126
+msgid "Shift dates"
+msgstr "Dátumok eltolása"
+
+#: templates/ew/search.html:127
 msgid "Add labels"
 msgstr "Címkék hozzáadása"
 
-#: templates/ew/search.html:127
+#: templates/ew/search.html:128
 msgid "Remove labels"
 msgstr "Címkék törlése"
 
-#: templates/ew/search.html:128
+#: templates/ew/search.html:129
 msgid "Set labels"
 msgstr "Címkék módosítása"
-
-#: templates/ew/search.html:129
-msgid "Shift dates"
-msgstr "Dátumok eltolása"
 
 #: templates/ew/search.html:131
 msgid "Export word pairs"
@@ -564,31 +564,31 @@ msgstr "Nulláz"
 msgid "Set the dates and strengths of the selected word pairs!"
 msgstr "Módosítsd a kiválasztott szópárok dátumjait és erősségeit!"
 
+#: templates/ew/search.html:192
+msgid "Days"
+msgstr "Napok"
+
 #: templates/ew/search.html:193
+msgid "Shift the dates of the selected word pairs!"
+msgstr "Told el a kiválasztott szópárok dátumát!"
+
+#: templates/ew/search.html:198
 msgid "Add the labels to the selected word pairs!"
 msgstr "Add a címkéket a kiválasztott szópárokhoz!"
 
-#: templates/ew/search.html:198
+#: templates/ew/search.html:203
 msgid "Remove the labels from the selected word pairs!"
 msgstr "Töröld a címkéket a kiválasztott szópárokról!"
 
-#: templates/ew/search.html:202
+#: templates/ew/search.html:207
 msgid ""
 "Warning: this operation will remove all other labels from the selected words."
 msgstr ""
 "Vigyázat: ez a művelet minden más címkét töröl a kiválasztott szópárokról."
 
-#: templates/ew/search.html:204
+#: templates/ew/search.html:209
 msgid "Set the labels of the selected word pairs!"
 msgstr "Módosítsd a kiválasztott szópárok címkéit!"
-
-#: templates/ew/search.html:208
-msgid "Days"
-msgstr "Napok"
-
-#: templates/ew/search.html:209
-msgid "Shift the dates of the selected word pairs!"
-msgstr "Told el a kiválasztott szópárok dátumát!"
 
 #: templates/ew/search.html:213
 msgid "Words to practice"
