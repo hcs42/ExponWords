@@ -1586,6 +1586,7 @@ def operation_on_word_pairs(request):
     # Perform the operation
 
     error_msg = None
+    word_count = None
     operation = request.POST.get('operation')
     do_operation = False
     if operation == 'delete':
@@ -1632,6 +1633,26 @@ def operation_on_word_pairs(request):
             do_operation = True
         except ValueError:
             error_msg = _('Please specify the number of days!')
+    elif operation == 'enqueue':
+        do_operation = True
+        try:
+            raw_start_date = request.POST.get('enqueue-start_date')
+            start_date = models.parse_date(raw_start_date)
+        except ValueError:
+            error_msg = (_('Incorrect date: %(date)s. Please use the '
+                           'following format: YYYY-MM-DD.') %
+                         {'date': raw_value})
+            do_operation = False
+        try:
+            raw_wp_per_day = request.POST.get('enqueue-word_pairs_per_day')
+            wp_per_day = int(raw_wp_per_day)
+        except ValueError:
+            error_msg = _('Please specify the number of words per day!')
+            do_operation = False
+        if wp_per_day <= 0:
+            error_msg = _('Please specify the number of words per day!')
+            do_operation = False
+
     elif operation == 'practice':
         # We don't do an operation to the words themselves
         practice_scope = request.POST.get('practice_scope')
@@ -1645,7 +1666,10 @@ def operation_on_word_pairs(request):
     else:
         error_msg = _('Operation not recognized') + ': ' + str(operation)
 
-    if do_operation:
+    if do_operation and operation == 'enqueue':
+        word_count = models.enqueue_word_pairs(
+                         word_pairs_to_use, start_date, wp_per_day)
+    elif do_operation:
         for wp in word_pairs_to_use:
             if operation == 'delete':
                 wp.deleted = True
@@ -1690,7 +1714,8 @@ def operation_on_word_pairs(request):
 
     elif source_url:
         if error_msg is None:
-            word_count = len(word_pairs_to_use)
+            if word_count is None:
+                word_count = len(word_pairs_to_use)
             if word_count == 0:
                 message = _('No word pair modified.')
             elif word_count == 1:

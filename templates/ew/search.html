@@ -124,6 +124,7 @@
     <option value="move">{% trans 'Move word pairs'%}</option>
     <option value="set_dates_strengths">{% trans 'Set dates and strengths'%}</option>
     <option value="shift_days">{% trans 'Shift dates'%}</option>
+    <option value="enqueue">{% trans 'Enqueue new word pairs'%}</option>
     <option value="add_labels">{% trans 'Add labels'%}</option>
     <option value="remove_labels">{% trans 'Remove labels'%}</option>
     <option value="set_labels">{% trans 'Set labels'%}</option>
@@ -193,6 +194,20 @@
     <input type="submit" value="{% trans 'Shift the dates of the selected word pairs!' %}">
   </div>
 
+  <div style="display:none" id="span-enqueue">
+    <table>
+      <tr>
+        <td>{% trans 'Starting date' %}</td>
+        <td><input type="text" name="enqueue-start_date" id="id_enqueue-start_date" value=""></td>
+      </tr>
+      <tr>
+        <td>{% trans 'Word pairs per day' %}</td>
+        <td><input type="text" name="enqueue-word_pairs_per_day" value=""><td/>
+      </tr>
+    </table>
+    <input type="submit" value="{% trans 'Enqueue the selected word pairs!' %}">
+  </div>
+
   <div style="display:none" id="span-add_labels">
     {% trans 'Labels' %}: <input type="text" name="add_labels-labels" value=""><br/>
     <input type="submit" value="{% trans 'Add the labels to the selected word pairs!' %}">
@@ -230,6 +245,11 @@
 </p>
 </form>
 
+<!-- It's practical to have some empty space because otherwise the user might
+     need to scroll to the bottom of the page twice: once after getting the
+     search results, and then after selecting the operation. -->
+<br/> <br/> <br/> <br/> <br/>
+
 {% endif %} <!-- result_exists -->
 
   <!-- Translations -->
@@ -242,5 +262,8 @@
   <script type="text/javascript" language="JavaScript" src="{% static 'js/search.js' %}?{% ew_version %}"></script>
   <script type="text/javascript" language="JavaScript" src="{% static 'js/add_word_pair.js' %}?{% ew_version %}"></script>
   <script>var csrf_token = "{{ csrf_token }}";</script>
-  <script>$(document).ready(function(){ $("#id_q").focus(); });</script>
+  <script>$(document).ready(function(){
+    $("#id_q").focus();
+    $("#id_enqueue-start_date").attr('value', get_now_date());
+  });</script>
 {% endblock %}

@@ -588,6 +588,12 @@ gray background and the state of their checkboxes in the "Selected" column.</p>
   if 3 days is typed, then a word which would otherwise be asked on 1st January
   will be asked only on 4th January. Negative numbers can also be specified: in
   this case the dates will be changed to earlier ones.</li>
+  <li>Enqueue new word pairs: set the dates of the word pairs to consecutive
+  days. For example, if you select 6 words, specify 2023-01-01 as the starting
+  date, and specify "2" as "word pairs per day", the first two words will be set
+  to 2023-01-01, and the next two words to 2023-01-02, and the last two words to
+  2023-01-03. Note that the dates are only set if the corresponding strength is
+  0 (to avoid accidentally enqueueing already practiced words).</li>
   <li>Add labels: adds the given labels to the selected word pairs.</li>
   <li>Remove labels: removes the given labels from the selected word
   pairs.</li>

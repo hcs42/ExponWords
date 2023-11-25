@@ -4,31 +4,31 @@
 msgid ""
 msgstr ""
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-25 15:40+0100\n"
+"POT-Creation-Date: 2023-11-25 16:41+0100\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
-#: models.py:1032
+#: models.py:1062
 #, python-format
 msgid "Line %(linenumber)s should not have spaces in the beginning: %(line)s"
 msgstr ""
 "A következő sor elején nem kellene szóközöknek lenni: %(linenumber)s. sor: "
 "%(line)s"
 
-#: models.py:1044
+#: models.py:1074
 #, python-format
 msgid "Line %(linenumber)s is incorrect: %(line)s"
 msgstr "A következő sor helytelen: %(linenumber)s. sor: %(line)s"
 
-#: models.py:1095
+#: models.py:1125
 #, python-format
 msgid "Not enough fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban nincs elég oszlop: %(linenumber)s. sor: %(line)s"
 
-#: models.py:1109
+#: models.py:1139
 #, python-format
 msgid "Too many fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
@@ -225,7 +225,7 @@ msgid "Help about custom CSS"
 msgstr "Súgó a saját CSS-ről"
 
 #: templates/ew/practice_wdict.html:7 templates/ew/practice_wdict.html:36
-#: templates/ew/search.html:130 templates/ew/wdict.html:21
+#: templates/ew/search.html:131 templates/ew/wdict.html:21
 msgid "Practice"
 msgstr "Gyakorlás"
 
@@ -471,18 +471,18 @@ msgstr "Szavak"
 msgid "Notes"
 msgstr "Jegyzetek"
 
-#: templates/ew/search.html:81 templates/ew/search.html:154
+#: templates/ew/search.html:81 templates/ew/search.html:155
 #: templates/ew/word_pair.html:45
 msgid "Dates"
 msgstr "Dátumok"
 
-#: templates/ew/search.html:82 templates/ew/search.html:155
+#: templates/ew/search.html:82 templates/ew/search.html:156
 #: templates/ew/word_pair.html:46
 msgid "Strengths"
 msgstr "Erősség"
 
-#: templates/ew/search.html:83 templates/ew/search.html:197
-#: templates/ew/search.html:202 templates/ew/search.html:208 views.py:182
+#: templates/ew/search.html:83 templates/ew/search.html:212
+#: templates/ew/search.html:217 templates/ew/search.html:223 views.py:182
 #: views.py:199
 msgid "Labels"
 msgstr "Címkék"
@@ -528,101 +528,117 @@ msgid "Shift dates"
 msgstr "Dátumok eltolása"
 
 #: templates/ew/search.html:127
+msgid "Enqueue new word pairs"
+msgstr "Új szópárok időzitése"
+
+#: templates/ew/search.html:128
 msgid "Add labels"
 msgstr "Címkék hozzáadása"
 
-#: templates/ew/search.html:128
+#: templates/ew/search.html:129
 msgid "Remove labels"
 msgstr "Címkék törlése"
 
-#: templates/ew/search.html:129
+#: templates/ew/search.html:130
 msgid "Set labels"
 msgstr "Címkék módosítása"
 
-#: templates/ew/search.html:131
+#: templates/ew/search.html:132
 msgid "Export word pairs"
 msgstr "Szópárok exportálása"
 
-#: templates/ew/search.html:133
+#: templates/ew/search.html:134
 msgid "Help for operations"
 msgstr "Súgó a műveletekhez"
 
-#: templates/ew/search.html:137
+#: templates/ew/search.html:138
 msgid "Delete the selected word pairs!"
 msgstr "Töröld a kijelölt szópárokat!"
 
-#: templates/ew/search.html:146
+#: templates/ew/search.html:147
 msgid "Move the selected word pairs!"
 msgstr "Mozgasd a kijelölt szópárokat!"
 
-#: templates/ew/search.html:168 templates/ew/search.html:182
+#: templates/ew/search.html:169 templates/ew/search.html:183
 #: templates/ew/word_pair.html:55 templates/ew/word_pair.html:65
 msgid "Reset"
 msgstr "Nulláz"
 
-#: templates/ew/search.html:188
+#: templates/ew/search.html:189
 msgid "Set the dates and strengths of the selected word pairs!"
 msgstr "Módosítsd a kiválasztott szópárok dátumjait és erősségeit!"
 
-#: templates/ew/search.html:192
+#: templates/ew/search.html:193
 msgid "Days"
 msgstr "Napok"
 
-#: templates/ew/search.html:193
+#: templates/ew/search.html:194
 msgid "Shift the dates of the selected word pairs!"
 msgstr "Told el a kiválasztott szópárok dátumát!"
 
-#: templates/ew/search.html:198
+#: templates/ew/search.html:200
+msgid "Starting date"
+msgstr "Kezdőnap"
+
+#: templates/ew/search.html:204
+msgid "Word pairs per day"
+msgstr "Szópárok naponta"
+
+#: templates/ew/search.html:208
+msgid "Enqueue the selected word pairs!"
+msgstr "Időzítsd be a kijelölt szópárokat!"
+
+#: templates/ew/search.html:213
 msgid "Add the labels to the selected word pairs!"
 msgstr "Add a címkéket a kiválasztott szópárokhoz!"
 
-#: templates/ew/search.html:203
+#: templates/ew/search.html:218
 msgid "Remove the labels from the selected word pairs!"
 msgstr "Töröld a címkéket a kiválasztott szópárokról!"
 
-#: templates/ew/search.html:207
+#: templates/ew/search.html:222
 msgid ""
 "Warning: this operation will remove all other labels from the selected words."
 msgstr ""
 "Vigyázat: ez a művelet minden más címkét töröl a kiválasztott szópárokról."
 
-#: templates/ew/search.html:209
+#: templates/ew/search.html:224
 msgid "Set the labels of the selected word pairs!"
 msgstr "Módosítsd a kiválasztott szópárok címkéit!"
 
-#: templates/ew/search.html:213
+#: templates/ew/search.html:228
 msgid "Words to practice"
 msgstr "Gyakorlandó szavak"
 
-#: templates/ew/search.html:214
+#: templates/ew/search.html:229
 msgid "only the word that are due today will be strengthened!"
 msgstr "csak azok a szavak lesznek megerősítve, amiket már kérdezni kellene!"
 
-#: templates/ew/search.html:216
+#: templates/ew/search.html:231
 msgid "All selected words"
 msgstr "Minden kijelölt szópár"
 
-#: templates/ew/search.html:217
+#: templates/ew/search.html:232
 msgid "Only those selected words that are due today"
 msgstr "Csak azok, amiket már kérdezni kellene"
 
-#: templates/ew/search.html:219
+#: templates/ew/search.html:234
 msgid "Go to the practice page!"
 msgstr "Menj a gyakorló oldalra!"
 
-#: templates/ew/search.html:223
+#: templates/ew/search.html:238
 msgid "Export format"
 msgstr "Export formátum"
 
-#: templates/ew/search.html:225 views.py:198
+#: templates/ew/search.html:240 views.py:198
 msgid "Text"
 msgstr "Szöveg"
 
-#: templates/ew/search.html:227
+#: templates/ew/search.html:242
 msgid "Export the selected word pairs!"
 msgstr "Exportáld a kijelölt szópárokat!"
 
-#: templates/ew/search.html:236
+#: templates/ew/search.html:251
 msgid "Select none"
 msgstr "Egyik kijelölése sem"
 
@@ -798,7 +814,7 @@ msgid "Welcome to %(site_name)s"
 msgstr "%(site_name)s regisztráció"
 
 #: views.py:343 views.py:409 views.py:577 views.py:665 views.py:733
-#: views.py:775 views.py:815 views.py:962 views.py:1502 views.py:1810
+#: views.py:775 views.py:815 views.py:962 views.py:1502 views.py:1835
 msgid "Some fields are invalid."
 msgstr "Néhány mező érvénytelen."
 
@@ -992,42 +1008,48 @@ msgstr "Szópár törölve."
 msgid "Word pair modified."
 msgstr "Szópár módosítva."
 
-#: views.py:1612
+#: views.py:1613 views.py:1642
 #, python-format
 msgid "Incorrect date: %(date)s. Please use the following format: YYYY-MM-DD."
 msgstr ""
 "Helytelen dátum: %(date)s. Használd a következő formátumot: ÉÉÉÉ-HH-NN."
 
-#: views.py:1620
+#: views.py:1621
 #, python-format
 msgid "Incorrect strength: %(strength)s. Please specify it as an integer."
 msgstr "Helytelen erősség: %(strength)s. Add meg egész számként!"
 
-#: views.py:1634
+#: views.py:1635
 msgid "Please specify the number of days!"
 msgstr "Add meg a napok számát!"
 
-#: views.py:1646
+#: views.py:1650 views.py:1653
+#, fuzzy
+#| msgid "Please specify the number of days!"
+msgid "Please specify the number of words per day!"
+msgstr "Add meg a napok számát!"
+
+#: views.py:1667
 msgid "Operation not recognized"
 msgstr "Ismeretlen művelet"
 
-#: views.py:1695
+#: views.py:1720
 msgid "No word pair modified."
 msgstr "Egy szópár sem lett módosítva."
 
-#: views.py:1697
+#: views.py:1722
 msgid "1 word pair modified."
 msgstr "1 szópár módosítva."
 
-#: views.py:1699
+#: views.py:1724
 #, python-format
 msgid "%(count)s word pairs modified."
 msgstr "%(count)s szópár módosítva."
 
-#: views.py:1752
+#: views.py:1777
 msgid "Announcement emails sent."
 msgstr "Értesítő levelek elküldve."
 
-#: views.py:1801
+#: views.py:1826
 msgid "Announcement texts saved."
 msgstr "Értesítő szöveg elmentve."

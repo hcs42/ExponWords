@@ -998,6 +998,36 @@ class WordPair(models.Model):
                 self.prefix(self.word_in_lang2, WORD_PREFIX))
 
 
+##### Enqueueing word pairs #####
+
+
+def enqueue_word_pairs(word_pairs, start_date, wp_per_day):
+    date = start_date
+    wp_queued_count = 0
+    for wp in word_pairs:
+        # We only want to modify dates where the strength is 0 (to avoid
+        # accidentally enqueueing word pairs and thereby resetting them).
+        #
+        # So we use the `wp_queued` variable to mark whether we queued at
+        # least one of its directions.
+        wp_queued = False
+        if wp.strength1 == 0:
+            wp.date1 = date
+            wp_queued = True
+        if wp.strength2 == 0:
+            wp.date2 = date
+            wp_queued = True
+
+        # If we processed another `wp_per_day` words, use the next day for the
+        # next words.
+        if wp_queued:
+            wp.save()
+            wp_queued_count += 1
+            if wp_queued_count % wp_per_day == 0:
+                date += datetime.timedelta(1)
+    return wp_queued_count
+
+
 ##### Importing and exporting word pairs #####
 
 
