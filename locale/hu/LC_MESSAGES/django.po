@@ -3,706 +3,363 @@
 # This file is distributed under the same license as ExponWords.
 msgid ""
 msgstr ""
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-11-25 15:16+0100\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
+#: models.py:1032
 #, python-format
 msgid "Line %(linenumber)s should not have spaces in the beginning: %(line)s"
 msgstr ""
 "A következő sor elején nem kellene szóközöknek lenni: %(linenumber)s. sor: "
 "%(line)s"
 
+#: models.py:1044
 #, python-format
 msgid "Line %(linenumber)s is incorrect: %(line)s"
 msgstr "A következő sor helytelen: %(linenumber)s. sor: %(line)s"
 
+#: models.py:1095
 #, python-format
 msgid "Not enough fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban nincs elég oszlop: %(linenumber)s. sor: %(line)s"
 
+#: models.py:1109
 #, python-format
 msgid "Too many fields in line %(linenumber)s: %(line)s"
 msgstr "A következő sorban túl sok oszlop van: %(linenumber)s. sor: %(line)s"
 
-msgid "Totally random"
-msgstr "Teljesen véletlenszerű"
-
-msgid "New and forgotten words first"
-msgstr "Új és elfelejtett szavak először"
-
-msgid "I am a little behind"
-msgstr "Kicsit le vagyok maradva"
-
-msgid "Double last actual time interval"
-msgstr "Az utolsó valós időintervallum duplázása"
-
-msgid "Double last due time interval"
-msgstr "Az utolsó elvárt időintervallum duplázása"
-
-msgid "Plain text"
-msgstr "Egyszerű szöveg"
-
-msgid "HTML (keep line breaks)"
-msgstr "HTML (sorok végét megtartva)"
-
-msgid "HTML (unmodified)"
-msgstr "HTML (módosítás nélkül)"
-
-msgid "Default (use the word order in the Settings page)"
-msgstr "Alapértelmezett (a Beállítások oldalon beállított rendezést használja)"
-
-msgid "Default (use the strengthener method in the Settings page)"
-msgstr ""
-"Alapértelmezett (a Beállítások oldalon beállított erősítő módszert használja)"
-
-msgid "Name of the dictionary"
-msgstr "Szótár neve"
-
-msgid "Language 1"
-msgstr "Első nyelv"
-
-msgid "Language 2"
-msgstr "Második nyelv"
-
-msgid "Practice page word order"
-msgstr "Szavak sorrendje a Gyakorlás oldalon"
-
-msgid "Method of strengthening a word after pressing YES"
-msgstr "A szavak megerősítésére használt módszer az IGEN gomb megnyomása után"
-
-msgid "Text format of the words and notes"
-msgstr "Szavak és jegyzetek formátuma"
-
-msgid "Custom CSS"
-msgstr "Saját CSS"
-
-#, python-format
-msgid "Word in \"%(lang)s\""
-msgstr "A szó \"%(lang)s\" nyelven"
-
-msgid "Notes"
-msgstr "Jegyzetek"
-
-msgid "Labels"
-msgstr "Címkék"
-
-msgid "Date of addition"
-msgstr "Hozzáadás dátuma"
-
-msgid "Text"
-msgstr "Szöveg"
-
-#, python-format
-msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
-msgstr "Biztos, hogy törölni akarod a következő szótárat: \"%(wdict)s\"?"
-
-#, python-format
-msgid ""
-"ExponWords is a web application for <strong>learning words</strong>. It "
-"helps learn the word pairs fed by the user using the principle that "
-"<strong>the more we have already practiced a word, the less we need to "
-"practice it in the future</strong>. You can read more <a href="
-"\"%(help_basics_url)s#basics\">here</a>."
-msgstr ""
-"Az ExponWords egy szótanító webalkalmazás, ami a felhasználó által bevitt "
-"<strong>szópárokat segít megtanulni</strong> azt az elvet felhasználva, hogy "
-"<strong>minél többször elevenítettünk már fel egy szót, annál ritkábban kell "
-"újra feleleveníteteni</strong>. Több információ <a href="
-"\"%(help_basics_url)s#basics\">itt</a> található."
-
-#, python-format
-msgid ""
-"%(site)s is a free service. ExponWords is open source software distributed "
-"under the %(lic_pre)sApache License version 2%(lic_post)s. The source code "
-"repository can be found %(ewrepo_pre)shere%(ewrepo_post)s."
-msgstr ""
-"Az %(site)s egy ingyenes szolgáltatás. Az ExponWords nyílt forráskódú "
-"szoftver, ami az %(lic_pre)sApache License version 2%(lic_post)s licenc "
-"alatt lett publikálva. A forráskódot tartalmazó tároló %(ewrepo_pre)sitt"
-"%(ewrepo_post)s található. "
-
-#, python-format
-msgid "Welcome to %(site_name)s"
-msgstr "%(site_name)s regisztráció"
-
-msgid "Some fields are invalid."
-msgstr "Néhány mező érvénytelen."
-
-msgid "The two passwords do not match."
-msgstr "A két jelszó nem egyezik meg."
-
-msgid "The password has to be at least 6 characters long!"
-msgstr "A jelszónak legalább 6 karakter hosszúnak kell lennie!"
-
-msgid "This username is already used."
-msgstr "Ez a felhasználónév már foglalt."
-
-msgid "Successful registration. Please log in!"
-msgstr "Sikeres regisztráció. Jelentkezz be!"
-
-msgid "Send me emails when ExponWords has new features"
-msgstr "Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe"
-
-msgid "(about once a month; can be turned off at any time from Settings)"
-msgstr ""
-"(körülbelül havonta egyszer; a Beállításokban bármikor ki lehet kapcsolni)"
-
-msgid "Username"
-msgstr "Felhasználónév"
-
-msgid "Password"
-msgstr "Jelszó"
-
-msgid "Password again"
-msgstr "Jelszó ismét"
-
-msgid "Email address"
-msgstr "Email cím"
-
-msgid "Word pair added"
-msgstr "Szópár hozzáadva"
-
-msgid "edit"
-msgstr "szerkesztés"
-
-msgid "The following word pair is the same"
-msgstr "A következő szópár ugyanez"
-
-msgid "The following word pairs are the same"
-msgstr "A következő szópárok ugyanezek"
-
-msgid "The following word pair is similar"
-msgstr "A következő szópár hasonló"
-
-msgid "The following word pairs are similar"
-msgstr "A következő szópárok hasonlóak"
-
-msgid "Word pairs added."
-msgstr "Szópárok hozzáadva."
-
-msgid "Error: "
-msgstr "Hiba: "
-
-msgid "Import word pairs from text"
-msgstr "Szópárok importálása szövegből"
-
-msgid "Import word pairs from tab-separated values"
-msgstr "Szópárok importálása tabbal elválasztott értékekből"
-
-msgid "Dictionary modified."
-msgstr "Szótár módosítva."
-
-msgid "Dictionary deleted."
-msgstr "Szótár törölve."
-
-msgid ""
-"Please check in the \"Are you sure\" checkbox if you really want to delete "
-"the dictionary."
-msgstr ""
-"Jelöld be a \"Biztos vagy benne?\" jelölőnégyzetet, ha tényleg törölni "
-"akarod a szótárat!"
-
-msgid "Dictionary created."
-msgstr "Szótár létrehozva."
-
-msgid "Sum"
-msgstr "Összesen"
-
-msgid "Normal"
-msgstr "Normál"
-
-msgid "Less scrolling"
-msgstr "Kevesebb görgetés"
-
-msgid "PageUp = Yes, PageDown = No"
-msgstr "PageUp = Igen, PageDown = Nem"
-
-msgid "PageUp = No, PageDown = Yes"
-msgstr "PageUp = Nem, PageDown = Igen"
-
-msgid "Language"
-msgstr "Nyelv"
-
-msgid "Time zone"
-msgstr "Időzóna"
-
-msgid "Turning point"
-msgstr "Fordulópont"
-
-msgid "Practice page arrangement"
-msgstr "Gyakorlás oldal elrendezése"
-
-msgid "PageUp/PageDown behavior"
-msgstr "PageUp/PageUp viselkedés"
-
-msgid "Quick labels"
-msgstr "Gyors címkék"
-
-msgid "Button size"
-msgstr "Gombok mérete"
-
-msgid "Question size"
-msgstr "Kérdés mérete"
-
-msgid "Answer size"
-msgstr "Válasz mérete"
-
-msgid "Notes size"
-msgstr "Jegyzetek mérete"
-
-msgid "Hidden extra features"
-msgstr "Rejtett extra funkciók"
-
-msgid "Invalid language code"
-msgstr "Érvénytelen nyelvkód"
-
-msgid "Settings saved."
-msgstr "Beállítások elmentve."
-
-msgid "All"
-msgstr "Mind"
-
-msgid "Search expression"
-msgstr "Keresett szöveg"
-
-msgid "Dictionary"
-msgstr "Szótár"
-
-msgid "Label"
-msgstr "Címke"
-
-msgid "Hits per page"
-msgstr "Találat oldalanként"
-
-msgid "Show hits"
-msgstr "Találatok mutatása"
-
-#, python-format
-msgid "Page %(current_page_index)s of %(page_count)s"
-msgstr "%(current_page_index)s. oldal (összesen %(page_count)s)"
-
-msgid "Word pair deleted."
-msgstr "Szópár törölve."
-
-msgid "Word pair modified."
-msgstr "Szópár módosítva."
-
-#, python-format
-msgid "Incorrect date: %(date)s. Please use the following format: YYYY-MM-DD."
-msgstr ""
-"Helytelen dátum: %(date)s. Használd a következő formátumot: ÉÉÉÉ-HH-NN."
-
-#, python-format
-msgid "Incorrect strength: %(strength)s. Please specify it as an integer."
-msgstr "Helytelen erősség: %(strength)s. Add meg egész számként!"
-
-msgid "Please specify the number of days!"
-msgstr "Add meg a napok számát!"
-
-msgid "Operation not recognized"
-msgstr "Ismeretlen művelet"
-
-msgid "No word pair modified."
-msgstr "Egy szópár sem lett módosítva."
-
-msgid "1 word pair modified."
-msgstr "1 szópár módosítva."
-
-#, python-format
-msgid "%(count)s word pairs modified."
-msgstr "%(count)s szópár módosítva."
-
-msgid "Announcement emails sent."
-msgstr "Értesítő levelek elküldve."
-
-msgid "Announcement texts saved."
-msgstr "Értesítő szöveg elmentve."
-
+#: templates/ew/add_wdict.html:7 templates/ew/add_wdict.html:15
+#: templates/ew/index.html:63
 msgid "Create new dictionary"
 msgstr "Új szótár készítése"
 
+#: templates/ew/add_wdict.html:24
 msgid "Create dictionary"
 msgstr "Szótár készítése"
 
+#: templates/ew/add_word_pair.html:7 templates/ew/add_word_pair.html:17
 msgid "Add new word"
 msgstr "Új szó hozzáadása"
 
+#: templates/ew/add_word_pair.html:25
 msgid "Add word pair"
 msgstr "Szópár hozzáadása"
 
+#: templates/ew/announce_release.html:5 templates/ew/announce_release.html:13
+#: templates/ew/announce_release.html:30
 msgid "Announce new release"
 msgstr "Értesítés új verzióról"
 
+#: templates/ew/announce_release.html:20
 msgid "Announcement text"
 msgstr "Értesítő szöveg"
 
+#: templates/ew/announce_release.html:22
 msgid ""
 "The first line of the text will be the subject of the email; the rest will "
 "be the body."
 msgstr "A szöveg első sora lesz az e-mail tárgya, a többi a törzse."
 
+#: templates/ew/announce_release.html:29 templates/ew/lang.html:28
+#: templates/ew/modify_wdict.html:66 templates/ew/settings.html:50
 msgid "Save"
 msgstr "Mentés"
 
+#: templates/ew/announce_release.html:38
 msgid "Recipients"
 msgstr "Címzettek"
 
+#: templates/ew/delete_wdict.html:5 templates/ew/delete_wdict.html:15
 msgid "Delete dictionary"
 msgstr "Szótár törlése"
 
+#: templates/ew/delete_wdict.html:24 templates/ew/wdict.html:30
 msgid "Delete"
 msgstr "Törlés"
 
+#: templates/ew/edit_word_pair.html:7 templates/ew/edit_word_pair.html:17
 msgid "Edit word pair"
 msgstr "Szópár szerkesztése"
 
+#: templates/ew/export_wdict_as_text.html:5
+#: templates/ew/export_wdict_as_text.html:15
 msgid "Export dictionary to text"
 msgstr "Szótár exportálása szövegként"
 
+#: templates/ew/export_word_pairs_as_text.html:5
+#: templates/ew/export_word_pairs_as_text.html:13 templates/ew/wdict.html:27
 msgid "Export word pairs to text"
 msgstr "Szópárok exportálása szövegbe"
 
+#: templates/ew/import_word_pairs.html:21
 msgid "Help about importing word pairs"
 msgstr "Súgó a szavak importálásáról"
 
+#: templates/ew/import_word_pairs.html:31
 msgid "Import word pairs"
 msgstr "Szópárok importálása"
 
+#: templates/ew/index.html:5
 msgid "Main page"
 msgstr "Főoldal"
 
+#: templates/ew/index.html:13 templates/ew/practice_wdict.html:37
+#: templates/ew/search.html:21 templates/ew/settings.html:17
+#: templates/ew/wdict.html:15
 msgid "Help for this page"
 msgstr "Súgó ehhez az oldalhoz"
 
+#: templates/ew/index.html:23
+#: templates/ew/registration/password_reset_complete.html:20
 msgid "Log in"
 msgstr "Bejelentkezés"
 
+#: templates/ew/index.html:24 templates/ew/register.html:7
+#: templates/ew/register.html:15 templates/ew/register.html:27
 msgid "Register"
 msgstr "Regisztráció"
 
+#: templates/ew/index.html:25 templates/ew/lang.html:5
+#: templates/ew/lang.html:14 templates/ew/lang.html:21 views.py:883
+msgid "Language"
+msgstr "Nyelv"
+
+#: templates/ew/index.html:26
 msgid "I forgot my password"
 msgstr "Elfelejtettem a jelszavam"
 
+#: templates/ew/index.html:27 templates/ew/index.html:87
 msgid "Help"
 msgstr "Súgó"
 
+#: templates/ew/index.html:34
 msgid "Welcome"
 msgstr "Üdv"
 
+#: templates/ew/index.html:38
 msgid "Dictionaries"
 msgstr "Szótárak"
 
+#: templates/ew/index.html:45
 msgid "My dictionaries"
 msgstr "Az én szótáraim"
 
+#: templates/ew/index.html:59
 msgid "You have no dictionaries."
 msgstr "Még nincs szótárad."
 
+#: templates/ew/index.html:64 templates/ew/search.html:7
+#: templates/ew/search.html:20 templates/ew/wdict.html:23
 msgid "Search and operations"
 msgstr "Keresés és műveletek"
 
+#: templates/ew/index.html:65 templates/ew/wdict.html:24
 msgid "List all words"
 msgstr "Minden szó kilistázása"
 
+#: templates/ew/index.html:66 templates/ew/visualize.html:7
+#: templates/ew/visualize.html:20
 msgid "Show my future"
 msgstr "Mutasd a jövőm"
 
+#: templates/ew/index.html:71
 msgid "My user"
 msgstr "Az én felhasználóm"
 
+#: templates/ew/index.html:73 templates/ew/settings.html:7
+#: templates/ew/settings.html:16
 msgid "Settings"
 msgstr "Beállítások"
 
+#: templates/ew/index.html:74
+#: templates/ew/registration/password_change_done.html:13
+#: templates/ew/registration/password_change_form.html:13
 msgid "Change password"
 msgstr "Jelszó megváltoztatása"
 
+#: templates/ew/index.html:75
 msgid "Log out"
 msgstr "Kijelentkezés"
 
+#: templates/ew/index.html:80
 msgid "Administration"
 msgstr "Adminisztráció"
 
+#: templates/ew/index.html:82
 msgid "Announce release"
 msgstr "Új verzió bejelentése"
 
+#: templates/ew/login.html:7 templates/ew/login.html:15
+#: templates/ew/login.html:25
 msgid "Login"
 msgstr "Bejelentkezés"
 
+#: templates/ew/menuitem_dict.html:2
 #, python-format
 msgid "Dictionary \"%(wdictname)s\""
 msgstr "\"%(wdictname)s\" szótár"
 
+#: templates/ew/modify_wdict.html:7 templates/ew/modify_wdict.html:18
 msgid "Modify dictionary"
 msgstr "Szótár módosítása"
 
+#: templates/ew/modify_wdict.html:40
 msgid "Help about word orders"
 msgstr "Súgó a szavak sorrendjéről"
 
+#: templates/ew/modify_wdict.html:47
 msgid "Help about strengthener methods"
 msgstr "Súgó az erősítő módszerekről"
 
+#: templates/ew/modify_wdict.html:54
 msgid "Help about text formats"
 msgstr "Súgó a formátumokról"
 
+#: templates/ew/modify_wdict.html:61
 msgid "Help about custom CSS"
 msgstr "Súgó a saját CSS-ről"
 
+#: templates/ew/practice_wdict.html:7 templates/ew/practice_wdict.html:36
+#: templates/ew/search.html:130 templates/ew/wdict.html:21
 msgid "Practice"
 msgstr "Gyakorlás"
 
+#: templates/ew/practice_wdict.html:11
 msgid "Custom"
 msgstr "Saját"
 
+#: templates/ew/practice_wdict.html:20 templates/ew/practice_wdict.html:72
 msgid "YES"
 msgstr "IGEN"
 
+#: templates/ew/practice_wdict.html:21 templates/ew/practice_wdict.html:73
 msgid "NO"
 msgstr "NEM"
 
+#: templates/ew/practice_wdict.html:22 templates/ew/practice_wdict.html:74
 msgid "ANSWER"
 msgstr "VÁLASZ"
 
+#: templates/ew/practice_wdict.html:51
 msgid "More"
 msgstr "Több"
 
+#: templates/ew/practice_wdict.html:53
 msgid "Operations"
 msgstr "Műveletek"
 
+#: templates/ew/practice_wdict.html:54
 msgid "Hide"
 msgstr "Elrejt"
 
+#: templates/ew/practice_wdict.html:56
 msgid "Edit current word"
 msgstr "Aktuális szó szerkesztése"
 
+#: templates/ew/practice_wdict.html:57
 msgid "Edit previous word"
 msgstr "Előző szó szerkesztése"
 
+#: templates/ew/practice_wdict.html:58
 msgid "Full screen"
 msgstr "Teljes képernyő"
 
+#: templates/ew/practice_wdict.html:59
 msgid "Exit full screen"
 msgstr "Teljes képernyő elhagyása"
 
+#: templates/ew/practice_wdict.html:60
 msgid "Add label"
 msgstr "Címke hozzáadása"
 
+#: templates/ew/practice_wdict.html:93
 msgid "Please wait..."
 msgstr "Várj..."
 
+#: templates/ew/practice_wdict.html:97
 msgid "You have completed all words for today. Good job!"
 msgstr "Mára minden szó kész van. Ügyes voltál!"
 
+#: templates/ew/practice_wdict.html:101
 msgid "All words to practice"
 msgstr "Gyakorlandó szavak összesen"
 
+#: templates/ew/practice_wdict.html:105
 msgid "Adding label started"
 msgstr "Címke hozzáadása elkezdődött"
 
+#: templates/ew/practice_wdict.html:109
 msgid "Adding label successful"
 msgstr "Címke hozzáadása sikeres"
 
+#: templates/ew/practice_wdict.html:113
 msgid "Adding label (still trying)"
 msgstr "Címke hozzáadása (próbálkozás)"
 
+#: templates/ew/practice_wdict.html:117
 msgid "Gave up adding label"
 msgstr "Címke hozzáadása feladva"
 
+#: templates/ew/register.html:21 views.py:376
+msgid "Username"
+msgstr "Felhasználónév"
+
+#: templates/ew/register.html:22 views.py:379
+msgid "Password"
+msgstr "Jelszó"
+
+#: templates/ew/register.html:23
 msgid "3+3="
 msgstr "3+3="
 
-msgid "Search"
-msgstr "Keresés"
-
-msgid "Number of word pairs found"
-msgstr "Talált szópárok száma"
-
-msgid "First page"
-msgstr "Első oldal"
-
-msgid "Previous page"
-msgstr "Előző oldal"
-
-msgid "Next page"
-msgstr "Következő oldal"
-
-msgid "Last page"
-msgstr "Utolsó oldal"
-
-msgid "Words"
-msgstr "Szavak"
-
-msgid "Dates"
-msgstr "Dátumok"
-
-msgid "Strengths"
-msgstr "Erősség"
-
-msgid "Operation"
-msgstr "Művelet"
-
-msgid "Selection"
-msgstr "Kijelölés"
-
-msgid "Edit"
-msgstr "Szerkesztés"
-
-msgid "Select all"
-msgstr "Mindegyik kijelölése"
-
-msgid "Please select an operation"
-msgstr "Válassz ki egy műveletet"
-
-msgid "Delete word pairs"
-msgstr "Szópárok törlése"
-
-msgid "Move word pairs"
-msgstr "Szópárok mozgatása"
-
-msgid "Set dates and strengths"
-msgstr "Dátumok és erősségek módosítása"
-
-msgid "Add labels"
-msgstr "Címkék hozzáadása"
-
-msgid "Remove labels"
-msgstr "Címkék törlése"
-
-msgid "Set labels"
-msgstr "Címkék módosítása"
-
-msgid "Shift dates"
-msgstr "Dátumok eltolása"
-
-msgid "Export word pairs"
-msgstr "Szópárok exportálása"
-
-msgid "Help for operations"
-msgstr "Súgó a műveletekhez"
-
-msgid "Delete the selected word pairs!"
-msgstr "Töröld a kijelölt szópárokat!"
-
-msgid "Move the selected word pairs!"
-msgstr "Mozgasd a kijelölt szópárokat!"
-
-msgid "Reset"
-msgstr "Nulláz"
-
-msgid "Set the dates and strengths of the selected word pairs!"
-msgstr "Módosítsd a kiválasztott szópárok dátumjait és erősségeit!"
-
-msgid "Add the labels to the selected word pairs!"
-msgstr "Add a címkéket a kiválasztott szópárokhoz!"
-
-msgid "Remove the labels from the selected word pairs!"
-msgstr "Töröld a címkéket a kiválasztott szópárokról!"
-
-msgid ""
-"Warning: this operation will remove all other labels from the selected words."
-msgstr ""
-"Vigyázat: ez a művelet minden más címkét töröl a kiválasztott szópárokról."
-
-msgid "Set the labels of the selected word pairs!"
-msgstr "Módosítsd a kiválasztott szópárok címkéit!"
-
-msgid "Days"
-msgstr "Napok"
-
-msgid "Shift the dates of the selected word pairs!"
-msgstr "Told el a kiválasztott szópárok dátumát!"
-
-msgid "Words to practice"
-msgstr "Gyakorlandó szavak"
-
-msgid "only the word that are due today will be strengthened!"
-msgstr "csak azok a szavak lesznek megerősítve, amiket már kérdezni kellene!"
-
-msgid "All selected words"
-msgstr "Minden kijelölt szópár"
-
-msgid "Only those selected words that are due today"
-msgstr "Csak azok, amiket már kérdezni kellene"
-
-msgid "Go to the practice page!"
-msgstr "Menj a gyakorló oldalra!"
-
-msgid "Export format"
-msgstr "Export formátum"
-
-msgid "Export the selected word pairs!"
-msgstr "Exportáld a kijelölt szópárokat!"
-
-msgid "Select none"
-msgstr "Egyik kijelölése sem"
-
-msgid "Time zone according to the web browser"
-msgstr "A böngésző szerint az időzóna"
-
-msgid "Number of word pairs that will be asked"
-msgstr "Adott napon kérdezendő szópárok száma"
-
-msgid "Practice early"
-msgstr "Korai gyakorlás"
-
-msgid "Add new word pair"
-msgstr "Új szópár hozzáadása"
-
-msgid "Import word pairs from tab separated values"
-msgstr "Szópárok importálása tabbal elválasztott értékekből"
-
-msgid "Modify"
-msgstr "Módosítás"
-
-msgid "Dates and strengths"
-msgstr "Dátumok és erősségek"
-
-msgid "Delete word pair"
-msgstr "Szópár törlése"
-
-msgid "Are you sure that you want to delete this word pair?"
-msgstr "Biztos, hogy törölni akarod ezt a szópárat?"
-
-msgid "Yes"
-msgstr "Igen"
-
-msgid "Cancel"
-msgstr "Mégsem"
-
-msgid "Advanced view"
-msgstr "Haladó nézet"
-
-msgid "Simple view"
-msgstr "Egyszerű nézet"
-
+#: templates/ew/registration/password_change_done.html:5
+#: templates/ew/registration/password_change_done.html:16
 msgid "Password change successful"
 msgstr "A jelszó megváltoztatása sikeres"
 
+#: templates/ew/registration/password_change_form.html:5
 msgid "Password change"
 msgstr "Jelszó megváltoztatása"
 
+#: templates/ew/registration/password_change_form.html:20
+#: templates/ew/registration/password_reset_confirm.html:24
 msgid "Change my password"
 msgstr "Változtasd meg a jelszavam"
 
+#: templates/ew/registration/password_reset_complete.html:5
+#: templates/ew/registration/password_reset_complete.html:16
 msgid "Password reset complete"
 msgstr "Jelszó törlése kész"
 
+#: templates/ew/registration/password_reset_complete.html:11
+#: templates/ew/registration/password_reset_confirm.html:5
+#: templates/ew/registration/password_reset_confirm.html:13
+#: templates/ew/registration/password_reset_done.html:13
+#: templates/ew/registration/password_reset_form.html:5
+#: templates/ew/registration/password_reset_form.html:13
 msgid "Password reset"
 msgstr "Jelszó törlése"
 
+#: templates/ew/registration/password_reset_complete.html:18
 msgid "Your password has been set.  You may go ahead and log in now."
 msgstr "Az új jelszó be lett állítva. Jelentkezz be az alábbi linken."
 
+#: templates/ew/registration/password_reset_confirm.html:18
 msgid ""
 "Please enter your new password twice so we can verify you typed it in "
 "correctly."
 msgstr "Írd be az új jelszavad kétszer."
 
+#: templates/ew/registration/password_reset_confirm.html:31
 msgid "Password reset unsuccessful"
 msgstr "Jelszó beállítása sikertelen"
 
+#: templates/ew/registration/password_reset_confirm.html:33
 msgid ""
 "The password reset link was invalid, possibly because it has already been "
 "used.  Please request a new password reset."
@@ -710,9 +367,11 @@ msgstr ""
 "A jelszót beállító link érvénytelen, valószínűleg azért, mert már "
 "felhasználták. Igényeljen új jelszó beállítást."
 
+#: templates/ew/registration/password_reset_done.html:5
 msgid "Password reset successful"
 msgstr "Jelszó beállítása sikeres"
 
+#: templates/ew/registration/password_reset_done.html:16
 msgid ""
 "We've e-mailed you instructions for setting your password to the e-mail "
 "address you submitted. You should be receiving it shortly."
@@ -720,6 +379,7 @@ msgstr ""
 "Az információkat elküldtük e-mailben a megadott címre. Hamarosan meg kell "
 "érkeznie."
 
+#: templates/ew/registration/password_reset_email.html:3
 #, python-format
 msgid ""
 "You are receiving this e-mail because you requested a password reset for "
@@ -728,15 +388,23 @@ msgstr ""
 "Azért kapod ezt az e-mailt, mert jelszó visszaállítását kérted ezen a "
 "weboldalon: %(site_name)s."
 
+#: templates/ew/registration/password_reset_email.html:5
 msgid "Please go to the following page and choose a new password:"
 msgstr "Látogasd meg a következő oldalt, és válassz egy új jelszót:"
 
+#: templates/ew/registration/password_reset_email.html:9
 msgid "Your username, in case you've forgotten:"
 msgstr "A felhasználóneved, ha elfelejtetted volna:"
 
+#: templates/ew/registration/password_reset_email.html:11
 msgid "Thanks for using our site!"
 msgstr "Köszönjük, hogy használod az oldalunkat!"
 
+#: templates/ew/registration/password_reset_form.html:18
+msgid "If you forgot your password, send an e-mail to "
+msgstr "Ha elfelejtetted a jelszavad, küldj egy e-mailt a következő címre:"
+
+#: templates/ew/registration/password_reset_form.html:28
 msgid ""
 "Forgotten your password? Enter your e-mail address below, and we'll e-mail "
 "instructions for setting a new one."
@@ -744,20 +412,25 @@ msgstr ""
 "Elfelejtetted a jelszavad? Írd be az e-mail címed, és küldünk egy levelet a "
 "teendőkről."
 
+#: templates/ew/registration/password_reset_form.html:32
 msgid "E-mail address:"
 msgstr "Email cím:"
 
+#: templates/ew/registration/password_reset_form.html:32
 msgid "Reset my password"
 msgstr "Töröld a jelszavam"
 
+#: templates/ew/registration/registration_email.html:3
 #, python-format
 msgid "Hi %(username)s,"
 msgstr "Szia %(username)s!"
 
+#: templates/ew/registration/registration_email.html:5
 #, python-format
 msgid "thank you for registering at %(site_name)s."
 msgstr "Köszönjük, hogy regisztráltál az %(site_name)s oldalra."
 
+#: templates/ew/registration/registration_email.html:7
 #, python-format
 msgid ""
 "If you ever forgot your username or password, please go to http://"
@@ -766,5 +439,595 @@ msgstr ""
 "Ha bármikor elfelejtenéd a felhasználóneved vagy jelszavad, a http://"
 "%(site_domain)s oldalon és kattints az \"Elfelejtettem a jelszavam\" linkre."
 
-msgid "If you forgot your password, send an e-mail to "
-msgstr "Ha elfelejtetted a jelszavad, küldj egy e-mailt a következő címre:"
+#: templates/ew/search.html:28
+msgid "Search"
+msgstr "Keresés"
+
+#: templates/ew/search.html:36
+msgid "Number of word pairs found"
+msgstr "Talált szópárok száma"
+
+#: templates/ew/search.html:64
+msgid "First page"
+msgstr "Első oldal"
+
+#: templates/ew/search.html:65
+msgid "Previous page"
+msgstr "Előző oldal"
+
+#: templates/ew/search.html:71
+msgid "Next page"
+msgstr "Következő oldal"
+
+#: templates/ew/search.html:72
+msgid "Last page"
+msgstr "Utolsó oldal"
+
+#: templates/ew/search.html:79
+msgid "Words"
+msgstr "Szavak"
+
+#: templates/ew/search.html:80 views.py:179
+msgid "Notes"
+msgstr "Jegyzetek"
+
+#: templates/ew/search.html:81 templates/ew/search.html:154
+#: templates/ew/word_pair.html:45
+msgid "Dates"
+msgstr "Dátumok"
+
+#: templates/ew/search.html:82 templates/ew/search.html:155
+#: templates/ew/word_pair.html:46
+msgid "Strengths"
+msgstr "Erősség"
+
+#: templates/ew/search.html:83 templates/ew/search.html:192
+#: templates/ew/search.html:197 templates/ew/search.html:203 views.py:182
+#: views.py:199
+msgid "Labels"
+msgstr "Címkék"
+
+#: templates/ew/search.html:85 templates/ew/wdict.html:5 views.py:1353
+msgid "Dictionary"
+msgstr "Szótár"
+
+#: templates/ew/search.html:87
+msgid "Operation"
+msgstr "Művelet"
+
+#: templates/ew/search.html:88
+msgid "Selection"
+msgstr "Kijelölés"
+
+#: templates/ew/search.html:103
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: templates/ew/search.html:113
+msgid "Select all"
+msgstr "Mindegyik kijelölése"
+
+#: templates/ew/search.html:122
+msgid "Please select an operation"
+msgstr "Válassz ki egy műveletet"
+
+#: templates/ew/search.html:123
+msgid "Delete word pairs"
+msgstr "Szópárok törlése"
+
+#: templates/ew/search.html:124
+msgid "Move word pairs"
+msgstr "Szópárok mozgatása"
+
+#: templates/ew/search.html:125
+msgid "Set dates and strengths"
+msgstr "Dátumok és erősségek módosítása"
+
+#: templates/ew/search.html:126
+msgid "Add labels"
+msgstr "Címkék hozzáadása"
+
+#: templates/ew/search.html:127
+msgid "Remove labels"
+msgstr "Címkék törlése"
+
+#: templates/ew/search.html:128
+msgid "Set labels"
+msgstr "Címkék módosítása"
+
+#: templates/ew/search.html:129
+msgid "Shift dates"
+msgstr "Dátumok eltolása"
+
+#: templates/ew/search.html:131
+msgid "Export word pairs"
+msgstr "Szópárok exportálása"
+
+#: templates/ew/search.html:133
+msgid "Help for operations"
+msgstr "Súgó a műveletekhez"
+
+#: templates/ew/search.html:137
+msgid "Delete the selected word pairs!"
+msgstr "Töröld a kijelölt szópárokat!"
+
+#: templates/ew/search.html:146
+msgid "Move the selected word pairs!"
+msgstr "Mozgasd a kijelölt szópárokat!"
+
+#: templates/ew/search.html:168 templates/ew/search.html:182
+#: templates/ew/word_pair.html:55 templates/ew/word_pair.html:65
+msgid "Reset"
+msgstr "Nulláz"
+
+#: templates/ew/search.html:188
+msgid "Set the dates and strengths of the selected word pairs!"
+msgstr "Módosítsd a kiválasztott szópárok dátumjait és erősségeit!"
+
+#: templates/ew/search.html:193
+msgid "Add the labels to the selected word pairs!"
+msgstr "Add a címkéket a kiválasztott szópárokhoz!"
+
+#: templates/ew/search.html:198
+msgid "Remove the labels from the selected word pairs!"
+msgstr "Töröld a címkéket a kiválasztott szópárokról!"
+
+#: templates/ew/search.html:202
+msgid ""
+"Warning: this operation will remove all other labels from the selected words."
+msgstr ""
+"Vigyázat: ez a művelet minden más címkét töröl a kiválasztott szópárokról."
+
+#: templates/ew/search.html:204
+msgid "Set the labels of the selected word pairs!"
+msgstr "Módosítsd a kiválasztott szópárok címkéit!"
+
+#: templates/ew/search.html:208
+msgid "Days"
+msgstr "Napok"
+
+#: templates/ew/search.html:209
+msgid "Shift the dates of the selected word pairs!"
+msgstr "Told el a kiválasztott szópárok dátumát!"
+
+#: templates/ew/search.html:213
+msgid "Words to practice"
+msgstr "Gyakorlandó szavak"
+
+#: templates/ew/search.html:214
+msgid "only the word that are due today will be strengthened!"
+msgstr "csak azok a szavak lesznek megerősítve, amiket már kérdezni kellene!"
+
+#: templates/ew/search.html:216
+msgid "All selected words"
+msgstr "Minden kijelölt szópár"
+
+#: templates/ew/search.html:217
+msgid "Only those selected words that are due today"
+msgstr "Csak azok, amiket már kérdezni kellene"
+
+#: templates/ew/search.html:219
+msgid "Go to the practice page!"
+msgstr "Menj a gyakorló oldalra!"
+
+#: templates/ew/search.html:223
+msgid "Export format"
+msgstr "Export formátum"
+
+#: templates/ew/search.html:225 views.py:198
+msgid "Text"
+msgstr "Szöveg"
+
+#: templates/ew/search.html:227
+msgid "Export the selected word pairs!"
+msgstr "Exportáld a kijelölt szópárokat!"
+
+#: templates/ew/search.html:236
+msgid "Select none"
+msgstr "Egyik kijelölése sem"
+
+#: templates/ew/settings.html:42
+msgid "Time zone according to the web browser"
+msgstr "A böngésző szerint az időzóna"
+
+#: templates/ew/visualize.html:26
+msgid "Number of word pairs that will be asked"
+msgstr "Adott napon kérdezendő szópárok száma"
+
+#: templates/ew/wdict.html:22
+msgid "Practice early"
+msgstr "Korai gyakorlás"
+
+#: templates/ew/wdict.html:25
+msgid "Add new word pair"
+msgstr "Új szópár hozzáadása"
+
+#: templates/ew/wdict.html:26 views.py:686
+msgid "Import word pairs from text"
+msgstr "Szópárok importálása szövegből"
+
+#: templates/ew/wdict.html:28
+msgid "Import word pairs from tab separated values"
+msgstr "Szópárok importálása tabbal elválasztott értékekből"
+
+#: templates/ew/wdict.html:29
+msgid "Modify"
+msgstr "Módosítás"
+
+#: templates/ew/word_pair.html:39
+msgid "Dates and strengths"
+msgstr "Dátumok és erősségek"
+
+#: templates/ew/word_pair.html:78
+msgid "Delete word pair"
+msgstr "Szópár törlése"
+
+#: templates/ew/word_pair.html:81
+msgid "Are you sure that you want to delete this word pair?"
+msgstr "Biztos, hogy törölni akarod ezt a szópárat?"
+
+#: templates/ew/word_pair.html:82
+msgid "Yes"
+msgstr "Igen"
+
+#: templates/ew/word_pair.html:83
+msgid "Cancel"
+msgstr "Mégsem"
+
+#: templates/ew/word_pair.html:88
+msgid "Advanced view"
+msgstr "Haladó nézet"
+
+#: templates/ew/word_pair.html:91
+msgid "Simple view"
+msgstr "Egyszerű nézet"
+
+#: views.py:56
+msgid "Totally random"
+msgstr "Teljesen véletlenszerű"
+
+#: views.py:57
+msgid "New and forgotten words first"
+msgstr "Új és elfelejtett szavak először"
+
+#: views.py:58
+msgid "I am a little behind"
+msgstr "Kicsit le vagyok maradva"
+
+#: views.py:60
+msgid "Double last actual time interval"
+msgstr "Az utolsó valós időintervallum duplázása"
+
+#: views.py:61
+msgid "Double last due time interval"
+msgstr "Az utolsó elvárt időintervallum duplázása"
+
+#: views.py:64
+msgid "Plain text"
+msgstr "Egyszerű szöveg"
+
+#: views.py:65
+msgid "HTML (keep line breaks)"
+msgstr "HTML (sorok végét megtartva)"
+
+#: views.py:66
+msgid "HTML (unmodified)"
+msgstr "HTML (módosítás nélkül)"
+
+#: views.py:130
+msgid "Default (use the word order in the Settings page)"
+msgstr "Alapértelmezett (a Beállítások oldalon beállított rendezést használja)"
+
+#: views.py:135
+msgid "Default (use the strengthener method in the Settings page)"
+msgstr ""
+"Alapértelmezett (a Beállítások oldalon beállított erősítő módszert használja)"
+
+#: views.py:140
+msgid "Name of the dictionary"
+msgstr "Szótár neve"
+
+#: views.py:142
+msgid "Language 1"
+msgstr "Első nyelv"
+
+#: views.py:144
+msgid "Language 2"
+msgstr "Második nyelv"
+
+#: views.py:148 views.py:891
+msgid "Practice page word order"
+msgstr "Szavak sorrendje a Gyakorlás oldalon"
+
+#: views.py:153 views.py:895
+msgid "Method of strengthening a word after pressing YES"
+msgstr "A szavak megerősítésére használt módszer az IGEN gomb megnyomása után"
+
+#: views.py:158
+msgid "Text format of the words and notes"
+msgstr "Szavak és jegyzetek formátuma"
+
+#: views.py:160
+msgid "Custom CSS"
+msgstr "Saját CSS"
+
+#: views.py:173 views.py:176
+#, python-format
+msgid "Word in \"%(lang)s\""
+msgstr "A szó \"%(lang)s\" nyelven"
+
+#: views.py:184
+msgid "Date of addition"
+msgstr "Hozzáadás dátuma"
+
+#: views.py:207
+#, python-format
+msgid "Are you sure that you want to delete dictionary \"%(wdict)s\"?"
+msgstr "Biztos, hogy törölni akarod a következő szótárat: \"%(wdict)s\"?"
+
+#: views.py:263
+#, python-format
+msgid ""
+"ExponWords is a web application for <strong>learning words</strong>. It "
+"helps learn the word pairs fed by the user using the principle that "
+"<strong>the more we have already practiced a word, the less we need to "
+"practice it in the future</strong>. You can read more <a "
+"href=\"%(help_basics_url)s#basics\">here</a>."
+msgstr ""
+"Az ExponWords egy szótanító webalkalmazás, ami a felhasználó által bevitt "
+"<strong>szópárokat segít megtanulni</strong> azt az elvet felhasználva, hogy "
+"<strong>minél többször elevenítettünk már fel egy szót, annál ritkábban kell "
+"újra feleleveníteteni</strong>. Több információ <a "
+"href=\"%(help_basics_url)s#basics\">itt</a> található."
+
+#: views.py:275
+#, python-format
+msgid ""
+"%(site)s is a free service. ExponWords is open source software distributed "
+"under the %(lic_pre)sApache License version 2%(lic_post)s. The source code "
+"repository can be found %(ewrepo_pre)shere%(ewrepo_post)s."
+msgstr ""
+"Az %(site)s egy ingyenes szolgáltatás. Az ExponWords nyílt forráskódú "
+"szoftver, ami az %(lic_pre)sApache License version 2%(lic_post)s licenc "
+"alatt lett publikálva. A forráskódot tartalmazó tároló "
+"%(ewrepo_pre)sitt%(ewrepo_post)s található. "
+
+#: views.py:320
+#, python-format
+msgid "Welcome to %(site_name)s"
+msgstr "%(site_name)s regisztráció"
+
+#: views.py:343 views.py:409 views.py:577 views.py:665 views.py:733
+#: views.py:775 views.py:815 views.py:962 views.py:1502 views.py:1810
+msgid "Some fields are invalid."
+msgstr "Néhány mező érvénytelen."
+
+#: views.py:345
+msgid "The two passwords do not match."
+msgstr "A két jelszó nem egyezik meg."
+
+#: views.py:347
+msgid "The password has to be at least 6 characters long!"
+msgstr "A jelszónak legalább 6 karakter hosszúnak kell lennie!"
+
+#: views.py:354
+msgid "This username is already used."
+msgstr "Ez a felhasználónév már foglalt."
+
+#: views.py:362
+msgid "Successful registration. Please log in!"
+msgstr "Sikeres regisztráció. Jelentkezz be!"
+
+#: views.py:370 views.py:915
+msgid "Send me emails when ExponWords has new features"
+msgstr "Szeretnék emailt kapni, amikor új funkciók kerülnek az ExponWordsbe"
+
+#: views.py:371
+msgid "(about once a month; can be turned off at any time from Settings)"
+msgstr ""
+"(körülbelül havonta egyszer; a Beállításokban bármikor ki lehet kapcsolni)"
+
+#: views.py:382
+msgid "Password again"
+msgstr "Jelszó ismét"
+
+#: views.py:384 views.py:912
+msgid "Email address"
+msgstr "Email cím"
+
+#: views.py:583
+msgid "Word pair added"
+msgstr "Szópár hozzáadva"
+
+#: views.py:585
+msgid "edit"
+msgstr "szerkesztés"
+
+#: views.py:594
+msgid "The following word pair is the same"
+msgstr "A következő szópár ugyanez"
+
+#: views.py:595
+msgid "The following word pairs are the same"
+msgstr "A következő szópárok ugyanezek"
+
+#: views.py:598
+msgid "The following word pair is similar"
+msgstr "A következő szópár hasonló"
+
+#: views.py:599
+msgid "The following word pairs are similar"
+msgstr "A következő szópárok hasonlóak"
+
+#: views.py:651
+msgid "Word pairs added."
+msgstr "Szópárok hozzáadva."
+
+#: views.py:656
+msgid "Error: "
+msgstr "Hiba: "
+
+#: views.py:709
+msgid "Import word pairs from tab-separated values"
+msgstr "Szópárok importálása tabbal elválasztott értékekből"
+
+#: views.py:729
+msgid "Dictionary modified."
+msgstr "Szótár módosítva."
+
+#: views.py:766
+msgid "Dictionary deleted."
+msgstr "Szótár törölve."
+
+#: views.py:772
+msgid ""
+"Please check in the \"Are you sure\" checkbox if you really want to delete "
+"the dictionary."
+msgstr ""
+"Jelöld be a \"Biztos vagy benne?\" jelölőnégyzetet, ha tényleg törölni "
+"akarod a szótárat!"
+
+#: views.py:811
+msgid "Dictionary created."
+msgstr "Szótár létrehozva."
+
+#: views.py:841
+msgid "Sum"
+msgstr "Összesen"
+
+#: views.py:863 views.py:867
+msgid "Normal"
+msgstr "Normál"
+
+#: views.py:864
+msgid "Less scrolling"
+msgstr "Kevesebb görgetés"
+
+#: views.py:868
+msgid "PageUp = Yes, PageDown = No"
+msgstr "PageUp = Igen, PageDown = Nem"
+
+#: views.py:869
+msgid "PageUp = No, PageDown = Yes"
+msgstr "PageUp = Nem, PageDown = Igen"
+
+#: views.py:885
+msgid "Time zone"
+msgstr "Időzóna"
+
+#: views.py:887
+msgid "Turning point"
+msgstr "Fordulópont"
+
+#: views.py:899
+msgid "Practice page arrangement"
+msgstr "Gyakorlás oldal elrendezése"
+
+#: views.py:903
+msgid "PageUp/PageDown behavior"
+msgstr "PageUp/PageUp viselkedés"
+
+#: views.py:904
+msgid "Quick labels"
+msgstr "Gyors címkék"
+
+#: views.py:905
+msgid "Button size"
+msgstr "Gombok mérete"
+
+#: views.py:906
+msgid "Question size"
+msgstr "Kérdés mérete"
+
+#: views.py:907
+msgid "Answer size"
+msgstr "Válasz mérete"
+
+#: views.py:908
+msgid "Notes size"
+msgstr "Jegyzetek mérete"
+
+#: views.py:909
+msgid "Hidden extra features"
+msgstr "Rejtett extra funkciók"
+
+#: views.py:960
+msgid "Invalid language code"
+msgstr "Érvénytelen nyelvkód"
+
+#: views.py:987
+msgid "Settings saved."
+msgstr "Beállítások elmentve."
+
+#: views.py:1340 views.py:1343
+msgid "All"
+msgstr "Mind"
+
+#: views.py:1350
+msgid "Search expression"
+msgstr "Keresett szöveg"
+
+#: views.py:1356
+msgid "Label"
+msgstr "Címke"
+
+#: views.py:1359
+msgid "Hits per page"
+msgstr "Találat oldalanként"
+
+#: views.py:1361
+msgid "Show hits"
+msgstr "Találatok mutatása"
+
+#: views.py:1427
+#, python-format
+msgid "Page %(current_page_index)s of %(page_count)s"
+msgstr "%(current_page_index)s. oldal (összesen %(page_count)s)"
+
+#: views.py:1484
+msgid "Word pair deleted."
+msgstr "Szópár törölve."
+
+#: views.py:1498
+msgid "Word pair modified."
+msgstr "Szópár módosítva."
+
+#: views.py:1612
+#, python-format
+msgid "Incorrect date: %(date)s. Please use the following format: YYYY-MM-DD."
+msgstr ""
+"Helytelen dátum: %(date)s. Használd a következő formátumot: ÉÉÉÉ-HH-NN."
+
+#: views.py:1620
+#, python-format
+msgid "Incorrect strength: %(strength)s. Please specify it as an integer."
+msgstr "Helytelen erősség: %(strength)s. Add meg egész számként!"
+
+#: views.py:1634
+msgid "Please specify the number of days!"
+msgstr "Add meg a napok számát!"
+
+#: views.py:1646
+msgid "Operation not recognized"
+msgstr "Ismeretlen művelet"
+
+#: views.py:1695
+msgid "No word pair modified."
+msgstr "Egy szópár sem lett módosítva."
+
+#: views.py:1697
+msgid "1 word pair modified."
+msgstr "1 szópár módosítva."
+
+#: views.py:1699
+#, python-format
+msgid "%(count)s word pairs modified."
+msgstr "%(count)s szópár módosítva."
+
+#: views.py:1752
+msgid "Announcement emails sent."
+msgstr "Értesítő levelek elküldve."
+
+#: views.py:1801
+msgid "Announcement texts saved."
+msgstr "Értesítő szöveg elmentve."
