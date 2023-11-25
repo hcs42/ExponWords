@@ -96,7 +96,7 @@ v0.10.2:
 
 v0.11:
 - email autofill when registering
-- practice page: "Please wait" 
+- practice page: "Please wait"
 - Submit buttons moved to the right column
 - Google Analytics code removed from the repository
 - add new wp: delete stored dates after a day

@@ -39,12 +39,12 @@
 {% if result_exists %}
 
 <form action="{% url 'operation_on_word_pairs' %}" method="post">
-  
+
 <!-- hidden fields -->
 
 {% csrf_token %}
 <input type="hidden" name="source_url" value="{{ source_url }}">
-  
+
 {% if show_hits %}
 
 <!-- Custom CSS -->
@@ -115,20 +115,20 @@
 
 {% endif %} <!-- show_hits -->
 
-<!-- operation --> 
+<!-- operation -->
 
 <p>
-  <select name="operation" id="operation-selection"> 
-    <option value="none">{% trans 'Please select an operation'%}</option> 
-    <option value="delete">{% trans 'Delete word pairs'%}</option> 
-    <option value="move">{% trans 'Move word pairs'%}</option> 
-    <option value="set_dates_strengths">{% trans 'Set dates and strengths'%}</option> 
-    <option value="add_labels">{% trans 'Add labels'%}</option> 
-    <option value="remove_labels">{% trans 'Remove labels'%}</option> 
-    <option value="set_labels">{% trans 'Set labels'%}</option> 
-    <option value="shift_days">{% trans 'Shift dates'%}</option> 
-    <option value="practice">{% trans 'Practice'%}</option> 
-    <option value="export">{% trans 'Export word pairs'%}</option> 
+  <select name="operation" id="operation-selection">
+    <option value="none">{% trans 'Please select an operation'%}</option>
+    <option value="delete">{% trans 'Delete word pairs'%}</option>
+    <option value="move">{% trans 'Move word pairs'%}</option>
+    <option value="set_dates_strengths">{% trans 'Set dates and strengths'%}</option>
+    <option value="add_labels">{% trans 'Add labels'%}</option>
+    <option value="remove_labels">{% trans 'Remove labels'%}</option>
+    <option value="set_labels">{% trans 'Set labels'%}</option>
+    <option value="shift_days">{% trans 'Shift dates'%}</option>
+    <option value="practice">{% trans 'Practice'%}</option>
+    <option value="export">{% trans 'Export word pairs'%}</option>
   </select>
   <a class="help" href="{% url 'help' LANGUAGE_CODE %}#operations" target="_blank">({% trans "Help for operations" %})</a>
   <br/>
@@ -138,9 +138,9 @@
   </div>
 
   <div style="display:none" id="span-move">
-    <select name="move_word_pairs_wdict"> 
+    <select name="move_word_pairs_wdict">
       {% for wdict_id, wdict_name in wdict_choices %}
-      <option value="{{ wdict_id }}">{{ wdict_name }}</option> 
+      <option value="{{ wdict_id }}">{{ wdict_name }}</option>
       {% endfor %}
     </select><br/>
     <input type="submit" value="{% trans 'Move the selected word pairs!' %}">
@@ -212,17 +212,17 @@
   <div style="display:none" id="span-practice">
     {% trans 'Words to practice' %}
     ({% trans 'only the word that are due today will be strengthened!' %}):
-    <select name="practice_scope"> 
-      <option value="all">{% trans 'All selected words' %}</option> 
-      <option value="due">{% trans 'Only those selected words that are due today' %}</option> 
+    <select name="practice_scope">
+      <option value="all">{% trans 'All selected words' %}</option>
+      <option value="due">{% trans 'Only those selected words that are due today' %}</option>
     </select><br/>
     <input type="submit" value="{% trans 'Go to the practice page!' %}">
   </div>
 
   <div style="display:none" id="span-export">
     {% trans 'Export format' %}:
-    <select name="export_format"> 
-      <option value="text">{% trans 'Text' %}</option> 
+    <select name="export_format">
+      <option value="text">{% trans 'Text' %}</option>
     </select><br/>
     <input type="submit" value="{% trans 'Export the selected word pairs!' %}">
   </div>
