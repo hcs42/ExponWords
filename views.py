@@ -840,6 +840,7 @@ def visualize(request):
 
     sum_data = WDictData(_('Sum'), [0 for date in dates])
     wdicts_data = [sum_data]
+    wdicts = sorted(wdicts, key=lambda wdict: normalize_string(wdict.name))
     for wdict in wdicts:
         wdict_data = WDictData(wdict.name, [])
         wdicts_data.append(wdict_data)
