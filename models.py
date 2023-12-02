@@ -335,6 +335,16 @@ def ts_to_datetime(ts):
     # The datetime object will be in UTC.
     return datetime.datetime.utcfromtimestamp(ts)
 
+def date_to_html(d):
+    """Return the date in yyyy-mm-dd format.
+
+    But use a non-breaking hyphen ("&#8209") between mm and dd. If we used only
+    normal hyphens, a date could be broken in the "Search and operations" page
+    as 2023-01<br>02. That would not be very readable. Breaking it as
+    2023-<br>01-02 looks much better.
+    """
+    return '{:04d}-{:02d}&#8209;{:02d}'.format(d.year, d.month, d.day)
+
 def date_to_ord(d):
     return d.toordinal()
 

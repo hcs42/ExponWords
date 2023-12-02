@@ -1434,7 +1434,9 @@ def search(request):
                 [(wp,
                   wp.get_html('word_in_lang1'),
                   wp.get_html('word_in_lang2'),
-                  wp.get_html('explanation'))
+                  wp.get_html('explanation'),
+                  models.date_to_html(wp.date1),
+                  models.date_to_html(wp.date2))
                  for wp in pagination_info.object_list]
             custom_css_list = \
                 [(wp_wdict.name, wp_wdict.get_css())

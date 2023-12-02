@@ -87,15 +87,15 @@
     <td class="tbl_header">{% trans "Operation" %}</td>
     <td class="tbl_header">{% trans "Selection" %}</td>
   </tr>
-  {% for wp, word_in_lang1, word_in_lang2, explanation in word_pairs_and_exps %}
+  {% for wp, word_in_lang1, word_in_lang2, explanation, date1, date2 in word_pairs_and_exps %}
   <tr>
     <td>{{ word_in_lang1|safe }}</td>
     <td>{{ word_in_lang2|safe }}</td>
     <td class="explanation">{{ explanation|safe }}</td>
-    <td>{{ wp.date1 }}</td>
-    <td>{{ wp.date2 }}</td>
-    <td>{{ wp.strength1 }}</td>
-    <td>{{ wp.strength2 }}</td>
+    <td>{{ date1|safe }}</td>
+    <td>{{ date2|safe }}</td>
+    <td>{{ wp.strength1|floatformat:"0" }}</td>
+    <td>{{ wp.strength2|floatformat:"0" }}</td>
     <td>{{ wp.labels }}</td>
     {% if wdict == None %}
     <td><a href="{% url 'wdict' wp.wdict.id %}">{{ wp.wdict.name }}</a></td>
