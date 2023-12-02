@@ -137,3 +137,8 @@ Install Django 3.0 and migrate the database:
 Compile the translations:
 
     $ django-admin.py compilemessages
+
+Upgrading to 1.2.0
+------------------
+
+No action required.
