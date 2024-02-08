@@ -23,7 +23,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import gettext as _
 
 
-version = '1.2.0'
+version = '1.3.0'
 
 
 ##### Constants #####

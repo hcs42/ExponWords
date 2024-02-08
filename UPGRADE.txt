@@ -142,3 +142,8 @@ Upgrading to 1.2.0
 ------------------
 
 No action required.
+
+Upgrading to 1.3.0
+------------------
+
+No action required.
