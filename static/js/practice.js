@@ -443,7 +443,7 @@ function yesno_button(answer) {
 }
 
 function ew_practice_button_pressed(button) {
-    if (state == 'answer') {
+    if (state == 'answer' && button == 'other') {
         state = 'intermediate';
         answer_button();
     } else if (state == 'yesno') {
