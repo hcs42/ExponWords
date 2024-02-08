@@ -550,15 +550,20 @@ is.</p>
   részben is (tehát például a "nagyonrégi" címkével rendelkező szópárokat is
   megtaláljuk). Ha pontos egyezésre van szükség, használjuk a "label:^régi$
   macska" keresőkifejezést (lásd lentebb).</li>
-  <li>"word1" (rövid forma: "w1"). Csak olyan szópárokat listázzon, amelyek
+  <li>"word1:" (rövid forma: "w1"). Csak olyan szópárokat listázzon, amelyek
   tartalmazzák a megadott szót az első nyelven. Például a "word1:hat" keresés
   megtalálja a "hat -- birtokol" szópárt, de nem találja meg a "sechs -- hat"
   szópárt.</li>
-  <li>"word2" (rövid forma: "w2"). Csak olyan szópárokat listázzon, amelyek
+  <li>"word2:" (rövid forma: "w2"). Csak olyan szópárokat listázzon, amelyek
   tartalmazzák a megadott szót a második nyelven. Például a "word2:macska"
   keresés megtalálja a "die Katze -- macska" szópárt.</li>
-  <li>"explanation" (rövid forma: "e"). Csak olyan szópárokat listázzon,
+  <li>"explanation:" (rövid forma: "e"). Csak olyan szópárokat listázzon,
   amelyek tartalmazzák a megadott szót a jegyzetekben.</li>
+  <li>"dict:". Csak a megadott szótárakban keressen. Például a "dict:42,43"
+  keresési kifejezés csak olyan szavakat fog megtalálni, amelyek a 42-es és
+  43-as azonosítójú szótárakban vannak. Az szótár azonosítóját úgy tudod
+  megnézni, hogy megnyitod a szótárat és megnézed az URL-jét. Például az
+  "exponwords.com/dict/42/" a 42-es szótárra utal.</li>
 </ul>
 <p>Az előtagok hosszú és rövid formái egyenértékűek. Így például a "label:régi"
 és "l:régi" kifejezések ugyanazokat a szópárokat találják meg.</p>

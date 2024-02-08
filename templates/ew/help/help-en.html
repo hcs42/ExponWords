@@ -540,14 +540,19 @@ search for "haz" will find the word pairs that contain the text "Ház".</p>
   "veryoldword" label will be found as well). If you want an exact match,
   specify "label:^oldwords$ cat" (see below).
   </li>
-  <li>"word1" (short form: "w1"). List only word pairs that contain the
+  <li>"word1:" (short form: "w1"). List only word pairs that contain the
   specified word in the first language. For example, "word1:hat" will find the
   word "hat -- have", but it will not find the word pair "der Hut -- hat".</li>
-  <li>"word2" (short form: "w2"). List only word pairs that contain the
+  <li>"word2:" (short form: "w2"). List only word pairs that contain the
   specified word in the second language. For example, "word2:cat" will find the
   word "die Katze -- cat".</li>
-  <li>"explanation" (short form: "e"). List only word pairs that contain the
+  <li>"explanation:" (short form: "e"). List only word pairs that contain the
   specified word in the explanation.</li>
+  <li>"dict:". Search only in the specified dictionaries. For
+  example, the search expression "dict:42,43" will find word pairs in the
+  dictionaries with the identifiers 42 and 43. You can find out the identifier
+  of a dictionary by opening the dictionary and checking the URL. For example,
+  "exponwords.com/dict/42/" refers to dictionary 42.</li>
 </ul>
 <p>The long and short forms of prefixes are equivalent. For example, the search
 expressions "label:oldwords" and "l:oldwords" find the same word pairs. </p>

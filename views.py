@@ -1279,6 +1279,8 @@ def search_in_db(user, query_wdict, query_label, query_text):
                 query_item_type = 'word2'
             elif query_item_type == 'e':
                 query_item_type = 'explanation'
+            elif query_item_type == 'dict':
+                query_item_type = 'dictionary'
 
             query_item_matches = False
             if query_item_type == 'text':
@@ -1321,6 +1323,9 @@ def search_in_db(user, query_wdict, query_label, query_text):
                         if query_item_value in base_text:
                             query_item_matches = True
                             continue
+            elif query_item_type == 'dictionary':
+                if str(wp.wdict_id) in query_item_value.split(','):
+                    query_item_matches = True
 
             if not query_item_matches:
                 wp_matches_all = False
