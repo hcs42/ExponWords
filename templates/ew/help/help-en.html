@@ -298,10 +298,13 @@ pages where words of that dictionary are shown (practice page, list words, etc.)
 
 <h5 id="import-as-text">Importing word pairs as text</h5>
 
-Word pairs can be imported as a text. The words in language 1 and language 2
-should be separated by the " -- " character sequence, and the notes should be
-indented with four spaces. For example:
+This page lets you import word pairs in a textual format.
 
+<ul>
+
+  <li>The words in language 1 and language 2 should be separated by the " -- "
+    character sequence, and the notes should be indented with four spaces. For
+    example:
 <pre>
 machen -- do
 essen -- eat
@@ -312,20 +315,63 @@ der Hund -- dog
     Plural: der Hund, die Hunde.
     Manche Hunde sind auch süß. (Some dogs are also cute.)
 </pre>
+  </li>
+
+  <li>If the <a href="#text-formats">text format</a> of the dictionary is "HTML
+    (keep linebreaks)", the "&lt;br&gt;" strings in the input are replaced with
+    linebreaks. For example, if you import the following text:
+<pre>
+das Schloss&lt;br&gt;die Schlösser -- (1) palace&lt;br&gt;(2) lock
+    (1) Der König wohnt in einem Schloss.
+    (2) Der Schlosser repariert Schlösser.
+</pre>
+This will produce the following word pair:
+  <table style="width:100%;">
+    <tr>
+      <th style="width:20%;">Word in German:</th>
+      <td>
+        <p style="border:1px solid;">
+        das Schloss<br>die Schlösser
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Word in English:</th>
+      <td>
+        <p style="border:1px solid;">
+        (1) palace<br>(2) lock
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Notes:</th>
+      <td>
+        <p style="border:1px solid;">
+        (1) Der König wohnt in einem Schloss.<br>
+        (2) Der Schlosser repariert Schlösser.
+        </p>
+      </td>
+    </tr>
+  </table>
+  </li>
+
+</ul>
 
 <h5 id="import-from-tsv">Importing word pairs as tab-separated values</h5>
 
-Word pairs can also be imported from the list of values separated by a tab
-character. Write one word per line. Each line should contain two or three
-fields: word in the first language; word in the second language; notes. The last
-one is optional. The fields should be separated by a TAB character.
+This page lets you import words from a spreadsheet for example.
 
-If a spreadsheet is opened in as spreadsheet editor application (such as
-LibreOffice, OpenOffice.org or Microsoft Excel), and it contains these three
-columns, which are copied and pasted here, then it will have exactly this
-format.
+<ul>
 
-An example text is the following:
+  <li>Write one word per line. Each line should contain two or three fields:
+    word in the first language; word in the second language; notes. The last one
+    is optional. The fields should be separated by a TAB character.
+
+    If a spreadsheet is opened in as spreadsheet editor application (such as
+    LibreOffice or Microsoft Excel), and it contains these three columns, which
+    are copied and pasted here, then it will have exactly this format.
+
+    For example:
 
 <pre>
 machen&lt;TAB&gt;do
@@ -333,6 +379,15 @@ essen&lt;TAB&gt;eat
 die Katze&lt;TAB&gt;cat&lt;TAB&gt;Plural: die Katzen. Katzen sind süße Tiere. (Cats are cute animals.)
 der Hund&lt;TAB&gt;dog&lt;TAB&gt;Plural: der Hund, die Hunde. Manche Hunde sind auch süß. (Some dogs are also cute.)
 </pre>
+  </li>
+
+  <li>If the <a href="#text-formats">text format</a> of the dictionary is "HTML
+    (keep linebreaks)", the "&lt;br&gt;" strings in the input are replaced with
+    linebreaks. See the <a href="#import-as-text">Importing word pairs as
+    text</a> section for more information.
+  </li>
+
+</ul>
 
 <h3 id="practice">Practice</h3>
 <p>The practice page contains the following elements:</p>

@@ -300,10 +300,13 @@ ami megjeleníti a szótár szavait (gyakorlás, szavak listázása, stb.)
 
 <h5 id="import-as-text">Szópárok importálása szövegből</h5>
 
-Szópárokat olyan szövegből lehet beimportálni, amiben a szavak két nyelvbeli
-formája a " -- " karaktersorozattal van elválasztva, és a jegyzetek négy
-szóközzel vannak behúzva. Például:
+Ezen az oldalon szöveges formátumból lehet szavakat importálni.
 
+<ul>
+
+  <li>Szópárokat olyan szövegből lehet beimportálni, amiben a szavak két
+    nyelvbeli formája a " -- " karaktersorozattal van elválasztva, és a
+    jegyzetek négy szóközzel vannak behúzva. Például:
 <pre>
 machen -- csinál
 essen -- eszik
@@ -314,19 +317,64 @@ der Hund -- kutya
     Többes szám: der Hund, die Hunde.
     Manche Hunde sind auch süß. (Néhány kutya is aranyos.)
 </pre>
+  </li>
+
+  <li>Ha a szótár <a href="#text-formats">szövegformátuma</a> "HTML
+    (sorok végét megtartva)", akkor az importált szövegben lévő
+    "&lt;br&gt;" karaktersorozatok sortörésekre cserélődnek. Például, ha az
+    alábbi szöveget importálod:
+<pre>
+das Schloss&lt;br&gt;die Schlösser -- (1) kastély&lt;br&gt;(2) lakat
+    (1) Der König wohnt in einem Schloss.
+    (2) Der Schlosser repariert Schlösser.
+</pre>
+Ez az alábbi szópárt eredményezi:
+  <table style="width:100%;">
+    <tr>
+      <th style="width:20%;">A szó németül:</th>
+      <td>
+        <p style="border:1px solid;">
+        das Schloss<br>die Schlösser
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>A szó magyarul:</th>
+      <td>
+        <p style="border:1px solid;">
+        (1) kastély<br>(2) lakat
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <th>Jegyzetek:</th>
+      <td>
+        <p style="border:1px solid;">
+        (1) Der König wohnt in einem Schloss.<br>
+        (2) Der Schlosser repariert Schlösser.
+        </p>
+      </td>
+    </tr>
+  </table>
+  </li>
+
+</ul>
 
 <h5 id="import-from-tsv">Szópárok importálása tabbal elválasztott értékekből</h5>
 
-Szópárokat tab karakterrel elválasztott értékekből is be lehet importálni. Egy
-sor egy szót tartalmazhat. Minden sornak két vagy három mezőt kell tartalmaznia:
-szó az első nyelven, szó a második nyelven, és opcionálisan jegyzetek. Ezeket a
-mezőket tab karakterrel kell elválasztani.
+Ezen az oldalon például táblázatból lehet szavakat importálni.
 
-Ha egy táblázatkezelő programban (például LibreOffice-ban, OpenOffice.org-ban
-vagy Microsoft Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza,
-és azt ide bemásolod, akkor az épp ilyen formátumban lesz.
+<ul>
 
-Példa szöveg:
+  <li>Egy sor egy szót tartalmazhat. Minden sornak két vagy három mezőt kell
+    tartalmaznia: szó az első nyelven, szó a második nyelven, és opcionálisan
+    jegyzetek. Ezeket a mezőket tab karakterrel kell elválasztani.
+
+    Ha egy táblázatkezelő programban (például LibreOffice-ban vagy Microsoft
+    Excelben) megnyitott táblázat ezt a három oszlopot tartalmazza, és azt ide
+    bemásolod, akkor az épp ilyen formátumban lesz.
+
+    Példa szöveg:
 
 <pre>
 machen&lt;TAB&gt;csinál
@@ -334,6 +382,16 @@ essen&lt;TAB&gt;eszik
 die Katze&lt;TAB&gt;macska&lt;TAB&gt;Többes szám: die Katzen. Katzen sind süße Tiere. (A macskák aranyos állatok.)
 der Hund&lt;TAB&gt;kutya&lt;TAB&gt;Többes szám: der Hund, die Hunde. Manche Hunde sind auch süß. (Néhány kutya is aranyos.)
 </pre>
+  </li>
+
+  <li>Ha a szótár <a href="#text-formats">szövegformátuma</a> "HTML
+    (sorok végét megtartva)", akkor az importált szövegben lévő
+    "&lt;br&gt;" karaktersorozatok sortörésekre cserélődnek.
+    További információ a <a href="#import-as-text">Szópárok importálása
+      szövegből</a> fejezetben.
+  </li>
+
+</ul>
 
 <h3 id="practice">Gyakorlás</h3>
 <p>A "Gyakorlás" oldal a következő elemeket tartalmazza:</p>

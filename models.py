@@ -1048,6 +1048,17 @@ def create_add_word_pairs(wdict, word_pairs):
         wdict.save()
 
 
+def format_for_import(text, wdict_text_format):
+    """Replace <br> with newlines if the dictionary has the "HTML (keep
+    linebreaks)" text format.
+    """
+
+    if wdict_text_format == 'html_ws':
+        return re.sub('<br>', '\n', text)
+    else:
+        return text
+
+
 def import_textfile(s, wdict):
     """Adds words from a text file to a dictionary.
 
@@ -1065,6 +1076,7 @@ def import_textfile(s, wdict):
             # This line is part of an explanation.
             if len(word_pairs) != 0:
                 line = re.sub('^ {1,4}', '', line) # removing prefix spaces
+                line = format_for_import(line, wdict.text_format)
                 word_pairs[-1].explanation += line + '\n'
             elif line == '':
                 pass
@@ -1088,8 +1100,8 @@ def import_textfile(s, wdict):
             wp = WordPair()
             word_pairs.append(wp)
 
-            wp.word_in_lang1 = r.group(3)
-            wp.word_in_lang2 = r.group(4)
+            wp.word_in_lang1 = format_for_import(r.group(3), wdict.text_format)
+            wp.word_in_lang2 = format_for_import(r.group(4), wdict.text_format)
             wp.explanation = ''
             if r.group(5) is not None:
                 wp.date_added = get_today(user)
@@ -1137,10 +1149,11 @@ def import_tsv(s, wdict):
             raise EWException(msg)
         elif 2 <= len(fields) <= 3:
             wp = WordPair()
-            wp.word_in_lang1 = fields[0]
-            wp.word_in_lang2 = fields[1]
+            wp.word_in_lang1 = format_for_import(fields[0], wdict.text_format)
+            wp.word_in_lang2 = format_for_import(fields[1], wdict.text_format)
             if len(fields) == 3:
-                wp.explanation = fields[2]
+                wp.explanation = \
+                    format_for_import(fields[2], wdict.text_format)
             wp.date1 = get_today(user)
             wp.date2 = get_today(user)
             wp.date_added = get_today(user)
