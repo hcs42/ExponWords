@@ -643,8 +643,31 @@ jelölődoboz állapotával jelzi.</p>
   illeszkedik a felhasználói felület többi részéhez, de az utóbbi jobb lehet
   olyan eszközön, amelyiknek a böngészője minden kattintás után az oldal
   tetejét igazítja a képernyőhöz.</li>
-  <li>PageUp/PageDown viselkedés: itt lehet beállítani, hogy a PageUp/PageDown
-  gombok megnyomásakor megnyomódjanak a YES/NO gombok a Gyakorlás oldalon.</li>
+
+  <li>PageUp/PageDown viselkedés: Ezzel a beállítással vezérelheted a Gyakorlás
+    oldalt egy prezenter eszközzel. Három lehetőség közül választhatsz:
+    <ul>
+      <li>"Normál": A PageUp és PageDown nincs testreszabva a Gyakorlás oldalon.
+        A szokásos módon görgetik a képernyőt. A Gyakorlás oldalt nem lehet
+        prezenterrel vezérelni.</li>
+      <li>"PageUp = Nem, PageDown = Igen":
+        <ul>
+          <li>A prezenter "Üres/fekete" gombja egyenértékű a
+            <span class="small-button">VÁLASZ</span> gombbal. A háttérben a
+            prezenter egy "b" billentyűt küld az ExponWords-nek.</li>
+          <li>A prezenter "Tovább" gombja egyenértékű az
+            <span class="small-button">IGEN</span> gombbal. A háttérben a
+            prezenter egy "PageDown" billentyűt küld az ExponWords-nek.</li>
+          <li>A prezenter "Előző" gombja egyenértékű az
+            <span class="small-button">NEM</span> gombbal. A háttérben a
+            prezenter egy "PageUp" billentyűt küld az ExponWords-nek.</li>
+        </ul>
+      </li>
+      <li>"PageUp = Igen, PageDown = Nem": Hasonló az előző opcióhoz, de a
+        "Következő" és az "Előző" gombok fordítva működnek.</li>
+    </ul>
+  </li>
+
   <li id="quick-labels">Gyors címkék: az ebbe a szövegdobozba (szóközökkel
   elválasztva) beírt címkék "gyors címkék" lesznek, ami azt jelenti, hogy a
   Gyakorlás oldalon mindegyiknek lesz egy külön gombja, amivel egyszerűen rá

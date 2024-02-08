@@ -629,8 +629,31 @@ gray background and the state of their checkboxes in the "Selected" column.</p>
   set to "Normal" and "Less scrolling". The former fits better with the rest of
   the user interface, but the latter can be better on a device on which the
   browser automatically scrolls to the top after all clicks.</li>
-  <li>PageUp/PageDown behavior: This settings can be used to make the YES/NO
-  buttons clicked when pressing the PageUp/PageDown buttons.</li>
+
+  <li>PageUp/PageDown behavior: You can use this setting to control the Practice
+    page with a presenter device. You can choose from three options:
+    <ul>
+      <li>"Normal": PageUp and PageDown are not customized on the Practice page.
+        They scroll the screen as usual. You cannot control the Practice page
+        with a presenter device.</li>
+      <li>"PageUp = No, PageDown = Yes":
+        <ul>
+          <li>The "Blank/Black" button on the presenter is equivalent to the
+            <span class="small-button">ANSWER</span> button. In the background,
+            the presenter sends a "b" key to ExponWords.</li>
+          <li>The "Next" button on the presenter is equivalent to the
+            <span class="small-button">YES</span> button. In the background, the
+            presenter sends a "PageDown" key to ExponWords.</li>
+          <li>The "Previous" button on the presenter is equivalent to
+            the <span class="small-button">NO</span> button. In the background,
+            the presenter sends a "PageUp" key to ExponWords.</li>
+        </ul>
+      </li>
+      <li>"PageUp = Yes, PageDown = No": Same as the previous option, but with
+        the "Next" and "Previous" buttons swapped.</li>
+    </ul>
+  </li>
+
   <li id="quick-labels">Quick labels: labels given in this textbox (separated
   by space characters) are the quick labels, which means that there is a button
   for each of them in the Practice Page; by clicking on these buttons, the
