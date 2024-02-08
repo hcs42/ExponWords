@@ -1644,7 +1644,7 @@ def operation_on_word_pairs(request):
         except ValueError:
             error_msg = (_('Incorrect date: %(date)s. Please use the '
                            'following format: YYYY-MM-DD.') %
-                         {'date': raw_value})
+                         {'date': raw_start_date})
             do_operation = False
         try:
             raw_wp_per_day = request.POST.get('enqueue-word_pairs_per_day')
@@ -1652,7 +1652,8 @@ def operation_on_word_pairs(request):
         except ValueError:
             error_msg = _('Please specify the number of words per day!')
             do_operation = False
-        if wp_per_day <= 0:
+
+        if do_operation and wp_per_day <= 0:
             error_msg = _('Please specify the number of words per day!')
             do_operation = False
 
