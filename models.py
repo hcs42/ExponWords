@@ -1188,8 +1188,8 @@ def export_textfile(wdict=None, word_pairs=None):
     for wp in word_pairs:
         result.append(
             '%s -- %s <%s %s><%s %s>\n' %
-            (wp.word_in_lang1.replace('\n', ' ').replace('\r', ' '),
-             wp.word_in_lang2.replace('\n', ' ').replace('\r', ' '),
+            (wp.word_in_lang1.replace('\n', '<br>').replace('\r', ''),
+             wp.word_in_lang2.replace('\n', '<br>').replace('\r', ''),
              str(wp.strength1),
              str(wp.date1),
              str(wp.strength2),
