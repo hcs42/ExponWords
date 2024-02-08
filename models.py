@@ -1348,10 +1348,8 @@ class EWException(Exception):
         """
 
         value = self.value
-        if isinstance(value, unicode):
+        if isinstance(value, str):
             return value
-        elif isinstance(value, str):
-            return unicode(value)
         else:
             return repr(value)
 
